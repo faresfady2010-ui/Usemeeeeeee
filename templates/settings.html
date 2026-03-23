@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #000;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+body.dark {
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+}
+.container {
+    max-width: 600px;
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: background-color 0.3s, color 0.3s;
+}
+body.dark .container {
+    background-color: #16213e;
+    color: #e0e0e0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+h1 { text-align: center; color: #007bff; }
+label { display: block; margin-top: 15px; font-weight: bold; }
+select, input[type="checkbox"] { margin-top: 5px; padding: 5px; }
+body.dark select {
+    background-color: #0f3460;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+.save-btn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.save-btn:hover { background-color: #218838; }
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+.nav-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.nav-buttons button:hover { background-color: #0056b3; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="nav-buttons">
+        <button onclick="openPage('index.html')">Home</button>
+        <button onclick="openPage('about.html')">About</button>
+        <button onclick="openPage('settings.html')">Settings</button>
+    </div>
+
+    <h1>Settings</h1>
+
+    <label for="appearance">Appearance:</label>
+    <select id="appearance" onchange="applyAppearance(this.value)">
+        <option value="light">Light Mode</option>
+        <option value="dark">Dark Mode</option>
+    </select>
+
+    <label for="language">Language:</label>
+    <select id="language">
+        <option value="en">English</option>
+    </select>
+
+    <label for="notifications">
+        <input type="checkbox" id="notifications"> Enable Notifications
+    </label>
+
+    <br>
+    <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+</div>
+
+<script>
+function openPage(page) { window.location.href = page; }
+
+function applyAppearance(value) {
+    const isDark = value === 'dark';
+    document.body.classList.toggle('dark', isDark);
+    localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+}
+
+function saveSettings() {
+    const notifications = document.getElementById("notifications").checked;
+    const isDark = document.body.classList.contains('dark');
+    alert(`Settings saved!\nAppearance: ${isDark ? 'Dark' : 'Light'} Mode\nNotifications: ${notifications}\nLanguage: English`);
+}
+
+window.onload = function() {
+    const isDark = localStorage.getItem('darkMode') === 'enabled';
+    if (isDark) {
+        document.body.classList.add('dark');
+        document.getElementById('appearance').value = 'dark';
+    }
+};
+</script>
+</body>
+</html>
