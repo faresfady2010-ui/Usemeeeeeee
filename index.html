@@ -80,23 +80,34 @@ async function sendMessage() {
     var rawText = $("#user-input").val();
     if (rawText.trim() === "") return;
 
-    // 1. Add User message to UI
     addMessage(rawText, 'user');
     $("#user-input").val(""); 
 
-    // 2. Show "Thinking..." state
     const loadingId = "msg-" + Date.now();
     addMessage("Thinking...", 'bot', loadingId);
     $(`#${loadingId}`).addClass('loading');
 
-    // 3. Connection to Hugging Face (Matching your Flask /chat POST route)
     try {
-        const response = await fetch("https://ankarasui-business-chatbot.hf.space/chat", {
+        const response = await fetch("https://ankarasui-business-chatbot.hf.space/api/predict/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ "message": rawText })
+            body: JSON.stringify({ data: [rawText] }) // Hugging Face expects `data` as array
         });
 
+        if (!response.ok) throw new Error("Connection failed");
+
+        const data = await response.json();
+
+        // The response array usually contains the text in data[0].value
+        const botReply = data?.data?.[0] || "Sorry, I couldn't understand that.";
+
+        $(`#${loadingId}`).text(botReply).removeClass('loading');
+
+    } catch (error) {
+        console.error(error);
+        $(`#${loadingId}`).text("Error: Could not reach the business chatbot. Check your Space status.").css("color", "red");
+    }
+}
         if (!response.ok) throw new Error("Connection failed");
 
         const data = await response.json();
