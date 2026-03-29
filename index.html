@@ -3,43 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chatbot</title>
+<title>UseMee Chatbot</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <style>
-    /* ... (All your existing CSS remains exactly the same) ... */
-    body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s; }
-    body.dark { background-color: #1a1a2e; }
-    .chat-container { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; display: flex; flex-direction: column; height: 600px; overflow: hidden; transition: background-color 0.3s; }
-    body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-    .chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; }
-    body.dark .chat-header { background-color: #0f3460; }
-    .nav-buttons { display: flex; justify-content: center; gap: 10px; padding: 10px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; }
-    body.dark .nav-buttons { background-color: #0f3460; border-bottom: 1px solid #1a1a2e; }
-    .nav-buttons button { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
-    .nav-buttons button:hover { background-color: #0056b3; }
-    .chat-box { flex-grow: 1; padding: 15px; overflow-y: auto; border-bottom: 1px solid #eee; }
-    body.dark .chat-box { border-bottom: 1px solid #0f3460; }
-    .message { margin-bottom: 10px; clear: both; overflow-wrap: break-word; }
-    .message.user { background-color: #e6f7ff; color: #000; padding: 8px 12px; border-radius: 15px; float: right; max-width: 70%; margin-left: auto; text-align: right; }
-    body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
-    .message.bot { background-color: #f0f0f0; color: #000; padding: 8px 12px; border-radius: 15px; float: left; max-width: 70%; margin-right: auto; text-align: left; }
-    body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
-    .chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
-    body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
-    #suggestWrapper { position: relative; margin-bottom: 10px; }
-    #suggestBtn { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 5px; }
-    #suggestBtn:hover { background-color: #0056b3; }
-    #suggestBox { position: absolute; bottom: 40px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 150px; overflow-y: auto; z-index: 10; }
-    #closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; }
-    .suggestion { cursor: pointer; padding: 5px; }
-    .suggestion:hover { background: #444; }
-    .chat-input-area input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; background-color: #fff; color: #000; }
-    body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; border: 1px solid #444; }
-    .chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 20px; color: white; cursor: pointer; }
-    .chat-input-area .send-btn:hover { background-color: #218838; }
-
-    /* New "Thinking" style */
-    .message.loading { font-style: italic; opacity: 0.7; }
+body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s; }
+body.dark { background-color: #1a1a2e; }
+.chat-container { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; display: flex; flex-direction: column; height: 600px; overflow: hidden; transition: background-color 0.3s; }
+body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; }
+body.dark .chat-header { background-color: #0f3460; }
+.nav-buttons { display: flex; justify-content: center; gap: 10px; padding: 10px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; }
+body.dark .nav-buttons { background-color: #0f3460; border-bottom: 1px solid #1a1a2e; }
+.nav-buttons button { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; }
+.nav-buttons button:hover { background-color: #0056b3; }
+.chat-box { flex-grow: 1; padding: 15px; overflow-y: auto; border-bottom: 1px solid #eee; }
+body.dark .chat-box { border-bottom: 1px solid #0f3460; }
+.message { margin-bottom: 10px; clear: both; overflow-wrap: break-word; }
+.message.user { background-color: #e6f7ff; color: #000; padding: 8px 12px; border-radius: 15px; float: right; max-width: 70%; margin-left: auto; text-align: right; }
+body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
+.message.bot { background-color: #f0f0f0; color: #000; padding: 8px 12px; border-radius: 15px; float: left; max-width: 70%; margin-right: auto; text-align: left; }
+body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
+.chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
+body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
+#suggestWrapper { position: relative; margin-bottom: 10px; }
+#suggestBtn { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 5px; }
+#suggestBtn:hover { background-color: #0056b3; }
+#suggestBox { position: absolute; bottom: 40px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 200px; overflow-y: auto; z-index: 10; }
+#closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; }
+.suggestion { cursor: pointer; padding: 5px; }
+.suggestion:hover { background: #444; }
+.chat-input-area input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; background-color: #fff; color: #000; }
+body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; border: 1px solid #444; }
+.chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 20px; color: white; cursor: pointer; }
+.chat-input-area .send-btn:hover { background-color: #218838; }
+.message.loading { font-style: italic; opacity: 0.7; }
 </style>
 </head>
 <body>
@@ -67,114 +64,191 @@
     </div>
 </div>
 
-<script src="config.js"></script>
 <script>
-// Apply dark mode
-if (localStorage.getItem('darkMode') === 'enabled') {
-    document.body.classList.add('dark');
+// Example intents (add as many as you like)
+const intents = [
+
+{tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
+{tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
+
+// BUSINESS BASICS
+{tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers in exchange for money."]},
+{tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
+{tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
+
+// MONEY
+{tag:"profit",patterns:["what is profit","profit meaning"],responses:["Profit is the money left after subtracting costs from revenue."]},
+{tag:"revenue",patterns:["what is revenue","income of business"],responses:["Revenue is the total income a business earns from sales."]},
+{tag:"costs",patterns:["what are costs","business expenses"],responses:["Costs are the money spent to run a business."]},
+{tag:"loss",patterns:["what is loss"],responses:["Loss happens when costs are higher than revenue."]},
+{tag:"cash_flow",patterns:["cash flow"],responses:["Cash flow shows money coming in and going out of a business."]},
+
+// ENTREPRENEURSHIP
+{tag:"entrepreneur",patterns:["what is entrepreneur"],responses:["An entrepreneur is someone who starts and manages a business."]},
+{tag:"entrepreneurship",patterns:["what is entrepreneurship"],responses:["Entrepreneurship is the process of creating and running a business."]},
+{tag:"startup",patterns:["what is startup"],responses:["A startup is a newly created business."]},
+
+// MARKETING
+{tag:"marketing",patterns:["what is marketing"],responses:["Marketing involves promoting and selling products or services."]},
+{tag:"advertising",patterns:["what is advertising"],responses:["Advertising is paid promotion of products or services."]},
+{tag:"branding",patterns:["what is branding"],responses:["Branding creates a unique identity for a business."]},
+{tag:"target_market",patterns:["target market"],responses:["Target market is the specific group of customers a business aims to reach."]},
+
+// PRODUCTS
+{tag:"product",patterns:["what is product"],responses:["A product is something a business sells to customers."]},
+{tag:"service",patterns:["what is service"],responses:["A service is an activity provided to customers."]},
+{tag:"product_development",patterns:["product development"],responses:["Product development involves creating new products."]},
+
+// MARKET
+{tag:"market",patterns:["what is market"],responses:["A market is where buyers and sellers interact."]},
+{tag:"demand",patterns:["what is demand"],responses:["Demand is how much people want a product."]},
+{tag:"supply",patterns:["what is supply"],responses:["Supply is how much of a product is available."]},
+{tag:"competition",patterns:["competition"],responses:["Competition is rivalry between businesses."]},
+
+// MANAGEMENT
+{tag:"management",patterns:["what is management"],responses:["Management involves planning and controlling business activities."]},
+{tag:"leadership",patterns:["leadership"],responses:["Leadership is guiding and motivating people."]},
+{tag:"teamwork",patterns:["teamwork"],responses:["Teamwork is working together to achieve goals."]},
+{tag:"communication",patterns:["communication"],responses:["Communication is sharing information effectively."]},
+
+// FINANCE
+{tag:"finance",patterns:["what is finance"],responses:["Finance is managing money in a business."]},
+{tag:"budget",patterns:["budget"],responses:["A budget is a financial plan of income and expenses."]},
+{tag:"investment",patterns:["investment"],responses:["Investment is putting money into something to earn profit."]},
+{tag:"risk",patterns:["risk"],responses:["Risk is the chance of losing money."]},
+
+// OPERATIONS
+{tag:"operations",patterns:["operations"],responses:["Operations manage daily business activities."]},
+{tag:"production",patterns:["production"],responses:["Production is creating goods or services."]},
+{tag:"quality",patterns:["quality"],responses:["Quality means how good a product or service is."]},
+
+// SALES
+{tag:"sales",patterns:["sales"],responses:["Sales involve selling products to customers."]},
+{tag:"pricing",patterns:["pricing"],responses:["Pricing is setting the value of a product."]},
+{tag:"discount",patterns:["discount"],responses:["A discount reduces the price of a product."]},
+
+// HR
+{tag:"human_resources",patterns:["human resources","hr"],responses:["HR manages employees in a business."]},
+{tag:"recruitment",patterns:["recruitment"],responses:["Recruitment is hiring employees."]},
+{tag:"training",patterns:["training"],responses:["Training improves employee skills."]},
+{tag:"motivation",patterns:["motivation"],responses:["Motivation encourages employees to work better."]},
+
+// ECONOMY
+{tag:"economy",patterns:["economy"],responses:["Economy is the system of production and consumption."]},
+{tag:"globalization",patterns:["globalization"],responses:["Globalization connects businesses worldwide."]},
+{tag:"ecommerce",patterns:["ecommerce"],responses:["Ecommerce is buying and selling online."]},
+
+// ETHICS
+{tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
+{tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
+
+// ACCOUNTING
+{tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
+{tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
+{tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
+{tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
+
+// SUCCESS
+{tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
+{tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
+{tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
+{tag:"start_business", patterns:["how to start a business","create a business","steps to start a business"], responses:[
+        `Starting a business involves multiple detailed steps:
+
+1️⃣ **Idea Generation**: Identify a product or service that solves a problem or fulfills a need.  
+2️⃣ **Market Research**: Study competitors and understand your target audience.  
+3️⃣ **Business Plan**: Outline your objectives, strategies, financial projections, and marketing plans.  
+4️⃣ **Legal Structure**: Choose whether to operate as a sole proprietorship, partnership, LLC, or corporation.  
+5️⃣ **Register Your Business**: Obtain required licenses, permits, and register the business name.  
+6️⃣ **Finances**: Open a business bank account, track expenses, and secure funding if necessary.  
+7️⃣ **Branding**: Design a logo, set up a website, and create a social media presence.  
+8️⃣ **Build Your Product/Service**: Develop your offering and ensure quality.  
+9️⃣ **Marketing & Promotion**: Advertise through social media, ads, networking, and events.  
+🔟 **Launch & Growth**: Start selling, monitor customer feedback, and improve operations continuously.`
+    ]}
+    // Add more intents here to reach 100+
+];
+
+// Typing animation helper
+function typeText(messageDiv, text, speed = 30) {
+    messageDiv.textContent = "";
+    let i = 0;
+    const interval = setInterval(() => {
+        messageDiv.textContent += text[i];
+        i++;
+        if (i >= text.length) clearInterval(interval);
+    }, speed);
 }
 
 function openPage(page) { window.location.href = page; }
 
-// Updated sendMessage - Works with Gradio/Hugging Face Spaces
-async function sendMessage() {
-    var rawText = $("#user-input").val();
-    if (rawText.trim() === "") return;
+function addMessage(text, sender, id=null, typing=false) {
+    const chatBox = document.getElementById('chat-box');
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    if(id) msgDiv.id = id;
 
-    addMessage(rawText, 'user');
-    $("#user-input").val(""); 
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    if(typing){
+        typeText(msgDiv, text, 20);
+    } else {
+        msgDiv.textContent = text;
+    }
+}
+
+// Simple intent matching
+function findResponse(input) {
+    input = input.toLowerCase();
+    for(const intent of intents){
+        for(const pattern of intent.patterns){
+            if(input.includes(pattern.toLowerCase())){
+                // Pick a random response if multiple
+                return intent.responses[Math.floor(Math.random()*intent.responses.length)];
+            }
+        }
+    }
+    return "I'm sorry, I didn't understand that. Could you rephrase your question?";
+}
+
+async function sendMessage() {
+    const userInput = $("#user-input").val().trim();
+    if(!userInput) return;
+
+    addMessage(userInput, 'user');
+    $("#user-input").val("");
 
     const loadingId = "msg-" + Date.now();
     addMessage("Thinking...", 'bot', loadingId);
-    $(`#${loadingId}`).addClass('loading');
 
-    try {
-        console.log("Backend URL:", ACTIVE_BACKEND);
-        
-        let response;
-        let botReply;
-
-        if (USE_LOCAL_BACKEND) {
-            // Call local Flask backend
-            console.log("Using local Flask backend");
-            response = await fetch(ACTIVE_BACKEND + "/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: rawText })
-            });
-            
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-            botReply = data?.response || "Sorry, I couldn't understand that.";
-        } else {
-            // Call Hugging Face Spaces (Gradio)
-            console.log("Using Hugging Face Space");
-            
-            // Try Gradio API endpoint
-            response = await fetch(ACTIVE_BACKEND + "/api/predict/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ data: [rawText] })
-            });
-            
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            
-            const data = await response.json();
-            console.log("Response:", data);
-            
-            // Gradio returns data in various formats
-            botReply = data?.data?.[0] || data?.response || data?.result || JSON.stringify(data);
-        }
-
-        $(`#${loadingId}`).text(botReply).removeClass('loading');
-
-    } catch (error) {
-        console.error("Full error:", error);
-        
-        let errorMsg = "❌ Connection Error";
-        
-        if (error.message.includes("Failed to fetch")) {
-            if (USE_LOCAL_BACKEND) {
-                errorMsg = `❌ Can't reach Flask backend: ${ACTIVE_BACKEND}\n\nMake sure the server is running!`;
-            } else {
-                errorMsg = `❌ Can't reach Hugging Face Space\n\n🔍 Troubleshooting:\n1. Is your Space URL correct: ${ACTIVE_BACKEND}?\n2. Is the Space running (not sleeping)?\n3. Check browser console (F12) for more details`;
-            }
-        } else if (error.message.includes("HTTP")) {
-            errorMsg = `❌ Server error (${error.message})\n\nYour Space might be having issues. Check the HF Spaces logs.`;
-        }
-        
-        $(`#${loadingId}`).text(errorMsg).css("color", "red");
-    }
-}
-// Fixed addMessage to support unique IDs for the "Thinking" replacement
-function addMessage(text, sender, id = null) {
-    const chatBox = document.getElementById('chat-box');
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('message', sender);
-    if (id) messageDiv.id = id;
-    messageDiv.textContent = text;
-    chatBox.appendChild(messageDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    // Simulate typing delay
+    setTimeout(()=>{
+        const botReply = findResponse(userInput);
+        const msgDiv = document.getElementById(loadingId);
+        msgDiv.classList.remove('loading');
+        typeText(msgDiv, botReply, 20);
+    }, 1000 + Math.random()*1000); // Random delay to feel like AI
 }
 
-// Enter key listener
-document.getElementById('user-input').addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') sendMessage();
-});
+// Enter key to send
+$("#user-input").on('keypress', function(e){ if(e.key==='Enter') sendMessage(); });
 
-window.onload = function() {
-    addMessage('Hello! How can I help you with business questions today?', 'bot');
-};
-
-// Suggestions Logic
-$("#suggestBtn").click(function() { $("#suggestBox").toggle(); });
-$("#closeBtn").click(function() { $("#suggestBox").hide(); });
-$(".suggestion").click(function() {
-    var text = $(this).text();
-    $("#user-input").val(text);
+// Suggestions toggle
+$("#suggestBtn").click(()=>$("#suggestBox").toggle());
+$("#closeBtn").click(()=>$("#suggestBox").hide());
+$(".suggestion").click(function(){
+    $("#user-input").val($(this).text());
     sendMessage();
     $("#suggestBox").hide();
 });
+
+// Dark mode from settings
+if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('dark');
+
+window.onload = ()=>{
+    addMessage("Hello! I'm your AI assistant. Ask me anything about business, entrepreneurship, or starting your own company.", 'bot', null, true);
+}
 </script>
 </body>
 </html>
