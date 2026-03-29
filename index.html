@@ -224,7 +224,7 @@ function findResponse(input) {
 let score = similarity(input, pattern);
 const keywords = pattern.split(" "); 
 for(const word of keywords){
-    if(input.includes(word)) score += 0.05; // small boost per keyword match
+    if(input.includes(word)) score += 1.5
 }
 // Typing animation helper
 function typeText(messageDiv, text, speed = 30) {
