@@ -54,7 +54,8 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
             <div id="suggestBox">
                 <button id="closeBtn">✖</button>
                 <p class="suggestion">what is business</p>
-                <p class="suggestion">what is the purpose of business</p>
+                <p class="suggestion">how to start a business</p>
+                <p class="suggestion">what is profit</p>
             </div>
         </div>
         <div style="display: flex;">
@@ -65,123 +66,115 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
 </div>
 
 <script>
-// Example intents (add as many as you like)
+// ======= FULL INTENTS =======
 const intents = [
+    // GREETINGS
+    {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
+    {tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
 
-{tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
-{tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
+    // BUSINESS BASICS
+    {tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers in exchange for money."]},
+    {tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
+    {tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
 
-// BUSINESS BASICS
-{tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers in exchange for money."]},
-{tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
-{tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
+    // MONEY
+    {tag:"profit",patterns:["what is profit","profit meaning"],responses:["Profit is the money left after subtracting costs from revenue."]},
+    {tag:"revenue",patterns:["what is revenue","income of business"],responses:["Revenue is the total income a business earns from sales."]},
+    {tag:"costs",patterns:["what are costs","business expenses"],responses:["Costs are the money spent to run a business."]},
+    {tag:"loss",patterns:["what is loss"],responses:["Loss happens when costs are higher than revenue."]},
+    {tag:"cash_flow",patterns:["cash flow"],responses:["Cash flow shows money coming in and going out of a business."]},
 
-// MONEY
-{tag:"profit",patterns:["what is profit","profit meaning"],responses:["Profit is the money left after subtracting costs from revenue."]},
-{tag:"revenue",patterns:["what is revenue","income of business"],responses:["Revenue is the total income a business earns from sales."]},
-{tag:"costs",patterns:["what are costs","business expenses"],responses:["Costs are the money spent to run a business."]},
-{tag:"loss",patterns:["what is loss"],responses:["Loss happens when costs are higher than revenue."]},
-{tag:"cash_flow",patterns:["cash flow"],responses:["Cash flow shows money coming in and going out of a business."]},
+    // ENTREPRENEURSHIP
+    {tag:"entrepreneur",patterns:["what is entrepreneur"],responses:["An entrepreneur is someone who starts and manages a business."]},
+    {tag:"entrepreneurship",patterns:["what is entrepreneurship"],responses:["Entrepreneurship is the process of creating and running a business."]},
+    {tag:"startup",patterns:["what is startup"],responses:["A startup is a newly created business."]},
 
-// ENTREPRENEURSHIP
-{tag:"entrepreneur",patterns:["what is entrepreneur"],responses:["An entrepreneur is someone who starts and manages a business."]},
-{tag:"entrepreneurship",patterns:["what is entrepreneurship"],responses:["Entrepreneurship is the process of creating and running a business."]},
-{tag:"startup",patterns:["what is startup"],responses:["A startup is a newly created business."]},
+    // MARKETING
+    {tag:"marketing",patterns:["what is marketing"],responses:["Marketing involves promoting and selling products or services."]},
+    {tag:"advertising",patterns:["what is advertising"],responses:["Advertising is paid promotion of products or services."]},
+    {tag:"branding",patterns:["what is branding"],responses:["Branding creates a unique identity for a business."]},
+    {tag:"target_market",patterns:["target market"],responses:["Target market is the specific group of customers a business aims to reach."]},
 
-// MARKETING
-{tag:"marketing",patterns:["what is marketing"],responses:["Marketing involves promoting and selling products or services."]},
-{tag:"advertising",patterns:["what is advertising"],responses:["Advertising is paid promotion of products or services."]},
-{tag:"branding",patterns:["what is branding"],responses:["Branding creates a unique identity for a business."]},
-{tag:"target_market",patterns:["target market"],responses:["Target market is the specific group of customers a business aims to reach."]},
+    // PRODUCTS
+    {tag:"product",patterns:["what is product"],responses:["A product is something a business sells to customers."]},
+    {tag:"service",patterns:["what is service"],responses:["A service is an activity provided to customers."]},
+    {tag:"product_development",patterns:["product development"],responses:["Product development involves creating new products."]},
 
-// PRODUCTS
-{tag:"product",patterns:["what is product"],responses:["A product is something a business sells to customers."]},
-{tag:"service",patterns:["what is service"],responses:["A service is an activity provided to customers."]},
-{tag:"product_development",patterns:["product development"],responses:["Product development involves creating new products."]},
+    // MARKET
+    {tag:"market",patterns:["what is market"],responses:["A market is where buyers and sellers interact."]},
+    {tag:"demand",patterns:["what is demand"],responses:["Demand is how much people want a product."]},
+    {tag:"supply",patterns:["what is supply"],responses:["Supply is how much of a product is available."]},
+    {tag:"competition",patterns:["competition"],responses:["Competition is rivalry between businesses."]},
 
-// MARKET
-{tag:"market",patterns:["what is market"],responses:["A market is where buyers and sellers interact."]},
-{tag:"demand",patterns:["what is demand"],responses:["Demand is how much people want a product."]},
-{tag:"supply",patterns:["what is supply"],responses:["Supply is how much of a product is available."]},
-{tag:"competition",patterns:["competition"],responses:["Competition is rivalry between businesses."]},
+    // MANAGEMENT
+    {tag:"management",patterns:["what is management"],responses:["Management involves planning and controlling business activities."]},
+    {tag:"leadership",patterns:["leadership"],responses:["Leadership is guiding and motivating people."]},
+    {tag:"teamwork",patterns:["teamwork"],responses:["Teamwork is working together to achieve goals."]},
+    {tag:"communication",patterns:["communication"],responses:["Communication is sharing information effectively."]},
 
-// MANAGEMENT
-{tag:"management",patterns:["what is management"],responses:["Management involves planning and controlling business activities."]},
-{tag:"leadership",patterns:["leadership"],responses:["Leadership is guiding and motivating people."]},
-{tag:"teamwork",patterns:["teamwork"],responses:["Teamwork is working together to achieve goals."]},
-{tag:"communication",patterns:["communication"],responses:["Communication is sharing information effectively."]},
+    // FINANCE
+    {tag:"finance",patterns:["what is finance"],responses:["Finance is managing money in a business."]},
+    {tag:"budget",patterns:["budget"],responses:["A budget is a financial plan of income and expenses."]},
+    {tag:"investment",patterns:["investment"],responses:["Investment is putting money into something to earn profit."]},
+    {tag:"risk",patterns:["risk"],responses:["Risk is the chance of losing money."]},
 
-// FINANCE
-{tag:"finance",patterns:["what is finance"],responses:["Finance is managing money in a business."]},
-{tag:"budget",patterns:["budget"],responses:["A budget is a financial plan of income and expenses."]},
-{tag:"investment",patterns:["investment"],responses:["Investment is putting money into something to earn profit."]},
-{tag:"risk",patterns:["risk"],responses:["Risk is the chance of losing money."]},
+    // OPERATIONS
+    {tag:"operations",patterns:["operations"],responses:["Operations manage daily business activities."]},
+    {tag:"production",patterns:["production"],responses:["Production is creating goods or services."]},
+    {tag:"quality",patterns:["quality"],responses:["Quality means how good a product or service is."]},
 
-// OPERATIONS
-{tag:"operations",patterns:["operations"],responses:["Operations manage daily business activities."]},
-{tag:"production",patterns:["production"],responses:["Production is creating goods or services."]},
-{tag:"quality",patterns:["quality"],responses:["Quality means how good a product or service is."]},
+    // SALES
+    {tag:"sales",patterns:["sales"],responses:["Sales involve selling products to customers."]},
+    {tag:"pricing",patterns:["pricing"],responses:["Pricing is setting the value of a product."]},
+    {tag:"discount",patterns:["discount"],responses:["A discount reduces the price of a product."]},
 
-// SALES
-{tag:"sales",patterns:["sales"],responses:["Sales involve selling products to customers."]},
-{tag:"pricing",patterns:["pricing"],responses:["Pricing is setting the value of a product."]},
-{tag:"discount",patterns:["discount"],responses:["A discount reduces the price of a product."]},
+    // HR
+    {tag:"human_resources",patterns:["human resources","hr"],responses:["HR manages employees in a business."]},
+    {tag:"recruitment",patterns:["recruitment"],responses:["Recruitment is hiring employees."]},
+    {tag:"training",patterns:["training"],responses:["Training improves employee skills."]},
+    {tag:"motivation",patterns:["motivation"],responses:["Motivation encourages employees to work better."]},
 
-// HR
-{tag:"human_resources",patterns:["human resources","hr"],responses:["HR manages employees in a business."]},
-{tag:"recruitment",patterns:["recruitment"],responses:["Recruitment is hiring employees."]},
-{tag:"training",patterns:["training"],responses:["Training improves employee skills."]},
-{tag:"motivation",patterns:["motivation"],responses:["Motivation encourages employees to work better."]},
+    // ECONOMY
+    {tag:"economy",patterns:["economy"],responses:["Economy is the system of production and consumption."]},
+    {tag:"globalization",patterns:["globalization"],responses:["Globalization connects businesses worldwide."]},
+    {tag:"ecommerce",patterns:["ecommerce"],responses:["Ecommerce is buying and selling online."]},
 
-// ECONOMY
-{tag:"economy",patterns:["economy"],responses:["Economy is the system of production and consumption."]},
-{tag:"globalization",patterns:["globalization"],responses:["Globalization connects businesses worldwide."]},
-{tag:"ecommerce",patterns:["ecommerce"],responses:["Ecommerce is buying and selling online."]},
+    // ETHICS
+    {tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
+    {tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
 
-// ETHICS
-{tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
-{tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
+    // ACCOUNTING
+    {tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
+    {tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
+    {tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
+    {tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
 
-// ACCOUNTING
-{tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
-{tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
-{tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
-{tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
+    // SUCCESS
+    {tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
+    {tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
+    {tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
 
-// SUCCESS
-{tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
-{tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
-{tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
-// BUSINESS CREATION
-{tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
+    // BUSINESS CREATION
+    {tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
 `Here are the key steps to create a business:
 
-1️⃣ **Idea Generation**: Think of a product or service you want to offer.  
-2️⃣ **Market Research**: Check if people need it and who your competitors are.  
-3️⃣ **Business Plan**: Write a plan including goals, strategies, and finances.  
-4️⃣ **Legal Structure**: Decide your business type (LLC, sole proprietorship, etc.).  
-5️⃣ **Register Your Business**: Officially register with the government.  
-6️⃣ **Finances**: Open a business bank account and secure funding if needed.  
-7️⃣ **Branding**: Choose a name, logo, and create an identity.  
-8️⃣ **Build Your Product/Service**: Develop what you will sell.  
-9️⃣ **Marketing**: Promote your business online and offline.  
-🔟 **Launch & Grow**: Start selling, gather feedback, and improve.`
-]}
+1️⃣ Idea Generation  
+2️⃣ Market Research  
+3️⃣ Business Plan  
+4️⃣ Legal Structure  
+5️⃣ Register Your Business  
+6️⃣ Finances  
+7️⃣ Branding  
+8️⃣ Build Your Product/Service  
+9️⃣ Marketing  
+🔟 Launch & Grow`
+    ]}
 
+    // ADD MORE UP TO ~200 INTENTS
 ];
-// Simple similarity function (Levenshtein distance)
-function similarity(s1, s2) {
-    s1 = s1.toLowerCase();
-    s2 = s2.toLowerCase();
-    const longer = s1.length > s2.length ? s1 : s2;
-    const shorter = s1.length > s2.length ? s2 : s1;
-    const longerLength = longer.length;
-    if(longerLength === 0) return 1.0;
-    const editDistance = levenshteinDistance(longer, shorter);
-    return (longerLength - editDistance) / parseFloat(longerLength);
-}
+</script>
 
-// Levenshtein distance
+// Typo-tolerant similarity
 function levenshteinDistance(a, b){
     const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
     for(let i=0;i<=b.length;i++) matrix[i][0]=i;
@@ -189,119 +182,108 @@ function levenshteinDistance(a, b){
     for(let i=1;i<=b.length;i++){
         for(let j=1;j<=a.length;j++){
             const cost = a[j-1]===b[i-1]?0:1;
-            matrix[i][j] = Math.min(
-                matrix[i-1][j]+1,
-                matrix[i][j-1]+1,
-                matrix[i-1][j-1]+cost
-            );
+            matrix[i][j] = Math.min(matrix[i-1][j]+1, matrix[i][j-1]+1, matrix[i-1][j-1]+cost);
         }
     }
     return matrix[b.length][a.length];
 }
 
-// Updated findResponse using similarity
-function findResponse(input) {
-    input = input.toLowerCase();
-    let bestMatch = null;
-    let bestScore = 0.0;
+function similarity(s1,s2){
+    s1 = s1.toLowerCase(); s2 = s2.toLowerCase();
+    const longer = s1.length > s2.length ? s1 : s2;
+    const shorter = s1.length > s2.length ? s2 : s1;
+    if(longer.length===0) return 1.0;
+    return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
+}
 
+// Enhanced reply logic
+function getBotReply(input){
+    const userInput = input.toLowerCase();
+
+    // 1️⃣ Intent matching
+    let bestIntent = null; let bestScore = 0;
     for(const intent of intents){
         for(const pattern of intent.patterns){
-            const score = similarity(input, pattern);
+            const score = similarity(userInput, pattern);
             if(score > bestScore){
-                bestScore = score;
-                bestMatch = intent;
+                bestScore = score; bestIntent = intent;
             }
         }
     }
-
-    // Threshold for typo tolerance
-    if(bestScore > 0.6){ // Adjust 0.6 for stricter or more lenient matching
-        return bestMatch.responses[Math.floor(Math.random()*bestMatch.responses.length)];
+    if(bestScore>0.6 && bestIntent){
+        return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
     }
 
-    return "I'm sorry, I didn't understand that. Could you rephrase your question?";
+    // 2️⃣ Smart fallback by topic keywords
+    const topics = [
+        {words:["business","company","entrepreneurship"], reply:"It seems you're asking about business. A business provides goods or services to customers for profit."},
+        {words:["finance","money","profit","revenue"], reply:"Looks like you're asking about finance. Finance manages money, revenue, costs, and profit."},
+        {words:["marketing","advertising","branding"], reply:"You're asking about marketing. Marketing promotes and sells products or services."},
+        {words:["product","service"], reply:"It seems you're asking about products or services. A product is sold, a service is provided to customers."}
+    ];
+    for(const topic of topics){
+        for(const w of topic.words){
+            if(userInput.includes(w)) return topic.reply;
+        }
+    }
+
+    // 3️⃣ Smart fallback for question words
+    if(userInput.includes("how")) return "That’s a great question! Usually it involves steps or a process. Could you clarify the topic, like 'how to start a business'?";
+    if(userInput.includes("why")) return "Interesting question! Usually about purpose or reasons. Try specifying a topic like 'why profit matters'.";
+    if(userInput.includes("what")) return "Looks like you're asking for a definition. Specify the topic, like 'what is marketing'.";
+    if(userInput.includes("who")) return "Seems like a person question. Specify, like 'who is an entrepreneur'.";
+    if(userInput.includes("when")) return "You’re asking about timing. Clarify, like 'when to launch a business'.";
+    if(userInput.includes("where")) return "Seems like a location question. Clarify, like 'where to find customers'.";
+
+    // 4️⃣ Default fallback
+    return "I'm not sure 🤔. Try asking about business, marketing, finance, or entrepreneurship!";
 }
 
-// Typing animation helper
-function typeText(messageDiv, text, speed = 30) {
-    messageDiv.textContent = "";
-    let i = 0;
-    const interval = setInterval(() => {
-        messageDiv.textContent += text[i];
-        i++;
-        if (i >= text.length) clearInterval(interval);
-    }, speed);
-}
+// Typing animation
+function typeText(div,text,speed=30){div.textContent="";let i=0;const interval=setInterval(()=>{div.textContent+=text[i];i++;if(i>=text.length) clearInterval(interval);},speed);}
 
-function openPage(page) { window.location.href = page; }
-
-function addMessage(text, sender, id=null, typing=false) {
-    const chatBox = document.getElementById('chat-box');
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', sender);
-    if(id) msgDiv.id = id;
-
+// Add message to chat
+function addMessage(text,sender,id=null,typing=false){
+    const chatBox=document.getElementById('chat-box');
+    const msgDiv=document.createElement('div');
+    msgDiv.classList.add('message',sender);
+    if(id) msgDiv.id=id;
     chatBox.appendChild(msgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    if(typing){
-        typeText(msgDiv, text, 20);
-    } else {
-        msgDiv.textContent = text;
-    }
+    chatBox.scrollTop=chatBox.scrollHeight;
+    if(typing){typeText(msgDiv,text,20);} else {msgDiv.textContent=text;}
 }
 
-// Simple intent matching
-function findResponse(input) {
-    input = input.toLowerCase();
-    for(const intent of intents){
-        for(const pattern of intent.patterns){
-            if(input.includes(pattern.toLowerCase())){
-                // Pick a random response if multiple
-                return intent.responses[Math.floor(Math.random()*intent.responses.length)];
-            }
-        }
-    }
-    return "I'm sorry, I didn't understand that. Could you rephrase your question?";
-}
+// Open page helper
+function openPage(page){window.location.href=page;}
 
-async function sendMessage() {
-    const userInput = $("#user-input").val().trim();
-    if(!userInput) return;
-
-    addMessage(userInput, 'user');
-    $("#user-input").val("");
-
-    const loadingId = "msg-" + Date.now();
-    addMessage("Thinking...", 'bot', loadingId);
-
-    // Simulate typing delay
+// Send message
+function sendMessage(){
+    const input=$("#user-input").val().trim(); if(!input) return;
+    addMessage(input,'user'); $("#user-input").val("");
+    const loadingId="msg-"+Date.now(); addMessage("Thinking...",'bot',loadingId);
     setTimeout(()=>{
-        const botReply = findResponse(userInput);
-        const msgDiv = document.getElementById(loadingId);
-        msgDiv.classList.remove('loading');
-        typeText(msgDiv, botReply, 20);
-    }, 1000 + Math.random()*1000); // Random delay to feel like AI
+        const reply=getBotReply(input);
+        const msgDiv=document.getElementById(loadingId);
+        msgDiv.classList.remove('loading'); typeText(msgDiv,reply,20);
+    },500+Math.random()*800);
 }
 
-// Enter key to send
-$("#user-input").on('keypress', function(e){ if(e.key==='Enter') sendMessage(); });
+// Enter key sends
+$("#user-input").on('keypress',function(e){if(e.key==='Enter') sendMessage();});
 
 // Suggestions toggle
 $("#suggestBtn").click(()=>$("#suggestBox").toggle());
 $("#closeBtn").click(()=>$("#suggestBox").hide());
 $(".suggestion").click(function(){
-    $("#user-input").val($(this).text());
-    sendMessage();
-    $("#suggestBox").hide();
+    $("#user-input").val($(this).text()); sendMessage(); $("#suggestBox").hide();
 });
 
-// Dark mode from settings
+// Dark mode from localStorage
 if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('dark');
 
-window.onload = ()=>{
-    addMessage("Hello! I'm your AI assistant. Ask me anything about business, entrepreneurship, or starting your own company.", 'bot', null, true);
+// Initial bot message
+window.onload=()=>{
+    addMessage("Hello! I'm your AI assistant 🤖. Ask me about business, finance, marketing, or entrepreneurship.",'bot',null,true);
 }
 </script>
 </body>
