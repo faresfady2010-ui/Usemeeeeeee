@@ -170,49 +170,47 @@ const intents = [
 
 ];
 // Simple similarity function (Levenshtein distance)
-function similarity(s1, s2) {
-    s1 = s1.toLowerCase();
-    s2 = s2.toLowerCase();
-    const longer = s1.length > s2.length ? s1 : s2;
-    const shorter = s1.length > s2.length ? s2 : s1;
-    const longerLength = longer.length;
-    if(longerLength === 0) return 1.0;
-    const editDistance = levenshteinDistance(longer, shorter);
-    return (longerLength - editDistance) / parseFloat(longerLength);
-}
-
-// Levenshtein distance
-function levenshteinDistance(a, b){
-    const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
-    for(let i=0;i<=b.length;i++) matrix[i][0]=i;
-    for(let j=0;j<=a.length;j++) matrix[0][j]=j;
-    for(let i=1;i<=b.length;i++){
-        for(let j=1;j<=a.length;j++){
-            const cost = a[j-1]===b[i-1]?0:1;
-            matrix[i][j] = Math.min(
-                matrix[i-1][j]+1,
-                matrix[i][j-1]+1,
-                matrix[i-1][j-1]+cost
-            );
-        }
-    }
-    return matrix[b.length][a.length];
-}
-
-// Updated findResponse using similarity
 function findResponse(input) {
-    input = input.toLowerCase();
+    input = preprocess(input);
+
+    const keywordInput = extractKeywords(input);
+
     let bestMatch = null;
     let bestScore = 0.0;
 
-    for(const intent of intents){
-        for(const pattern of intent.patterns){
-            const score = similarity(input, pattern);
-            if(score > bestScore){
-                bestScore = score;
+    for (const intent of intents) {
+        for (const pattern of intent.patterns) {
+            const cleanPattern = preprocess(pattern);
+            const keywordPattern = extractKeywords(cleanPattern);
+
+            // 🔥 combine BOTH
+            const scoreFull = similarity(input, cleanPattern);
+            const scoreKeywords = similarity(keywordInput, keywordPattern);
+
+            const finalScore = (scoreFull * 0.5) + (scoreKeywords * 0.5);
+
+            if (finalScore > bestScore) {
+                bestScore = finalScore;
                 bestMatch = intent;
             }
         }
+    }
+
+    if (bestScore > 0.45) {
+        return bestMatch.responses[Math.floor(Math.random() * bestMatch.responses.length)];
+    }
+
+    // fallback
+    for (const intent of intents) {
+        for (const pattern of intent.patterns) {
+            if (input.includes(preprocess(pattern))) {
+                return intent.responses[0];
+            }
+        }
+    }
+
+    return "I'm sorry, I didn't understand that. Could you rephrase your question?";
+}
     }
 
     // Threshold for typo tolerance
