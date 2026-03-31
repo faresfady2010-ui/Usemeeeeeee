@@ -174,7 +174,7 @@ const intents = [
 
     // ADD MORE UP TO ~200 INTENTS
 ];// ================= CONTEXT MEMORY =================
-let lastTopic = "";
+
 
 // ================= LEVENSHTEIN =================
 function levenshteinDistance(a, b){
@@ -345,6 +345,7 @@ function addMessage(text,sender,id=null){
 
     typeText(msgDiv,text,20);
 }
+function openPage(page){window.location.href=page;}
 
 function sendMessage(){
     const input=$("#user-input").val().trim();
