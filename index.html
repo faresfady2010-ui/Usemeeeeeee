@@ -400,13 +400,14 @@ function sendMessage(){
     const msgDiv = document.getElementById(loadingId);
     const animation = animateThinking(msgDiv);
 
+    const thinkingTime = getThinkingTime(input); // dynamic thinking time
+
     setTimeout(()=>{
         clearInterval(animation);
 
-        const reply=getBotReply(input);
-        typeText(msgDiv,reply,20);
-
-    },500+Math.random()*800);
+        const reply = getBotReply(input);
+        typeText(msgDiv, reply, 20); // ✅ first sentence + rest all animate exactly the same
+    }, thinkingTime);
 }
 function openPage(page){window.location.href=page;}
 // Enter key sends
