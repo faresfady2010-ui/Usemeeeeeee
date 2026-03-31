@@ -171,7 +171,126 @@ const intents = [
 8️⃣ Build Your Product/Service  
 9️⃣ Marketing  
 🔟 Launch & Grow`
-    ]}
+    ]}, 
+    // ================= ADVICE & SUCCESS =================
+{tag:"success_factor",patterns:[
+    "most important aspect of business",
+    "key to success in business",
+    "what makes a business successful",
+    "important thing in business"
+],responses:[
+    "The most important aspect of a business is understanding your customers and delivering value to them consistently. 💡",
+    "A business succeeds by solving real problems for customers and managing operations efficiently.",
+    "Focus on customer satisfaction, smart planning, and continuous improvement to make your business thrive."
+]},
+
+{tag:"customer_focus",patterns:[
+    "importance of customer satisfaction",
+    "why customers are important",
+    "how to satisfy customers"
+],responses:[
+    "Customers are the heart of any business. Meeting their needs keeps the business alive and growing.",
+    "Happy customers lead to loyalty, repeat sales, and word-of-mouth promotion.",
+    "Listening to your customers and delivering value consistently is crucial for success."
+]},
+
+{tag:"planning_importance",patterns:[
+    "why business plan is important",
+    "importance of planning",
+    "role of business planning"
+],responses:[
+    "A solid business plan gives direction, helps manage resources, and reduces risks.",
+    "Planning helps anticipate challenges and ensures you know your goals and strategies.",
+    "Without planning, even good ideas can fail due to lack of structure and preparation."
+]},
+
+{tag:"innovation_importance",patterns:[
+    "why innovation is important",
+    "role of innovation",
+    "how to innovate in business"
+],responses:[
+    "Innovation helps businesses stay ahead of competition and meet changing customer needs.",
+    "Constant improvement and new ideas can make a business more attractive and profitable.",
+    "Businesses that innovate adapt faster and survive longer in competitive markets."
+]},
+
+{tag:"marketing_importance",patterns:[
+    "importance of marketing",
+    "role of marketing in business",
+    "why marketing matters"
+],responses:[
+    "Marketing helps customers know about your product and creates demand.",
+    "Even the best product won’t sell if people don’t know it exists, so marketing is vital.",
+    "Marketing builds your brand, attracts customers, and drives growth."
+]},
+
+{tag:"finance_importance",patterns:[
+    "importance of finance",
+    "financial management in business",
+    "why money management matters"
+],responses:[
+    "Managing finances ensures your business stays profitable and avoids cash flow problems.",
+    "Good financial control helps make informed decisions and plan for growth.",
+    "Finance is the backbone of any business; without it, operations can’t survive."
+]},
+
+{tag:"entrepreneur_mindset",patterns:[
+    "important traits of entrepreneur",
+    "entrepreneur qualities",
+    "mindset for business success"
+],responses:[
+    "Successful entrepreneurs are resilient, creative, and customer-focused.",
+    "The right mindset combines planning, risk-taking, and adaptability.",
+    "Passion, persistence, and problem-solving skills are key to running a business successfully."
+]}, 
+intents.push(
+    // PERSONAL DEVELOPMENT
+    {tag:"time_management",patterns:["time management","how to manage time"],responses:["Time management is planning and controlling how much time to spend on activities."]},
+    {tag:"productivity",patterns:["productivity","how to be productive"],responses:["Productivity is about working efficiently and achieving more in less time."]},
+    {tag:"goal_setting",patterns:["goal setting","how to set goals"],responses:["Goal setting helps you define targets and work towards them effectively."]},
+
+    // DIGITAL MARKETING
+    {tag:"seo",patterns:["seo","search engine optimization"],responses:["SEO is optimizing your website to rank higher in search engine results."]},
+    {tag:"social_media",patterns:["social media marketing","social media"],responses:["Social media marketing uses platforms like Facebook, Instagram, and Twitter to promote products."]},
+    {tag:"email_marketing",patterns:["email marketing"],responses:["Email marketing is sending promotional messages to customers via email."]},
+
+    // BUSINESS STRATEGY
+    {tag:"business_model",patterns:["business model","types of business model"],responses:["A business model explains how a company makes money and delivers value to customers."]},
+    {tag:"competitive_advantage",patterns:["competitive advantage"],responses:["Competitive advantage is what makes a business better than its competitors."]},
+    {tag:"swot_analysis",patterns:["swot analysis"],responses:["SWOT analysis identifies strengths, weaknesses, opportunities, and threats of a business."]},
+
+    // CUSTOMER
+    {tag:"customer_service",patterns:["customer service","how to serve customers"],responses:["Customer service is helping and supporting customers before, during, and after purchase."]},
+    {tag:"customer_satisfaction",patterns:["customer satisfaction"],responses:["Customer satisfaction measures how happy customers are with your products or services."]},
+    {tag:"customer_loyalty",patterns:["customer loyalty"],responses:["Customer loyalty is when customers repeatedly buy from a business because they trust it."]},
+
+    // STRATEGY & PLANNING
+    {tag:"business_plan",patterns:["business plan","how to make a business plan"],responses:["A business plan is a document outlining your business goals and how to achieve them."]},
+    {tag:"strategic_planning",patterns:["strategic planning"],responses:["Strategic planning is creating long-term goals and deciding the actions needed to reach them."]},
+    {tag:"risk_management",patterns:["risk management"],responses:["Risk management is identifying, assessing, and reducing risks in business."]},
+
+    // LEGAL & REGULATORY
+    {tag:"business_registration",patterns:["register business","business registration"],responses:["Registering a business makes it legally recognized and compliant with regulations."]},
+    {tag:"licenses",patterns:["business licenses","licenses required"],responses:["Business licenses allow you to legally operate and are often required by local authorities."]},
+    {tag:"taxes",patterns:["business taxes","tax"],responses:["Businesses must pay taxes on income according to local laws."]},
+
+    // E-COMMERCE
+    {tag:"online_store",patterns:["online store","ecommerce store"],responses:["An online store sells products or services over the internet."]},
+    {tag:"payment_gateway",patterns:["payment gateway","online payment"],responses:["A payment gateway allows businesses to accept online payments securely."]},
+    {tag:"dropshipping",patterns:["dropshipping"],responses:["Dropshipping is selling products without keeping inventory, fulfilled by a supplier."]},
+
+    // INVESTMENT & FINANCE
+    {tag:"loan",patterns:["business loan","loan for business"],responses:["A business loan is money borrowed to fund or grow a business, which must be repaid with interest."]},
+    {tag:"funding",patterns:["business funding","raise funds"],responses:["Funding is securing money from investors or banks to start or grow your business."]},
+    {tag:"venture_capital",patterns:["venture capital","vc funding"],responses:["Venture capital is investment from investors in exchange for equity in a startup."]},
+
+    // BUSINESS TIPS
+    {tag:"common_mistakes",patterns:["common business mistakes","business errors"],responses:["Common mistakes include poor planning, ignoring customers, and underestimating costs."]},
+    {tag:"tips_for_success",patterns:["business tips","how to succeed in business"],responses:["Key tips: plan well, know your market, focus on customers, and innovate continuously."]},
+    {tag:"scaling",patterns:["scaling business","grow business"],responses:["Scaling means increasing the size, revenue, or market reach of your business efficiently."]}
+);
+
+
 
     // ADD MORE UP TO ~200 INTENTS
 ];// ================= CONTEXT MEMORY =================
