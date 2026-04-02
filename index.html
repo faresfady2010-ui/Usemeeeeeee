@@ -37,42 +37,46 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
 .chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 20px; color: white; cursor: pointer; }
 .chat-input-area .send-btn:hover { background-color: #218838; }
 .message.loading { font-style: italic; opacity: 0.7; }
-voice-btn {
+/* Wrapper to position elements */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Input styling */
+.input-wrapper input {
+    width: 100%;
+    padding: 10px 45px 10px 15px; /* space for mic */
+    border-radius: 20px;
+}
+
+/* 🎤 inside input */
+#voice-btn {
+    position: absolute;
+    right: 70px; /* adjust if needed */
+    background: none;
     border: none;
-    background-color: #eee;
-    padding: 10px 12px;
-    margin-left: 8px;
-    border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
+    font-size: 18px;
 }
 
-#voice-btn:hover {
-    background-color: #ddd;
+/* Send button stays right */
+.send-btn {
+    margin-left: 10px;
 }
 
+/* Listening animation */
 #voice-btn.listening {
-    background-color: #ff4d4d;
-    color: white;
+    color: red;
     animation: pulse 1s infinite;
 }
 
 @keyframes pulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.2); }
     100% { transform: scale(1); }
 }
-
-body.dark #voice-btn {
-    background-color: #0f3460;
-    color: #e0e0e0;
-}
-
-body.dark #voice-btn:hover {
-    background-color: #1a1a2e;
-}
-
 </style>
 </head>
 <body>
@@ -86,28 +90,27 @@ body.dark #voice-btn:hover {
     </div>
 
     <div class="chat-box" id="chat-box"></div>
+<div class="chat-input-area">
+    <div id="suggestWrapper">
+        <button id="suggestBtn">💡 Suggestions</button>
+        <div id="suggestBox">
+            <button id="closeBtn">✖</button>
+            <p class="suggestion">what is business</p>
+            <p class="suggestion">how to start a business</p>
+            <p class="suggestion">what is profit</p>
+        </div> <!-- suggestBox -->
+    </div> <!-- suggestWrapper -->
 
-    <div class="chat-input-area">
-        <div id="suggestWrapper">
-            <button id="suggestBtn">💡 Suggestions</button>
-            <div id="suggestBox">
-                <button id="closeBtn">✖</button>
-                <p class="suggestion">what is business</p>
-                <p class="suggestion">how to start a business</p>
-                <p class="suggestion">what is profit</p>
-            </div>
-        </div>
+    <div class="input-wrapper">
+        <input type="text" id="user-input" placeholder="Type your message...">
 
-        <div style="display: flex; align-items: center; gap: 5px;">
-            <input type="text" id="user-input" placeholder="Type your message...">
+        <!-- 🎤 inside input -->
+        <button id="voice-btn" onclick="startVoice()">🎤</button>
 
-            <!-- 🎤 Voice Button -->
-            <button id="voice-btn" onclick="startVoice()">🎤</button>
-
-            <button class="send-btn" onclick="sendMessage()">Send</button>
-        </div>
-    </div>
-</div>
+        <!-- Send button -->
+        <button class="send-btn" onclick="sendMessage()">Send</button>
+    </div> <!-- input-wrapper -->
+</div> <!-- chat-input-area -->
 
 <script>
 // ======= FULL INTENTS =======
