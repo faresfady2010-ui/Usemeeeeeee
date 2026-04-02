@@ -228,6 +228,9 @@ function getBotReply(input){
 
         // Resolve context
         const context = resolveContext(userInput);
+        if(context && context !== userInput){
+    userInput += " " + context;
+}
 
         // 1️⃣ Intent matching
         let bestIntent = null;
