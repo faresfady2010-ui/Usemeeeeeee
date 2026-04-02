@@ -317,7 +317,6 @@ function resolveContext(text){
     }
     return text;
 }
-
 function getBotReply(input){
     try{
         let userInput = input.toLowerCase();
@@ -401,20 +400,6 @@ if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic
     return "The purpose of a business is to provide goods or services that satisfy customer needs while making profit. It also aims to grow, create value, and contribute to the economy.";
 }
 
-// ================= SMART RESPONSES + FOLLOW-UPS =================
-
-// FOLLOW-UP HANDLERS (check first!)
-
-
-// BUSINESS
-// ================= SMART RESPONSES =================
-
-// BUSINESS
-if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic === "business")){
-    lastTopic = "business";
-    return "The purpose of a business is to provide goods or services that satisfy customer needs while making profit. It also aims to grow, create value, and contribute to the economy.";
-}
-
 if(context.includes("business")){
     lastTopic = "business";
 
@@ -482,6 +467,12 @@ Try: "how to start ${lastTopic}"`;
 
 if(userInput.includes("what")){
     return "Try asking: 'What is business?' or 'What is marketing?'";
+}
+
+    } catch(error){
+        console.error(error);
+        return "Something went wrong ⚠️";
+    }
 }
 
 // ================= UI =================
