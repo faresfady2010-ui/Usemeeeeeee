@@ -37,17 +37,56 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
 .chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 20px; color: white; cursor: pointer; }
 .chat-input-area .send-btn:hover { background-color: #218838; }
 .message.loading { font-style: italic; opacity: 0.7; }
+voice-btn {
+    border: none;
+    background-color: #eee;
+    padding: 10px 12px;
+    margin-left: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+#voice-btn:hover {
+    background-color: #ddd;
+}
+
+#voice-btn.listening {
+    background-color: #ff4d4d;
+    color: white;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+body.dark #voice-btn {
+    background-color: #0f3460;
+    color: #e0e0e0;
+}
+
+body.dark #voice-btn:hover {
+    background-color: #1a1a2e;
+}
+
 </style>
 </head>
 <body>
-<div class="chat-container">
+<<div class="chat-container">
     <div class="chat-header">usemee</div>
+
     <div class="nav-buttons">
         <button onclick="openPage('index.html')">Home</button>
         <button onclick="openPage('about.html')">About</button>
         <button onclick="openPage('settings.html')">Settings</button>
     </div>
+
     <div class="chat-box" id="chat-box"></div>
+
     <div class="chat-input-area">
         <div id="suggestWrapper">
             <button id="suggestBtn">💡 Suggestions</button>
@@ -58,8 +97,13 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
                 <p class="suggestion">what is profit</p>
             </div>
         </div>
-        <div style="display: flex;">
+
+        <div style="display: flex; align-items: center; gap: 5px;">
             <input type="text" id="user-input" placeholder="Type your message...">
+
+            <!-- 🎤 Voice Button -->
+            <button id="voice-btn" onclick="startVoice()">🎤</button>
+
             <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
@@ -549,6 +593,53 @@ if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('da
 // Initial bot message
 window.onload=()=>{
     addMessage("Hello! I'm your AI assistant 🤖. Ask me about business, finance, marketing, or entrepreneurship.",'bot',null,true);
+}
+// ================= VOICE INPUT =================
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+let recognition;
+
+if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = "en-US"; // change to "ar-EG" if you want Arabic
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => {
+        const btn = document.getElementById("voice-btn");
+        if(btn) btn.classList.add("listening");
+    };
+
+    recognition.onend = () => {
+        const btn = document.getElementById("voice-btn");
+        if(btn) btn.classList.remove("listening");
+    };
+
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+
+        // Put voice text into input
+        document.getElementById("user-input").value = transcript;
+
+        // Use YOUR existing chatbot system
+        sendMessage();
+    };
+
+    recognition.onerror = function(e) {
+        console.error("Voice error:", e.error);
+
+        const btn = document.getElementById("voice-btn");
+        if(btn) btn.classList.remove("listening");
+    };
+}
+
+// Function triggered by 🎤 button
+function startVoice(){
+    if(recognition){
+        recognition.start();
+    } else {
+        alert("Speech recognition not supported in this browser");
+    }
 }
 </script>
 </body>
