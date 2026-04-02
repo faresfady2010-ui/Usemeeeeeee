@@ -256,6 +256,9 @@ function getBotReply(input){
         // 2️⃣ SMART RESPONSES
 
         // BUSINESS
+        if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic === "business")){
+    return "The purpose of a business is to provide goods or services that satisfy customer needs while making profit. It also aims to grow, create value, and contribute to the economy.";
+}
         if(context.includes("business")){
             lastTopic = "business";
 
