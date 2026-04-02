@@ -178,11 +178,13 @@ const intents = [
 // Typo-tolerant similarity
 // ================= CONTEXT MEMORY =================
 // ================= CONTEXT MEMORY =================
+// ================= CONTEXT MEMORY =================
 let lastTopic = "";
 
 // ================= LEVENSHTEIN =================
 function levenshteinDistance(a, b){
     const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
+
     for(let i=0;i<=b.length;i++) matrix[i][0]=i;
     for(let j=0;j<=a.length;j++) matrix[0][j]=j;
 
@@ -211,18 +213,9 @@ function similarity(s1,s2){
     return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
-// ================= TOPIC DETECTION =================
-function detectTopic(text){
-    if(text.includes("business")) return "business";
-    if(text.includes("finance") || text.includes("money") || text.includes("profit")) return "finance";
-    if(text.includes("marketing")) return "marketing";
-    if(text.includes("product") || text.includes("service")) return "product";
-    return "";
-}
-
 // ================= CONTEXT RESOLVER =================
 function resolveContext(text){
-    if(text.includes("it") || text.includes("this") || text.includes("that")){
+    if((text.includes("it") || text.includes("this") || text.includes("that")) && lastTopic){
         return lastTopic;
     }
     return text;
@@ -230,110 +223,128 @@ function resolveContext(text){
 
 // ================= MAIN BOT =================
 function getBotReply(input){
-    let userInput = input.toLowerCase();
+    try{
+        let userInput = input.toLowerCase();
 
-    // 1️⃣ Detect topic
-    const detected = detectTopic(userInput);
-    if(detected !== ""){
-        lastTopic = detected;
-    }
+        // Resolve context
+        const context = resolveContext(userInput);
 
-    // 2️⃣ Resolve context (it -> business etc.)
-    const context = resolveContext(userInput);
+        // 1️⃣ Intent matching
+        let bestIntent = null;
+        let bestScore = 0;
 
-    // 3️⃣ Intent matching (fuzzy)
-    let bestIntent = null;
-    let bestScore = 0;
-
-    for(const intent of intents){
-        for(const pattern of intent.patterns){
-            const score = similarity(userInput, pattern);
-            if(score > bestScore){
-                bestScore = score;
-                bestIntent = intent;
+        if(typeof intents !== "undefined"){
+            for(const intent of intents){
+                for(const pattern of intent.patterns){
+                    const score = similarity(userInput, pattern);
+                    if(score > bestScore){
+                        bestScore = score;
+                        bestIntent = intent;
+                    }
+                }
             }
         }
-    }
 
-    if(bestScore > 0.55 && bestIntent){
-        return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
-    }
+        if(bestScore > 0.55 && bestIntent){
+            lastTopic = bestIntent.tag; // ✅ update topic safely
+            return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
+        }
 
-    // 4️⃣ SMART CONTEXT RESPONSES
+        // 2️⃣ SMART RESPONSES
 
-    // BUSINESS
-    if(context.includes("business")){
-        if(userInput.includes("start") || userInput.includes("how")){
-            return `Starting a business involves several important steps:
+        // BUSINESS
+        if(context.includes("business")){
+            lastTopic = "business";
 
-1. Develop a clear idea 💡  
+            if(userInput.includes("start") || userInput.includes("how")){
+                return `Starting a business involves several steps:
+
+1. Develop an idea 💡  
 2. Research the market 📊  
 3. Create a business plan 📝  
-4. Secure funding 💰  
-5. Register your business legally 📄  
-6. Start marketing your product 📢  
+4. Get funding 💰  
+5. Register legally 📄  
+6. Launch and market 🚀  
 
-👉 Do you want a real example of a business idea?`;
-        }
+👉 Want a real example?`;
+            }
 
-        return `A business is an organization that provides goods or services to customers in order to make profit.
+            return `A business is an organization that provides goods or services to make profit.
 
-Businesses are important because they create jobs, provide products, and help the economy grow.
+It helps the economy and creates jobs.
 
 👉 Do you want to learn how to start one?`;
-    }
-
-    // FINANCE
-    if(context.includes("finance")){
-        return `Finance is about managing money, including income, expenses, and profit.
-
-It helps businesses make decisions and stay successful.
-
-👉 Want an example of profit calculation?`;
-    }
-
-    // MARKETING
-    if(context.includes("marketing")){
-        return `Marketing is the process of promoting and selling products or services.
-
-It includes advertising, branding, and understanding customers.
-
-👉 Want to learn marketing strategies?`;
-    }
-
-    // YES FOLLOW-UP
-    if(userInput === "yes"){
-        if(lastTopic === "business"){
-            return "Great! Let's go deeper 🚀\n\nA successful business idea could be like starting an online store, a café, or even a tech service.\n\n👉 Do you want help creating your own idea?";
         }
-    }
 
-    // 5️⃣ Question fallback (SMARTER)
-    if(userInput.includes("how")){
-        if(lastTopic){
-            return `You're asking about how related to ${lastTopic}.
+        // FINANCE
+        if(context.includes("finance") || context.includes("money") || context.includes("profit")){
+            lastTopic = "finance";
 
-Can you be a bit more specific? For example: "how to start ${lastTopic}"`;
+            return `Finance is about managing money, including income, expenses, and profit.
+
+👉 Want an example?`;
         }
-        return "That's a great question! Can you specify the topic?";
-    }
 
-    if(userInput.includes("what")){
-        return "You're asking for a definition. Try something like: 'What is business?'";
-    }
+        // MARKETING
+        if(context.includes("marketing")){
+            lastTopic = "marketing";
 
-    // 6️⃣ Default
-    return "I'm not sure 🤔. Try asking about business, marketing, or finance!";
+            return `Marketing is promoting and selling products or services.
+
+👉 Want strategies?`;
+        }
+
+        // YES FOLLOW-UP
+        if(userInput === "yes"){
+            if(lastTopic === "business"){
+                return `Great! 🚀
+
+Example business ideas:
+- Online store 🛒  
+- Small café ☕  
+- Tech service 💻  
+
+👉 Want help choosing one?`;
+            }
+        }
+
+        // 3️⃣ QUESTION HELP
+        if(userInput.includes("how")){
+            if(lastTopic){
+                return `You're asking about how related to ${lastTopic}.
+
+Try: "how to start ${lastTopic}"`;
+            }
+            return "That's a great question! Can you specify the topic?";
+        }
+
+        if(userInput.includes("what")){
+            return "Try asking: 'What is business?' or 'What is marketing?'";
+        }
+
+        // 4️⃣ DEFAULT
+        return "I'm not sure 🤔. Try asking about business, marketing, or finance!";
+
+    } catch(error){
+        console.error(error);
+        return "Something went wrong ⚠️";
+    }
 }
 
 // ================= UI =================
 function typeText(div,text,speed=20){
+    if(!text) text = "Error";
+
     div.textContent="";
     let i=0;
+
     const interval=setInterval(()=>{
-        div.textContent+=text[i];
-        i++;
-        if(i>=text.length) clearInterval(interval);
+        if(i < text.length){
+            div.textContent += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(interval);
+        }
     },speed);
 }
 
