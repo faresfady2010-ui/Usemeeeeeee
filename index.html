@@ -348,7 +348,23 @@ function similarity(s1,s2){
     return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
-// ================= DYNAMIC DATA (STOCKS) =================
+// ================= DYNAMIC DATA =================
+async function getStockPrice(ticker){
+    const apiKey = "8d387ee577424308bb8b6e103f133559";
+    const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${apiKey}`;
+
+    try{
+        const res = await fetch(url);
+        const data = await res.json();
+        const price = data["Global Quote"]?.["05. price"];
+        if(price) return `The latest price of ${ticker} is $${price}`;
+        return `I couldn't find the price for ${ticker}.`;
+    } catch(err){
+        console.error(err);
+        return "Sorry, I couldn't fetch the stock price right now.";
+    }
+}
+
 async function getNews(query) {
     const apiKey = "8d387ee577424308bb8b6e103f133559";
     const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&apiKey=${apiKey}&pageSize=5`;
@@ -384,7 +400,7 @@ async function getBotReply(input){
     try{
         let userInput = input.toLowerCase().trim();
 
-        // 1. Follow-up Handlers
+        // 1️⃣ Follow-up Handlers
         if(userInput.includes("and why") || userInput === "why?"){
             switch(lastTopic){
                 case "business": return "Because businesses create value for customers and society while generating profit.";
@@ -403,22 +419,26 @@ async function getBotReply(input){
             }
         }
 
-        // 2. Stock Price Check (Regex)
-        const stockMatch = input.match(/price of (\w+)/i);
+        // 2️⃣ Stock Price Detection
+        const stockMatch = userInput.match(/price of (\w+)/i);
         if(stockMatch){
             const ticker = stockMatch[1].toUpperCase();
             lastTopic = "finance";
             return await getStockPrice(ticker);
         }
 
-        // 3. Resolve Context
+        // 3️⃣ News Detection
+        if(userInput.includes("news") || userInput.includes("latest") || userInput.includes("update") || userInput.includes("articles")){
+            return await getNews(userInput);
+        }
+
+        // 4️⃣ Resolve Context
         const context = resolveContext(userInput);
         let searchInput = (context && context !== userInput) ? userInput + " " + context : userInput;
 
-        // 4. Intent Matching
+        // 5️⃣ Intent Matching
         let bestIntent = null;
         let bestScore = 0;
-
         if(typeof intents !== "undefined"){
             for(const intent of intents){
                 for(const pattern of intent.patterns){
@@ -430,22 +450,16 @@ async function getBotReply(input){
                 }
             }
         }
-
         if(bestScore > 0.55 && bestIntent){
             const tag = bestIntent.tag;
-            // Update lastTopic for next time
-            if(["profit", "revenue", "costs", "finance"].includes(tag)) lastTopic = "finance";
-            else if(["marketing", "branding", "seo"].includes(tag)) lastTopic = "marketing";
-            else lastTopic = "business";
+            if(["profit","revenue","costs","finance"].includes(tag)) lastTopic="finance";
+            else if(["marketing","branding","seo"].includes(tag)) lastTopic="marketing";
+            else lastTopic="business";
 
             return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
         }
-        // Check if the question is about news
-        if(userInput.includes("news") || userInput.includes("latest") || userInput.includes("update") || userInput.includes("articles")){
-    // Call the async function and return
-    return await getNews(userInput); // make sure getBotReply is now async
-}
-        // 5. Smart Responses (Fallback)
+
+        // 6️⃣ Smart Responses (Fallbacks)
         if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic === "business")){
             lastTopic = "business";
             return "The purpose of a business is to satisfy customer needs while making profit.";
@@ -483,7 +497,9 @@ function addMessage(text, sender, id=null){
     chatBox.scrollTop = chatBox.scrollHeight;
     if(!id) typeText(msgDiv, text, 20); 
 }
+
 function openPage(page){window.location.href=page;}
+
 async function sendMessage() {
     const input = $("#user-input").val().trim();
     if (!input) return;
@@ -494,7 +510,6 @@ async function sendMessage() {
     const loadingId = "msg-" + Date.now();
     addMessage("Thinking...", 'bot', loadingId);
 
-    // Give it a small delay for realism
     setTimeout(async () => {
         const questions = input.toLowerCase().split(/and|[\.\?]/g).filter(q => q.trim().length > 2);
         let finalReply = "";
@@ -520,7 +535,9 @@ async function sendMessage() {
 }
 
 // Enter key sends
-$("#user-input").on('keypress',function(e){if(e.key==='Enter') sendMessage();});
+$("#user-input").on('keypress', function(e){
+    if(e.key==='Enter') sendMessage();
+});
 
 // Suggestions toggle
 $("#suggestBtn").click(()=>$("#suggestBox").toggle());
@@ -531,7 +548,6 @@ $(".suggestion").click(function(){
 
 // Dark mode from localStorage
 if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('dark');
-
 // Initial bot message
 window.onload=()=>{
     addMessage("Hello! I'm your AI assistant 🤖. Ask me about business, finance, marketing, or entrepreneurship.",'bot',null,true);
