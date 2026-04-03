@@ -435,7 +435,7 @@ if(bestScore > 0.55 && bestIntent){
     // Map specific tags to the broad categories used in your follow-up switch
     const tag = bestIntent.tag;
     
-    if(["profit", "revenue", "costs", "assets", "liabilities", "budget"].includes(tag)) {
+    if(["costs", "assets", "liabilities", "budget"].includes(tag)) {
         lastTopic = "finance";
     } else if(["advertising", "branding", "target_market", "seo"].includes(tag)) {
         lastTopic = "marketing";
@@ -480,7 +480,7 @@ It helps the economy and creates jobs.
 }
 
 // FINANCE
-if(context.includes("finance") || context.includes("money") || context.includes("profit")){
+if(context.includes("finance") || context.includes("money")){
     lastTopic = "finance";
 
     return `Finance is about managing money, including income, expenses, and profit.
