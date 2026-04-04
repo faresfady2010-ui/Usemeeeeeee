@@ -95,6 +95,8 @@ body.dark #voice-btn:hover {
                 <p class="suggestion">what is business</p>
                 <p class="suggestion">how to start a business</p>
                 <p class="suggestion">what is profit</p>
+                <p class="suggestion">latest business news</p>
+                <p class="suggestion">tech news</p>
                 <p class="suggestion">why did tesla stock drop</p>
                 <p class="suggestion">apple stock analysis</p>
             </div>
@@ -194,7 +196,7 @@ const intents = [
     // ACCOUNTING
     {tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
     {tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
-    {tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]}],
+    {tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
     {tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
 
     // SUCCESS
@@ -220,7 +222,7 @@ const intents = [
     // STRATEGY & ANALYSIS
     {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
     {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
-    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than the competition."]},
+    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
     {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
     {tag:"niche_market",patterns:["what is a niche","niche market meaning"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
 
@@ -233,7 +235,7 @@ const intents = [
     {tag:"b2c",patterns:["what is b2c","business to consumer"],responses:["B2C refers to businesses selling products and services directly to individual customers."]},
 
     // CUSTOMER EXPERIENCE
-    {tag:"customer_retention",patterns:["customer retention","keeping customers"],responses:["Customer retention refers to the activities a company uses to reduce the number of customer defections."]}],
+    {tag:"customer_retention",patterns:["customer retention","keeping customers"],responses:["Customer retention refers to the activities a company uses to reduce the number of customer defections."]},
     {tag:"customer_feedback",patterns:["importance of feedback","customer reviews"],responses:["Feedback helps businesses understand customer needs and improve their products or services."]},
     {tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company’s relationships and interactions with customers and potential customers."]},
     {tag:"user_experience",patterns:["what is ux","user experience"],responses:["UX refers to the overall experience a person has when interacting with a product, especially in terms of how easy or pleasing it is to use."]},
@@ -249,7 +251,7 @@ const intents = [
     // OPERATIONS & LOGISTICS
     {tag:"supply_chain",patterns:["supply chain management","scm"],responses:["The supply chain is the entire process of making and selling commercial goods, from the supply of materials to the sale to the customer."]},
     {tag:"outsourcing",patterns:["what is outsourcing"],responses:["Outsourcing is hiring a party outside a company to perform services or create goods that were traditionally performed in-house."]},
-    {tag:"inventory_management",patterns:["inventory management","stock control"],responses:["Inventory management is the process of ordering, storing, using, and selling a company's inventory."]}],
+    {tag:"inventory_management",patterns:["inventory management","stock control"],responses:["Inventory management is the process of ordering, storing, using, and selling a company's inventory."]},
     {tag:"wholesale",patterns:["what is wholesale"],responses:["Wholesale is the sale of goods in large quantities to be retailed by others."]},
 
     // MISC / INTERACTIVE
@@ -273,50 +275,30 @@ const intents = [
 
     // THE EXECUTION ASPECT
     {tag:"execution",patterns:["importance of execution","idea vs execution"],responses:["Having an idea is easy; the main aspect of business is execution—the ability to turn that idea into a working, profitable reality."]},
-    {tag:"iteration",patterns:["pivot and change","improving the business","iteration"],responses:["Making a business involves constant iteration: listening to feedback, fixing what's broken, and improving your product over time."]}],
+    {tag:"iteration",patterns:["pivot and change","improving the business","iteration"],responses:["Making a business involves constant iteration: listening to feedback, fixing what's broken, and improving your product over time."]},
     {tag:"resilience",patterns:["business mindset","staying in business","resilience"],responses:["Mental toughness is a key aspect. Most businesses face failures early on, so the ability to bounce back is essential."]},
 
     // FINANCIAL VIABILITY
-    {tag:"profitability",patterns:["is the business viable","making a profit","financial health"],responses:["A business must eventually become profitable. If expenses always exceed revenue, it's a hobby, not a business."]}],
+    {tag:"profitability",patterns:["is the business viable","making a profit","financial health"],responses:["A business must eventually become profitable. If expenses always exceed revenue, it's a hobby, not a business."]},
     {tag:"capital",patterns:["starting capital","funding the business"],responses:["You need resources—whether it's your own savings, a loan, or investors—to get the engine of your business running."]},
     // STRATEGIC FOUNDATIONS
-    {tag:"market_need",patterns:["identifying a market need","gap in the market","finding an opportunity"],responses:["A main aspect of making a business is finding a 'gap'—a problem that isn't being solved well by others—and filling it."]}],
-    {tag:"timing",patterns:["importance of timing","business timing","when to launch"],responses:["Timing is a critical aspect. Launching too early (before the market is ready) or too late (when it's crowded) can determine success or failure."]}],
+    {tag:"market_need",patterns:["identifying a market need","gap in the market","finding an opportunity"],responses:["A main aspect of making a business is finding a 'gap'—a problem that isn't being solved well by others—and filling it."]},
+    {tag:"timing",patterns:["importance of timing","business timing","when to launch"],responses:["Timing is a critical aspect. Launching too early (before the market is ready) or too late (when it's crowded) can determine success or failure."]},
     {tag:"differentiation",patterns:["how to stand out","differentiation strategy"],responses:["To succeed, a business must be different. This could be through lower prices, better quality, faster service, or a unique brand personality."]},
 
-    // CUSTOMER ACQUISITION & RETENTION
-    {tag:"customer_acquisition_cost",patterns:["what is cac","cost to get a customer"],responses:["CAC is the total cost of sales and marketing efforts needed to convince a customer to buy a product or service."]}],
-    {tag:"lifetime_value",patterns:["what is ltv","customer lifetime value"],responses:["LTV is the total amount of money a customer is expected to spend with your business during their entire relationship with you."]}],
-    {tag:"customer_persona",patterns:["what is a buyer persona","ideal customer profile"],responses:["A customer persona is a detailed description of your target customer, including their age, interests, pain points, and buying habits."]},
-
-    // THE PRODUCT ECOSYSTEM
-    {tag:"mvp",patterns:["what is mvp","minimum viable product"],responses:["An MVP is the simplest version of a product that allows you to start the learning process and get customer feedback as quickly as possible."]}],
-    {tag:"product_market_fit",patterns:["what is product market fit","pmf meaning"],responses:["Product-Market Fit is the stage where your product perfectly satisfies a strong market demand. It's the 'holy grail' for startups."]}],
-    {tag:"scalability_vs_growth",patterns:["growth vs scaling"],responses:["Growth means adding resources at the same rate as revenue; Scaling means increasing revenue much faster than you add costs."]},
-
-    // ADVANCED OPERATIONS
-    {tag:"standard_operating_procedures",patterns:["what is sop","standard procedures"],responses:["SOPs are step-by-step instructions to help employees carry out complex routine operations consistently."]}],
-    {tag:"automation",patterns:["business automation","using tools to save time"],responses:["Automation involves using technology to perform repetitive tasks, allowing you to focus on high-level strategy and creativity."]}],
-    {tag:"supply_chain_resilience",patterns:["supply chain issues","managing suppliers"],responses:["A strong business must have a resilient supply chain, meaning it has backup plans if a supplier fails or shipping is delayed."]},
-
-    // LEADERSHIP & CULTURE
-    {tag:"vision_statement",patterns:["what is a vision statement","company vision"],responses:["A vision statement describes where the company wants to be in the future (e.g., 'To be the world's most customer-centric company')."]}],
-    {tag:"mission_statement",patterns:["what is a mission statement","company mission"],responses:["A mission statement defines the company's current purpose, what it does, and who it serves."]}],
-    {tag:"core_values",patterns:["company values","business beliefs"],responses:["Core values are the guiding principles that dictate behavior and action within a business."]},
-
     // EXIT STRATEGIES (THE END GAME)
-    {tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]}],
-    {tag:"ipo",patterns:["what is an ipo","going public"],responses:["An Initial Public Offering (IPO) is when a private company offers shares to the public for the first time to raise capital."]}],
+    {tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]},
+    {tag:"ipo",patterns:["what is an ipo","going public"],responses:["An Initial Public Offering (IPO) is when a private company offers shares to the public for the first time to raise capital."]},
     {tag:"acquisition",patterns:["business acquisition","being bought out"],responses:["An acquisition occurs when one company buys most or all of another company's shares to take control of it."]},
 
     // RISK & RECOVERY
-    {tag:"pivot_vs_persevere",patterns:["should i pivot or persevere","when to change direction"],responses:["Deciding whether to stick with a plan (persevere) or change the fundamental strategy (pivot) is one of the hardest aspects of management."]}],
-    {tag:"burn_rate",patterns:["what is burn rate","spending money fast"],responses:["Burn rate is the pace at which a new company uses up its initial capital before generating positive cash flow."]}],
+    {tag:"pivot_vs_persevere",patterns:["should i pivot or persevere","when to change direction"],responses:["Deciding whether to stick with a plan (persevere) or change the fundamental strategy (pivot) is one of the hardest aspects of management."]},
+    {tag:"burn_rate",patterns:["what is burn rate","spending money fast"],responses:["Burn rate is the pace at which a new company uses up its initial capital before generating positive cash flow."]},
     {tag:"contingency_plan",patterns:["plan b","emergency business plan"],responses:["A contingency plan is a 'Plan B' for when things go wrong, such as a financial crisis or a major competitor entering the market."]},
     
     // NEWS & CURRENT EVENTS
-    {tag:"news",patterns:["what is the news","latest news","current news","business news","tell me the news"],responses:["Let me fetch the latest news for you..."]}],
-    {tag:"news_business",patterns:["business news","recent business","what's happening in business"],responses:["Let me get the latest business news..."]}],
+    {tag:"news",patterns:["what is the news","latest news","current news","business news","tell me the news"],responses:["Let me fetch the latest news for you..."]},
+    {tag:"news_business",patterns:["business news","recent business","what's happening in business"],responses:["Let me get the latest business news..."]},
     {tag:"news_technology",patterns:["tech news","technology news","latest tech"],responses:["Let me get the latest technology news..."]},
 
     // ADD MORE UP TO ~200 INTENTS
@@ -361,46 +343,45 @@ function similarity(s1,s2){
 }
 
 // ================= API KEYS =================
+const NEWSAPI_KEY = "8d387ee577424308bb8b6e103f133559";
 const FINNHUB_KEY = "ctij4u9r01qjblgsfvtgctij4u9r01qjblgsfvug"; // Free Finnhub key
 
-// ================= NEWS INTEGRATION =================
+// ================= NEWSAPI INTEGRATION =================
 async function fetchNews(keyword = "") {
     try {
-        const category = "general";
-        const url = `https://finnhub.io/api/v1/news?category=${category}&token=${FINNHUB_KEY}`;
+        const query = keyword || "business OR technology OR economy";
+        const today = new Date();
+        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+        const fromDate = thirtyDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD format
+        
+        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&from=${fromDate}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
+        
         const response = await fetch(url);
         const data = await response.json();
-
-        if (!Array.isArray(data) || data.length === 0) {
-            return `No news found for "${keyword || 'business'}". Try a different search term.`;
+        
+        // Check for API errors
+        if (data.status === "error") {
+            console.error("NewsAPI Error:", data);
+            return `News service error: ${data.message}. You may need to update the API key or check your account status.`;
         }
-
-        let filteredArticles = data;
-        if (keyword && keyword !== "business") {
-            const lowerKeyword = keyword.toLowerCase();
-            filteredArticles = data.filter(item => {
-                const headline = item.headline ? item.headline.toLowerCase() : "";
-                const summary = item.summary ? item.summary.toLowerCase() : "";
-                return headline.includes(lowerKeyword) || summary.includes(lowerKeyword);
+        
+        if (data.articles && data.articles.length > 0) {
+            let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
+            
+            data.articles.slice(0, 5).forEach((article, index) => {
+                newsText += `${index + 1}. **${article.title}**\n`;
+                newsText += `   📅 ${new Date(article.publishedAt).toLocaleDateString()}\n`;
+                newsText += `   🔗 Source: ${article.source.name}\n`;
+                newsText += `   ${article.description ? article.description.substring(0, 100) + "..." : ""}\n\n`;
             });
+            
+            return newsText;
+        } else {
+            console.log("NewsAPI Response:", data); // Debug log
+            return `No recent news found for "${keyword}". NewsAPI free tier only returns articles from the last 30 days. Try searching for current events or trending topics.`;
         }
-
-        filteredArticles = filteredArticles.slice(0, 5);
-        if (filteredArticles.length === 0) {
-            filteredArticles = data.slice(0, 5);
-        }
-
-        let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
-        filteredArticles.forEach((article, index) => {
-            newsText += `${index + 1}. **${article.headline}**\n`;
-            newsText += `   📅 ${new Date(article.datetime * 1000).toLocaleDateString()}\n`;
-            newsText += `   🔗 Source: ${article.source}\n`;
-            newsText += `   ${article.summary ? article.summary.substring(0, 100) + "..." : ""}\n\n`;
-        });
-
-        return newsText;
     } catch (error) {
-        console.error("News Fetch Error:", error);
+        console.error("NewsAPI Error:", error);
         return "Sorry, I couldn't fetch news at the moment. Please try again later.";
     }
 }
@@ -408,64 +389,74 @@ async function fetchNews(keyword = "") {
 // ================= STOCK ANALYSIS INTEGRATION =================
 async function analyzeStockMovement(company, symbol) {
     try {
-        const today = new Date();
-        const fromDate = new Date(today);
-        fromDate.setDate(fromDate.getDate() - 7);
-        const formatDate = date => date.toISOString().slice(0, 10);
-
-        const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=${formatDate(fromDate)}&to=${formatDate(today)}&token=${FINNHUB_KEY}`;
+        // Fetch company news from Finnhub (free tier)
+        const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2026-04-01&to=2026-04-04&token=${FINNHUB_KEY}`;
         const newsResponse = await fetch(newsUrl);
         const newsData = await newsResponse.json();
-
+        
+        // Fetch latest business news about company
+        const businessNewsUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(company + " stock")}&sortBy=publishedAt&language=en&pageSize=3&apiKey=${NEWSAPI_KEY}`;
+        const businessResponse = await fetch(businessNewsUrl);
+        const businessData = await businessResponse.json();
+        
         let analysis = `📊 **${company.toUpperCase()} Stock Analysis**\n\n`;
-
-        if (Array.isArray(newsData) && newsData.length > 0) {
-            const articles = newsData.slice(0, 5);
-            analysis += `📉 **Recent Company News:**\n\n`;
-
+        
+        // Check if we have recent news
+        if (newsData && newsData.length > 0) {
+            analysis += `📉 **Recent Developments:**\n\n`;
+            newsData.slice(0, 3).forEach((item, idx) => {
+                analysis += `${idx + 1}. ${item.headline}\n`;
+                analysis += `   Source: ${item.source}\n`;
+                analysis += `   ${item.summary ? item.summary.substring(0, 120) + "..." : ""}\n\n`;
+            });
+        }
+        
+        // Add business news analysis
+        if (businessData.articles && businessData.articles.length > 0) {
+            analysis += `\n💡 **Why It Moved:**\n\n`;
+            const articles = businessData.articles.slice(0, 3);
+            
+            // Sentiment analysis based on keywords
             let positiveSignals = 0;
             let negativeSignals = 0;
             let headlines = "";
-
-            articles.forEach((item, idx) => {
-                const headline = item.headline || "";
-                const summary = item.summary || "";
-                const text = (headline + " " + summary).toLowerCase();
-
-                if (text.includes("surge") || text.includes("soar") || text.includes("rally") ||
+            
+            articles.forEach((article, idx) => {
+                const text = (article.title + " " + article.description).toLowerCase();
+                
+                // Positive keywords
+                if (text.includes("surge") || text.includes("soar") || text.includes("rally") || 
                     text.includes("gain") || text.includes("profit") || text.includes("grow") ||
                     text.includes("beat") || text.includes("success") || text.includes("innovative")) {
                     positiveSignals++;
                 }
-
-                if (text.includes("drop") || text.includes("fall") || text.includes("decline") ||
+                
+                // Negative keywords
+                if (text.includes("drop") || text.includes("fall") || text.includes("decline") || 
                     text.includes("loss") || text.includes("fail") || text.includes("crash") ||
                     text.includes("risk") || text.includes("lawsuit") || text.includes("concern")) {
                     negativeSignals++;
                 }
-
-                headlines += `${idx + 1}. ${headline}\n`;
-                if (summary) {
-                    headlines += `   ${summary.substring(0, 120)}...\n`;
-                }
+                
+                headlines += `${idx + 1}. ${article.title}\n`;
             });
-
+            
             analysis += headlines + "\n";
+            
             if (negativeSignals > positiveSignals) {
-                analysis += `⚠️ **Market Sentiment:** More negative than positive\n`;
-                analysis += `Most recent company news includes concerns and downside pressure.\n`;
+                analysis += `⚠️ **Market Sentiment:** Negative\n`;
+                analysis += `The recent headlines suggest negative sentiment with concerns or disappointing news affecting the stock price.\n`;
             } else if (positiveSignals > negativeSignals) {
-                analysis += `✅ **Market Sentiment:** More positive than negative\n`;
-                analysis += `Most recent company news points to positive momentum or strong results.\n`;
+                analysis += `✅ **Market Sentiment:** Positive\n`;
+                analysis += `Recent developments show positive momentum with growth or success stories supporting the stock.\n`;
             } else {
                 analysis += `➡️ **Market Sentiment:** Mixed\n`;
-                analysis += `Recent news is mixed, with no clear bullish or bearish signal.\n`;
+                analysis += `Recent news shows mixed signals with both positive and negative developments.\n`;
             }
         } else {
-            analysis += `I couldn't find enough recent company news for ${company}.\n`;
-            analysis += `Try a slightly different stock query, or ask about a major company like Apple, Tesla, or Microsoft.\n`;
+            analysis += `\nNo specific news found, but price movements can be influenced by overall market conditions, earnings reports, or analyst ratings.\n`;
         }
-
+        
         return analysis;
     } catch (error) {
         console.error("Stock Analysis Error:", error);
@@ -516,16 +507,16 @@ function getBotReply(input){
 
         // CHECK FOR NEWS REQUESTS
         if (userInput.includes("news") || userInput.includes("latest")) {
-            let keyword = "business";
+            let keyword = "business OR technology OR economy"; // More specific query
             
             if (userInput.includes("tech") || userInput.includes("technology")) {
-                keyword = "technology";
+                keyword = "technology OR AI OR startup";
             } else if (userInput.includes("sport") || userInput.includes("sports")) {
-                keyword = "sports";
+                keyword = "sports OR football OR basketball";
             } else if (userInput.includes("health")) {
-                keyword = "health";
+                keyword = "health OR medical OR COVID";
             } else if (userInput.includes("world") || userInput.includes("international")) {
-                keyword = "world";
+                keyword = "world OR international OR politics";
             }
             
             // Return a special marker so sendMessage knows to fetch news
