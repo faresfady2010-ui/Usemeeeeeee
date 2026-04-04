@@ -222,7 +222,7 @@ const intents = [
     // STRATEGY & ANALYSIS
     {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
     {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
-    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than the competition."]},
+    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
     {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
     {tag:"niche_market",patterns:["what is a niche","niche market meaning"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
 
@@ -286,26 +286,6 @@ const intents = [
     {tag:"timing",patterns:["importance of timing","business timing","when to launch"],responses:["Timing is a critical aspect. Launching too early (before the market is ready) or too late (when it's crowded) can determine success or failure."]},
     {tag:"differentiation",patterns:["how to stand out","differentiation strategy"],responses:["To succeed, a business must be different. This could be through lower prices, better quality, faster service, or a unique brand personality."]},
 
-    // CUSTOMER ACQUISITION & RETENTION
-    {tag:"customer_acquisition_cost",patterns:["what is cac","cost to get a customer"],responses:["CAC is the total cost of sales and marketing efforts needed to convince a customer to buy a product or service."]},
-    {tag:"lifetime_value",patterns:["what is ltv","customer lifetime value"],responses:["LTV is the total amount of money a customer is expected to spend with your business during their entire relationship with you."]},
-    {tag:"customer_persona",patterns:["what is a buyer persona","ideal customer profile"],responses:["A customer persona is a detailed description of your target customer, including their age, interests, pain points, and buying habits."]},
-
-    // THE PRODUCT ECOSYSTEM
-    {tag:"mvp",patterns:["what is mvp","minimum viable product"],responses:["An MVP is the simplest version of a product that allows you to start the learning process and get customer feedback as quickly as possible."]},
-    {tag:"product_market_fit",patterns:["what is product market fit","pmf meaning"],responses:["Product-Market Fit is the stage where your product perfectly satisfies a strong market demand. It's the 'holy grail' for startups."]},
-    {tag:"scalability_vs_growth",patterns:["growth vs scaling"],responses:["Growth means adding resources at the same rate as revenue; Scaling means increasing revenue much faster than you add costs."]},
-
-    // ADVANCED OPERATIONS
-    {tag:"standard_operating_procedures",patterns:["what is sop","standard procedures"],responses:["SOPs are step-by-step instructions to help employees carry out complex routine operations consistently."]},
-    {tag:"automation",patterns:["business automation","using tools to save time"],responses:["Automation involves using technology to perform repetitive tasks, allowing you to focus on high-level strategy and creativity."]},
-    {tag:"supply_chain_resilience",patterns:["supply chain issues","managing suppliers"],responses:["A strong business must have a resilient supply chain, meaning it has backup plans if a supplier fails or shipping is delayed."]},
-
-    // LEADERSHIP & CULTURE
-    {tag:"vision_statement",patterns:["what is a vision statement","company vision"],responses:["A vision statement describes where the company wants to be in the future (e.g., 'To be the world's most customer-centric company')."]},
-    {tag:"mission_statement",patterns:["what is a mission statement","company mission"],responses:["A mission statement defines the company's current purpose, what it does, and who it serves."]},
-    {tag:"core_values",patterns:["company values","business beliefs"],responses:["Core values are the guiding principles that dictate behavior and action within a business."]},
-
     // EXIT STRATEGIES (THE END GAME)
     {tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]},
     {tag:"ipo",patterns:["what is an ipo","going public"],responses:["An Initial Public Offering (IPO) is when a private company offers shares to the public for the first time to raise capital."]},
@@ -364,16 +344,26 @@ function similarity(s1,s2){
 
 // ================= API KEYS =================
 const NEWSAPI_KEY = "8d387ee577424308bb8b6e103f133559";
-const FINNHUB_KEY = "d78khipr01qp0fl5i9l0d78khipr01qp0fl5i9lg"; // Free Finnhub key
+const FINNHUB_KEY = "ctij4u9r01qjblgsfvtgctij4u9r01qjblgsfvug"; // Free Finnhub key
 
 // ================= NEWSAPI INTEGRATION =================
 async function fetchNews(keyword = "") {
     try {
-        const query = keyword || "business";
-        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
+        const query = keyword || "business OR technology OR economy";
+        const today = new Date();
+        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+        const fromDate = thirtyDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD format
+        
+        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&from=${fromDate}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
         
         const response = await fetch(url);
         const data = await response.json();
+        
+        // Check for API errors
+        if (data.status === "error") {
+            console.error("NewsAPI Error:", data);
+            return `News service error: ${data.message}. You may need to update the API key or check your account status.`;
+        }
         
         if (data.articles && data.articles.length > 0) {
             let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
@@ -387,7 +377,8 @@ async function fetchNews(keyword = "") {
             
             return newsText;
         } else {
-            return `No news found for "${keyword}". Try a different search term.`;
+            console.log("NewsAPI Response:", data); // Debug log
+            return `No recent news found for "${keyword}". NewsAPI free tier only returns articles from the last 30 days. Try searching for current events or trending topics.`;
         }
     } catch (error) {
         console.error("NewsAPI Error:", error);
@@ -516,16 +507,16 @@ function getBotReply(input){
 
         // CHECK FOR NEWS REQUESTS
         if (userInput.includes("news") || userInput.includes("latest")) {
-            let keyword = "business";
+            let keyword = "business OR technology OR economy"; // More specific query
             
             if (userInput.includes("tech") || userInput.includes("technology")) {
-                keyword = "technology";
+                keyword = "technology OR AI OR startup";
             } else if (userInput.includes("sport") || userInput.includes("sports")) {
-                keyword = "sports";
+                keyword = "sports OR football OR basketball";
             } else if (userInput.includes("health")) {
-                keyword = "health";
+                keyword = "health OR medical OR COVID";
             } else if (userInput.includes("world") || userInput.includes("international")) {
-                keyword = "world";
+                keyword = "world OR international OR politics";
             }
             
             // Return a special marker so sendMessage knows to fetch news
