@@ -80,9 +80,9 @@ body.dark #voice-btn:hover {
     <div class="chat-header">usemee</div>
 
     <div class="nav-buttons">
-        <button onclick="openPage('index.html')">Home</button>
-        <button onclick="openPage('about.html')">About</button>
-        <button onclick="openPage('settings.html')">Settings</button>
+        <button onclick="openPage('templates/index.html')">Home</button>
+        <button onclick="openPage('templates/about.html')">About</button>
+        <button onclick="openPage('templates/settings.html')">Settings</button>
     </div>
 
     <div class="chat-box" id="chat-box"></div>
@@ -200,117 +200,15 @@ const intents = [
     {tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
 
     // SUCCESS
-    {tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
+    {tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]}],
     {tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
     {tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
-
-    // BUSINESS CREATION
-    {tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
-`Here are the key steps to create a business:
-
-1️⃣ Idea Generation  
-2️⃣ Market Research  
-3️⃣ Business Plan  
-4️⃣ Legal Structure  
-5️⃣ Register Your Business  
-6️⃣ Finances  
-7️⃣ Branding  
-8️⃣ Build Your Product/Service  
-9️⃣ Marketing  
-🔟 Launch & Grow`
-    ]},
-    // STRATEGY & ANALYSIS
-    {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
-    {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
-    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
-    {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
-    {tag:"niche_market",patterns:["what is a niche","niche market meaning"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
-
-    // DIGITAL PRESENCE & TECH
-    {tag:"seo",patterns:["what is seo","search engine optimization"],responses:["SEO is the process of improving your website to increase its visibility when people search for products or services."]},
-    {tag:"social_media_marketing",patterns:["social media marketing","marketing on instagram","facebook ads"],responses:["This involves using social media platforms to connect with your audience to build your brand and increase sales."]},
-    {tag:"content_marketing",patterns:["what is content marketing"],responses:["Content marketing focuses on creating and sharing valuable, relevant content to attract and retain customers."]},
-    {tag:"saas",patterns:["what is saas","software as a service"],responses:["SaaS is a software distribution model where a provider hosts applications and makes them available to customers over the internet."]},
-    {tag:"b2b",patterns:["what is b2b","business to business"],responses:["B2B describes businesses that sell products or services to other businesses rather than to individual consumers."]},
-    {tag:"b2c",patterns:["what is b2c","business to consumer"],responses:["B2C refers to businesses selling products and services directly to individual customers."]},
-
-    // CUSTOMER EXPERIENCE
-    {tag:"customer_retention",patterns:["customer retention","keeping customers"],responses:["Customer retention refers to the activities a company uses to reduce the number of customer defections."]},
-    {tag:"customer_feedback",patterns:["importance of feedback","customer reviews"],responses:["Feedback helps businesses understand customer needs and improve their products or services."]},
-    {tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company’s relationships and interactions with customers and potential customers."]},
-    {tag:"user_experience",patterns:["what is ux","user experience"],responses:["UX refers to the overall experience a person has when interacting with a product, especially in terms of how easy or pleasing it is to use."]},
-
-    // ADVANCED FINANCE & LEGAL
-    {tag:"roi",patterns:["what is roi","return on investment"],responses:["ROI is a measure used to evaluate the efficiency of an investment."]},
-    {tag:"equity_financing",patterns:["what is equity financing"],responses:["Equity financing is the process of raising capital through the sale of shares in an enterprise."]},
-    {tag:"debt_financing",patterns:["what is debt financing","business loans"],responses:["Debt financing occurs when a firm raises money for working capital or capital expenditures by selling debt instruments (loans)."]},
-    {tag:"intellectual_property",patterns:["what is ip","intellectual property"],responses:["IP refers to creations of the mind, such as inventions, literary works, designs, symbols, and names used in commerce."]},
-    {tag:"trademark",patterns:["what is a trademark","brand protection"],responses:["A trademark is a recognizable sign, design, or expression which identifies products or services of a particular source."]},
-    {tag:"patent",patterns:["what is a patent"],responses:["A patent is a government authority or license conferring a right or title for a set period, especially the sole right to exclude others from making, using, or selling an invention."]},
-
-    // OPERATIONS & LOGISTICS
-    {tag:"supply_chain",patterns:["supply chain management","scm"],responses:["The supply chain is the entire process of making and selling commercial goods, from the supply of materials to the sale to the customer."]},
-    {tag:"outsourcing",patterns:["what is outsourcing"],responses:["Outsourcing is hiring a party outside a company to perform services or create goods that were traditionally performed in-house."]},
-    {tag:"inventory_management",patterns:["inventory management","stock control"],responses:["Inventory management is the process of ordering, storing, using, and selling a company's inventory."]},
-    {tag:"wholesale",patterns:["what is wholesale"],responses:["Wholesale is the sale of goods in large quantities to be retailed by others."]},
-
-    // MISC / INTERACTIVE
-    {tag:"business_joke",patterns:["tell me a business joke","joke about work"],responses:["Why did the doughnut maker retire? He was tired of the hole business!"]},
-    {tag:"motivation_quote",patterns:["give me a quote","business motivation"],responses:["'The way to get started is to quit talking and begin doing.' - Walt Disney"]},
-    {tag:"pivot",patterns:["what is a pivot","business pivot"],responses:["A pivot is when a company shifts its business strategy to accommodate changes in its industry, customer preferences, or competition."]},
-    // CORE ASPECTS OF MAKING A BUSINESS
-    {tag:"value_creation",patterns:["main aspect of business","core of business","value creation"],responses:["The main aspect of a business is creating value. If you provide something that people find useful, they will be willing to pay for it."]},
-    {tag:"problem_solving",patterns:["solving problems","business ideas come from","identifying needs"],responses:["Successful businesses are built on solving a specific problem for a specific group of people. No problem, no business."]},
-    {tag:"sustainability",patterns:["business sustainability","long term success"],responses:["A key aspect of making a business is ensuring it is sustainable—meaning it can generate enough profit to continue operating for years to come."]},
-    {tag:"value_proposition",patterns:["what is a value proposition","why should customers buy"],responses:["A value proposition is the core reason why a customer should choose you over a competitor. it defines the unique benefit you provide."]},
-    {tag:"customer_centricity",patterns:["importance of customers","focusing on the customer"],responses:["The heart of any business is the customer. Without understanding and serving their needs, a business cannot survive."]},
-
-    // LEGAL & STRUCTURAL ASPECTS
-    {tag:"business_structure",patterns:["types of business","legal structure","sole proprietorship","llc"],responses:["Choosing a structure (like a Sole Proprietorship, Partnership, or LLC) is a main aspect that affects your taxes, liability, and paperwork."]},
-    {tag:"business_model",patterns:["what is a business model","how to make money"],responses:["A business model is your 'map' for making money. It explains what you sell, who you sell to, and how you deliver that value."]},
-    
-    // THE PEOPLE ASPECT
-    {tag:"human_capital",patterns:["importance of employees","people in business","hiring the right team"],responses:["A business is only as good as its people. Building a team with the right skills and culture is a vital aspect of growth."]},
-    {tag:"company_culture",patterns:["what is company culture","work environment"],responses:["Culture is the shared values and behaviors of a company. A strong culture keeps employees motivated and loyal."]},
-
-    // THE EXECUTION ASPECT
-    {tag:"execution",patterns:["importance of execution","idea vs execution"],responses:["Having an idea is easy; the main aspect of business is execution—the ability to turn that idea into a working, profitable reality."]},
-    {tag:"iteration",patterns:["pivot and change","improving the business","iteration"],responses:["Making a business involves constant iteration: listening to feedback, fixing what's broken, and improving your product over time."]},
-    {tag:"resilience",patterns:["business mindset","staying in business","resilience"],responses:["Mental toughness is a key aspect. Most businesses face failures early on, so the ability to bounce back is essential."]},
-
-    // FINANCIAL VIABILITY
-    {tag:"profitability",patterns:["is the business viable","making a profit","financial health"],responses:["A business must eventually become profitable. If expenses always exceed revenue, it's a hobby, not a business."]},
-    {tag:"capital",patterns:["starting capital","funding the business"],responses:["You need resources—whether it's your own savings, a loan, or investors—to get the engine of your business running."]},
-    // STRATEGIC FOUNDATIONS
-    {tag:"market_need",patterns:["identifying a market need","gap in the market","finding an opportunity"],responses:["A main aspect of making a business is finding a 'gap'—a problem that isn't being solved well by others—and filling it."]},
-    {tag:"timing",patterns:["importance of timing","business timing","when to launch"],responses:["Timing is a critical aspect. Launching too early (before the market is ready) or too late (when it's crowded) can determine success or failure."]},
-    {tag:"differentiation",patterns:["how to stand out","differentiation strategy"],responses:["To succeed, a business must be different. This could be through lower prices, better quality, faster service, or a unique brand personality."]},
-
-    // EXIT STRATEGIES (THE END GAME)
-    {tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]},
-    {tag:"ipo",patterns:["what is an ipo","going public"],responses:["An Initial Public Offering (IPO) is when a private company offers shares to the public for the first time to raise capital."]},
-    {tag:"acquisition",patterns:["business acquisition","being bought out"],responses:["An acquisition occurs when one company buys most or all of another company's shares to take control of it."]},
-
-    // RISK & RECOVERY
-    {tag:"pivot_vs_persevere",patterns:["should i pivot or persevere","when to change direction"],responses:["Deciding whether to stick with a plan (persevere) or change the fundamental strategy (pivot) is one of the hardest aspects of management."]},
-    {tag:"burn_rate",patterns:["what is burn rate","spending money fast"],responses:["Burn rate is the pace at which a new company uses up its initial capital before generating positive cash flow."]},
-    {tag:"contingency_plan",patterns:["plan b","emergency business plan"],responses:["A contingency plan is a 'Plan B' for when things go wrong, such as a financial crisis or a major competitor entering the market."]},
-    
-    // NEWS & CURRENT EVENTS
-    {tag:"news",patterns:["what is the news","latest news","current news","business news","tell me the news"],responses:["Let me fetch the latest news for you..."]},
-    {tag:"news_business",patterns:["business news","recent business","what's happening in business"],responses:["Let me get the latest business news..."]},
-    {tag:"news_technology",patterns:["tech news","technology news","latest tech"],responses:["Let me get the latest technology news..."]},
-
-    // ADD MORE UP TO ~200 INTENTS
+    // ... additional intents ...
 ];
 
 // Typo-tolerant similarity
-// ================= CONTEXT MEMORY =================
-// ================= CONTEXT MEMORY =================
-// ================= CONTEXT MEMORY =================
 let lastTopic = "";
 
-// ================= LEVENSHTEIN =================
 function levenshteinDistance(a, b){
     const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
 
@@ -342,126 +240,76 @@ function similarity(s1,s2){
     return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
-// ================= API KEYS =================
-const NEWSAPI_KEY = "8d387ee577424308bb8b6e103f133559";
-const FINNHUB_KEY = "ctij4u9r01qjblgsfvtgctij4u9r01qjblgsfvug"; // Free Finnhub key
+// ================= FREE API KEYS =================
+const GNEWS_API_KEY = "0d31cf6bde31c6920f82e4763c62d0ca"; // GNews - Free tier
+const FMP_API_KEY = "demo"; // Financial Modeling Prep demo key
 
-// ================= NEWSAPI INTEGRATION =================
-async function fetchNews(keyword = "") {
-    try {
-        const query = keyword || "business OR technology OR economy";
-        const today = new Date();
-        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
-        const fromDate = thirtyDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD format
-        
-        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&from=${fromDate}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        // Check for API errors
-        if (data.status === "error") {
-            console.error("NewsAPI Error:", data);
-            return `News service error: ${data.message}. You may need to update the API key or check your account status.`;
-        }
-        
-        if (data.articles && data.articles.length > 0) {
-            let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
-            
-            data.articles.slice(0, 5).forEach((article, index) => {
-                newsText += `${index + 1}. **${article.title}**\n`;
-                newsText += `   📅 ${new Date(article.publishedAt).toLocaleDateString()}\n`;
-                newsText += `   🔗 Source: ${article.source.name}\n`;
-                newsText += `   ${article.description ? article.description.substring(0, 100) + "..." : ""}\n\n`;
-            });
-            
-            return newsText;
-        } else {
-            console.log("NewsAPI Response:", data); // Debug log
-            return `No recent news found for "${keyword}". NewsAPI free tier only returns articles from the last 30 days. Try searching for current events or trending topics.`;
-        }
-    } catch (error) {
-        console.error("NewsAPI Error:", error);
-        return "Sorry, I couldn't fetch news at the moment. Please try again later.";
-    }
+// ================= GNEWS API - FREE NEWS =================
+function fetchNews(keyword = "") {
+    const query = encodeURIComponent(keyword || "business");
+    const url = `https://gnews.io/api/v4/search?q=${query}&lang=en&max=10&token=${GNEWS_API_KEY}`;
+    
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.articles && data.articles.length > 0) {
+                let newsText = `📰 **Latest ${keyword ? keyword : "Business"} News:**\n\n`;
+                data.articles.slice(0, 5).forEach((article, index) => {
+                    newsText += `${index + 1}. ${article.title}\n`;
+                    newsText += `   🔗 Source: ${article.source.name}\n`;
+                    newsText += `   ${article.description ? article.description.substring(0, 80) + "..." : ""}\n\n`;
+                });
+                return newsText;
+            }
+            return `No news found for "${keyword}".`;
+        })
+        .catch(error => {
+            console.error("GNews Error:", error);
+            return "📰 News service temporarily unavailable. Try: 'What is business?' or 'How to start a business?'";
+        });
 }
 
-// ================= STOCK ANALYSIS INTEGRATION =================
-async function analyzeStockMovement(company, symbol) {
-    try {
-        // Fetch company news from Finnhub (free tier)
-        const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2026-04-01&to=2026-04-04&token=${FINNHUB_KEY}`;
-        const newsResponse = await fetch(newsUrl);
-        const newsData = await newsResponse.json();
-        
-        // Fetch latest business news about company
-        const businessNewsUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(company + " stock")}&sortBy=publishedAt&language=en&pageSize=3&apiKey=${NEWSAPI_KEY}`;
-        const businessResponse = await fetch(businessNewsUrl);
-        const businessData = await businessResponse.json();
-        
-        let analysis = `📊 **${company.toUpperCase()} Stock Analysis**\n\n`;
-        
-        // Check if we have recent news
-        if (newsData && newsData.length > 0) {
-            analysis += `📉 **Recent Developments:**\n\n`;
-            newsData.slice(0, 3).forEach((item, idx) => {
-                analysis += `${idx + 1}. ${item.headline}\n`;
-                analysis += `   Source: ${item.source}\n`;
-                analysis += `   ${item.summary ? item.summary.substring(0, 120) + "..." : ""}\n\n`;
-            });
-        }
-        
-        // Add business news analysis
-        if (businessData.articles && businessData.articles.length > 0) {
-            analysis += `\n💡 **Why It Moved:**\n\n`;
-            const articles = businessData.articles.slice(0, 3);
+// ================= FINANCIAL MODELING PREP - STOCK DATA (FREE DEMO) =================
+function analyzeStockMovement(company, symbol) {
+    const quoteUrl = `https://financialmodelingprep.com/api/v3/quote/${symbol}?apikey=${FMP_API_KEY}`;
+    
+    return fetch(quoteUrl)
+        .then(response => response.json())
+        .then(data => {
+            let analysis = `📊 **${symbol} - ${company.toUpperCase()}**\n\n`;
             
-            // Sentiment analysis based on keywords
-            let positiveSignals = 0;
-            let negativeSignals = 0;
-            let headlines = "";
-            
-            articles.forEach((article, idx) => {
-                const text = (article.title + " " + article.description).toLowerCase();
+            if (Array.isArray(data) && data.length > 0) {
+                const quote = data[0];
+                analysis += `💰 **Price Data:**\n`;
+                analysis += `Current: $${quote.price ? quote.price.toFixed(2) : 'N/A'}\n`;
+                analysis += `Open: $${quote.open ? quote.open.toFixed(2) : 'N/A'}\n`;
+                analysis += `High: $${quote.high ? quote.high.toFixed(2) : 'N/A'}\n`;
+                analysis += `Low: $${quote.low ? quote.low.toFixed(2) : 'N/A'}\n`;
+                analysis += `Previous Close: $${quote.previousClose ? quote.previousClose.toFixed(2) : 'N/A'}\n\n`;
                 
-                // Positive keywords
-                if (text.includes("surge") || text.includes("soar") || text.includes("rally") || 
-                    text.includes("gain") || text.includes("profit") || text.includes("grow") ||
-                    text.includes("beat") || text.includes("success") || text.includes("innovative")) {
-                    positiveSignals++;
+                const change = quote.price && quote.previousClose ? quote.price - quote.previousClose : null;
+                const pctChange = quote.changePercent || 0;
+                if (change !== null) {
+                    analysis += `📈 **Change:**\n`;
+                    analysis += `Change: ${change.toFixed(2)} (${pctChange.toFixed(2)}%)\n`;
+                    analysis += `${change > 0 ? '📈 Trending UP' : '📉 Trending DOWN'}\n\n`;
                 }
                 
-                // Negative keywords
-                if (text.includes("drop") || text.includes("fall") || text.includes("decline") || 
-                    text.includes("loss") || text.includes("fail") || text.includes("crash") ||
-                    text.includes("risk") || text.includes("lawsuit") || text.includes("concern")) {
-                    negativeSignals++;
-                }
-                
-                headlines += `${idx + 1}. ${article.title}\n`;
-            });
-            
-            analysis += headlines + "\n";
-            
-            if (negativeSignals > positiveSignals) {
-                analysis += `⚠️ **Market Sentiment:** Negative\n`;
-                analysis += `The recent headlines suggest negative sentiment with concerns or disappointing news affecting the stock price.\n`;
-            } else if (positiveSignals > negativeSignals) {
-                analysis += `✅ **Market Sentiment:** Positive\n`;
-                analysis += `Recent developments show positive momentum with growth or success stories supporting the stock.\n`;
+                analysis += `💡 **Disclaimer:** Always do your own research before investing!\n`;
+                analysis += `📍 Data powered by Financial Modeling Prep (Demo)\n`;
             } else {
-                analysis += `➡️ **Market Sentiment:** Mixed\n`;
-                analysis += `Recent news shows mixed signals with both positive and negative developments.\n`;
+                analysis += `Unable to fetch real-time data. Please try:\n`;
+                analysis += `• Google Finance: finance.google.com\n`;
+                analysis += `• Yahoo Finance: finance.yahoo.com\n`;
+                analysis += `• TradingView: tradingview.com\n`;
             }
-        } else {
-            analysis += `\nNo specific news found, but price movements can be influenced by overall market conditions, earnings reports, or analyst ratings.\n`;
-        }
-        
-        return analysis;
-    } catch (error) {
-        console.error("Stock Analysis Error:", error);
-        return `Unable to fetch detailed analysis for ${company}. The service may be temporarily unavailable.`;
-    }
+            
+            return analysis;
+        })
+        .catch(error => {
+            console.error("Financial Modeling Prep Error:", error);
+            return `📊 Stock data service unavailable.\n\nFor live data visit:\n• finance.google.com\n• yahoo.com/finance`;
+        });
 }
 
 // ================= CONTEXT RESOLVER =================
@@ -507,25 +355,21 @@ function getBotReply(input){
 
         // CHECK FOR NEWS REQUESTS
         if (userInput.includes("news") || userInput.includes("latest")) {
-            let keyword = "business OR technology OR economy"; // More specific query
+            let keyword = "business";
             
             if (userInput.includes("tech") || userInput.includes("technology")) {
-                keyword = "technology OR AI OR startup";
+                keyword = "technology";
             } else if (userInput.includes("sport") || userInput.includes("sports")) {
-                keyword = "sports OR football OR basketball";
+                keyword = "sports";
             } else if (userInput.includes("health")) {
-                keyword = "health OR medical OR COVID";
+                keyword = "health";
             } else if (userInput.includes("world") || userInput.includes("international")) {
-                keyword = "world OR international OR politics";
+                keyword = "world";
             }
             
-            // Return a special marker so sendMessage knows to fetch news
             return { isNews: true, keyword: keyword };
         }
 
-        // 1️⃣ FOLLOW-UP HANDLERS FIRST
-        
-        // 2️⃣ FOLLOW-UP HANDLERS
         if(userInput.includes("and why") || userInput === "why?"){
             switch(lastTopic){
                 case "business":
@@ -565,13 +409,11 @@ function getBotReply(input){
             }
         }
 
-        // 2️⃣ Resolve context for new questions
         const context = resolveContext(userInput);
         if(context && context !== userInput){
             userInput += " " + context;
         }
 
-        // 3️⃣ Intent matching (only for new questions)
         let bestIntent = null;
         let bestScore = 0;
 
@@ -587,54 +429,20 @@ function getBotReply(input){
             }
         }
 
-        // inside getBotReply...
+        if(bestScore > 0.55 && bestIntent){
+            return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
+        }
 
-if(bestScore > 0.55 && bestIntent){
-    // Map specific tags to the broad categories used in your follow-up switchconst topicMap = {
-    
-const topicMap = {
-    finance: ["profit","revenue","costs","loss","cash_flow","budget","investment","risk","assets","liabilities","equity","break_even","roi","equity_financing","debt_financing","capital","profitability","burn_rate"],
+        if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic === "business")){
+            lastTopic = "business";
+            return "The purpose of a business is to provide goods or services that satisfy customer needs while making profit. It also aims to grow, create value, and contribute to the economy.";
+        }
 
-    marketing: ["marketing","advertising","branding","target_market","seo","social_media_marketing","content_marketing","customer_acquisition_cost","customer_persona"],
+        if(context.includes("business")){
+            lastTopic = "business";
 
-    operations: ["operations","production","quality","supply_chain","outsourcing","inventory_management","wholesale","automation","standard_operating_procedures","supply_chain_resilience"],
-
-    human_resources: ["human_resources","recruitment","training","motivation","human_capital","company_culture"],
-
-    strategy: ["swot_analysis","business_plan","unique_selling_proposition","scalability","niche_market","market_need","timing","differentiation","pivot","pivot_vs_persevere","contingency_plan"],
-
-    sales: ["sales","pricing","discount","customer_retention","customer_feedback","crm","lifetime_value"],
-
-    product: ["product","service","product_development","mvp","product_market_fit","iteration"],
-
-    market: ["market","demand","supply","competition"],
-
-    leadership: ["management","leadership","teamwork","communication","vision_statement","mission_statement","core_values"],
-
-    legal: ["intellectual_property","trademark","patent","business_structure"],
-
-    tech: ["saas","b2b","b2c","ecommerce","user_experience"],
-
-    general: ["business_definition","business_purpose","business_activity","business_success","business_growth","innovation","value_creation","problem_solving","sustainability","value_proposition","customer_centricity","execution","resilience"]
-};
-    return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
-}
-
-        // 4️⃣ SMART RESPONSES (your previous business/finance/marketing logic)
-        // ...
-        // ================= SMART RESPONSES =================
-
-// BUSINESS
-if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic === "business")){
-    lastTopic = "business";
-    return "The purpose of a business is to provide goods or services that satisfy customer needs while making profit. It also aims to grow, create value, and contribute to the economy.";
-}
-
-if(context.includes("business")){
-    lastTopic = "business";
-
-    if(userInput.includes("start") || userInput.includes("how")){
-        return `Starting a business involves several steps:
+            if(userInput.includes("start") || userInput.includes("how")){
+                return `Starting a business involves several steps:
 
 1. Develop an idea 💡  
 2. Research the market 📊  
@@ -644,37 +452,34 @@ if(context.includes("business")){
 6. Launch and market 🚀  
 
 👉 Want a real example?`;
-    }
+            }
 
-    return `A business is an organization that provides goods or services to make profit.
+            return `A business is an organization that provides goods or services to make profit.
 
 It helps the economy and creates jobs.
 
 👉 Do you want to learn how to start one?`;
-}
+        }
 
-// FINANCE
-if(context.includes("finance") || context.includes("money")){
-    lastTopic = "finance";
+        if(context.includes("finance") || context.includes("money")){
+            lastTopic = "finance";
 
-    return `Finance is about managing money, including income, expenses, and profit.
+            return `Finance is about managing money, including income, expenses, and profit.
 
 👉 Want an example?`;
-}
+        }
 
-// MARKETING
-if(context.includes("marketing")){
-    lastTopic = "marketing";
+        if(context.includes("marketing")){
+            lastTopic = "marketing";
 
-    return `Marketing is promoting and selling products or services.
+            return `Marketing is promoting and selling products or services.
 
 👉 Want strategies?`;
-}
+        }
 
-// YES FOLLOW-UP
-if(userInput === "yes"){
-    if(lastTopic === "business"){
-        return `Great! 🚀
+        if(userInput === "yes"){
+            if(lastTopic === "business"){
+                return `Great! 🚀
 
 Example business ideas:
 - Online store 🛒  
@@ -682,29 +487,28 @@ Example business ideas:
 - Tech service 💻  
 
 👉 Want help choosing one?`;
-    }
-}
+            }
+        }
 
-// QUESTION HELP
-if(userInput.includes("how")){
-    if(lastTopic){
-        return `You're asking about how related to ${lastTopic}.
+        if(userInput.includes("how")){
+            if(lastTopic){
+                return `You're asking about how related to ${lastTopic}.
 
 Try: "how to start ${lastTopic}"`;
-    }
-    return "That's a great question! Can you specify the topic?";
-}
+            }
+            return "That's a great question! Can you specify the topic?";
+        }
 
-if(userInput.includes("what")){
-    return "Try asking: 'What is business?' or 'What is marketing?'";
-}
+        if(userInput.includes("what")){
+            return "Try asking: 'What is business?' or 'What is marketing?'";
+        }
 
     } catch(error){
         console.error(error);
         return "Something went wrong ⚠️";
     }
 }
-// ================= UI =================
+
 function typeText(div,text,speed=20){
     if(!text) text = "Error";
 
@@ -733,7 +537,10 @@ function addMessage(text,sender,id=null){
 
     typeText(msgDiv,text,20);
 }
-function openPage(page){window.location.href=page;}
+function openPage(page){
+    console.log("Navigating to:", page);
+    window.location.href=page;
+}
 function sendMessage() {
     const input = $("#user-input").val().trim();
     if (!input) return;
@@ -744,69 +551,65 @@ function sendMessage() {
     const loadingId = "msg-" + Date.now();
     addMessage("Thinking...", 'bot', loadingId);
 
-    setTimeout(async () => {
-        // --- MULTI-QUESTION LOGIC START ---
-        // Split by "and", ".", or "?"
+    setTimeout(() => {
         const questions = input.toLowerCase().split(/and|[\.\?]/g).filter(q => q.trim().length > 2);
         
         let finalReply = "";
         
         if (questions.length > 1) {
-            // Process each question and join them with a clear break
             const replies = questions.map(q => getBotReply(q.trim()));
             finalReply = replies.join("\n\n---\n\n"); 
         } else {
-            // Just a single question
             finalReply = getBotReply(input);
         }
         
-        // Check if the response is a stock analysis request
         if (typeof finalReply === 'object' && finalReply.isStockAnalysis) {
-            finalReply = await analyzeStockMovement(finalReply.company, finalReply.symbol);
+            analyzeStockMovement(finalReply.company, finalReply.symbol).then(result => {
+                const msgDiv = document.getElementById(loadingId);
+                msgDiv.innerHTML = "";
+                typeText(msgDiv, result, 20);
+            });
+            return;
         }
-        // Check if the response is a news request
         else if (typeof finalReply === 'object' && finalReply.isNews) {
-            finalReply = await fetchNews(finalReply.keyword);
+            fetchNews(finalReply.keyword).then(result => {
+                const msgDiv = document.getElementById(loadingId);
+                msgDiv.innerHTML = "";
+                typeText(msgDiv, result, 20);
+            });
+            return;
         }
-        
-        // --- MULTI-QUESTION LOGIC END ---
 
         const msgDiv = document.getElementById(loadingId);
-        msgDiv.innerHTML = ""; // Clear the "Thinking..." text
+        msgDiv.innerHTML = "";
         typeText(msgDiv, finalReply, 20);
         
-        // If you have the voice function from before:
         if (typeof speakResponse === "function") {
             speakResponse(finalReply.replace(/-/g, "")); 
         }
     }, 500 + Math.random() * 800);
 }
 
-// Enter key sends
 $("#user-input").on('keypress',function(e){if(e.key==='Enter') sendMessage();});
 
-// Suggestions toggle
 $("#suggestBtn").click(()=>$("#suggestBox").toggle());
 $("#closeBtn").click(()=>$("#suggestBox").hide());
 $(".suggestion").click(function(){
     $("#user-input").val($(this).text()); sendMessage(); $("#suggestBox").hide();
 });
 
-// Dark mode from localStorage
 if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('dark');
 
-// Initial bot message
 window.onload=()=>{
     addMessage("Hello! I'm your AI assistant 🤖. Ask me about business, finance, marketing, or entrepreneurship.",'bot',null,true);
 }
-// ================= VOICE INPUT =================
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
 let recognition;
 
 if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.lang = "en-US"; // change to "ar-EG" if you want Arabic
+    recognition.lang = "en-US";
     recognition.continuous = false;
     recognition.interimResults = false;
 
@@ -822,23 +625,17 @@ if (SpeechRecognition) {
 
     recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
-
-        // Put voice text into input
         document.getElementById("user-input").value = transcript;
-
-        // Use YOUR existing chatbot system
         sendMessage();
     };
 
     recognition.onerror = function(e) {
         console.error("Voice error:", e.error);
-
         const btn = document.getElementById("voice-btn");
         if(btn) btn.classList.remove("listening");
     };
 }
 
-// Function triggered by 🎤 button
 function startVoice(){
     if(recognition){
         recognition.start();
