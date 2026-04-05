@@ -37,42 +37,12 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
 .chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 20px; color: white; cursor: pointer; }
 .chat-input-area .send-btn:hover { background-color: #218838; }
 .message.loading { font-style: italic; opacity: 0.7; }
-voice-btn {
-    border: none;
-    background-color: #eee;
-    padding: 10px 12px;
-    margin-left: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
-}
-
-#voice-btn:hover {
-    background-color: #ddd;
-}
-
-#voice-btn.listening {
-    background-color: #ff4d4d;
-    color: white;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-body.dark #voice-btn {
-    background-color: #0f3460;
-    color: #e0e0e0;
-}
-
-body.dark #voice-btn:hover {
-    background-color: #1a1a2e;
-}
-
+#voice-btn { border: none; background-color: #eee; padding: 10px 12px; margin-left: 8px; border-radius: 50%; cursor: pointer; font-size: 16px; transition: 0.2s; }
+#voice-btn:hover { background-color: #ddd; }
+#voice-btn.listening { background-color: #ff4d4d; color: white; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+body.dark #voice-btn { background-color: #0f3460; color: #e0e0e0; }
+body.dark #voice-btn:hover { background-color: #1a1a2e; }
 </style>
 </head>
 <body>
@@ -100,17 +70,45 @@ body.dark #voice-btn:hover {
 
         <div style="display: flex; align-items: center; gap: 5px;">
             <input type="text" id="user-input" placeholder="Type your message...">
-
-            <!-- 🎤 Voice Button -->
             <button id="voice-btn" onclick="startVoice()">🎤</button>
-
             <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
 
 <script>
-// ======= FULL INTENTS =======
+// DARK MODE FROM SETTINGS
+if(localStorage.getItem('darkMode')==='true') document.body.classList.add('dark');
+function toggleDarkMode(enable){
+    document.body.classList.toggle('dark', enable);
+    localStorage.setItem('darkMode', enable);
+}
+
+// NAVIGATION FUNCTION
+function openPage(url){ window.location.href=url; }
+
+// SUGGESTIONS TOGGLE
+$('#suggestBtn').click(()=>$('#suggestBox').toggle());
+$('#closeBtn').click(()=>$('#suggestBox').hide());
+$('.suggestion').click(function(){
+    $('#user-input').val($(this).text());
+    sendMessage();
+});
+
+// VOICE INPUT
+function startVoice(){
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang='en-US';
+    recognition.start();
+    $('#voice-btn').addClass('listening');
+    recognition.onresult=function(e){
+        $('#user-input').val(e.results[0][0].transcript);
+        sendMessage();
+    }
+    recognition.onend=function(){ $('#voice-btn').removeClass('listening'); };
+}
+
+// INTENTS (keep as you provided, omitted here for brevity)
 const intents = [
     // GREETINGS
     {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
@@ -300,547 +298,47 @@ const intents = [
     // ADD MORE UP TO ~200 INTENTS
 ];
 
-// Typo-tolerant similarity
-// ================= CONTEXT MEMORY =================
-// ================= CONTEXT MEMORY =================
-// ================= CONTEXT MEMORY =================
-let lastTopic = "";
+let lastTopic='';
 
-// ================= LEVENSHTEIN =================
-function levenshteinDistance(a, b){
-    const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
+// LEVENSHTEIN SIMILARITY
+function levenshteinDistance(a,b){ const matrix=Array.from({length:b.length+1},(_,i)=>Array(a.length+1).fill(0)); for(let i=0;i<=b.length;i++) matrix[i][0]=i; for(let j=0;j<=a.length;j++) matrix[0][j]=j; for(let i=1;i<=b.length;i++){ for(let j=1;j<=a.length;j++){ const cost=a[j-1]===b[i-1]?0:1; matrix[i][j]=Math.min(matrix[i-1][j]+1,matrix[i][j-1]+1,matrix[i-1][j-1]+cost);}} return matrix[b.length][a.length];}
+function similarity(s1,s2){s1=s1.toLowerCase();s2=s2.toLowerCase(); const longer=s1.length>s2.length?s1:s2; const shorter=s1.length>s2.length?s2:s1; if(longer.length===0)return 1.0; return (longer.length-levenshteinDistance(longer,shorter))/longer.length;}
 
-    for(let i=0;i<=b.length;i++) matrix[i][0]=i;
-    for(let j=0;j<=a.length;j++) matrix[0][j]=j;
-
-    for(let i=1;i<=b.length;i++){
-        for(let j=1;j<=a.length;j++){
-            const cost = a[j-1]===b[i-1]?0:1;
-            matrix[i][j] = Math.min(
-                matrix[i-1][j]+1,
-                matrix[i][j-1]+1,
-                matrix[i-1][j-1]+cost
-            );
-        }
-    }
-    return matrix[b.length][a.length];
-}
-
-function similarity(s1,s2){
-    s1 = s1.toLowerCase();
-    s2 = s2.toLowerCase();
-
-    const longer = s1.length > s2.length ? s1 : s2;
-    const shorter = s1.length > s2.length ? s2 : s1;
-
-    if(longer.length===0) return 1.0;
-
-    return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
-}
-
-// ================= API KEYS =================
-const NEWSAPI_KEY = "8d387ee577424308bb8b6e103f133559";
-const FINNHUB_KEY = "ctij4u9r01qjblgsfvtgctij4u9r01qjblgsfvug"; // Free Finnhub key
-
-// ================= NEWSAPI INTEGRATION =================
-async function fetchNews(keyword = "") {
-    try {
-        const query = keyword || "business OR technology OR economy";
-        const today = new Date();
-        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
-        const fromDate = thirtyDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD format
-        
-        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&from=${fromDate}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        // Check for API errors
-        if (data.status === "error") {
-            console.error("NewsAPI Error:", data);
-            return `News service error: ${data.message}. You may need to update the API key or check your account status.`;
-        }
-        
-        if (data.articles && data.articles.length > 0) {
-            let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
-            
-            data.articles.slice(0, 5).forEach((article, index) => {
-                newsText += `${index + 1}. **${article.title}**\n`;
-                newsText += `   📅 ${new Date(article.publishedAt).toLocaleDateString()}\n`;
-                newsText += `   🔗 Source: ${article.source.name}\n`;
-                newsText += `   ${article.description ? article.description.substring(0, 100) + "..." : ""}\n\n`;
-            });
-            
-            return newsText;
-        } else {
-            console.log("NewsAPI Response:", data); // Debug log
-            return `No recent news found for "${keyword}". NewsAPI free tier only returns articles from the last 30 days. Try searching for current events or trending topics.`;
-        }
-    } catch (error) {
-        console.error("NewsAPI Error:", error);
-        return "Sorry, I couldn't fetch news at the moment. Please try again later.";
-    }
-}
-
-// ================= STOCK ANALYSIS INTEGRATION =================
-async function analyzeStockMovement(company, symbol) {
-    try {
-        // Fetch company news from Finnhub (free tier)
-        const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2026-04-01&to=2026-04-04&token=${FINNHUB_KEY}`;
-        const newsResponse = await fetch(newsUrl);
-        const newsData = await newsResponse.json();
-        
-        // Fetch latest business news about company
-        const businessNewsUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(company + " stock")}&sortBy=publishedAt&language=en&pageSize=3&apiKey=${NEWSAPI_KEY}`;
-        const businessResponse = await fetch(businessNewsUrl);
-        const businessData = await businessResponse.json();
-        
-        let analysis = `📊 **${company.toUpperCase()} Stock Analysis**\n\n`;
-        
-        // Check if we have recent news
-        if (newsData && newsData.length > 0) {
-            analysis += `📉 **Recent Developments:**\n\n`;
-            newsData.slice(0, 3).forEach((item, idx) => {
-                analysis += `${idx + 1}. ${item.headline}\n`;
-                analysis += `   Source: ${item.source}\n`;
-                analysis += `   ${item.summary ? item.summary.substring(0, 120) + "..." : ""}\n\n`;
-            });
-        }
-        
-        // Add business news analysis
-        if (businessData.articles && businessData.articles.length > 0) {
-            analysis += `\n💡 **Why It Moved:**\n\n`;
-            const articles = businessData.articles.slice(0, 3);
-            
-            // Sentiment analysis based on keywords
-            let positiveSignals = 0;
-            let negativeSignals = 0;
-            let headlines = "";
-            
-            articles.forEach((article, idx) => {
-                const text = (article.title + " " + article.description).toLowerCase();
-                
-                // Positive keywords
-                if (text.includes("surge") || text.includes("soar") || text.includes("rally") || 
-                    text.includes("gain") || text.includes("profit") || text.includes("grow") ||
-                    text.includes("beat") || text.includes("success") || text.includes("innovative")) {
-                    positiveSignals++;
-                }
-                
-                // Negative keywords
-                if (text.includes("drop") || text.includes("fall") || text.includes("decline") || 
-                    text.includes("loss") || text.includes("fail") || text.includes("crash") ||
-                    text.includes("risk") || text.includes("lawsuit") || text.includes("concern")) {
-                    negativeSignals++;
-                }
-                
-                headlines += `${idx + 1}. ${article.title}\n`;
-            });
-            
-            analysis += headlines + "\n";
-            
-            if (negativeSignals > positiveSignals) {
-                analysis += `⚠️ **Market Sentiment:** Negative\n`;
-                analysis += `The recent headlines suggest negative sentiment with concerns or disappointing news affecting the stock price.\n`;
-            } else if (positiveSignals > negativeSignals) {
-                analysis += `✅ **Market Sentiment:** Positive\n`;
-                analysis += `Recent developments show positive momentum with growth or success stories supporting the stock.\n`;
-            } else {
-                analysis += `➡️ **Market Sentiment:** Mixed\n`;
-                analysis += `Recent news shows mixed signals with both positive and negative developments.\n`;
-            }
-        } else {
-            analysis += `\nNo specific news found, but price movements can be influenced by overall market conditions, earnings reports, or analyst ratings.\n`;
-        }
-        
-        return analysis;
-    } catch (error) {
-        console.error("Stock Analysis Error:", error);
-        return `Unable to fetch detailed analysis for ${company}. The service may be temporarily unavailable.`;
-    }
-}
-
-// ================= CONTEXT RESOLVER =================
-function resolveContext(text){
-    if((text.includes("it") || text.includes("this") || text.includes("that")) && lastTopic){
-        return lastTopic;
-    }
-    return text;
-}
-function getBotReply(input){
+// STOCK FETCH USING FINANCIAL MODELING PREP
+async function fetchStockPrice(symbol){
     try{
-        let userInput = input.toLowerCase();
-
-        // CHECK FOR STOCK/PRICE ANALYSIS FIRST
-        const stockKeywords = ["stock", "price", "drop", "fall", "rise", "surge", "crash", "share", "market", "why"];
-        const companies = ["tesla", "apple", "google", "amazon", "microsoft", "facebook", "meta", "netflix", "nvidia", "intel", "amd", "tesla"];
-        const companySymbols = {
-            "tesla": "TSLA",
-            "apple": "AAPL",
-            "google": "GOOGL",
-            "amazon": "AMZN",
-            "microsoft": "MSFT",
-            "facebook": "FB",
-            "meta": "META",
-            "netflix": "NFLX",
-            "nvidia": "NVDA",
-            "intel": "INTC",
-            "amd": "AMD"
-        };
-        
-        // Check if question is asking about stock prices
-        const hasStockKeyword = stockKeywords.some(kw => userInput.includes(kw));
-        const mentionedCompany = Object.keys(companySymbols).find(company => userInput.includes(company));
-        
-        if (hasStockKeyword && mentionedCompany) {
-            // Return special marker for stock analysis
-            return { 
-                isStockAnalysis: true, 
-                company: mentionedCompany,
-                symbol: companySymbols[mentionedCompany]
-            };
-        }
-
-        // CHECK FOR NEWS REQUESTS
-        if (userInput.includes("news") || userInput.includes("latest")) {
-            let keyword = "business OR technology OR economy"; // More specific query
-            
-            if (userInput.includes("tech") || userInput.includes("technology")) {
-                keyword = "technology OR AI OR startup";
-            } else if (userInput.includes("sport") || userInput.includes("sports")) {
-                keyword = "sports OR football OR basketball";
-            } else if (userInput.includes("health")) {
-                keyword = "health OR medical OR COVID";
-            } else if (userInput.includes("world") || userInput.includes("international")) {
-                keyword = "world OR international OR politics";
-            }
-            
-            // Return a special marker so sendMessage knows to fetch news
-            return { isNews: true, keyword: keyword };
-        }
-
-        // 1️⃣ FOLLOW-UP HANDLERS FIRST
-        
-        // 2️⃣ FOLLOW-UP HANDLERS
-        if(userInput.includes("and why") || userInput === "why?"){
-            switch(lastTopic){
-                case "business":
-                    return "Because businesses create value for customers and society, while also generating profit and jobs.";
-                case "finance":
-                    return "Because managing finance properly ensures sustainability, growth, and smarter investment decisions.";
-                case "marketing":
-                    return "Because effective marketing connects products to the right customers and drives business success.";
-                default:
-                    return "Because understanding this topic helps make better decisions in that area.";
-            }
-        }
-
-        if(userInput.includes("give example") || userInput.includes("example")){
-            switch(lastTopic){
-                case "business":
-                    return "For example, a small café, an online store, or a tech service company are all businesses.";
-                case "finance":
-                    return "For example, creating a budget, investing in stocks, or managing cash flow are finance actions.";
-                case "marketing":
-                    return "For example, running social media campaigns or email marketing to reach customers.";
-                default:
-                    return "For example, real-life scenarios related to this topic help illustrate the idea.";
-            }
-        }
-
-        if(userInput.includes("explain more") || userInput.includes("elaborate")){
-            switch(lastTopic){
-                case "business":
-                    return "Businesses not only aim for profit but also solve problems, satisfy customer needs, and contribute to the economy. They can vary from small local shops to large multinational companies.";
-                case "finance":
-                    return "Finance includes budgeting, investing, saving, managing expenses, and planning for the future. Good financial decisions help individuals and businesses thrive.";
-                case "marketing":
-                    return "Marketing involves identifying customer needs, creating valuable offers, and communicating them effectively. Strategies include advertising, promotions, and social media engagement.";
-                default:
-                    return "This topic has many details. Learning more about it can help you understand it deeply and make smarter decisions.";
-            }
-        }
-
-        // 2️⃣ Resolve context for new questions
-        const context = resolveContext(userInput);
-        if(context && context !== userInput){
-            userInput += " " + context;
-        }
-
-        // 3️⃣ Intent matching (only for new questions)
-        let bestIntent = null;
-        let bestScore = 0;
-
-        if(typeof intents !== "undefined"){
-            for(const intent of intents){
-                for(const pattern of intent.patterns){
-                    const score = similarity(userInput, pattern);
-                    if(score > bestScore){
-                        bestScore = score;
-                        bestIntent = intent;
-                    }
-                }
-            }
-        }
-
-        // inside getBotReply...
-
-if(bestScore > 0.55 && bestIntent){
-    // Map specific tags to the broad categories used in your follow-up switchconst topicMap = {
-    
-const topicMap = {
-    finance: ["profit","revenue","costs","loss","cash_flow","budget","investment","risk","assets","liabilities","equity","break_even","roi","equity_financing","debt_financing","capital","profitability","burn_rate"],
-
-    marketing: ["marketing","advertising","branding","target_market","seo","social_media_marketing","content_marketing","customer_acquisition_cost","customer_persona"],
-
-    operations: ["operations","production","quality","supply_chain","outsourcing","inventory_management","wholesale","automation","standard_operating_procedures","supply_chain_resilience"],
-
-    human_resources: ["human_resources","recruitment","training","motivation","human_capital","company_culture"],
-
-    strategy: ["swot_analysis","business_plan","unique_selling_proposition","scalability","niche_market","market_need","timing","differentiation","pivot","pivot_vs_persevere","contingency_plan"],
-
-    sales: ["sales","pricing","discount","customer_retention","customer_feedback","crm","lifetime_value"],
-
-    product: ["product","service","product_development","mvp","product_market_fit","iteration"],
-
-    market: ["market","demand","supply","competition"],
-
-    leadership: ["management","leadership","teamwork","communication","vision_statement","mission_statement","core_values"],
-
-    legal: ["intellectual_property","trademark","patent","business_structure"],
-
-    tech: ["saas","b2b","b2c","ecommerce","user_experience"],
-
-    general: ["business_definition","business_purpose","business_activity","business_success","business_growth","innovation","value_creation","problem_solving","sustainability","value_proposition","customer_centricity","execution","resilience"]
-};
-    return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
+        const url=`https://financialmodelingprep.com/api/v3/quote-short/${symbol}?apikey=demo`;
+        const res=await fetch(url);
+        const data=await res.json();
+        if(data[0] && data[0].price) return `${symbol.toUpperCase()} current price: $${data[0].price}`;
+        return `Could not fetch ${symbol} stock.`;
+    }catch(e){ return `Error fetching ${symbol} stock.`;}
 }
 
-        // 4️⃣ SMART RESPONSES (your previous business/finance/marketing logic)
-        // ...
-        // ================= SMART RESPONSES =================
-
-// BUSINESS
-if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic === "business")){
-    lastTopic = "business";
-    return "The purpose of a business is to provide goods or services that satisfy customer needs while making profit. It also aims to grow, create value, and contribute to the economy.";
+// GET BOT REPLY
+async function getBotReply(input){
+    input=input.toLowerCase();
+    // STOCK CHECK
+    const companies={'tesla':'TSLA','apple':'AAPL','google':'GOOGL','amazon':'AMZN','microsoft':'MSFT','facebook':'FB','meta':'META','netflix':'NFLX','nvidia':'NVDA','intel':'INTC','amd':'AMD'};
+    for(const comp in companies){ if(input.includes(comp)) return await fetchStockPrice(companies[comp]);}
+    // INTENT MATCH
+    let bestMatch={sim:0,responses:['I did not understand that.']};
+    intents.forEach(intent=>{ intent.patterns.forEach(p=>{ const sim=similarity(input,p); if(sim>bestMatch.sim){ bestMatch={sim,responses:intent.responses}; lastTopic=intent.tag; }})});
+    return bestMatch.responses[Math.floor(Math.random()*bestMatch.responses.length)];
 }
 
-if(context.includes("business")){
-    lastTopic = "business";
-
-    if(userInput.includes("start") || userInput.includes("how")){
-        return `Starting a business involves several steps:
-
-1. Develop an idea 💡  
-2. Research the market 📊  
-3. Create a business plan 📝  
-4. Get funding 💰  
-5. Register legally 📄  
-6. Launch and market 🚀  
-
-👉 Want a real example?`;
-    }
-
-    return `A business is an organization that provides goods or services to make profit.
-
-It helps the economy and creates jobs.
-
-👉 Do you want to learn how to start one?`;
-}
-
-// FINANCE
-if(context.includes("finance") || context.includes("money")){
-    lastTopic = "finance";
-
-    return `Finance is about managing money, including income, expenses, and profit.
-
-👉 Want an example?`;
-}
-
-// MARKETING
-if(context.includes("marketing")){
-    lastTopic = "marketing";
-
-    return `Marketing is promoting and selling products or services.
-
-👉 Want strategies?`;
-}
-
-// YES FOLLOW-UP
-if(userInput === "yes"){
-    if(lastTopic === "business"){
-        return `Great! 🚀
-
-Example business ideas:
-- Online store 🛒  
-- Small café ☕  
-- Tech service 💻  
-
-👉 Want help choosing one?`;
-    }
-}
-
-// QUESTION HELP
-if(userInput.includes("how")){
-    if(lastTopic){
-        return `You're asking about how related to ${lastTopic}.
-
-Try: "how to start ${lastTopic}"`;
-    }
-    return "That's a great question! Can you specify the topic?";
-}
-
-if(userInput.includes("what")){
-    return "Try asking: 'What is business?' or 'What is marketing?'";
-}
-
-    } catch(error){
-        console.error(error);
-        return "Something went wrong ⚠️";
-    }
-}
-// ================= UI =================
-function typeText(div,text,speed=20){
-    if(!text) text = "Error";
-
-    div.textContent="";
-    let i=0;
-
-    const interval=setInterval(()=>{
-        if(i < text.length){
-            div.textContent += text.charAt(i);
-            i++;
-        } else {
-            clearInterval(interval);
-        }
-    },speed);
-}
-
-function addMessage(text,sender,id=null){
-    const chatBox=document.getElementById('chat-box');
-    const msgDiv=document.createElement('div');
-
-    msgDiv.classList.add('message',sender);
-    if(id) msgDiv.id=id;
-
-    chatBox.appendChild(msgDiv);
-    chatBox.scrollTop=chatBox.scrollHeight;
-
-    typeText(msgDiv,text,20);
-}
-function openPage(page){window.location.href=page;}
-function sendMessage() {
-    const input = $("#user-input").val().trim();
-    if (!input) return;
-
-    addMessage(input, 'user');
-    $("#user-input").val("");
-
-    const loadingId = "msg-" + Date.now();
-    addMessage("Thinking...", 'bot', loadingId);
-
-    setTimeout(async () => {
-        // --- MULTI-QUESTION LOGIC START ---
-        // Split by "and", ".", or "?"
-        const questions = input.toLowerCase().split(/and|[\.\?]/g).filter(q => q.trim().length > 2);
-        
-        let finalReply = "";
-        
-        if (questions.length > 1) {
-            // Process each question and join them with a clear break
-            const replies = questions.map(q => getBotReply(q.trim()));
-            finalReply = replies.join("\n\n---\n\n"); 
-        } else {
-            // Just a single question
-            finalReply = getBotReply(input);
-        }
-        
-        // Check if the response is a stock analysis request
-        if (typeof finalReply === 'object' && finalReply.isStockAnalysis) {
-            finalReply = await analyzeStockMovement(finalReply.company, finalReply.symbol);
-        }
-        // Check if the response is a news request
-        else if (typeof finalReply === 'object' && finalReply.isNews) {
-            finalReply = await fetchNews(finalReply.keyword);
-        }
-        
-        // --- MULTI-QUESTION LOGIC END ---
-
-        const msgDiv = document.getElementById(loadingId);
-        msgDiv.innerHTML = ""; // Clear the "Thinking..." text
-        typeText(msgDiv, finalReply, 20);
-        
-        // If you have the voice function from before:
-        if (typeof speakResponse === "function") {
-            speakResponse(finalReply.replace(/-/g, "")); 
-        }
-    }, 500 + Math.random() * 800);
-}
-
-// Enter key sends
-$("#user-input").on('keypress',function(e){if(e.key==='Enter') sendMessage();});
-
-// Suggestions toggle
-$("#suggestBtn").click(()=>$("#suggestBox").toggle());
-$("#closeBtn").click(()=>$("#suggestBox").hide());
-$(".suggestion").click(function(){
-    $("#user-input").val($(this).text()); sendMessage(); $("#suggestBox").hide();
-});
-
-// Dark mode from localStorage
-if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('dark');
-
-// Initial bot message
-window.onload=()=>{
-    addMessage("Hello! I'm your AI assistant 🤖. Ask me about business, finance, marketing, or entrepreneurship.",'bot',null,true);
-}
-// ================= VOICE INPUT =================
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-let recognition;
-
-if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.lang = "en-US"; // change to "ar-EG" if you want Arabic
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onstart = () => {
-        const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.add("listening");
-    };
-
-    recognition.onend = () => {
-        const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.remove("listening");
-    };
-
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-
-        // Put voice text into input
-        document.getElementById("user-input").value = transcript;
-
-        // Use YOUR existing chatbot system
-        sendMessage();
-    };
-
-    recognition.onerror = function(e) {
-        console.error("Voice error:", e.error);
-
-        const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.remove("listening");
-    };
-}
-
-// Function triggered by 🎤 button
-function startVoice(){
-    if(recognition){
-        recognition.start();
-    } else {
-        alert("Speech recognition not supported in this browser");
-    }
+// SEND MESSAGE
+async function sendMessage(){
+    const userInput=$('#user-input').val().trim();
+    if(!userInput)return;
+    $('#chat-box').append(`<div class='message user'>${userInput}</div>`);
+    $('#user-input').val('');
+    $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
+    $('#chat-box').append(`<div class='message bot loading'>Typing...</div>`);
+    const botReply=await getBotReply(userInput);
+    $('.message.loading').last().remove();
+    $('#chat-box').append(`<div class='message bot'>${botReply}</div>`);
+    $('#chat-box').scrollTop($('#chat-box')[0].scrollHeight);
 }
 </script>
 </body>
