@@ -37,56 +37,23 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
 .chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 20px; color: white; cursor: pointer; }
 .chat-input-area .send-btn:hover { background-color: #218838; }
 .message.loading { font-style: italic; opacity: 0.7; }
-voice-btn {
-    border: none;
-    background-color: #eee;
-    padding: 10px 12px;
-    margin-left: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    transition: 0.2s;
-}
-
-#voice-btn:hover {
-    background-color: #ddd;
-}
-
-#voice-btn.listening {
-    background-color: #ff4d4d;
-    color: white;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-body.dark #voice-btn {
-    background-color: #0f3460;
-    color: #e0e0e0;
-}
-
-body.dark #voice-btn:hover {
-    background-color: #1a1a2e;
-}
-
+#voice-btn { border: none; background-color: #eee; padding: 10px 12px; margin-left: 8px; border-radius: 50%; cursor: pointer; font-size: 16px; transition: 0.2s; }
+#voice-btn:hover { background-color: #ddd; }
+#voice-btn.listening { background-color: #ff4d4d; color: white; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+body.dark #voice-btn { background-color: #0f3460; color: #e0e0e0; }
+body.dark #voice-btn:hover { background-color: #1a1a2e; }
 </style>
 </head>
 <body>
 <div class="chat-container">
     <div class="chat-header">usemee</div>
-
     <div class="nav-buttons">
         <button onclick="openPage('templates/index.html')">Home</button>
         <button onclick="openPage('templates/about.html')">About</button>
         <button onclick="openPage('templates/settings.html')">Settings</button>
     </div>
-
     <div class="chat-box" id="chat-box"></div>
-
     <div class="chat-input-area">
         <div id="suggestWrapper">
             <button id="suggestBtn">💡 Suggestions</button>
@@ -101,24 +68,19 @@ body.dark #voice-btn:hover {
                 <p class="suggestion">apple stock analysis</p>
             </div>
         </div>
-
         <div style="display: flex; align-items: center; gap: 5px;">
             <input type="text" id="user-input" placeholder="Type your message...">
-
-            <!-- 🎤 Voice Button -->
             <button id="voice-btn" onclick="startVoice()">🎤</button>
-
             <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
 
 <script>
-// ======= FULL INTENTS =======
 const intents = [
     {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
     {tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
-    {tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},  
+    {tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},
     {tag:"okays",patterns:["okay","ok"],responses:["👍 Got it. What do you want to work on next?"]},
     {tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers in exchange for money."]},
     {tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
@@ -173,72 +135,7 @@ const intents = [
     {tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
     {tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
     {tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:["Here are the key steps to create a business:\n\n1️⃣ Idea Generation\n2️⃣ Market Research\n3️⃣ Business Plan\n4️⃣ Legal Structure\n5️⃣ Register Your Business\n6️⃣ Finances\n7️⃣ Branding\n8️⃣ Build Your Product/Service\n9️⃣ Marketing\n🔟 Launch & Grow"]},
-    {tag:"swot_analysis",patterns:["what is swot","swot analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
-    {tag:"business_plan",patterns:["what is a business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
-    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point"],responses:["A USP is the specific factor that makes your business better than the competition."]},
-    {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand."]},
-    {tag:"niche_market",patterns:["niche market"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
-    {tag:"seo",patterns:["what is seo","search engine optimization"],responses:["SEO is the process of improving your website visibility in search results."]},
-    {tag:"social_media_marketing",patterns:["social media marketing"],responses:["Using social media platforms to connect with audiences and build your brand."]},
-    {tag:"content_marketing",patterns:["content marketing"],responses:["Creating and sharing valuable content to attract and retain customers."]},
-    {tag:"saas",patterns:["what is saas"],responses:["SaaS is a software distribution model where applications are available over the internet."]},
-    {tag:"b2b",patterns:["what is b2b"],responses:["B2B is businesses selling to other businesses."]},
-    {tag:"b2c",patterns:["what is b2c"],responses:["B2C is businesses selling directly to consumers."]},
-    {tag:"customer_retention",patterns:["customer retention"],responses:["Customer retention refers to reducing customer defections."]},
-    {tag:"customer_feedback",patterns:["customer feedback"],responses:["Feedback helps businesses improve their products."]},
-    {tag:"crm",patterns:["what is crm"],responses:["CRM manages relationships with customers and potential customers."]},
-    {tag:"user_experience",patterns:["what is ux"],responses:["UX is how easy and pleasant it is to use a product."]},
-    {tag:"roi",patterns:["what is roi"],responses:["ROI measures the efficiency of an investment."]},
-    {tag:"equity_financing",patterns:["equity financing"],responses:["Raising capital through the sale of shares."]},
-    {tag:"debt_financing",patterns:["debt financing"],responses:["Raising money by selling debt instruments or loans."]},
-    {tag:"intellectual_property",patterns:["intellectual property"],responses:["IP includes inventions, designs, and brand names."]},
-    {tag:"trademark",patterns:["trademark"],responses:["A trademark identifies products of a particular source."]},
-    {tag:"patent",patterns:["patent"],responses:["A patent gives exclusive rights to an invention."]},
-    {tag:"supply_chain",patterns:["supply chain"],responses:["The entire process from materials to sale to customer."]},
-    {tag:"outsourcing",patterns:["outsourcing"],responses:["Hiring outside parties to perform services."]},
-    {tag:"inventory_management",patterns:["inventory management"],responses:["Managing the ordering and storage of inventory."]},
-    {tag:"wholesale",patterns:["wholesale"],responses:["Selling goods in large quantities to retailers."]},
-    {tag:"business_joke",patterns:["business joke"],responses:["Why did the doughnut maker retire? He was tired of the hole business!"]},
-    {tag:"motivation_quote",patterns:["give me a quote"],responses:["'The way to get started is to quit talking and begin doing.' - Walt Disney"]},
-    {tag:"pivot",patterns:["what is pivot"],responses:["A pivot is shifting business strategy based on market changes."]},
-    {tag:"value_creation",patterns:["value creation"],responses:["Creating something people find useful and will pay for."]},
-    {tag:"problem_solving",patterns:["problem solving"],responses:["Businesses solve specific problems for specific groups."]},
-    {tag:"sustainability",patterns:["sustainability"],responses:["Ensuring a business can generate profit long-term."]},
-    {tag:"value_proposition",patterns:["value proposition"],responses:["The core reason customers choose you over competitors."]},
-    {tag:"customer_centricity",patterns:["customer centricity"],responses:["The heart of business is understanding customer needs."]},
-    {tag:"business_structure",patterns:["business structure"],responses:["Legal structure affects taxes and liability."]},
-    {tag:"business_model",patterns:["business model"],responses:["Your 'map' for making money and delivering value."]},
-    {tag:"human_capital",patterns:["human capital"],responses:["Good people are vital for business growth."]},
-    {tag:"company_culture",patterns:["company culture"],responses:["Shared values that keep employees motivated."]},
-    {tag:"execution",patterns:["execution"],responses:["Turning ideas into working, profitable reality."]},
-    {tag:"iteration",patterns:["iteration"],responses:["Constant improvement through feedback and changes."]},
-    {tag:"resilience",patterns:["resilience"],responses:["Mental toughness to bounce back from failures."]},
-    {tag:"profitability",patterns:["profitability"],responses:["A business must eventually become profitable."]},
-    {tag:"capital",patterns:["capital"],responses:["Resources needed to start and run a business."]},
-    {tag:"market_need",patterns:["market need"],responses:["Finding a problem others haven't solved well."]},
-    {tag:"timing",patterns:["timing"],responses:["Launching at the right market moment."]},
-    {tag:"differentiation",patterns:["differentiation"],responses:["Being different through price, quality, or service."]},
-    {tag:"customer_acquisition_cost",patterns:["cost to get customer"],responses:["CAC is the cost of sales and marketing per customer."]},
-    {tag:"lifetime_value",patterns:["lifetime value"],responses:["Total money a customer will spend with you."]},
-    {tag:"customer_persona",patterns:["customer persona"],responses:["Detailed description of your target customer."]},
-    {tag:"mvp",patterns:["what is mvp"],responses:["An MVP is the simplest version to test the market."]},
-    {tag:"product_market_fit",patterns:["product market fit"],responses:["When your product perfectly satisfies market demand."]},
-    {tag:"scalability_vs_growth",patterns:["growth vs scaling"],responses:["Growth adds resources; Scaling increases revenue faster."]},
-    {tag:"standard_operating_procedures",patterns:["standard procedures"],responses:["Step-by-step instructions for consistent operations."]},
-    {tag:"automation",patterns:["automation"],responses:["Using technology to perform repetitive tasks."]},
-    {tag:"supply_chain_resilience",patterns:["supply chain issues"],responses:["Having backup plans if suppliers fail."]},
-    {tag:"vision_statement",patterns:["vision statement"],responses:["Where the company wants to be in the future."]},
-    {tag:"mission_statement",patterns:["mission statement"],responses:["The company's current purpose and what it does."]},
-    {tag:"core_values",patterns:["core values"],responses:["Guiding principles that dictate behavior."]},
-    {tag:"exit_strategy",patterns:["exit strategy"],responses:["A plan for selling or transferring ownership."]},
-    {tag:"ipo",patterns:["ipo"],responses:["Initial Public Offering - going public."]},
-    {tag:"acquisition",patterns:["acquisition"],responses:["When one company buys another."]},
-    {tag:"pivot_vs_persevere",patterns:["pivot or persevere"],responses:["Deciding whether to stick with a plan or change direction."]},
-    {tag:"burn_rate",patterns:["burn rate"],responses:["The pace at which a company uses up capital."]},
-    {tag:"contingency_plan",patterns:["contingency plan"],responses:["A 'Plan B' for when things go wrong."]},
-    {tag:"news",patterns:["latest news","business news"],responses:["Let me fetch the latest news for you..."]},
-    {tag:"news_business",patterns:["what's happening in business"],responses:["Let me get the latest business news..."]},
-    {tag:"news_technology",patterns:["tech news"],responses:["Let me get the latest technology news..."]}
+    {tag:"news",patterns:["what is the news","latest news","current news","business news","tell me the news"],responses:["Let me fetch the latest news for you..."]},
 ];
 
 let lastTopic = "";
@@ -265,81 +162,74 @@ function similarity(s1,s2){
     return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
-const NEWSAPI_KEY = "8d387ee577424308bb8b6e103f133559";
-const FINNHUB_KEY = "ctij4u9r01qjblgsfvtgctij4u9r01qjblgsfvug";
+const GNEWS_API_KEY = "0d31cf6bde31c6920f82e4763c62d0ca";
+const FINNHUB_KEY = "cvog8m9r01qti3d0kj4gcvog8m9r01qti3d0kj5g";
 
-async function fetchNews(keyword = "") {
-    try {
-        const query = keyword || "business";
-        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
-        const response = await fetch(url);
-        const data = await response.json();
-        if (data.articles && data.articles.length > 0) {
-            let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
-            data.articles.slice(0, 5).forEach((article, index) => {
-                newsText += `${index + 1}. **${article.title}**\n`;
-                newsText += `   📅 ${new Date(article.publishedAt).toLocaleDateString()}\n`;
-                newsText += `   🔗 Source: ${article.source.name}\n`;
-                newsText += `   ${article.description ? article.description.substring(0, 100) + "..." : ""}\n\n`;
-            });
-            return newsText;
-        } else {
-            return `No news found for "${keyword}". Try a different search term.`;
-        }
-    } catch (error) {
-        console.error("NewsAPI Error:", error);
-        return "Sorry, I couldn't fetch news at the moment.";
-    }
+function fetchNews(keyword = "") {
+    const query = encodeURIComponent(keyword || "business");
+    const url = `https://gnews.io/api/v4/search?q=${query}&lang=en&max=10&token=${GNEWS_API_KEY}`;
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.articles && data.articles.length > 0) {
+                let newsText = `📰 **Latest ${keyword ? keyword : "Business"} News:**\n\n`;
+                data.articles.slice(0, 5).forEach((article, index) => {
+                    newsText += `${index + 1}. ${article.title}\n`;
+                    newsText += `   🔗 Source: ${article.source.name}\n`;
+                    newsText += `   ${article.description ? article.description.substring(0, 80) + "..." : ""}\n\n`;
+                });
+                return newsText;
+            }
+            return `No news found for "${keyword}".`;
+        })
+        .catch(error => {
+            console.error("GNews Error:", error);
+            return "📰 News service temporarily unavailable.";
+        });
 }
 
-async function analyzeStockMovement(company, symbol) {
-    try {
-        const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2026-04-01&to=2026-04-04&token=${FINNHUB_KEY}`;
-        const newsResponse = await fetch(newsUrl);
-        const newsData = await newsResponse.json();
-        const businessNewsUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(company + " stock")}&sortBy=publishedAt&language=en&pageSize=3&apiKey=${NEWSAPI_KEY}`;
-        const businessResponse = await fetch(businessNewsUrl);
-        const businessData = await businessResponse.json();
-        let analysis = `📊 **${company.toUpperCase()} Stock Analysis**\n\n`;
-        if (newsData && newsData.length > 0) {
-            analysis += `📉 **Recent Developments:**\n\n`;
-            newsData.slice(0, 3).forEach((item, idx) => {
-                analysis += `${idx + 1}. ${item.headline}\n`;
-                analysis += `   Source: ${item.source}\n`;
-                analysis += `   ${item.summary ? item.summary.substring(0, 120) + "..." : ""}\n\n`;
-            });
-        }
-        if (businessData.articles && businessData.articles.length > 0) {
-            analysis += `\n💡 **Why It Moved:**\n\n`;
-            const articles = businessData.articles.slice(0, 3);
-            let positiveSignals = 0;
-            let negativeSignals = 0;
-            let headlines = "";
-            articles.forEach((article, idx) => {
-                const text = (article.title + " " + article.description).toLowerCase();
-                if (text.includes("surge") || text.includes("soar") || text.includes("rally") || 
-                    text.includes("gain") || text.includes("profit") || text.includes("grow")) {
-                    positiveSignals++;
-                }
-                if (text.includes("drop") || text.includes("fall") || text.includes("decline")) {
-                    negativeSignals++;
-                }
-                headlines += `${idx + 1}. ${article.title}\n`;
-            });
-            analysis += headlines + "\n";
-            if (negativeSignals > positiveSignals) {
-                analysis += `⚠️ **Market Sentiment:** Negative\n`;
-            } else if (positiveSignals > negativeSignals) {
-                analysis += `✅ **Market Sentiment:** Positive\n`;
-            } else {
-                analysis += `➡️ **Market Sentiment:** Mixed\n`;
+function analyzeStockMovement(company, symbol) {
+    const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${FINNHUB_KEY}`;
+    const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${FINNHUB_KEY}`;
+    
+    return Promise.all([
+        fetch(quoteUrl).then(r => r.json()),
+        fetch(profileUrl).then(r => r.json())
+    ])
+    .then(([quote, profile]) => {
+        let analysis = `📊 **${symbol} - ${company.toUpperCase()}**\n\n`;
+        
+        if (quote.c) {
+            analysis += `💰 **Price Data:**\n`;
+            analysis += `Current: $${quote.c.toFixed(2)}\n`;
+            analysis += `Open: $${quote.o ? quote.o.toFixed(2) : 'N/A'}\n`;
+            analysis += `High: $${quote.h ? quote.h.toFixed(2) : 'N/A'}\n`;
+            analysis += `Low: $${quote.l ? quote.l.toFixed(2) : 'N/A'}\n`;
+            analysis += `Previous Close: $${quote.pc ? quote.pc.toFixed(2) : 'N/A'}\n\n`;
+            
+            analysis += `📈 **Change:**\n`;
+            const change = quote.c - (quote.pc || 0);
+            const pctChange = quote.d || 0;
+            analysis += `Change: ${change.toFixed(2)} (${pctChange.toFixed(2)}%)\n`;
+            analysis += `${change > 0 ? '📈 Trending UP' : '📉 Trending DOWN'}\n\n`;
+            
+            if (profile.name) {
+                analysis += `🏢 **About:**\n`;
+                analysis += `Company: ${profile.name}\n`;
+                analysis += `Industry: ${profile.finnhubIndustry || 'N/A'}\n`;
+                analysis += `Exchange: ${profile.exchange || 'N/A'}\n\n`;
             }
+            
+            analysis += `💡 **Disclaimer:** Always do your own research!\n📍 Data by Finnhub\n`;
+        } else {
+            analysis += `Unable to fetch real-time data.\n• finance.google.com\n• yahoo.com/finance\n`;
         }
         return analysis;
-    } catch (error) {
-        console.error("Stock Analysis Error:", error);
-        return `Unable to fetch analysis for ${company}.`;
-    }
+    })
+    .catch(error => {
+        console.error("Finnhub Error:", error);
+        return `📊 Stock data unavailable.\n• finance.google.com\n• yahoo.com/finance`;
+    });
 }
 
 function resolveContext(text){
@@ -352,30 +242,20 @@ function resolveContext(text){
 function getBotReply(input){
     try{
         let userInput = input.toLowerCase();
-        const stockKeywords = ["stock", "price", "drop", "fall", "rise", "surge", "crash"];
-        const companySymbols = {
-            "tesla": "TSLA",
-            "apple": "AAPL",
-            "google": "GOOGL",
-            "amazon": "AMZN",
-            "microsoft": "MSFT",
-        };
+        const stockKeywords = ["stock", "price", "drop", "fall", "rise", "surge", "crash", "share", "market", "why"];
+        const companySymbols = {"tesla": "TSLA", "apple": "AAPL", "google": "GOOGL", "amazon": "AMZN", "microsoft": "MSFT", "facebook": "FB", "meta": "META", "netflix": "NFLX", "nvidia": "NVDA", "intel": "INTC", "amd": "AMD"};
         
         const hasStockKeyword = stockKeywords.some(kw => userInput.includes(kw));
         const mentionedCompany = Object.keys(companySymbols).find(company => userInput.includes(company));
         
         if (hasStockKeyword && mentionedCompany) {
-            return { 
-                isStockAnalysis: true, 
-                company: mentionedCompany,
-                symbol: companySymbols[mentionedCompany]
-            };
+            return {isStockAnalysis: true, company: mentionedCompany, symbol: companySymbols[mentionedCompany]};
         }
 
         if (userInput.includes("news") || userInput.includes("latest")) {
             let keyword = "business";
             if (userInput.includes("tech")) keyword = "technology";
-            return { isNews: true, keyword: keyword };
+            return {isNews: true, keyword: keyword};
         }
 
         if(userInput.includes("and why") || userInput === "why?"){
@@ -400,7 +280,15 @@ function getBotReply(input){
             return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
         }
 
-        return "I'm not sure about that. Try asking: 'What is business?' or 'How to start a business?'";
+        if(userInput.includes("how")){
+            return "Can you be more specific about what you'd like to know?";
+        }
+
+        if(userInput.includes("what")){
+            return "Try asking: 'What is business?' or 'What is profit?'";
+        }
+
+        return "I'm not sure. Try asking about business, finance, or marketing!";
     } catch(error){
         console.error(error);
         return "Something went wrong ⚠️";
@@ -443,15 +331,26 @@ function sendMessage() {
     $("#user-input").val("");
     const loadingId = "msg-" + Date.now();
     addMessage("Thinking...", 'bot', loadingId);
-    setTimeout(async () => {
+
+    setTimeout(() => {
         let finalReply = getBotReply(input);
         
         if (typeof finalReply === 'object' && finalReply.isStockAnalysis) {
-            finalReply = await analyzeStockMovement(finalReply.company, finalReply.symbol);
+            analyzeStockMovement(finalReply.company, finalReply.symbol).then(result => {
+                const msgDiv = document.getElementById(loadingId);
+                msgDiv.innerHTML = "";
+                typeText(msgDiv, result, 20);
+            });
+            return;
         } else if (typeof finalReply === 'object' && finalReply.isNews) {
-            finalReply = await fetchNews(finalReply.keyword);
+            fetchNews(finalReply.keyword).then(result => {
+                const msgDiv = document.getElementById(loadingId);
+                msgDiv.innerHTML = "";
+                typeText(msgDiv, result, 20);
+            });
+            return;
         }
-        
+
         const msgDiv = document.getElementById(loadingId);
         msgDiv.innerHTML = "";
         typeText(msgDiv, finalReply, 20);
