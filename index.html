@@ -119,52 +119,33 @@ const intents = [
     // GREETINGS
   
 
-{tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:[() => getDynamicResponse("Hello! I'm here to help you understand business concepts in a simple and clear way. You can ask me anything from basics to advanced topics.")]},
-
-{tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye! It was great helping you today. Come back anytime if you want to learn more."]},
-
-{tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm glad I could help."]},  
-
-{tag:"okays",patterns:["okay","ok"],responses:["Got it! Tell me what you'd like to explore next."]},
-
+   {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:[() => getDynamicResponse("Hello! I'm here to help you understand business concepts in a simple and clear way. You can ask me anything from basics to advanced topics.")]},
+   {tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye! It was great helping you today. Come back anytime if you want to learn more."]},
+   {tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm glad I could help."]},  
+   {tag:"okays",patterns:["okay","ok"],responses:["Got it! Tell me what you'd like to explore next."]},
 // BUSINESS BASICS
-{tag:"business_definition",patterns:["what is business","define business"],responses:[() => getDynamicResponse("A business is an organization that provides goods or services to customers in exchange for money. Its main goal is to satisfy customer needs while making a profit. Businesses play a major role in economic growth and job creation.")]},
-
-{tag:"business_purpose",patterns:["purpose of business"],responses:[() => getDynamicResponse("The purpose of a business is to meet customer needs by providing value while generating profit. Profit allows the business to grow and continue operating over time.")]},
-
-{tag:"business_activity",patterns:["business activities"],responses:[() => getDynamicResponse("Business activities include producing goods, providing services, marketing, and managing operations. All these activities work together to create value and generate revenue.")]},
+   {tag:"business_definition",patterns:["what is business","define business"],responses:[() => getDynamicResponse("A business is an organization that provides goods or services to customers in exchange for money. Its main goal is to satisfy customer needs while making a profit. Businesses play a major role in economic growth and job creation.")]},
+   {tag:"business_purpose",patterns:["purpose of business"],responses:[() => getDynamicResponse("The purpose of a business is to meet customer needs by providing value while generating profit. Profit allows the business to grow and continue operating over time.")]},
+   {tag:"business_activity",patterns:["business activities"],responses:[() => getDynamicResponse("Business activities include producing goods, providing services, marketing, and managing operations. All these activities work together to create value and generate revenue.")]},
 
 // MONEY
-{tag:"profit",patterns:["profit"],responses:[() => getDynamicResponse("Profit is the money left after subtracting costs from revenue. It shows whether a business is successful and sustainable.")]},
-
-{tag:"revenue",patterns:["revenue"],responses:[() => getDynamicResponse("Revenue is the total income a business earns from selling its products or services. It is the starting point for calculating profit.")]},
-
-{tag:"costs",patterns:["costs"],responses:[() => getDynamicResponse("Costs are the expenses a business must pay, such as rent, salaries, and materials. Managing costs is important to maintain profitability.")]},
-
-{tag:"loss",patterns:["loss"],responses:[() => getDynamicResponse("A loss occurs when costs are higher than revenue. This means the business is losing money and may need to adjust its strategy.")]},
-
-{tag:"cash_flow",patterns:["cash flow"],responses:[() => getDynamicResponse("Cash flow refers to the movement of money in and out of a business. Positive cash flow helps keep the business stable and running smoothly.")]},
-
+   {tag:"profit",patterns:["profit"],responses:[() => getDynamicResponse("Profit is the money left after subtracting costs from revenue. It shows whether a business is successful and sustainable.")]},
+   {tag:"revenue",patterns:["revenue"],responses:[() => getDynamicResponse("Revenue is the total income a business earns from selling its products or services. It is the starting point for calculating profit.")]},
+   {tag:"costs",patterns:["costs"],responses:[() => getDynamicResponse("Costs are the expenses a business must pay, such as rent, salaries, and materials. Managing costs is important to maintain profitability.")]},
+   {tag:"loss",patterns:["loss"],responses:[() => getDynamicResponse("A loss occurs when costs are higher than revenue. This means the business is losing money and may need to adjust its strategy.")]},
+   {tag:"cash_flow",patterns:["cash flow"],responses:[() => getDynamicResponse("Cash flow refers to the movement of money in and out of a business. Positive cash flow helps keep the business stable and running smoothly.")]},
 // ENTREPRENEURSHIP
-{tag:"entrepreneur",patterns:["entrepreneur"],responses:[() => getDynamicResponse("An entrepreneur is someone who starts and manages a business, often taking risks to make a profit. Entrepreneurs drive innovation and create opportunities.")]},
-
-{tag:"entrepreneurship",patterns:["entrepreneurship"],responses:[() => getDynamicResponse("Entrepreneurship is the process of creating and running a business by identifying opportunities and managing risks.")]},
-
-{tag:"startup",patterns:["startup"],responses:[() => getDynamicResponse("A startup is a newly created business focused on growth and innovation, often aiming to solve a specific problem.")]},
-
+   {tag:"entrepreneur",patterns:["entrepreneur"],responses:[() => getDynamicResponse("An entrepreneur is someone who starts and manages a business, often taking risks to make a profit. Entrepreneurs drive innovation and create opportunities.")]},
+   {tag:"entrepreneurship",patterns:["entrepreneurship"],responses:[() => getDynamicResponse("Entrepreneurship is the process of creating and running a business by identifying opportunities and managing risks.")]},
+   {tag:"startup",patterns:["startup"],responses:[() => getDynamicResponse("A startup is a newly created business focused on growth and innovation, often aiming to solve a specific problem.")]},
 // MARKETING
-{tag:"marketing",patterns:["marketing"],responses:[() => getDynamicResponse("Marketing is the process of promoting and selling products or services. It involves understanding customers and communicating value effectively.")]},
-
-{tag:"advertising",patterns:["advertising"],responses:[() => getDynamicResponse("Advertising is paid promotion used to reach a large audience and increase awareness about products or services.")]},
-
-{tag:"branding",patterns:["branding"],responses:[() => getDynamicResponse("Branding creates a unique identity for a business through its name, design, and image, helping it stand out.")]},
-
-{tag:"target_market",patterns:["target market"],responses:[() => getDynamicResponse("A target market is the specific group of customers a business aims to reach. Identifying it improves marketing effectiveness.")]},
-
+   {tag:"marketing",patterns:["marketing"],responses:[() => getDynamicResponse("Marketing is the process of promoting and selling products or services. It involves understanding customers and communicating value effectively.")]},
+   {tag:"advertising",patterns:["advertising"],responses:[() => getDynamicResponse("Advertising is paid promotion used to reach a large audience and increase awareness about products or services.")]},
+   {tag:"branding",patterns:["branding"],responses:[() => getDynamicResponse("Branding creates a unique identity for a business through its name, design, and image, helping it stand out.")]},
+   {tag:"target_market",patterns:["target market"],responses:[() => getDynamicResponse("A target market is the specific group of customers a business aims to reach. Identifying it improves marketing effectiveness.")]},
 // PRODUCTS
-{tag:"product",patterns:["product"],responses:[() => getDynamicResponse("A product is something a business sells to satisfy customer needs. It can be physical or digital.")]},
-
-{tag:"service",patterns:["service"],responses:[() => getDynamicResponse("A service is a non-physical offering provided to customers, such as education or consulting.")]},
+   {tag:"product",patterns:["product"],responses:[() => getDynamicResponse("A product is something a business sells to satisfy customer needs. It can be physical or digital.")]},
+   {tag:"service",patterns:["service"],responses:[() => getDynamicResponse("A service is a non-physical offering provided to customers, such as education or consulting.")]},
 
 // MARKET
    {tag:"market",patterns:["market"],responses:[() => getDynamicResponse("A market is where buyers and sellers interact to exchange goods and services. It determines prices and availability.")]},
