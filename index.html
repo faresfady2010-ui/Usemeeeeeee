@@ -308,18 +308,7 @@ const intents = [
 
     // ADD MORE UP TO ~200 INTENTS
 ];
-function getDynamicResponse(base){
-    const followUps = [
-        " Would you like a real-life example?",
-        " Do you want me to simplify it further?",
-        " I can also give you examples if you want.",
-        " Let me know if you want to go deeper into this topic.",
-        " Want me to connect this to real businesses?"
-    ];
 
-    const randomFollowUp = followUps[Math.floor(Math.random() * followUps.length)];
-    return base + randomFollowUp;
-}
 
 // Typo-tolerant similarity
 // ================= CONTEXT MEMORY =================
