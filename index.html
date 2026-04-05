@@ -117,189 +117,127 @@ const intents = [
 ];
 
 let lastTopic = "";
-
-function levenshteinDistance(a, b){
-    const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
-    for(let i=0;i<=b.length;i++) matrix[i][0]=i;
-    for(let j=0;j<=a.length;j++) matrix[0][j]=j;
-    for(let i=1;i<=b.length;i++){
-        for(let j=1;j<=a.length;j++){
-            const cost = a[j-1]===b[i-1]?0:1;
-            matrix[i][j] = Math.min(matrix[i-1][j]+1, matrix[i][j-1]+1, matrix[i-1][j-1]+cost);
+// ======= LEVENSHTEIN (Typos) =======
+function levenshtein(a, b){
+    const tmp = [];
+    for (let i = 0; i <= a.length; i++) tmp[i] = [i];
+    for (let j = 0; j <= b.length; j++) tmp[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+        for (let j = 1; j <= b.length; j++) {
+            tmp[i][j] = Math.min(tmp[i-1][j]+1, tmp[i][j-1]+1, tmp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
         }
     }
-    return matrix[b.length][a.length];
+    return tmp[a.length][b.length];
 }
 
-function similarity(s1,s2){
-    s1 = s1.toLowerCase();
-    s2 = s2.toLowerCase();
-    const longer = s1.length > s2.length ? s1 : s2;
-    const shorter = s1.length > s2.length ? s2 : s1;
-    if(longer.length===0) return 1.0;
-    return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
+function getSimilarity(s1, s2) {
+    let longer = s1.length > s2.length ? s1 : s2;
+    if (longer.length === 0) return 1.0;
+    return (longer.length - levenshtein(s1.toLowerCase(), s2.toLowerCase())) / longer.length;
 }
 
-const GNEWS_API_KEY = "0d31cf6bde31c6920f82e4763c62d0ca";
-
-function fetchNews(keyword = "") {
-    const query = encodeURIComponent(keyword || "business");
-    const url = `https://gnews.io/api/v4/search?q=${query}&lang=en&max=10&token=${GNEWS_API_KEY}`;
-    return fetch(url).then(r=>r.json()).then(data=>{
-        if(data.articles && data.articles.length>0){
-            let txt = `📰 **${keyword} News:**\n\n`;
-            data.articles.slice(0,5).forEach((a,i)=>{txt += `${i+1}. ${a.title}\n🔗 ${a.source.name}\n${a.description? a.description.substring(0,80)+"...":""}\n\n`});
+// ======= API LOGIC =======
+function getNews() {
+    return fetch(`https://finnhub.io/api/v1/news?category=general&token=sandbox_c8m93q2ad3iefu91ogjg`)
+        .then(res => res.json())
+        .then(data => {
+            let txt = "📰 Top News:\n\n";
+            data.slice(0, 2).forEach(n => txt += `• ${n.headline}\n\n`);
             return txt;
-        }
-        return `No news for "${keyword}".`;
-    }).catch(e=>"📰 News unavailable");
+        }).catch(() => "News service busy.");
 }
 
-const stockData = {
-    "TSLA": {name:"Tesla", price:245.32, open:243.50, high:248.75, low:242.10, prevClose:243.80},
-    "AAPL": {name:"Apple", price:182.45, open:181.20, high:184.30, low:180.90, prevClose:181.50},
-    "GOOGL": {name:"Google", price:156.87, open:155.60, high:158.20, low:155.10, prevClose:156.00},
-    "AMZN": {name:"Amazon", price:198.42, open:197.50, high:200.15, low:196.80, prevClose:197.80},
-    "MSFT": {name:"Microsoft", price:378.91, open:377.20, high:381.50, low:376.50, prevClose:377.80},
-    "META": {name:"Meta", price:312.58, open:310.50, high:315.20, low:309.80, prevClose:311.20},
-    "NFLX": {name:"Netflix", price:425.63, open:423.10, high:428.50, low:422.10, prevClose:424.00},
-    "NVDA": {name:"Nvidia", price:658.42, open:655.00, high:662.10, low:653.50, prevClose:656.20},
-    "INTC": {name:"Intel", price:42.37, open:41.90, high:43.20, low:41.50, prevClose:42.10},
-    "AMD": {name:"AMD", price:156.84, open:155.20, high:158.90, low:154.50, prevClose:155.80},
-    "BMW": {name:"BMW", price:89.75, open:88.50, high:91.20, low:88.00, prevClose:88.90},
-    "SSNLF": {name:"Samsung", price:52.43, open:51.80, high:53.60, low:51.50, prevClose:52.10},
-    "TM": {name:"Toyota", price:203.58, open:202.30, high:205.80, low:201.90, prevClose:202.70},
-    "UBER": {name:"Uber", price:76.42, open:75.50, high:78.20, low:75.00, prevClose:76.10},
-    "ABNB": {name:"Airbnb", price:186.29, open:184.70, high:188.50, low:184.20, prevClose:185.80},
-    "ZM": {name:"Zoom", price:58.71, open:58.00, high:60.10, low:57.50, prevClose:58.30},
-    "X": {name:"Twitter", price:42.18, open:41.50, high:43.50, low:41.20, prevClose:41.80}
-};
-
-function analyzeStockMovement(company, symbol) {
-    const url = `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=demo`;
-    return fetch(url).then(r=>r.json()).then(data=>{
-        let analysis = `📊 **${symbol} - ${company.toUpperCase()}**\n\n`;
-        if(data.price){
-            const change = data.price - data.previous_close;
-            const pct = ((change/data.previous_close)*100).toFixed(2);
-            analysis += `💰 **Real-time:**\nCurrent: $${parseFloat(data.price).toFixed(2)}\nChange: ${change.toFixed(2)} (${pct}%)\n${change>0?'📈 UP':'📉 DOWN'}\n📍 Twelve Data`;
-        }else{
-            const s = stockData[symbol];
-            if(s){
-                const c = s.price - s.prevClose;
-                const p = ((c/s.prevClose)*100).toFixed(2);
-                analysis += `💰 **Demo Data:**\nCurrent: $${s.price}\nChange: ${c.toFixed(2)} (${p}%)\n⚠️ Fallback`;
-            }else{analysis += `Not available`;}
-        }
-        return analysis;
-    }).catch(e=>{
-        const s = stockData[symbol];
-        if(s){
-            const c = s.price - s.prevClose;
-            const p = ((c/s.prevClose)*100).toFixed(2);
-            return `📊 **${symbol}**\n💰 $${s.price}\n📈 ${c>0?'UP':'DOWN'} (${p}%)`;
-        }
-        return `Stock data unavailable`;
-    });
+function getStock(symbol) {
+    return fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=demo`)
+        .then(res => res.json())
+        .then(data => {
+            const q = data["Global Quote"];
+            if(q) return `📊 ${symbol}: $${parseFloat(q["05. price"]).toFixed(2)} (${q["10. change percent"]})`;
+            return `📊 ${symbol}: $182.45 (Demo Value)`;
+        }).catch(() => "Stock data unavailable.");
 }
 
-function resolveContext(text){
-    if((text.includes("it")||text.includes("this")||text.includes("that"))&&lastTopic) return lastTopic;
-    return text;
-}
+// ======= CHAT ENGINE =======
+function sendMessage() {
+    const rawInput = $("#user-input").val().trim();
+    if (!rawInput) return;
 
-function getBotReply(input){
-    try{
-        let userInput = input.toLowerCase();
-        const stockKeywords = ["stock","price","drop","fall","rise","surge","crash","share","market","why","rate","value","gain","loss","down","up","trend","perform","bull","bear","ipo"];
-        const companySymbols = {"tesla":"TSLA","apple":"AAPL","google":"GOOGL","amazon":"AMZN","microsoft":"MSFT","facebook":"FB","meta":"META","netflix":"NFLX","nvidia":"NVDA","intel":"INTC","amd":"AMD","bmw":"BMW","samsung":"SSNLF","toyota":"TM","uber":"UBER","airbnb":"ABNB","zoom":"ZM","twitter":"X"};
-        const hasStock = stockKeywords.some(kw=>userInput.includes(kw));
-        const company = Object.keys(companySymbols).find(c=>userInput.includes(c));
-        if(hasStock && company) return {isStockAnalysis:true, company:company, symbol:companySymbols[company]};
-        if(userInput.includes("news")||userInput.includes("latest")) return {isNews:true, keyword:"business"};
-        
-        let bestIntent = null, bestScore = 0;
-        for(const intent of intents){
-            for(const pattern of intent.patterns){
-                const score = similarity(userInput, pattern);
-                if(score > bestScore){bestScore = score; bestIntent = intent;}
-            }
-        }
-        if(bestScore > 0.55 && bestIntent) return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
-        return "Try asking about business, finance, stocks, or entrepreneurship!";
-    }catch(e){console.error(e); return "Something went wrong ⚠️";}
-}
-
-function typeText(div,text,speed=20){
-    if(!text) text = "Error";
-    div.textContent="";
-    let i=0;
-    const interval=setInterval(()=>{if(i<text.length){div.textContent+=text.charAt(i);i++;}else{clearInterval(interval);}},speed);
-}
-
-function addMessage(text,sender,id=null){
-    const chatBox=document.getElementById('chat-box');
-    const msgDiv=document.createElement('div');
-    msgDiv.classList.add('message',sender);
-    if(id) msgDiv.id=id;
-    chatBox.appendChild(msgDiv);
-    chatBox.scrollTop=chatBox.scrollHeight;
-    typeText(msgDiv,text,20);
-}
-
-function openPage(page){console.log("Navigating to:",page);window.location.href=page;}
-
-function sendMessage(){
-    const input=$("#user-input").val().trim();
-    if(!input) return;
-    addMessage(input,'user');
+    addMessage(rawInput, 'user');
     $("#user-input").val("");
-    const loadingId="msg-"+Date.now();
-    addMessage("Thinking...",'bot',loadingId);
-    setTimeout(()=>{
-        let finalReply=getBotReply(input);
-        if(typeof finalReply==='object'&&finalReply.isStockAnalysis){
-            analyzeStockMovement(finalReply.company,finalReply.symbol).then(result=>{
-                const msgDiv=document.getElementById(loadingId);
-                msgDiv.innerHTML="";
-                typeText(msgDiv,result,20);
-            });
-            return;
+
+    // Context handling ("it", "this")
+    let processedInput = rawInput.toLowerCase();
+    if ((processedInput.includes("it") || processedInput.includes("this")) && lastTopic) {
+        processedInput = processedInput.replace(/it|this|that/g, lastTopic);
+    }
+
+    // Add Thinking Animation
+    const loadingId = "load-" + Date.now();
+    const thinkingHtml = `<div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+    addMessage(thinkingHtml, 'bot', loadingId);
+
+    setTimeout(() => {
+        const msgDiv = document.getElementById(loadingId);
+        
+        if (processedInput.includes("news")) {
+            getNews().then(res => typeWordByWord(msgDiv, res));
+        } else if (processedInput.includes("apple") || processedInput.includes("aapl")) {
+            lastTopic = "apple";
+            getStock("AAPL").then(res => typeWordByWord(msgDiv, res));
+        } else {
+            let best = {score: 0, text: "I'm not sure. Try asking 'what is profit' or 'latest news'."};
+            intents.forEach(i => i.patterns.forEach(p => {
+                let s = getSimilarity(processedInput, p);
+                if (s > best.score) { best.score = s; best.text = i.responses[0]; }
+            }));
+            typeWordByWord(msgDiv, best.score > 0.5 ? best.text : best.text);
         }
-        if(typeof finalReply==='object'&&finalReply.isNews){
-            fetchNews(finalReply.keyword).then(result=>{
-                const msgDiv=document.getElementById(loadingId);
-                msgDiv.innerHTML="";
-                typeText(msgDiv,result,20);
-            });
-            return;
-        }
-        const msgDiv=document.getElementById(loadingId);
-        msgDiv.innerHTML="";
-        typeText(msgDiv,finalReply,20);
-    },500+Math.random()*800);
+    }, 1200); // Delay for thinking feel
 }
 
-$("#user-input").on('keypress',function(e){if(e.key==='Enter') sendMessage();});
-$("#suggestBtn").click(()=>$("#suggestBox").toggle());
-$("#closeBtn").click(()=>$("#suggestBox").hide());
-$(".suggestion").click(function(){$("#user-input").val($(this).text());sendMessage();$("#suggestBox").hide();});
-if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('dark');
-window.onload=()=>{addMessage("Hello! Ask me about business, finance, or stocks 🚀",'bot',null,true);}
-
-const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
-let recognition;
-if(SpeechRecognition){
-    recognition=new SpeechRecognition();
-    recognition.lang="en-US";
-    recognition.continuous=false;
-    recognition.interimResults=false;
-    recognition.onstart=()=>{const btn=document.getElementById("voice-btn");if(btn)btn.classList.add("listening");};
-    recognition.onend=()=>{const btn=document.getElementById("voice-btn");if(btn)btn.classList.remove("listening");};
-    recognition.onresult=function(event){document.getElementById("user-input").value=event.results[0][0].transcript;sendMessage();};
-    recognition.onerror=function(e){console.error(e.error);document.getElementById("voice-btn").classList.remove("listening");};
+function addMessage(content, sender, id) {
+    const html = `<div class="message ${sender}" id="${id || ''}">${content}</div>`;
+    $("#chat-box").append(html);
+    $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
 }
-function startVoice(){if(recognition){recognition.start();}else{alert("Speech recognition not supported");}}
+
+// ======= WORD-BY-WORD ANIMATION =======
+function typeWordByWord(element, text) {
+    element.innerHTML = ""; // Clear dots
+    const words = text.split(" ");
+    let i = 0;
+    
+    const interval = setInterval(() => {
+        if (i < words.length) {
+            element.innerHTML += (i === 0 ? "" : " ") + words[i];
+            i++;
+            $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+        } else {
+            clearInterval(interval);
+        }
+    }, 150); // Adjust speed here (ms per word)
+}
+
+// ======= LISTENERS =======
+$("#user-input").keypress(e => { if(e.key === 'Enter') sendMessage(); });
+$("#suggestBtn").click(() => $("#suggestBox").toggle());
+$(".suggestion").click(function() { 
+    $("#user-input").val($(this).text()); 
+    $("#suggestBox").hide(); 
+    sendMessage(); 
+});
+
+function startVoice() {
+    const Speech = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!Speech) return alert("Not supported");
+    const rec = new Speech();
+    rec.onstart = () => $("#voice-btn").addClass("listening");
+    rec.onend = () => $("#voice-btn").removeClass("listening");
+    rec.onresult = (e) => { $("#user-input").val(e.results[0][0].transcript); sendMessage(); };
+    rec.start();
+}
+
+window.onload = () => addMessage("Hello! Ready to talk business? 🚀", 'bot');
 </script>
 </body>
 </html>
