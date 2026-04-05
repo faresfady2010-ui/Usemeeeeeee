@@ -118,7 +118,6 @@ body.dark #voice-btn:hover {
 const intents = [
     // GREETINGS
   
-const intents = [
 
 {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:[() => getDynamicResponse("Hello! I'm here to help you understand business concepts in a simple and clear way. You can ask me anything from basics to advanced topics.")]},
 
@@ -168,47 +167,42 @@ const intents = [
 {tag:"service",patterns:["service"],responses:[() => getDynamicResponse("A service is a non-physical offering provided to customers, such as education or consulting.")]},
 
 // MARKET
-{tag:"market",patterns:["market"],responses:[() => getDynamicResponse("A market is where buyers and sellers interact to exchange goods and services. It determines prices and availability.")]},
+   {tag:"market",patterns:["market"],responses:[() => getDynamicResponse("A market is where buyers and sellers interact to exchange goods and services. It determines prices and availability.")]},
 
-{tag:"demand",patterns:["demand"],responses:[() => getDynamicResponse("Demand is how much customers want a product at a given price. High demand often increases sales.")]},
+   {tag:"demand",patterns:["demand"],responses:[() => getDynamicResponse("Demand is how much customers want a product at a given price. High demand often increases sales.")]},
 
-{tag:"supply",patterns:["supply"],responses:[() => getDynamicResponse("Supply is how much of a product businesses are willing to sell. It works with demand to determine prices.")]},
+   {tag:"supply",patterns:["supply"],responses:[() => getDynamicResponse("Supply is how much of a product businesses are willing to sell. It works with demand to determine prices.")]},
 
-{tag:"competition",patterns:["competition"],responses:[() => getDynamicResponse("Competition is the rivalry between businesses trying to attract customers. It pushes companies to improve.")]},
+   {tag:"competition",patterns:["competition"],responses:[() => getDynamicResponse("Competition is the rivalry between businesses trying to attract customers. It pushes companies to improve.")]},
 
 // MANAGEMENT
-{tag:"management",patterns:["management"],responses:[() => getDynamicResponse("Management involves planning and controlling business activities to achieve goals efficiently.")]},
+   {tag:"management",patterns:["management"],responses:[() => getDynamicResponse("Management involves planning and controlling business activities to achieve goals efficiently.")]},
+   {tag:"leadership",patterns:["leadership"],responses:[() => getDynamicResponse("Leadership is guiding and motivating people to achieve goals. Strong leadership improves performance.")]},
+   {tag:"teamwork",patterns:["teamwork"],responses:[() => getDynamicResponse("Teamwork is working together to achieve a shared goal. It improves productivity and results.")]},
 
-{tag:"leadership",patterns:["leadership"],responses:[() => getDynamicResponse("Leadership is guiding and motivating people to achieve goals. Strong leadership improves performance.")]},
-
-{tag:"teamwork",patterns:["teamwork"],responses:[() => getDynamicResponse("Teamwork is working together to achieve a shared goal. It improves productivity and results.")]},
-
-{tag:"communication",patterns:["communication"],responses:[() => getDynamicResponse("Communication is sharing information clearly within a business. It is essential for smooth operations.")]},
+   {tag:"communication",patterns:["communication"],responses:[() => getDynamicResponse("Communication is sharing information clearly within a business. It is essential for smooth operations.")]},
 
 // FINANCE
-{tag:"finance",patterns:["finance"],responses:[() => getDynamicResponse("Finance is managing money in a business, including budgeting and investing. It ensures stability and growth.")]},
+   {tag:"finance",patterns:["finance"],responses:[() => getDynamicResponse("Finance is managing money in a business, including budgeting and investing. It ensures stability and growth.")]},
 
-{tag:"budget",patterns:["budget"],responses:[() => getDynamicResponse("A budget is a plan for income and expenses. It helps control spending and reduce risks.")]},
+   {tag:"budget",patterns:["budget"],responses:[() => getDynamicResponse("A budget is a plan for income and expenses. It helps control spending and reduce risks.")]},
 
-{tag:"investment",patterns:["investment"],responses:[() => getDynamicResponse("Investment is putting money into something to earn profit in the future. It helps businesses grow.")]},
-
-{tag:"risk",patterns:["risk"],responses:[() => getDynamicResponse("Risk is the chance of losing money or failing. Managing risk is important for decision-making.")]},
+   {tag:"investment",patterns:["investment"],responses:[() => getDynamicResponse("Investment is putting money into something to earn profit in the future. It helps businesses grow.")]},
+   {tag:"risk",patterns:["risk"],responses:[() => getDynamicResponse("Risk is the chance of losing money or failing. Managing risk is important for decision-making.")]},
 
 // SUCCESS
-{tag:"business_success",patterns:["business success"],responses:[() => getDynamicResponse("Business success depends on good planning, marketing, and customer satisfaction. Successful businesses adapt and improve constantly.")]},
-
-{tag:"business_growth",patterns:["business growth"],responses:[() => getDynamicResponse("Business growth means increasing revenue, customers, or size. It is key for long-term success.")]},
-
-{tag:"innovation",patterns:["innovation"],responses:[() => getDynamicResponse("Innovation means creating new ideas or improving existing ones. It helps businesses stay competitive.")]},
+   {tag:"business_success",patterns:["business success"],responses:[() => getDynamicResponse("Business success depends on good planning, marketing, and customer satisfaction. Successful businesses adapt and improve constantly.")]},
+   {tag:"business_growth",patterns:["business growth"],responses:[() => getDynamicResponse("Business growth means increasing revenue, customers, or size. It is key for long-term success.")]},
+   {tag:"innovation",patterns:["innovation"],responses:[() => getDynamicResponse("Innovation means creating new ideas or improving existing ones. It helps businesses stay competitive.")]},
     // ETHICS
-{tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
-{tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
+   {tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
+   {tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
 
     // ACCOUNTING
-{tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
-{tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
-{tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
-{tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
+    {tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
+    {tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
+    {tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
+    {tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
 
     // SUCCESS
     {tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
