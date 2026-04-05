@@ -80,9 +80,9 @@ body.dark #voice-btn:hover {
     <div class="chat-header">usemee</div>
 
     <div class="nav-buttons">
-        <button onclick="openPage('templates/index.html')">Home</button>
-        <button onclick="openPage('templates/about.html')">About</button>
-        <button onclick="openPage('templates/settings.html')">Settings</button>
+        <button onclick="openPage('index.html')">Home</button>
+        <button onclick="openPage('about.html')">About</button>
+        <button onclick="openPage('settings.html')">Settings</button>
     </div>
 
     <div class="chat-box" id="chat-box"></div>
@@ -222,7 +222,7 @@ const intents = [
     // STRATEGY & ANALYSIS
     {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
     {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
-    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than the competition."]},
+    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
     {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
     {tag:"niche_market",patterns:["what is a niche","niche market meaning"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
 
@@ -266,7 +266,7 @@ const intents = [
     {tag:"customer_centricity",patterns:["importance of customers","focusing on the customer"],responses:["The heart of any business is the customer. Without understanding and serving their needs, a business cannot survive."]},
 
     // LEGAL & STRUCTURAL ASPECTS
-    {tag:"business_structure",patterns:["types of business","legal structure","sole proprietorship","llc"],responses:["Choosing a structure (like a Sole Proprietorship, Partnership, or LLC) affects your taxes, liability, and paperwork."]},
+    {tag:"business_structure",patterns:["types of business","legal structure","sole proprietorship","llc"],responses:["Choosing a structure (like a Sole Proprietorship, Partnership, or LLC) is a main aspect that affects your taxes, liability, and paperwork."]},
     {tag:"business_model",patterns:["what is a business model","how to make money"],responses:["A business model is your 'map' for making money. It explains what you sell, who you sell to, and how you deliver that value."]},
     
     // THE PEOPLE ASPECT
@@ -285,26 +285,6 @@ const intents = [
     {tag:"market_need",patterns:["identifying a market need","gap in the market","finding an opportunity"],responses:["A main aspect of making a business is finding a 'gap'—a problem that isn't being solved well by others—and filling it."]},
     {tag:"timing",patterns:["importance of timing","business timing","when to launch"],responses:["Timing is a critical aspect. Launching too early (before the market is ready) or too late (when it's crowded) can determine success or failure."]},
     {tag:"differentiation",patterns:["how to stand out","differentiation strategy"],responses:["To succeed, a business must be different. This could be through lower prices, better quality, faster service, or a unique brand personality."]},
-
-    // CUSTOMER ACQUISITION & RETENTION
-    {tag:"customer_acquisition_cost",patterns:["what is cac","cost to get a customer"],responses:["CAC is the total cost of sales and marketing efforts needed to convince a customer to buy a product or service."]},
-    {tag:"lifetime_value",patterns:["what is ltv","customer lifetime value"],responses:["LTV is the total amount of money a customer is expected to spend with your business during their entire relationship with you."]},
-    {tag:"customer_persona",patterns:["what is a buyer persona","ideal customer profile"],responses:["A customer persona is a detailed description of your target customer, including their age, interests, pain points, and buying habits."]},
-
-    // THE PRODUCT ECOSYSTEM
-    {tag:"mvp",patterns:["what is mvp","minimum viable product"],responses:["An MVP is the simplest version of a product that allows you to start the learning process and get customer feedback as quickly as possible."]},
-    {tag:"product_market_fit",patterns:["what is product market fit","pmf meaning"],responses:["Product-Market Fit is the stage where your product perfectly satisfies a strong market demand. It's the 'holy grail' for startups."]},
-    {tag:"scalability_vs_growth",patterns:["growth vs scaling"],responses:["Growth means adding resources at the same rate as revenue; Scaling means increasing revenue much faster than you add costs."]},
-
-    // ADVANCED OPERATIONS
-    {tag:"standard_operating_procedures",patterns:["what is sop","standard procedures"],responses:["SOPs are step-by-step instructions to help employees carry out complex routine operations consistently."]},
-    {tag:"automation",patterns:["business automation","using tools to save time"],responses:["Automation involves using technology to perform repetitive tasks, allowing you to focus on high-level strategy and creativity."]},
-    {tag:"supply_chain_resilience",patterns:["supply chain issues","managing suppliers"],responses:["A strong business must have a resilient supply chain, meaning it has backup plans if a supplier fails or shipping is delayed."]},
-
-    // LEADERSHIP & CULTURE
-    {tag:"vision_statement",patterns:["what is a vision statement","company vision"],responses:["A vision statement describes where the company wants to be in the future (e.g., 'To be the world's most customer-centric company')."]},
-    {tag:"mission_statement",patterns:["what is a mission statement","company mission"],responses:["A mission statement defines the company's current purpose, what it does, and who it serves."]},
-    {tag:"core_values",patterns:["company values","business beliefs"],responses:["Core values are the guiding principles that dictate behavior and action within a business."]},
 
     // EXIT STRATEGIES (THE END GAME)
     {tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]},
@@ -362,77 +342,126 @@ function similarity(s1,s2){
     return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
-// ================= FREE API KEYS =================
-const GNEWS_API_KEY = "0d31cf6bde31c6920f82e4763c62d0ca"; // GNews - Free tier
-const ALPHA_VANTAGE_KEY = "demo"; // Alpha Vantage - Free demo key (unlimited for demo purposes)
+// ================= API KEYS =================
+const NEWSAPI_KEY = "8d387ee577424308bb8b6e103f133559";
+const FINNHUB_KEY = "ctij4u9r01qjblgsfvtgctij4u9r01qjblgsfvug"; // Free Finnhub key
 
-// ================= GNEWS API - FREE NEWS =================
-function fetchNews(keyword = "") {
-    const query = encodeURIComponent(keyword || "business");
-    const url = `https://gnews.io/api/v4/search?q=${query}&lang=en&max=10&token=${GNEWS_API_KEY}`;
-    
-    return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (data.articles && data.articles.length > 0) {
-                let newsText = `📰 **Latest ${keyword ? keyword : "Business"} News:**\n\n`;
-                data.articles.slice(0, 5).forEach((article, index) => {
-                    newsText += `${index + 1}. ${article.title}\n`;
-                    newsText += `   🔗 Source: ${article.source.name}\n`;
-                    newsText += `   ${article.description ? article.description.substring(0, 80) + "..." : ""}\n\n`;
-                });
-                return newsText;
-            }
-            return `No news found for "${keyword}".`;
-        })
-        .catch(error => {
-            console.error("GNews Error:", error);
-            return "📰 News service temporarily unavailable. Try: 'What is business?' or 'How to start a business?'";
-        });
+// ================= NEWSAPI INTEGRATION =================
+async function fetchNews(keyword = "") {
+    try {
+        const query = keyword || "business OR technology OR economy";
+        const today = new Date();
+        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+        const fromDate = thirtyDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD format
+        
+        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&from=${fromDate}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
+        
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Check for API errors
+        if (data.status === "error") {
+            console.error("NewsAPI Error:", data);
+            return `News service error: ${data.message}. You may need to update the API key or check your account status.`;
+        }
+        
+        if (data.articles && data.articles.length > 0) {
+            let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
+            
+            data.articles.slice(0, 5).forEach((article, index) => {
+                newsText += `${index + 1}. **${article.title}**\n`;
+                newsText += `   📅 ${new Date(article.publishedAt).toLocaleDateString()}\n`;
+                newsText += `   🔗 Source: ${article.source.name}\n`;
+                newsText += `   ${article.description ? article.description.substring(0, 100) + "..." : ""}\n\n`;
+            });
+            
+            return newsText;
+        } else {
+            console.log("NewsAPI Response:", data); // Debug log
+            return `No recent news found for "${keyword}". NewsAPI free tier only returns articles from the last 30 days. Try searching for current events or trending topics.`;
+        }
+    } catch (error) {
+        console.error("NewsAPI Error:", error);
+        return "Sorry, I couldn't fetch news at the moment. Please try again later.";
+    }
 }
 
-// ================= ALPHA VANTAGE - STOCK DATA (FREE DEMO) =================
-function analyzeStockMovement(company, symbol) {
-    // Get current quote using Alpha Vantage demo
-    const quoteUrl = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${ALPHA_VANTAGE_KEY}`;
-    
-    return fetch(quoteUrl)
-        .then(response => response.json())
-        .then(data => {
-            const quote = data["Global Quote"];
-            let analysis = `📊 **${symbol} - ${company.toUpperCase()}**\n\n`;
+// ================= STOCK ANALYSIS INTEGRATION =================
+async function analyzeStockMovement(company, symbol) {
+    try {
+        // Fetch company news from Finnhub (free tier)
+        const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2026-04-01&to=2026-04-04&token=${FINNHUB_KEY}`;
+        const newsResponse = await fetch(newsUrl);
+        const newsData = await newsResponse.json();
+        
+        // Fetch latest business news about company
+        const businessNewsUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(company + " stock")}&sortBy=publishedAt&language=en&pageSize=3&apiKey=${NEWSAPI_KEY}`;
+        const businessResponse = await fetch(businessNewsUrl);
+        const businessData = await businessResponse.json();
+        
+        let analysis = `📊 **${company.toUpperCase()} Stock Analysis**\n\n`;
+        
+        // Check if we have recent news
+        if (newsData && newsData.length > 0) {
+            analysis += `📉 **Recent Developments:**\n\n`;
+            newsData.slice(0, 3).forEach((item, idx) => {
+                analysis += `${idx + 1}. ${item.headline}\n`;
+                analysis += `   Source: ${item.source}\n`;
+                analysis += `   ${item.summary ? item.summary.substring(0, 120) + "..." : ""}\n\n`;
+            });
+        }
+        
+        // Add business news analysis
+        if (businessData.articles && businessData.articles.length > 0) {
+            analysis += `\n💡 **Why It Moved:**\n\n`;
+            const articles = businessData.articles.slice(0, 3);
             
-            if (quote && quote["05. price"]) {
-                // Current Price Data
-                analysis += `💰 **Price Data:**\n`;
-                analysis += `Current: $${parseFloat(quote["05. price"]).toFixed(2)}\n`;
-                analysis += `Open: $${parseFloat(quote["02. open"]).toFixed(2)}\n`;
-                analysis += `High: $${parseFloat(quote["03. high"]).toFixed(2)}\n`;
-                analysis += `Low: $${parseFloat(quote["04. low"]).toFixed(2)}\n`;
-                analysis += `Previous Close: $${parseFloat(quote["08. previous close"]).toFixed(2)}\n\n`;
+            // Sentiment analysis based on keywords
+            let positiveSignals = 0;
+            let negativeSignals = 0;
+            let headlines = "";
+            
+            articles.forEach((article, idx) => {
+                const text = (article.title + " " + article.description).toLowerCase();
                 
-                // Change/Percentage
-                analysis += `📈 **Change:**\n`;
-                const change = parseFloat(quote["09. change"]);
-                const pctChange = parseFloat(quote["10. change percent"].replace('%', ''));
-                analysis += `Change: ${change.toFixed(2)} (${pctChange.toFixed(2)}%)\n`;
-                analysis += `${change > 0 ? '📈 Trending UP' : '📉 Trending DOWN'}\n\n`;
+                // Positive keywords
+                if (text.includes("surge") || text.includes("soar") || text.includes("rally") || 
+                    text.includes("gain") || text.includes("profit") || text.includes("grow") ||
+                    text.includes("beat") || text.includes("success") || text.includes("innovative")) {
+                    positiveSignals++;
+                }
                 
-                analysis += `💡 **Disclaimer:** Always do your own research before investing!\n`;
-                analysis += `📍 Data powered by Alpha Vantage (Demo)\n`;
+                // Negative keywords
+                if (text.includes("drop") || text.includes("fall") || text.includes("decline") || 
+                    text.includes("loss") || text.includes("fail") || text.includes("crash") ||
+                    text.includes("risk") || text.includes("lawsuit") || text.includes("concern")) {
+                    negativeSignals++;
+                }
+                
+                headlines += `${idx + 1}. ${article.title}\n`;
+            });
+            
+            analysis += headlines + "\n";
+            
+            if (negativeSignals > positiveSignals) {
+                analysis += `⚠️ **Market Sentiment:** Negative\n`;
+                analysis += `The recent headlines suggest negative sentiment with concerns or disappointing news affecting the stock price.\n`;
+            } else if (positiveSignals > negativeSignals) {
+                analysis += `✅ **Market Sentiment:** Positive\n`;
+                analysis += `Recent developments show positive momentum with growth or success stories supporting the stock.\n`;
             } else {
-                analysis += `Unable to fetch real-time data. Please try:\n`;
-                analysis += `• Google Finance: finance.google.com\n`;
-                analysis += `• Yahoo Finance: finance.yahoo.com\n`;
-                analysis += `• TradingView: tradingview.com\n`;
+                analysis += `➡️ **Market Sentiment:** Mixed\n`;
+                analysis += `Recent news shows mixed signals with both positive and negative developments.\n`;
             }
-            
-            return analysis;
-        })
-        .catch(error => {
-            console.error("Alpha Vantage Error:", error);
-            return `📊 Stock data service unavailable.\n\nFor live data visit:\n• finance.google.com\n• yahoo.com/finance`;
-        });
+        } else {
+            analysis += `\nNo specific news found, but price movements can be influenced by overall market conditions, earnings reports, or analyst ratings.\n`;
+        }
+        
+        return analysis;
+    } catch (error) {
+        console.error("Stock Analysis Error:", error);
+        return `Unable to fetch detailed analysis for ${company}. The service may be temporarily unavailable.`;
+    }
 }
 
 // ================= CONTEXT RESOLVER =================
@@ -478,16 +507,16 @@ function getBotReply(input){
 
         // CHECK FOR NEWS REQUESTS
         if (userInput.includes("news") || userInput.includes("latest")) {
-            let keyword = "business";
+            let keyword = "business OR technology OR economy"; // More specific query
             
             if (userInput.includes("tech") || userInput.includes("technology")) {
-                keyword = "technology";
+                keyword = "technology OR AI OR startup";
             } else if (userInput.includes("sport") || userInput.includes("sports")) {
-                keyword = "sports";
+                keyword = "sports OR football OR basketball";
             } else if (userInput.includes("health")) {
-                keyword = "health";
+                keyword = "health OR medical OR COVID";
             } else if (userInput.includes("world") || userInput.includes("international")) {
-                keyword = "world";
+                keyword = "world OR international OR politics";
             }
             
             // Return a special marker so sendMessage knows to fetch news
@@ -561,6 +590,33 @@ function getBotReply(input){
         // inside getBotReply...
 
 if(bestScore > 0.55 && bestIntent){
+    // Map specific tags to the broad categories used in your follow-up switchconst topicMap = {
+    
+const topicMap = {
+    finance: ["profit","revenue","costs","loss","cash_flow","budget","investment","risk","assets","liabilities","equity","break_even","roi","equity_financing","debt_financing","capital","profitability","burn_rate"],
+
+    marketing: ["marketing","advertising","branding","target_market","seo","social_media_marketing","content_marketing","customer_acquisition_cost","customer_persona"],
+
+    operations: ["operations","production","quality","supply_chain","outsourcing","inventory_management","wholesale","automation","standard_operating_procedures","supply_chain_resilience"],
+
+    human_resources: ["human_resources","recruitment","training","motivation","human_capital","company_culture"],
+
+    strategy: ["swot_analysis","business_plan","unique_selling_proposition","scalability","niche_market","market_need","timing","differentiation","pivot","pivot_vs_persevere","contingency_plan"],
+
+    sales: ["sales","pricing","discount","customer_retention","customer_feedback","crm","lifetime_value"],
+
+    product: ["product","service","product_development","mvp","product_market_fit","iteration"],
+
+    market: ["market","demand","supply","competition"],
+
+    leadership: ["management","leadership","teamwork","communication","vision_statement","mission_statement","core_values"],
+
+    legal: ["intellectual_property","trademark","patent","business_structure"],
+
+    tech: ["saas","b2b","b2c","ecommerce","user_experience"],
+
+    general: ["business_definition","business_purpose","business_activity","business_success","business_growth","innovation","value_creation","problem_solving","sustainability","value_proposition","customer_centricity","execution","resilience"]
+};
     return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
 }
 
@@ -677,10 +733,7 @@ function addMessage(text,sender,id=null){
 
     typeText(msgDiv,text,20);
 }
-function openPage(page){
-    console.log("Navigating to:", page);
-    window.location.href=page;
-}
+function openPage(page){window.location.href=page;}
 function sendMessage() {
     const input = $("#user-input").val().trim();
     if (!input) return;
@@ -691,7 +744,8 @@ function sendMessage() {
     const loadingId = "msg-" + Date.now();
     addMessage("Thinking...", 'bot', loadingId);
 
-    setTimeout(() => {
+    setTimeout(async () => {
+        // --- MULTI-QUESTION LOGIC START ---
         // Split by "and", ".", or "?"
         const questions = input.toLowerCase().split(/and|[\.\?]/g).filter(q => q.trim().length > 2);
         
@@ -708,22 +762,14 @@ function sendMessage() {
         
         // Check if the response is a stock analysis request
         if (typeof finalReply === 'object' && finalReply.isStockAnalysis) {
-            analyzeStockMovement(finalReply.company, finalReply.symbol).then(result => {
-                const msgDiv = document.getElementById(loadingId);
-                msgDiv.innerHTML = "";
-                typeText(msgDiv, result, 20);
-            });
-            return;
+            finalReply = await analyzeStockMovement(finalReply.company, finalReply.symbol);
         }
         // Check if the response is a news request
         else if (typeof finalReply === 'object' && finalReply.isNews) {
-            fetchNews(finalReply.keyword).then(result => {
-                const msgDiv = document.getElementById(loadingId);
-                msgDiv.innerHTML = "";
-                typeText(msgDiv, result, 20);
-            });
-            return;
+            finalReply = await fetchNews(finalReply.keyword);
         }
+        
+        // --- MULTI-QUESTION LOGIC END ---
 
         const msgDiv = document.getElementById(loadingId);
         msgDiv.innerHTML = ""; // Clear the "Thinking..." text
