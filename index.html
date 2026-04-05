@@ -840,11 +840,15 @@ if (SpeechRecognition) {
 
 // Function triggered by 🎤 button
 function startVoice(){
-    if(recognition){
-        recognition.start();
-    } else {
-        alert("Speech recognition not supported in this browser");
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang='en-US';
+    recognition.start();
+    $('#voice-btn').addClass('listening');
+    recognition.onresult=function(e){
+        $('#user-input').val(e.results[0][0].transcript);
+        sendMessage();
     }
+    recognition.onend=function(){ $('#voice-btn').removeClass('listening'); };
 }
 </script>
 </body>
