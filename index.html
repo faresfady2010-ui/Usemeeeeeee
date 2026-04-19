@@ -505,65 +505,40 @@ function handleSWOTFlow(input){
         return "Finally, what threats does it face?";
     }
 
-    // ================= SWOT MODE =================
-let swotMode = false;
-let swotStep = 0;
+    ifif(swotStep === 5){
+    swotData.threats = input;
 
-let swotData = {
-    business: "",
-    strengths: "",
-    weaknesses: "",
-    opportunities: "",
-    threats: ""
-};
+    swotMode = false;
+    swotStep = 0;
 
-function handleSWOTFlow(input){
+    return `
+📊 SWOT Analysis for <b>${swotData.business}</b>
 
-    if(swotStep === 1){
-        swotData.business = input;
-        swotStep++;
-        return "Great 👍 What are the strengths of this business?";
-    }
+<div class="swot-grid">
 
-    if(swotStep === 2){
-        swotData.strengths = input;
-        swotStep++;
-        return "Good. What are the weaknesses?";
-    }
-
-    if(swotStep === 3){
-        swotData.weaknesses = input;
-        swotStep++;
-        return "Nice. What opportunities does it have?";
-    }
-
-    if(swotStep === 4){
-        swotData.opportunities = input;
-        swotStep++;
-        return "Finally, what threats does it face?";
-    }
-
-    if(swotStep === 5){
-        swotData.threats = input;
-
-        swotMode = false;
-        swotStep = 0;
-
-        return `📊 SWOT Analysis for ${swotData.business}:
-
-🟢 Strengths:
+<div class="swot-box strengths">
+<div class="swot-title">🟢 Strengths</div>
 ${swotData.strengths}
+</div>
 
-🔴 Weaknesses:
+<div class="swot-box weaknesses">
+<div class="swot-title">🔴 Weaknesses</div>
 ${swotData.weaknesses}
+</div>
 
-🔵 Opportunities:
+<div class="swot-box opportunities">
+<div class="swot-title">🔵 Opportunities</div>
 ${swotData.opportunities}
+</div>
 
-🟠 Threats:
-${swotData.threats}`;
-    }
-}    
+<div class="swot-box threats">
+<div class="swot-title">🟠 Threats</div>
+${swotData.threats}
+</div>
+
+</div>
+`;
+}
 function getBotReply(input){
     // ================= SWOT CHECK =================
 if(swotMode){
