@@ -527,152 +527,137 @@ ${swotData.opportunities}
 ${swotData.threats}`;
     }
 }
-    // ================= AI MODE SYSTEM =================
-let aiMode = "teacher"; // default mode
-
-function setMode(input){
-    let cmd = input.toLowerCase();
-
-    if(cmd.startsWith("/mode")){
-        let mode = cmd.replace("/mode", "").trim();
-
-        if(["analyst","teacher","consultant","investor"].includes(mode)){
-            aiMode = mode;
-            return `✅ AI Mode changed to: ${mode.toUpperCase()}`;
-        } else {
-            return `❌ Invalid mode. Use: analyst / teacher / consultant / investor`;
-        }
-    }
-
-    return null;
-}
 function getBotReply(input){
+    // ================= SWOT CHECK =================
+if(swotMode){
+    return handleSWOTFlow(input);
+}
 
-    // MODE SWITCH
-    let modeResponse = setMode(input);
-    if(modeResponse) return modeResponse;
+let userInput = input.toLowerCase();
 
-    // SWOT FLOW
-    if(swotMode){
-        return handleSWOTFlow(input);
-    }
+if(userInput.includes("swot")){
+    swotMode = true;
+    swotStep = 1;
+    return "Let's build a SWOT analysis 💼\n\nWhat is the business name?";
+}
+    try{
+        let userInput = input.toLowerCase();
 
-    let userInput = input.toLowerCase();
-
-    // START SWOT
-    if(userInput.includes("swot")){
-        swotMode = true;
-        swotStep = 1;
-        return "Let's build a SWOT analysis 💼\n\nWhat is the business name?";
-    }
-
-    try {
-
-        // ================= STOCK CHECK =================
-        const stockKeywords = ["stock","price","drop","fall","rise","surge","crash","share","market","why"];
-        const companies = ["tesla","apple","google","amazon","microsoft","facebook","meta","netflix","nvidia","intel","amd"];
-
+        // CHECK FOR STOCK/PRICE ANALYSIS FIRST
+        const stockKeywords = ["stock", "price", "drop", "fall", "rise", "surge", "crash", "share", "market", "why"];
+        const companies = ["tesla", "apple", "google", "amazon", "microsoft", "facebook", "meta", "netflix", "nvidia", "intel", "amd", "tesla"];
         const companySymbols = {
-            tesla:"TSLA",
-            apple:"AAPL",
-            google:"GOOGL",
-            amazon:"AMZN",
-            microsoft:"MSFT",
-            facebook:"FB",
-            meta:"META",
-            netflix:"NFLX",
-            nvidia:"NVDA",
-            intel:"INTC",
-            amd:"AMD"
+            "tesla": "TSLA",
+            "apple": "AAPL",
+            "google": "GOOGL",
+            "amazon": "AMZN",
+            "microsoft": "MSFT",
+            "facebook": "FB",
+            "meta": "META",
+            "netflix": "NFLX",
+            "nvidia": "NVDA",
+            "intel": "INTC",
+            "amd": "AMD"
         };
-
+        
+        // Check if question is asking about stock prices
         const hasStockKeyword = stockKeywords.some(kw => userInput.includes(kw));
-        const mentionedCompany = Object.keys(companySymbols).find(c => userInput.includes(c));
-
-        if(hasStockKeyword && mentionedCompany){
-            return {
-                isStockAnalysis:true,
-                company:mentionedCompany,
-                symbol:companySymbols[mentionedCompany]
+        const mentionedCompany = Object.keys(companySymbols).find(company => userInput.includes(company));
+        
+        if (hasStockKeyword && mentionedCompany) {
+            // Return special marker for stock analysis
+            return { 
+                isStockAnalysis: true, 
+                company: mentionedCompany,
+                symbol: companySymbols[mentionedCompany]
             };
         }
 
-        // ================= NEWS CHECK =================
-        if(userInput.includes("news") || userInput.includes("latest")){
-            let keyword = "business OR technology OR economy";
-
-            if(userInput.includes("tech")) keyword = "technology OR AI";
-            else if(userInput.includes("sport")) keyword = "sports";
-            else if(userInput.includes("world")) keyword = "world OR politics";
-
-            return { isNews:true, keyword };
+        // CHECK FOR NEWS REQUESTS
+        if (userInput.includes("news") || userInput.includes("latest")) {
+            let keyword = "business OR technology OR economy"; // More specific query
+            
+            if (userInput.includes("tech") || userInput.includes("technology")) {
+                keyword = "technology OR AI OR startup";
+            } else if (userInput.includes("sport") || userInput.includes("sports")) {
+                keyword = "sports OR football OR basketball";
+            } else if (userInput.includes("health")) {
+                keyword = "health OR medical OR COVID";
+            } else if (userInput.includes("world") || userInput.includes("international")) {
+                keyword = "world OR international OR politics";
+            }
+            
+            // Return a special marker so sendMessage knows to fetch news
+            return { isNews: true, keyword: keyword };
         }
 
-        // ================= FOLLOW UPS =================
-        if(userInput.includes("and why")){
-            if(lastTopic === "business") return "Because businesses create value and profit.";
-            if(lastTopic === "finance") return "Because finance ensures stability and growth.";
-            if(lastTopic === "marketing") return "Because marketing drives customers.";
+        // 1️⃣ FOLLOW-UP HANDLERS FIRST
+        
+        // 2️⃣ FOLLOW-UP HANDLERS
+        if(userInput.includes("and why") || userInput === "why?"){
+            switch(lastTopic){
+                case "business":
+                    return "Because businesses create value for customers and society, while also generating profit and jobs.";
+                case "finance":
+                    return "Because managing finance properly ensures sustainability, growth, and smarter investment decisions.";
+                case "marketing":
+                    return "Because effective marketing connects products to the right customers and drives business success.";
+                default:
+                    return "Because understanding this topic helps make better decisions in that area.";
+            }
         }
 
-        if(userInput.includes("example")){
-            if(lastTopic === "business") return "Example: café, online store, tech startup.";
-            if(lastTopic === "finance") return "Example: budgeting, investing, saving.";
-            if(lastTopic === "marketing") return "Example: Instagram ads, email campaigns.";
+        if(userInput.includes("give example") || userInput.includes("example")){
+            switch(lastTopic){
+                case "business":
+                    return "For example, a small café, an online store, or a tech service company are all businesses.";
+                case "finance":
+                    return "For example, creating a budget, investing in stocks, or managing cash flow are finance actions.";
+                case "marketing":
+                    return "For example, running social media campaigns or email marketing to reach customers.";
+                default:
+                    return "For example, real-life scenarios related to this topic help illustrate the idea.";
+            }
         }
 
-        // ================= INTENT MATCHING =================
+        if(userInput.includes("explain more") || userInput.includes("elaborate")){
+            switch(lastTopic){
+                case "business":
+                    return "Businesses not only aim for profit but also solve problems, satisfy customer needs, and contribute to the economy. They can vary from small local shops to large multinational companies.";
+                case "finance":
+                    return "Finance includes budgeting, investing, saving, managing expenses, and planning for the future. Good financial decisions help individuals and businesses thrive.";
+                case "marketing":
+                    return "Marketing involves identifying customer needs, creating valuable offers, and communicating them effectively. Strategies include advertising, promotions, and social media engagement.";
+                default:
+                    return "This topic has many details. Learning more about it can help you understand it deeply and make smarter decisions.";
+            }
+        }
+
+        // 2️⃣ Resolve context for new questions
+        const context = resolveContext(userInput);
+        if(context && context !== userInput){
+            userInput += " " + context;
+        }
+
+        // 3️⃣ Intent matching (only for new questions)
         let bestIntent = null;
         let bestScore = 0;
 
-        for(const intent of intents){
-            for(const pattern of intent.patterns){
-                const score = similarity(userInput, pattern);
-                if(score > bestScore){
-                    bestScore = score;
-                    bestIntent = intent;
+        if(typeof intents !== "undefined"){
+            for(const intent of intents){
+                for(const pattern of intent.patterns){
+                    const score = similarity(userInput, pattern);
+                    if(score > bestScore){
+                        bestScore = score;
+                        bestIntent = intent;
+                    }
                 }
             }
         }
 
-        if(bestScore > 0.55 && bestIntent){
+        // inside getBotReply...
 
-            let response = bestIntent.responses[
-                Math.floor(Math.random()*bestIntent.responses.length)
-            ];
-
-            switch(aiMode){
-                case "teacher": return "🧠 Teacher Mode:\n\n" + response;
-                case "analyst": return "📊 Analyst Mode:\n\n" + response;
-                case "consultant": return "💼 Consultant Mode:\n\n" + response;
-                case "investor": return "🚀 Investor Mode:\n\n" + response;
-                default: return response;
-            }
-        }
-
-        // ================= BUSINESS LOGIC =================
-        if(userInput.includes("business")){
-            lastTopic = "business";
-            return "A business provides goods/services to make profit.";
-        }
-
-        if(userInput.includes("finance")){
-            lastTopic = "finance";
-            return "Finance is managing money, income and expenses.";
-        }
-
-        if(userInput.includes("marketing")){
-            lastTopic = "marketing";
-            return "Marketing is promoting products to customers.";
-        }
-
-        return "I didn't fully understand. Try asking differently.";
-
-    } catch(e){
-        console.error(e);
-        return "Error in bot processing ⚠️";
-    }
-}
+if(bestScore > 0.55 && bestIntent){
     // Map specific tags to the broad categories used in your follow-up switchconst topicMap = {
     
 const topicMap = {
