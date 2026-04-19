@@ -468,6 +468,7 @@ function resolveContext(text){
     return text;
 }
 // ================= SWOT MODE =================
+// ================= SWOT MODE =================
 let swotMode = false;
 let swotStep = 0;
 
@@ -505,39 +506,26 @@ function handleSWOTFlow(input){
         return "Finally, what threats does it face?";
     }
 
-    ifif(swotStep === 5){
-    swotData.threats = input;
+    if(swotStep === 5){
+        swotData.threats = input;
 
-    swotMode = false;
-    swotStep = 0;
+        swotMode = false;
+        swotStep = 0;
 
-    return `
-📊 SWOT Analysis for <b>${swotData.business}</b>
+        return `📊 SWOT Analysis for ${swotData.business}:
 
-<div class="swot-grid">
-
-<div class="swot-box strengths">
-<div class="swot-title">🟢 Strengths</div>
+🟢 Strengths:
 ${swotData.strengths}
-</div>
 
-<div class="swot-box weaknesses">
-<div class="swot-title">🔴 Weaknesses</div>
+🔴 Weaknesses:
 ${swotData.weaknesses}
-</div>
 
-<div class="swot-box opportunities">
-<div class="swot-title">🔵 Opportunities</div>
+🔵 Opportunities:
 ${swotData.opportunities}
-</div>
 
-<div class="swot-box threats">
-<div class="swot-title">🟠 Threats</div>
-${swotData.threats}
-</div>
-
-</div>
-`;
+🟠 Threats:
+${swotData.threats}`;
+    }
 }
 function getBotReply(input){
     // ================= SWOT CHECK =================
