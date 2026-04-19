@@ -505,7 +505,7 @@ function handleSWOTFlow(input){
         return "Finally, what threats does it face?";
     }
 
-    ifif(swotStep === 5){
+    if(swotStep === 5){
     swotData.threats = input;
 
     swotMode = false;
@@ -539,6 +539,7 @@ ${swotData.threats}
 </div>
 `;
 }
+    
 function getBotReply(input){
     // ================= SWOT CHECK =================
 if(swotMode){
