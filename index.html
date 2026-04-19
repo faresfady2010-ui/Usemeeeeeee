@@ -469,62 +469,141 @@ function resolveContext(text){
 }
 // ================= SWOT MODE =================
 // ================= SWOT MODE =================
+// ================= SWOT MODE =================
 let swotMode = false;
 let swotStep = 0;
 
 let swotData = {
     business: "",
-    strengths: "",
-    weaknesses: "",
-    opportunities: "",
-    threats: ""
+    strengths: [],
+    weaknesses: [],
+    opportunities: [],
+    threats: []
 };
+
+// ✅ ADD THIS FUNCTION HERE
+function generateSWOTResult(){
+
+    function rank(arr){
+        return arr.sort((a,b)=>b.score-a.score).slice(0,3);
+    }
+
+    const topS = rank(swotData.strengths);
+    const topW = rank(swotData.weaknesses);
+    const topO = rank(swotData.opportunities);
+    const topT = rank(swotData.threats);
+
+    let strategies = "";
+
+    topS.forEach(s=>{
+        topO.forEach(o=>{
+            strategies += `🟢 SO: Use "${s.description}" to exploit "${o.description}"\n`;
+        });
+    });
+
+    topW.forEach(w=>{
+        topO.forEach(o=>{
+            strategies += `🔵 WO: Improve "${w.description}" to capture "${o.description}"\n`;
+        });
+    });
+
+    topS.forEach(s=>{
+        topT.forEach(t=>{
+            strategies += `🟠 ST: Use "${s.description}" to reduce "${t.description}"\n`;
+        });
+    });
+
+    topW.forEach(w=>{
+        topT.forEach(t=>{
+            strategies += `🔴 WT: Minimize "${w.description}" to avoid "${t.description}"\n`;
+        });
+    });
+
+    swotMode = false;
+    swotStep = 0;
+
+    return `📊 SWOT Analysis for ${swotData.business}
+
+🟢 Top Strengths:
+${topS.map(s=>`- ${s.description} (${s.score})`).join("\n")}
+
+🔴 Key Weaknesses:
+${topW.map(w=>`- ${w.description} (${w.score})`).join("\n")}
+
+🔵 Opportunities:
+${topO.map(o=>`- ${o.description} (${o.score})`).join("\n")}
+
+🟠 Threats:
+${topT.map(t=>`- ${t.description} (${t.score})`).join("\n")}
+
+🚀 Strategies:
+${strategies}
+`;
+}
+
+let currentType = "";
+let tempItem = {};
 
 function handleSWOTFlow(input){
 
+    // STEP 1: Business name
     if(swotStep === 1){
         swotData.business = input;
-        swotStep++;
-        return "Great 👍 What are the strengths of this business?";
+        swotStep = 2;
+        currentType = "strengths";
+        return "Enter a strength:";
     }
 
+    // STEP 2: Description
     if(swotStep === 2){
-        swotData.strengths = input;
-        swotStep++;
-        return "Good. What are the weaknesses?";
+        tempItem = { description: input };
+        swotStep = 3;
+        return "Rate its impact (1-5):";
     }
 
+    // STEP 3: Impact
     if(swotStep === 3){
-        swotData.weaknesses = input;
-        swotStep++;
-        return "Nice. What opportunities does it have?";
+        tempItem.impact = parseInt(input);
+        swotStep = 4;
+        return "Rate your control over it (1-5):";
     }
 
+    // STEP 4: Control
     if(swotStep === 4){
-        swotData.opportunities = input;
-        swotStep++;
-        return "Finally, what threats does it face?";
+        tempItem.control = parseInt(input);
+        tempItem.score = tempItem.impact * tempItem.control;
+
+        swotData[currentType].push(tempItem);
+
+        swotStep = 5;
+        return `Added ✅\n\nType "next" to move on or "add" to add another ${currentType}`;
     }
 
+    // STEP 5: Continue or move
     if(swotStep === 5){
-        swotData.threats = input;
 
-        swotMode = false;
-        swotStep = 0;
+        if(input.toLowerCase() === "add"){
+            swotStep = 2;
+            return `Enter another ${currentType}:`;
+        }
 
-        return `📊 SWOT Analysis for ${swotData.business}:
+        if(input.toLowerCase() === "next"){
 
-🟢 Strengths:
-${swotData.strengths}
+            if(currentType === "strengths"){
+                currentType = "weaknesses";
+            } else if(currentType === "weaknesses"){
+                currentType = "opportunities";
+            } else if(currentType === "opportunities"){
+                currentType = "threats";
+            } else {
+                return generateSWOTResult();
+            }
 
-🔴 Weaknesses:
-${swotData.weaknesses}
+            swotStep = 2;
+            return `Now enter ${currentType}:`;
+        }
 
-🔵 Opportunities:
-${swotData.opportunities}
-
-🟠 Threats:
-${swotData.threats}`;
+        return "Type 'add' or 'next'";
     }
 }
 function getBotReply(input){
@@ -538,7 +617,17 @@ let userInput = input.toLowerCase();
 if(userInput.includes("swot")){
     swotMode = true;
     swotStep = 1;
-    return "Let's build a SWOT analysis 💼\n\nWhat is the business name?";
+
+    // reset data every time
+    swotData = {
+        business: "",
+        strengths: [],
+        weaknesses: [],
+        opportunities: [],
+        threats: []
+    };
+
+    return "Let's build a SMART SWOT 💼\n\nWhat is the business name?";
 }
     try{
         let userInput = input.toLowerCase();
