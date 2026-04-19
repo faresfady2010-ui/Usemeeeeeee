@@ -527,7 +527,28 @@ ${swotData.opportunities}
 ${swotData.threats}`;
     }
 }
+    // ================= AI MODE SYSTEM =================
+let aiMode = "teacher"; // default mode
+
+function setMode(input){
+    let cmd = input.toLowerCase();
+
+    if(cmd.startsWith("/mode")){
+        let mode = cmd.replace("/mode", "").trim();
+
+        if(["analyst","teacher","consultant","investor"].includes(mode)){
+            aiMode = mode;
+            return `✅ AI Mode changed to: ${mode.toUpperCase()}`;
+        } else {
+            return `❌ Invalid mode. Use: analyst / teacher / consultant / investor`;
+        }
+    }
+
+    return null;
+}
 function getBotReply(input){
+    let modeResponse = setMode(input);
+if(modeResponse) return modeResponse;
     // ================= SWOT CHECK =================
 if(swotMode){
     return handleSWOTFlow(input);
@@ -658,6 +679,27 @@ if(userInput.includes("swot")){
         // inside getBotReply...
 
 if(bestScore > 0.55 && bestIntent){
+
+    let baseResponse = bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
+
+    switch(aiMode){
+
+        case "teacher":
+            return "🧠 Teacher Mode:\n\n" + baseResponse;
+
+        case "analyst":
+            return "📊 Analyst Mode:\n\n" + baseResponse + "\n\n(Analyzed logically with business breakdown)";
+
+        case "consultant":
+            return "💼 Consultant Mode:\n\n" + baseResponse + "\n\n(Think about strategy and execution)";
+
+        case "investor":
+            return "🚀 Investor Mode:\n\n" + baseResponse + "\n\n(Consider risk, profit, and growth potential)";
+
+        default:
+            return baseResponse;
+    }
+}
     // Map specific tags to the broad categories used in your follow-up switchconst topicMap = {
     
 const topicMap = {
