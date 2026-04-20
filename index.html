@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Usemee Chatbot</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s; }
 body.dark { background-color: #1a1a2e; }
@@ -37,7 +38,7 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
 .chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; margin-left: 10px; border-radius: 20px; color: white; cursor: pointer; }
 .chat-input-area .send-btn:hover { background-color: #218838; }
 .message.loading { font-style: italic; opacity: 0.7; }
-voice-btn {
+#voice-btn {
     border: none;
     background-color: #eee;
     padding: 10px 12px;
@@ -47,41 +48,124 @@ voice-btn {
     font-size: 16px;
     transition: 0.2s;
 }
-
-#voice-btn:hover {
-    background-color: #ddd;
-}
-
+#voice-btn:hover { background-color: #ddd; }
 #voice-btn.listening {
     background-color: #ff4d4d;
     color: white;
     animation: pulse 1s infinite;
 }
-
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
-
 body.dark #voice-btn {
     background-color: #0f3460;
     color: #e0e0e0;
 }
-
 body.dark #voice-btn:hover {
     background-color: #1a1a2e;
 }
 
+/* Chart Container */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin: 15px 0;
+    background: white;
+    border-radius: 8px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+body.dark .chart-container {
+    background: #2a2a4a;
+}
+
+/* Report Styles */
+.report-container {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px 0;
+    max-width: 600px;
+}
+
+body.dark .report-container {
+    background: #16213e;
+    color: #e0e0e0;
+}
+
+.report-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.report-section {
+    margin: 15px 0;
+    padding: 10px;
+    background: #f9f9f9;
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+}
+
+body.dark .report-section {
+    background: #0f3460;
+    border-left-color: #00d4ff;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+body.dark .modal-content {
+    background-color: #16213e;
+    color: #e0e0e0;
+}
+
+.close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: black;
+}
 </style>
 </head>
 <body>
 <div class="chat-container">
-    <div class="chat-header">usemee</div>
+    <div class="chat-header">usemee 📊</div>
 
     <div class="nav-buttons">
         <button onclick="openPage('index.html')">Home</button>
         <button onclick="openPage('about.html')">About</button>
+        <button onclick="showReports()">📊 Reports</button>
         <button onclick="openPage('settings.html')">Settings</button>
     </div>
 
@@ -94,20 +178,30 @@ body.dark #voice-btn:hover {
                 <button id="closeBtn">✖</button>
                 <p class="suggestion">what is business</p>
                 <p class="suggestion">how to start a business</p>
-                <p class="suggestion">what is profit</p>
+                <p class="suggestion">create swot analysis</p>
+                <p class="suggestion">generate business report</p>
+                <p class="suggestion">create profit chart</p>
             </div>
         </div>
 
         <div style="display: flex; align-items: center; gap: 5px;">
             <input type="text" id="user-input" placeholder="Type your message...">
-
-            <!-- 🎤 Voice Button -->
             <button id="voice-btn" onclick="startVoice()">🎤</button>
-
             <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
+
+<!-- Report Modal -->
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div id="reportContent"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 // ======= FULL INTENTS =======
@@ -300,21 +394,368 @@ const intents = [
     // ADD MORE UP TO ~200 INTENTS
 ];
 
-// Typo-tolerant similarity
-// ================= CONTEXT MEMORY =================
-// ================= CONTEXT MEMORY =================
-// ================= CONTEXT MEMORY =================
 let lastTopic = "";
+let swotMode = false;
+let swotStep = 0;
+let chartMode = false;
+let reportMode = false;
 
-// ================= LEVENSHTEIN =================
-function levenshteinDistance(a, b){
+let swotData = {
+    business: "",
+    strengths: [],
+    weaknesses: [],
+    opportunities: [],
+    threats: []
+};
+
+let reportData = {
+    businessName: "",
+    industry: "",
+    revenue: 0,
+    expenses: 0,
+    employees: 0,
+    founded: "",
+    description: ""
+};
+
+// ================= CHART GENERATION =================
+function generateProfitChart(revenue, expenses, businessName = "Business") {
+    const profit = revenue - expenses;
+    const chartHTML = `
+        <div class="chart-container">
+            <canvas id="profitChart"></canvas>
+        </div>
+    `;
+    return { html: chartHTML, revenue, expenses, profit, businessName };
+}
+
+function generateRevenueChart(data) {
+    const chartHTML = `
+        <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    `;
+    return chartHTML;
+}
+
+function displayChart(chartData) {
+    const chatBox = document.getElementById('chat-box');
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message', 'bot');
+    messageDiv.innerHTML = chartData.html;
+    chatBox.appendChild(messageDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    setTimeout(() => {
+        const ctx = document.getElementById('profitChart');
+        if (ctx) {
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Revenue', 'Expenses'],
+                    datasets: [{
+                        data: [chartData.revenue, chartData.expenses],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderColor: ['#1e7e34', '#bd2130'],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        title: { 
+                            display: true, 
+                            text: `${chartData.businessName} - Profit: $${chartData.profit.toLocaleString()}`
+                        }
+                    }
+                }
+            });
+        }
+    }, 100);
+}
+
+// ================= SWOT ANALYSIS =================
+function handleSWOTFlow(input) {
+    if (swotStep === 1) {
+        swotData.business = input;
+        swotStep = 2;
+        return `Great! Now let's analyze ${input}.\n\nEnter your first STRENGTH:`;
+    }
+
+    if (swotStep === 2) {
+        swotData.currentType = "strengths";
+        swotData.tempItem = { description: input, score: 0 };
+        swotStep = 3;
+        return "Rate its importance (1-5):";
+    }
+
+    if (swotStep === 3) {
+        const score = parseInt(input);
+        if (score < 1 || score > 5) return "Please enter a number between 1-5";
+        
+        swotData.tempItem.score = score;
+        swotData[swotData.currentType].push(swotData.tempItem);
+        swotStep = 5;
+        return `✅ Added!\n\nType "add" to add another ${swotData.currentType}, or "next" to continue:`;
+    }
+
+    if (swotStep === 5) {
+        if (input.toLowerCase() === "add") {
+            swotStep = 2;
+            return `Enter another ${swotData.currentType}:`;
+        }
+
+        if (input.toLowerCase() === "next") {
+            if (swotData.currentType === "strengths") {
+                swotData.currentType = "weaknesses";
+            } else if (swotData.currentType === "weaknesses") {
+                swotData.currentType = "opportunities";
+            } else if (swotData.currentType === "opportunities") {
+                swotData.currentType = "threats";
+            } else {
+                return generateSWOTReport();
+            }
+
+            swotStep = 2;
+            return `Now enter your first ${swotData.currentType}:`;
+        }
+
+        return "Type 'add' or 'next':";
+    }
+}
+
+function generateSWOTReport() {
+    swotMode = false;
+    swotStep = 0;
+
+    const top3 = (arr) => arr.sort((a, b) => b.score - a.score).slice(0, 3);
+
+    const S = top3(swotData.strengths);
+    const W = top3(swotData.weaknesses);
+    const O = top3(swotData.opportunities);
+    const T = top3(swotData.threats);
+
+    const reportHTML = `
+        <div class="report-container">
+            <div class="report-header">📊 SWOT Analysis: ${swotData.business}</div>
+            
+            <div class="report-section">
+                <b>🟢 Top Strengths (${S.length})</b><br>
+                ${S.map((x, i) => `${i+1}. ${x.description} (Score: ${x.score}/5)`).join('<br>')}
+            </div>
+
+            <div class="report-section">
+                <b>🔴 Key Weaknesses (${W.length})</b><br>
+                ${W.map((x, i) => `${i+1}. ${x.description} (Score: ${x.score}/5)`).join('<br>')}
+            </div>
+
+            <div class="report-section">
+                <b>🔵 Opportunities (${O.length})</b><br>
+                ${O.map((x, i) => `${i+1}. ${x.description} (Score: ${x.score}/5)`).join('<br>')}
+            </div>
+
+            <div class="report-section">
+                <b>🟠 Threats (${T.length})</b><br>
+                ${T.map((x, i) => `${i+1}. ${x.description} (Score: ${x.score}/5)`).join('<br>')}
+            </div>
+
+            <div class="report-section">
+                <b>🚀 Strategic Recommendations</b><br>
+                • Use strengths to capitalize on opportunities<br>
+                • Address weaknesses to mitigate threats<br>
+                • Consider partnerships to overcome weaknesses<br>
+                • Monitor competitive landscape for threats
+            </div>
+
+            <button onclick="downloadReport('swot')" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+                📥 Download Report
+            </button>
+        </div>
+    `;
+
+    const chatBox = document.getElementById('chat-box');
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', 'bot');
+    msgDiv.innerHTML = reportHTML;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    return "✅ SWOT Analysis complete! Scroll up to see your report.";
+}
+
+// ================= BUSINESS REPORT GENERATION =================
+function generateBusinessReport(input) {
+    const lines = input.split('\n').filter(l => l.trim());
+    
+    reportData.businessName = lines[0] || "Unknown Business";
+    reportData.industry = lines[1] || "General";
+    reportData.description = lines[2] || "No description provided";
+    reportData.revenue = parseFloat(lines[3]) || 0;
+    reportData.expenses = parseFloat(lines[4]) || 0;
+    reportData.employees = parseInt(lines[5]) || 0;
+    reportData.founded = lines[6] || "N/A";
+
+    const profit = reportData.revenue - reportData.expenses;
+    const profitMargin = reportData.revenue > 0 ? ((profit / reportData.revenue) * 100).toFixed(2) : 0;
+
+    const reportHTML = `
+        <div class="report-container">
+            <div class="report-header">📈 Business Report: ${reportData.businessName}</div>
+            
+            <div class="report-section">
+                <b>📋 Company Overview</b><br>
+                Industry: ${reportData.industry}<br>
+                Founded: ${reportData.founded}<br>
+                Description: ${reportData.description}
+            </div>
+
+            <div class="report-section">
+                <b>💰 Financial Summary</b><br>
+                Revenue: $${reportData.revenue.toLocaleString()}<br>
+                Expenses: $${reportData.expenses.toLocaleString()}<br>
+                Profit/Loss: $${profit.toLocaleString()}<br>
+                Profit Margin: ${profitMargin}%
+            </div>
+
+            <div class="report-section">
+                <b>👥 Operations</b><br>
+                Employees: ${reportData.employees}<br>
+                Revenue per Employee: $${(reportData.revenue / (reportData.employees || 1)).toLocaleString()}
+            </div>
+
+            <div class="report-section">
+                <b>📊 Key Metrics</b><br>
+                Status: ${profit > 0 ? '✅ Profitable' : '⚠️ Operating at Loss'}<br>
+                Growth Potential: ${reportData.revenue > 100000 ? 'High' : reportData.revenue > 50000 ? 'Medium' : 'High (Early Stage)'}
+            </div>
+
+            <div class="report-section">
+                <b>💡 Recommendations</b><br>
+                ${generateRecommendations(profit, reportData.revenue, reportData.expenses)}
+            </div>
+
+            <button onclick="downloadReport('business')" style="background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+                📥 Download Report
+            </button>
+        </div>
+    `;
+
+    const chatBox = document.getElementById('chat-box');
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', 'bot');
+    msgDiv.innerHTML = reportHTML;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    return "✅ Business report generated! Check the detailed analysis above.";
+}
+
+function generateRecommendations(profit, revenue, expenses) {
+    const recommendations = [];
+    
+    if (profit < 0) {
+        recommendations.push("• Reduce operating expenses");
+        recommendations.push("• Focus on revenue growth");
+    }
+    if (expenses > revenue * 0.8) {
+        recommendations.push("• Optimize cost structure");
+    }
+    if (revenue > 0) {
+        recommendations.push("• Scale marketing efforts");
+        recommendations.push("• Expand product/service offerings");
+    }
+    recommendations.push("• Build customer loyalty programs");
+    
+    return recommendations.slice(0, 4).join('<br>');
+}
+
+// ================= REPORT MODAL =================
+function showReports() {
+    const modal = document.getElementById('reportModal');
+    const content = document.getElementById('reportContent');
+    
+    content.innerHTML = `
+        <h2>📊 Generate Business Report</h2>
+        <p>Choose what type of report you want:</p>
+        <button onclick="startSWOTReport()" style="display:block;width:100%;padding:10px;margin:5px 0;background:#007bff;color:white;border:none;border-radius:5px;cursor:pointer;">
+            🔄 SWOT Analysis
+        </button>
+        <button onclick="startBusinessReport()" style="display:block;width:100%;padding:10px;margin:5px 0;background:#28a745;color:white;border:none;border-radius:5px;cursor:pointer;">
+            📈 Business Report
+        </button>
+        <button onclick="startChartReport()" style="display:block;width:100%;padding:10px;margin:5px 0;background:#ffc107;color:black;border:none;border-radius:5px;cursor:pointer;">
+            📊 Profit Chart
+        </button>
+    `;
+    
+    modal.style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById('reportModal').style.display = "none";
+}
+
+function startSWOTReport() {
+    closeModal();
+    swotMode = true;
+    swotStep = 1;
+    swotData = { business: "", strengths: [], weaknesses: [], opportunities: [], threats: [] };
+    addMessage("Let's build your SWOT Analysis! 📊\n\nWhat is your business name?", 'bot');
+}
+
+function startBusinessReport() {
+    closeModal();
+    const input = prompt(`Enter your business information (one per line):
+1. Business Name
+2. Industry
+3. Description
+4. Revenue ($)
+5. Expenses ($)
+6. Number of Employees
+7. Founded (Year/Date)`);
+    
+    if (input) {
+        addMessage(input, 'user');
+        const reply = generateBusinessReport(input);
+        addMessage(reply, 'bot');
+    }
+}
+
+function startChartReport() {
+    closeModal();
+    const revenue = parseFloat(prompt("Enter Revenue ($):") || 0);
+    const expenses = parseFloat(prompt("Enter Expenses ($):") || 0);
+    const businessName = prompt("Enter Business Name:") || "Business";
+    
+    if (revenue > 0 || expenses > 0) {
+        addMessage(`Revenue: $${revenue}, Expenses: $${expenses}`, 'user');
+        const chartData = generateProfitChart(revenue, expenses, businessName);
+        displayChart(chartData);
+    }
+}
+
+function downloadReport(type) {
+    const element = document.querySelector('.report-container') || document.querySelector('.chart-container');
+    if (!element) return alert('No report to download');
+    
+    html2canvas(element).then(canvas => {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+        const imgData = canvas.toDataURL('image/png');
+        pdf.addImage(imgData, 'PNG', 10, 10, 190, 277);
+        pdf.save(`${type}-report-${new Date().toISOString().split('T')[0]}.pdf`);
+    });
+}
+
+// ================= LEVENSHTEIN DISTANCE =================
+function levenshteinDistance(a, b) {
     const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
-
     for(let i=0;i<=b.length;i++) matrix[i][0]=i;
     for(let j=0;j<=a.length;j++) matrix[0][j]=j;
-
-    for(let i=1;i<=b.length;i++){
-        for(let j=1;j<=a.length;j++){
+    for(let i=1;i<=b.length;i++) {
+        for(let j=1;j<=a.length;j++) {
             const cost = a[j-1]===b[i-1]?0:1;
             matrix[i][j] = Math.min(
                 matrix[i-1][j]+1,
@@ -326,608 +767,104 @@ function levenshteinDistance(a, b){
     return matrix[b.length][a.length];
 }
 
-function similarity(s1,s2){
+function similarity(s1,s2) {
     s1 = s1.toLowerCase();
     s2 = s2.toLowerCase();
-
     const longer = s1.length > s2.length ? s1 : s2;
     const shorter = s1.length > s2.length ? s2 : s1;
-
     if(longer.length===0) return 1.0;
-
     return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
-// ================= API KEYS =================
-const NEWSAPI_KEY = "8d387ee577424308bb8b6e103f133559";
-const FINNHUB_KEY = "ctij4u9r01qjblgsfvtgctij4u9r01qjblgsfvug"; // Free Finnhub key
-
-// ================= NEWSAPI INTEGRATION =================
-async function fetchNews(keyword = "") {
-    try {
-        const query = keyword || "business OR technology OR economy";
-        const today = new Date();
-        const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
-        const fromDate = thirtyDaysAgo.toISOString().split('T')[0]; // YYYY-MM-DD format
-        
-        const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&from=${fromDate}&sortBy=publishedAt&language=en&pageSize=5&apiKey=${NEWSAPI_KEY}`;
-        
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        // Check for API errors
-        if (data.status === "error") {
-            console.error("NewsAPI Error:", data);
-            return `News service error: ${data.message}. You may need to update the API key or check your account status.`;
-        }
-        
-        if (data.articles && data.articles.length > 0) {
-            let newsText = `📰 Latest ${keyword ? keyword : "Business"} News:\n\n`;
-            
-            data.articles.slice(0, 5).forEach((article, index) => {
-                newsText += `${index + 1}. **${article.title}**\n`;
-                newsText += `   📅 ${new Date(article.publishedAt).toLocaleDateString()}\n`;
-                newsText += `   🔗 Source: ${article.source.name}\n`;
-                newsText += `   ${article.description ? article.description.substring(0, 100) + "..." : ""}\n\n`;
-            });
-            
-            return newsText;
-        } else {
-            console.log("NewsAPI Response:", data); // Debug log
-            return `No recent news found for "${keyword}". NewsAPI free tier only returns articles from the last 30 days. Try searching for current events or trending topics.`;
-        }
-    } catch (error) {
-        console.error("NewsAPI Error:", error);
-        return "Sorry, I couldn't fetch news at the moment. Please try again later.";
-    }
-}
-
-// ================= STOCK ANALYSIS INTEGRATION =================
-async function analyzeStockMovement(company, symbol) {
-    try {
-        // Fetch company news from Finnhub (free tier)
-        const newsUrl = `https://finnhub.io/api/v1/company-news?symbol=${symbol}&from=2026-04-01&to=2026-04-04&token=${FINNHUB_KEY}`;
-        const newsResponse = await fetch(newsUrl);
-        const newsData = await newsResponse.json();
-        
-        // Fetch latest business news about company
-        const businessNewsUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(company + " stock")}&sortBy=publishedAt&language=en&pageSize=3&apiKey=${NEWSAPI_KEY}`;
-        const businessResponse = await fetch(businessNewsUrl);
-        const businessData = await businessResponse.json();
-        
-        let analysis = `📊 **${company.toUpperCase()} Stock Analysis**\n\n`;
-        
-        // Check if we have recent news
-        if (newsData && newsData.length > 0) {
-            analysis += `📉 **Recent Developments:**\n\n`;
-            newsData.slice(0, 3).forEach((item, idx) => {
-                analysis += `${idx + 1}. ${item.headline}\n`;
-                analysis += `   Source: ${item.source}\n`;
-                analysis += `   ${item.summary ? item.summary.substring(0, 120) + "..." : ""}\n\n`;
-            });
-        }
-        
-        // Add business news analysis
-        if (businessData.articles && businessData.articles.length > 0) {
-            analysis += `\n💡 **Why It Moved:**\n\n`;
-            const articles = businessData.articles.slice(0, 3);
-            
-            // Sentiment analysis based on keywords
-            let positiveSignals = 0;
-            let negativeSignals = 0;
-            let headlines = "";
-            
-            articles.forEach((article, idx) => {
-                const text = (article.title + " " + article.description).toLowerCase();
-                
-                // Positive keywords
-                if (text.includes("surge") || text.includes("soar") || text.includes("rally") || 
-                    text.includes("gain") || text.includes("profit") || text.includes("grow") ||
-                    text.includes("beat") || text.includes("success") || text.includes("innovative")) {
-                    positiveSignals++;
-                }
-                
-                // Negative keywords
-                if (text.includes("drop") || text.includes("fall") || text.includes("decline") || 
-                    text.includes("loss") || text.includes("fail") || text.includes("crash") ||
-                    text.includes("risk") || text.includes("lawsuit") || text.includes("concern")) {
-                    negativeSignals++;
-                }
-                
-                headlines += `${idx + 1}. ${article.title}\n`;
-            });
-            
-            analysis += headlines + "\n";
-            
-            if (negativeSignals > positiveSignals) {
-                analysis += `⚠️ **Market Sentiment:** Negative\n`;
-                analysis += `The recent headlines suggest negative sentiment with concerns or disappointing news affecting the stock price.\n`;
-            } else if (positiveSignals > negativeSignals) {
-                analysis += `✅ **Market Sentiment:** Positive\n`;
-                analysis += `Recent developments show positive momentum with growth or success stories supporting the stock.\n`;
-            } else {
-                analysis += `➡️ **Market Sentiment:** Mixed\n`;
-                analysis += `Recent news shows mixed signals with both positive and negative developments.\n`;
-            }
-        } else {
-            analysis += `\nNo specific news found, but price movements can be influenced by overall market conditions, earnings reports, or analyst ratings.\n`;
-        }
-        
-        return analysis;
-    } catch (error) {
-        console.error("Stock Analysis Error:", error);
-        return `Unable to fetch detailed analysis for ${company}. The service may be temporarily unavailable.`;
-    }
-}
-
-// ================= CONTEXT RESOLVER =================
-function resolveContext(text){
-    if((text.includes("it") || text.includes("this") || text.includes("that")) && lastTopic){
-        return lastTopic;
-    }
-    return text;
-}
-// ================= SWOT MODE =================
-// ================= SWOT MODE =================
-// ================= SWOT MODE =================
-let swotMode = false;
-let swotStep = 0;
-
-let swotData = {
-    business: "",
-    strengths: [],
-    weaknesses: [],
-    opportunities: [],
-    threats: []
-};
-
-// ✅ ADD THIS FUNCTION HERE
-function generateSWOTResult(){
-
-    function rank(arr){
-        return arr.sort((a,b)=>b.score-a.score).slice(0,3);
+// ================= BOT REPLY LOGIC =================
+function getBotReply(input) {
+    if (swotMode) {
+        return handleSWOTFlow(input);
     }
 
-    const topS = rank(swotData.strengths);
-    const topW = rank(swotData.weaknesses);
-    const topO = rank(swotData.opportunities);
-    const topT = rank(swotData.threats);
+    let userInput = input.toLowerCase();
 
-    let strategies = "";
-
-    topS.forEach(s=>{
-        topO.forEach(o=>{
-            strategies += `🟢 SO: Use "${s.description}" to exploit "${o.description}"\n`;
-        });
-    });
-
-    topW.forEach(w=>{
-        topO.forEach(o=>{
-            strategies += `🔵 WO: Improve "${w.description}" to capture "${o.description}"\n`;
-        });
-    });
-
-    topS.forEach(s=>{
-        topT.forEach(t=>{
-            strategies += `🟠 ST: Use "${s.description}" to reduce "${t.description}"\n`;
-        });
-    });
-
-    topW.forEach(w=>{
-        topT.forEach(t=>{
-            strategies += `🔴 WT: Minimize "${w.description}" to avoid "${t.description}"\n`;
-        });
-    });
-
-    swotMode = false;
-    swotStep = 0;
-
-    return `📊 SWOT Analysis for ${swotData.business}
-
-🟢 Top Strengths:
-${topS.map(s=>`- ${s.description} (${s.score})`).join("\n")}
-
-🔴 Key Weaknesses:
-${topW.map(w=>`- ${w.description} (${w.score})`).join("\n")}
-
-🔵 Opportunities:
-${topO.map(o=>`- ${o.description} (${o.score})`).join("\n")}
-
-🟠 Threats:
-${topT.map(t=>`- ${t.description} (${t.score})`).join("\n")}
-
-🚀 Strategies:
-${strategies}
-`;
-}
-
-let currentType = "";
-let tempItem = {};
-function generateSWOTHTML(){
-
-    function top3(arr){
-        return arr.sort((a,b)=>b.score-a.score).slice(0,3);
+    // Check for chart requests
+    if (userInput.includes("chart") || userInput.includes("graph") || userInput.includes("profit")) {
+        return startChartReport();
     }
 
-    const S = top3(swotData.strengths);
-    const W = top3(swotData.weaknesses);
-    const O = top3(swotData.opportunities);
-    const T = top3(swotData.threats);
-
-    return `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
-        
-        <div style="background:#d4edda;padding:10px;border-radius:8px;">
-            <b>🟢 Strengths</b><br>
-            ${S.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
-        </div>
-
-        <div style="background:#f8d7da;padding:10px;border-radius:8px;">
-            <b>🔴 Weaknesses</b><br>
-            ${W.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
-        </div>
-
-        <div style="background:#d1ecf1;padding:10px;border-radius:8px;">
-            <b>🔵 Opportunities</b><br>
-            ${O.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
-        </div>
-
-        <div style="background:#fff3cd;padding:10px;border-radius:8px;">
-            <b>🟠 Threats</b><br>
-            ${T.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
-        </div>
-
-    </div>
-    `;
-}
-
-function handleSWOTFlow(input){
-
-    // STEP 1: Business name
-    if(swotStep === 1){
-        swotData.business = input;
-        swotStep = 2;
-        currentType = "strengths";
-        return "Enter a strength:";
+    // Check for report requests
+    if (userInput.includes("report") || userInput.includes("analysis")) {
+        return showReports();
     }
 
-    // STEP 2: Description
-    if(swotStep === 2){
-        tempItem = { description: input };
-        swotStep = 3;
-        return "Rate its impact (1-5):";
+    // Check for swot requests
+    if (userInput.includes("swot")) {
+        swotMode = true;
+        swotStep = 1;
+        swotData = { business: "", strengths: [], weaknesses: [], opportunities: [], threats: [] };
+        return "Let's create a SWOT Analysis! 📊\n\nWhat is your business name?";
     }
 
-    // STEP 3: Impact
-    if(swotStep === 3){
-        tempItem.impact = parseInt(input);
-        swotStep = 4;
-        return "Rate your control over it (1-5):";
-    }
+    // Intent matching
+    let bestIntent = null;
+    let bestScore = 0;
 
-    // STEP 4: Control
-    if(swotStep === 4){
-        tempItem.control = parseInt(input);
-        tempItem.score = tempItem.impact * tempItem.control;
-
-        swotData[currentType].push(tempItem);
-
-        swotStep = 5;
-        return `Added ✅\n\nType "next" to move on or "add" to add another ${currentType}`;
-    }
-
-    // STEP 5: Continue or move
-    if(swotStep === 5){
-
-        if(input.toLowerCase() === "add"){
-            swotStep = 2;
-            return `Enter another ${currentType}:`;
-        }
-
-        if(input.toLowerCase() === "next"){
-
-            if(currentType === "strengths"){
-                currentType = "weaknesses";
-            } else if(currentType === "weaknesses"){
-                currentType = "opportunities";
-            } else if(currentType === "opportunities"){
-                currentType = "threats";
-            } else {
-                return generateSWOTResult();
-            }
-
-            swotStep = 2;
-            return `Now enter ${currentType}:`;
-        }
-
-        return "Type 'add' or 'next'";
-    }
-}
-function getBotReply(input){
-    // ================= SWOT CHECK =================
-if(swotMode){
-    return handleSWOTFlow(input);
-}
-
-let userInput = input.toLowerCase();
-
-if(userInput.includes("swot")){
-    swotMode = true;
-    swotStep = 1;
-
-    // reset data every time
-    swotData = {
-        business: "",
-        strengths: [],
-        weaknesses: [],
-        opportunities: [],
-        threats: []
-    };
-
-    return "Let's build a SMART SWOT 💼\n\nWhat is the business name?";
-}
-    try{
-        let userInput = input.toLowerCase();
-
-        // CHECK FOR STOCK/PRICE ANALYSIS FIRST
-        const stockKeywords = ["stock", "price", "drop", "fall", "rise", "surge", "crash", "share", "market", "why"];
-        const companies = ["tesla", "apple", "google", "amazon", "microsoft", "facebook", "meta", "netflix", "nvidia", "intel", "amd", "tesla"];
-        const companySymbols = {
-            "tesla": "TSLA",
-            "apple": "AAPL",
-            "google": "GOOGL",
-            "amazon": "AMZN",
-            "microsoft": "MSFT",
-            "facebook": "FB",
-            "meta": "META",
-            "netflix": "NFLX",
-            "nvidia": "NVDA",
-            "intel": "INTC",
-            "amd": "AMD"
-        };
-        
-        // Check if question is asking about stock prices
-        const hasStockKeyword = stockKeywords.some(kw => userInput.includes(kw));
-        const mentionedCompany = Object.keys(companySymbols).find(company => userInput.includes(company));
-        
-        if (hasStockKeyword && mentionedCompany) {
-            // Return special marker for stock analysis
-            return { 
-                isStockAnalysis: true, 
-                company: mentionedCompany,
-                symbol: companySymbols[mentionedCompany]
-            };
-        }
-
-        // CHECK FOR NEWS REQUESTS
-        if (userInput.includes("news") || userInput.includes("latest")) {
-            let keyword = "business OR technology OR economy"; // More specific query
-            
-            if (userInput.includes("tech") || userInput.includes("technology")) {
-                keyword = "technology OR AI OR startup";
-            } else if (userInput.includes("sport") || userInput.includes("sports")) {
-                keyword = "sports OR football OR basketball";
-            } else if (userInput.includes("health")) {
-                keyword = "health OR medical OR COVID";
-            } else if (userInput.includes("world") || userInput.includes("international")) {
-                keyword = "world OR international OR politics";
-            }
-            
-            // Return a special marker so sendMessage knows to fetch news
-            return { isNews: true, keyword: keyword };
-        }
-
-        // 1️⃣ FOLLOW-UP HANDLERS FIRST
-        
-        // 2️⃣ FOLLOW-UP HANDLERS
-        if(userInput.includes("and why") || userInput === "why?"){
-            switch(lastTopic){
-                case "business":
-                    return "Because businesses create value for customers and society, while also generating profit and jobs.";
-                case "finance":
-                    return "Because managing finance properly ensures sustainability, growth, and smarter investment decisions.";
-                case "marketing":
-                    return "Because effective marketing connects products to the right customers and drives business success.";
-                default:
-                    return "Because understanding this topic helps make better decisions in that area.";
+    for (const intent of intents) {
+        for (const pattern of intent.patterns) {
+            const score = similarity(userInput, pattern);
+            if (score > bestScore) {
+                bestScore = score;
+                bestIntent = intent;
             }
         }
-
-        if(userInput.includes("give example") || userInput.includes("example")){
-            switch(lastTopic){
-                case "business":
-                    return "For example, a small café, an online store, or a tech service company are all businesses.";
-                case "finance":
-                    return "For example, creating a budget, investing in stocks, or managing cash flow are finance actions.";
-                case "marketing":
-                    return "For example, running social media campaigns or email marketing to reach customers.";
-                default:
-                    return "For example, real-life scenarios related to this topic help illustrate the idea.";
-            }
-        }
-
-        if(userInput.includes("explain more") || userInput.includes("elaborate")){
-            switch(lastTopic){
-                case "business":
-                    return "Businesses not only aim for profit but also solve problems, satisfy customer needs, and contribute to the economy. They can vary from small local shops to large multinational companies.";
-                case "finance":
-                    return "Finance includes budgeting, investing, saving, managing expenses, and planning for the future. Good financial decisions help individuals and businesses thrive.";
-                case "marketing":
-                    return "Marketing involves identifying customer needs, creating valuable offers, and communicating them effectively. Strategies include advertising, promotions, and social media engagement.";
-                default:
-                    return "This topic has many details. Learning more about it can help you understand it deeply and make smarter decisions.";
-            }
-        }
-
-        // 2️⃣ Resolve context for new questions
-        const context = resolveContext(userInput);
-        if(context && context !== userInput){
-            userInput += " " + context;
-        }
-
-        // 3️⃣ Intent matching (only for new questions)
-        let bestIntent = null;
-        let bestScore = 0;
-
-        if(typeof intents !== "undefined"){
-            for(const intent of intents){
-                for(const pattern of intent.patterns){
-                    const score = similarity(userInput, pattern);
-                    if(score > bestScore){
-                        bestScore = score;
-                        bestIntent = intent;
-                    }
-                }
-            }
-        }
-
-        // inside getBotReply...
-
-if(bestScore > 0.55 && bestIntent){
-    // Map specific tags to the broad categories used in your follow-up switchconst topicMap = {
-    
-const topicMap = {
-    finance: ["profit","revenue","costs","loss","cash_flow","budget","investment","risk","assets","liabilities","equity","break_even","roi","equity_financing","debt_financing","capital","profitability","burn_rate"],
-
-    marketing: ["marketing","advertising","branding","target_market","seo","social_media_marketing","content_marketing","customer_acquisition_cost","customer_persona"],
-
-    operations: ["operations","production","quality","supply_chain","outsourcing","inventory_management","wholesale","automation","standard_operating_procedures","supply_chain_resilience"],
-
-    human_resources: ["human_resources","recruitment","training","motivation","human_capital","company_culture"],
-
-    strategy: ["swot_analysis","business_plan","unique_selling_proposition","scalability","niche_market","market_need","timing","differentiation","pivot","pivot_vs_persevere","contingency_plan"],
-
-    sales: ["sales","pricing","discount","customer_retention","customer_feedback","crm","lifetime_value"],
-
-    product: ["product","service","product_development","mvp","product_market_fit","iteration"],
-
-    market: ["market","demand","supply","competition"],
-
-    leadership: ["management","leadership","teamwork","communication","vision_statement","mission_statement","core_values"],
-
-    legal: ["intellectual_property","trademark","patent","business_structure"],
-
-    tech: ["saas","b2b","b2c","ecommerce","user_experience"],
-
-    general: ["business_definition","business_purpose","business_activity","business_success","business_growth","innovation","value_creation","problem_solving","sustainability","value_proposition","customer_centricity","execution","resilience"]
-};
-    return bestIntent.responses[Math.floor(Math.random()*bestIntent.responses.length)];
-}
-
-        // 4️⃣ SMART RESPONSES (your previous business/finance/marketing logic)
-        // ...
-        // ================= SMART RESPONSES =================
-
-// BUSINESS
-if(userInput.includes("purpose") && (userInput.includes("business") || lastTopic === "business")){
-    lastTopic = "business";
-    return "The purpose of a business is to provide goods or services that satisfy customer needs while making profit. It also aims to grow, create value, and contribute to the economy.";
-}
-
-if(context.includes("business")){
-    lastTopic = "business";
-
-    if(userInput.includes("start") || userInput.includes("how")){
-        return `Starting a business involves several steps:
-
-1. Develop an idea 💡  
-2. Research the market 📊  
-3. Create a business plan 📝  
-4. Get funding 💰  
-5. Register legally 📄  
-6. Launch and market 🚀  
-
-👉 Want a real example?`;
     }
 
-    return `A business is an organization that provides goods or services to make profit.
-
-It helps the economy and creates jobs.
-
-👉 Do you want to learn how to start one?`;
-}
-
-// FINANCE
-if(context.includes("finance") || context.includes("money")){
-    lastTopic = "finance";
-
-    return `Finance is about managing money, including income, expenses, and profit.
-
-👉 Want an example?`;
-}
-
-// MARKETING
-if(context.includes("marketing")){
-    lastTopic = "marketing";
-
-    return `Marketing is promoting and selling products or services.
-
-👉 Want strategies?`;
-}
-
-// YES FOLLOW-UP
-if(userInput === "yes"){
-    if(lastTopic === "business"){
-        return `Great! 🚀
-
-Example business ideas:
-- Online store 🛒  
-- Small café ☕  
-- Tech service 💻  
-
-👉 Want help choosing one?`;
+    if (bestScore > 0.55 && bestIntent) {
+        const response = bestIntent.responses[0];
+        if (typeof response === 'object' && response.isReport) {
+            showReports();
+            return;
+        }
+        if (typeof response === 'object' && response.isSwot) {
+            startSWOTReport();
+            return;
+        }
+        if (typeof response === 'object' && response.isChart) {
+            startChartReport();
+            return;
+        }
+        return response;
     }
+
+    return "I'm here to help with business insights! Try asking about SWOT analysis, business reports, or creating charts. 📊";
 }
 
-// QUESTION HELP
-if(userInput.includes("how")){
-    if(lastTopic){
-        return `You're asking about how related to ${lastTopic}.
-
-Try: "how to start ${lastTopic}"`;
-    }
-    return "That's a great question! Can you specify the topic?";
-}
-
-if(userInput.includes("what")){
-    return "Try asking: 'What is business?' or 'What is marketing?'";
-}
-
-    } catch(error){
-        console.error(error);
-        return "Something went wrong ⚠️";
-    }
-}
-// ================= UI =================
-function typeText(div,text,speed=20){
-    if(!text) text = "Error";
-
-    div.textContent="";
-    let i=0;
-
-    const interval=setInterval(()=>{
-        if(i < text.length){
+// ================= UI FUNCTIONS =================
+function typeText(div, text, speed = 20) {
+    if (!text) text = "Error";
+    div.textContent = "";
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i < text.length) {
             div.textContent += text.charAt(i);
             i++;
         } else {
             clearInterval(interval);
         }
-    },speed);
+    }, speed);
 }
 
-function addMessage(text,sender,id=null){
-    const chatBox=document.getElementById('chat-box');
-    const msgDiv=document.createElement('div');
-
-    msgDiv.classList.add('message',sender);
-    if(id) msgDiv.id=id;
-
+function addMessage(text, sender, id = null) {
+    const chatBox = document.getElementById('chat-box');
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', sender);
+    if (id) msgDiv.id = id;
+    msgDiv.textContent = text;
     chatBox.appendChild(msgDiv);
-    chatBox.scrollTop=chatBox.scrollHeight;
-
-    typeText(msgDiv,text,20);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
-function openPage(page){window.location.href=page;}
+
+function openPage(page) {
+    window.location.href = page;
+}
+
 function sendMessage() {
     const input = $("#user-input").val().trim();
     if (!input) return;
@@ -938,103 +875,75 @@ function sendMessage() {
     const loadingId = "msg-" + Date.now();
     addMessage("Thinking...", 'bot', loadingId);
 
-    setTimeout(async () => {
-        // --- MULTI-QUESTION LOGIC START ---
-        // Split by "and", ".", or "?"
-        const questions = input.toLowerCase().split(/and|[\.\?]/g).filter(q => q.trim().length > 2);
-        
-        let finalReply = "";
-        
-        if (questions.length > 1) {
-            // Process each question and join them with a clear break
-            const replies = questions.map(q => getBotReply(q.trim()));
-            finalReply = replies.join("\n\n---\n\n"); 
-        } else {
-            // Just a single question
-            finalReply = getBotReply(input);
-        }
-        
-        // Check if the response is a stock analysis request
-        if (typeof finalReply === 'object' && finalReply.isStockAnalysis) {
-            finalReply = await analyzeStockMovement(finalReply.company, finalReply.symbol);
-        }
-        // Check if the response is a news request
-        else if (typeof finalReply === 'object' && finalReply.isNews) {
-            finalReply = await fetchNews(finalReply.keyword);
-        }
-        
-        // --- MULTI-QUESTION LOGIC END ---
-
-        const msgDiv = document.getElementById(loadingId);
-        msgDiv.innerHTML = ""; // Clear the "Thinking..." text
-        typeText(msgDiv, finalReply, 20);
-        
-        // If you have the voice function from before:
-        if (typeof speakResponse === "function") {
-            speakResponse(finalReply.replace(/-/g, "")); 
+    setTimeout(() => {
+        const reply = getBotReply(input);
+        if (reply) {
+            const msgDiv = document.getElementById(loadingId);
+            msgDiv.textContent = reply;
         }
     }, 500 + Math.random() * 800);
 }
 
-// Enter key sends
-$("#user-input").on('keypress',function(e){if(e.key==='Enter') sendMessage();});
-
-// Suggestions toggle
-$("#suggestBtn").click(()=>$("#suggestBox").toggle());
-$("#closeBtn").click(()=>$("#suggestBox").hide());
-$(".suggestion").click(function(){
-    $("#user-input").val($(this).text()); sendMessage(); $("#suggestBox").hide();
+$("#user-input").on('keypress', function(e) {
+    if (e.key === 'Enter') sendMessage();
 });
 
-// Dark mode from localStorage
-if(localStorage.getItem('darkMode')==='enabled') document.body.classList.add('dark');
+$("#suggestBtn").click(() => $("#suggestBox").toggle());
+$("#closeBtn").click(() => $("#suggestBox").hide());
+$(".suggestion").click(function() {
+    $("#user-input").val($(this).text());
+    sendMessage();
+    $("#suggestBox").hide();
+});
 
-// Initial bot message
-window.onload=()=>{
-    addMessage("Hello! I'm your AI assistant 🤖. Ask me about business, finance, marketing, or entrepreneurship.",'bot',null,true);
-}
-// ================= VOICE INPUT =================
+window.addEventListener("click", function(e) {
+    const modal = document.getElementById("reportModal");
+    if (e.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+if (localStorage.getItem('darkMode') === 'enabled') document.body.classList.add('dark');
+
+window.onload = () => {
+    addMessage("Hello! I'm your Business AI Assistant 🤖\n\nI can help you with:\n• SWOT Analysis 📊\n• Business Reports 📈\n• Profit Charts 💹\n\nTry saying 'create swot', 'generate report', or 'create chart'!", 'bot');
+};
+
+// Voice Recognition
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
 let recognition;
 
 if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.lang = "en-US"; // change to "ar-EG" if you want Arabic
+    recognition.lang = "en-US";
     recognition.continuous = false;
     recognition.interimResults = false;
 
     recognition.onstart = () => {
         const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.add("listening");
+        if (btn) btn.classList.add("listening");
     };
 
     recognition.onend = () => {
         const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.remove("listening");
+        if (btn) btn.classList.remove("listening");
     };
 
     recognition.onresult = function(event) {
         const transcript = event.results[0][0].transcript;
-
-        // Put voice text into input
         document.getElementById("user-input").value = transcript;
-
-        // Use YOUR existing chatbot system
         sendMessage();
     };
 
     recognition.onerror = function(e) {
         console.error("Voice error:", e.error);
-
         const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.remove("listening");
+        if (btn) btn.classList.remove("listening");
     };
 }
 
-// Function triggered by 🎤 button
-function startVoice(){
-    if(recognition){
+function startVoice() {
+    if (recognition) {
         recognition.start();
     } else {
         alert("Speech recognition not supported in this browser");
