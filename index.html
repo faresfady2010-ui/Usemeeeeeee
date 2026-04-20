@@ -482,127 +482,105 @@ let swotData = {
 };
 
 // ✅ ADD THIS FUNCTION HERE
-function generateSWOT(data){
+function generateSWOTResult(){
 
-    let combinedText = `
-        ${data.description}
-        ${data.advantage}
-        ${data.challenges}
-        ${data.opportunities}
-        ${data.competitors}
+    function rank(arr){
+        return arr.sort((a,b)=>b.score-a.score).slice(0,3);
+    }
+
+    const topS = rank(swotData.strengths);
+    const topW = rank(swotData.weaknesses);
+    const topO = rank(swotData.opportunities);
+    const topT = rank(swotData.threats);
+
+    let strategies = "";
+
+    topS.forEach(s=>{
+        topO.forEach(o=>{
+            strategies += `🟢 SO: Use "${s.description}" to exploit "${o.description}"\n`;
+        });
+    });
+
+    topW.forEach(w=>{
+        topO.forEach(o=>{
+            strategies += `🔵 WO: Improve "${w.description}" to capture "${o.description}"\n`;
+        });
+    });
+
+    topS.forEach(s=>{
+        topT.forEach(t=>{
+            strategies += `🟠 ST: Use "${s.description}" to reduce "${t.description}"\n`;
+        });
+    });
+
+    topW.forEach(w=>{
+        topT.forEach(t=>{
+            strategies += `🔴 WT: Minimize "${w.description}" to avoid "${t.description}"\n`;
+        });
+    });
+
+    swotMode = false;
+    swotStep = 0;
+
+    return `📊 SWOT Analysis for ${swotData.business}
+
+🟢 Top Strengths:
+${topS.map(s=>`- ${s.description} (${s.score})`).join("\n")}
+
+🔴 Key Weaknesses:
+${topW.map(w=>`- ${w.description} (${w.score})`).join("\n")}
+
+🔵 Opportunities:
+${topO.map(o=>`- ${o.description} (${o.score})`).join("\n")}
+
+🟠 Threats:
+${topT.map(t=>`- ${t.description} (${t.score})`).join("\n")}
+
+🚀 Strategies:
+${strategies}
+`;
+}
+
+let currentType = "";
+let tempItem = {};
+function generateSWOTHTML(){
+
+    function top3(arr){
+        return arr.sort((a,b)=>b.score-a.score).slice(0,3);
+    }
+
+    const S = top3(swotData.strengths);
+    const W = top3(swotData.weaknesses);
+    const O = top3(swotData.opportunities);
+    const T = top3(swotData.threats);
+
+    return `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+        
+        <div style="background:#d4edda;padding:10px;border-radius:8px;">
+            <b>🟢 Strengths</b><br>
+            ${S.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
+        </div>
+
+        <div style="background:#f8d7da;padding:10px;border-radius:8px;">
+            <b>🔴 Weaknesses</b><br>
+            ${W.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
+        </div>
+
+        <div style="background:#d1ecf1;padding:10px;border-radius:8px;">
+            <b>🔵 Opportunities</b><br>
+            ${O.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
+        </div>
+
+        <div style="background:#fff3cd;padding:10px;border-radius:8px;">
+            <b>🟠 Threats</b><br>
+            ${T.map(x=>`• ${x.description} (${x.score})`).join("<br>")}
+        </div>
+
+    </div>
     `;
-
-    let analysis = analyzeText(combinedText);
-
-    return `📊 SMART AI SWOT for ${data.business}
-
-✅ Strengths:
-- ${analysis.strengths.join(", ") || "Strong positioning based on advantages"}
-
-⚠️ Weaknesses:
-- ${analysis.weaknesses.join(", ") || "Operational or growth limitations detected"}
-
-🚀 Opportunities:
-- ${analysis.opportunities.join(", ") || "Market expansion and growth potential"}
-
-🔥 Threats:
-- ${analysis.threats.join(", ") || "Competitive pressure from ${data.competitors}"}
-
-💡 AI Insight:
-Your business shows ${analysis.strengths.length} strengths and ${analysis.weaknesses.length} weaknesses.
-Focus on improving weaknesses while scaling opportunities.`;
 }
-const aiKeywords = {
-    strengths: ["fast","cheap","unique","quality","strong","brand","advantage","innovation"],
-    weaknesses: ["problem","difficult","lack","expensive","slow","limited","weak"],
-    opportunities: ["grow","expand","opportunity","market","trend","online","increase"],
-    threats: ["competition","competitor","risk","threat","decline","crisis","market pressure"]
-};
-function analyzeText(text){
 
-    text = text.toLowerCase();
-
-    let result = {
-        strengths: [],
-        weaknesses: [],
-        opportunities: [],
-        threats: []
-    };
-
-    for(let word of aiKeywords.strengths){
-        if(text.includes(word)) result.strengths.push(word);
-    }
-
-    for(let word of aiKeywords.weaknesses){
-        if(text.includes(word)) result.weaknesses.push(word);
-    }
-
-    for(let word of aiKeywords.opportunities){
-        if(text.includes(word)) result.opportunities.push(word);
-    }
-
-    for(let word of aiKeywords.threats){
-        if(text.includes(word)) result.threats.push(word);
-    }
-
-    return result;
-}
-function generateFullReport(data){
-
-    return `📊 BUSINESS REPORT: ${data.business}
-
-━━━━━━━━━━━━━━━━━━
-🧾 Overview:
-${data.description}
-
-🏆 Competitive Position:
-Compared to ${data.competitors}, your business stands out because ${data.advantage}.
-However, it faces challenges such as ${data.challenges}.
-
-📊 SWOT Summary:
-• Strength: ${data.advantage}
-• Weakness: ${data.challenges}
-• Opportunity: ${data.opportunities}
-• Threat: Competition from ${data.competitors}
-
-📈 Strategic Insights:
-To grow, focus on leveraging your strengths while reducing weaknesses.
-Expanding into ${data.opportunities} can increase your market share.
-
-⚖️ AI Comparison:
-Your business appears ${
-    data.advantage.length > data.challenges.length ? "competitive and strong" : "developing but needs improvement"
-} compared to competitors.
-
-🚀 Recommendation:
-- Improve weak areas
-- Strengthen differentiation
-- Monitor competitors closely
-
-━━━━━━━━━━━━━━━━━━`;
-}
-function guessCompetitors(business){
-
-    business = business.toLowerCase();
-
-    if(business.includes("clothing") || business.includes("fashion"))
-        return "brands like Zara, H&M";
-
-    if(business.includes("tech") || business.includes("software"))
-        return "major tech companies";
-
-    if(business.includes("food") || business.includes("restaurant"))
-        return "local restaurants and chains";
-
-    return "industry competitors";
-}
-let threatText;
-
-if(data.competitors && data.competitors.trim() !== ""){
-    threatText = `Competition from ${data.competitors}`;
-} else {
-    threatText = `Competition from ${guessCompetitors(data.business)}`;
-}
 function handleSWOTFlow(input){
 
     // STEP 1: Business name
@@ -655,10 +633,8 @@ function handleSWOTFlow(input){
             } else if(currentType === "opportunities"){
                 currentType = "threats";
             } else {
-                let swot = generateSWOT(aiData);
-let report = generateFullReport(aiData);
-
-return swot + "\n\n" + report;
+                return generateSWOTResult();
+            }
 
             swotStep = 2;
             return `Now enter ${currentType}:`;
