@@ -592,7 +592,10 @@ function generateSWOTReport() {
 
 // ================= BUSINESS REPORT GENERATION =================
 function generateBusinessReport(input) {
-    const lines = input.split('\n').filter(l => l.trim());
+    const lines = input
+    .split(/\d+\.\s*/)   // split at "1. ", "2. ", etc.
+    .map(l => l.trim())
+    .filter(l => l);
     
     reportData.businessName = lines[0] || "Unknown Business";
     reportData.industry = lines[1] || "General";
