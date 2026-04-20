@@ -26,9 +26,9 @@ body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
 body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
 .chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
 body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
-#suggestWrapper { position: relative; margin-bottom: 10px; }
-#suggestBtn { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 5px; }
-#suggestBtn:hover { background-color: #0056b3; }
+#suggestWrapper { position: relative; margin-bottom: 10px; display: flex; gap: 10px; }
+#suggestBtn, #reportsBtn { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 0; }
+#suggestBtn:hover, #reportsBtn:hover { background-color: #0056b3; }
 #suggestBox { position: absolute; bottom: 40px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 200px; overflow-y: auto; z-index: 10; }
 #closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; }
 .suggestion { cursor: pointer; padding: 5px; }
@@ -179,7 +179,7 @@ body.dark .modal-content {
 
     <div class="chat-input-area">
         <div id="suggestWrapper">
-            <button onclick="showReports()">📊 Reports</button>
+            <button id="reportsBtn" onclick="showReports()">📊 Reports</button>
             <button id="suggestBtn">💡 Suggestions</button>
             <div id="suggestBox">
                 <button id="closeBtn">✖</button>
@@ -332,7 +332,7 @@ const intents = [
     // CUSTOMER EXPERIENCE
     {tag:"customer_retention",patterns:["customer retention","keeping customers"],responses:["Customer retention refers to the activities a company uses to reduce the number of customer defections."]},
     {tag:"customer_feedback",patterns:["importance of feedback","customer reviews"],responses:["Feedback helps businesses understand customer needs and improve their products or services."]},
-    {tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company’s relationships and interactions with customers and potential customers."]},
+    {tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company's relationships and interactions with customers and potential customers."]},
     {tag:"user_experience",patterns:["what is ux","user experience"],responses:["UX refers to the overall experience a person has when interacting with a product, especially in terms of how easy or pleasing it is to use."]},
 
     // ADVANCED FINANCE & LEGAL
