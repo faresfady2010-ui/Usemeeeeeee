@@ -39,7 +39,21 @@ body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
 .chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
 body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
 #suggestWrapper { position: relative; margin-bottom: 10px; display: flex; gap: 5px; flex-wrap: wrap; }
-#suggestBtn, #reportsBtn, #plannerBtn { background-color: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; margin-bottom: 0; font-size: 0.8em; font-weight: 600; transition: all 0.3s; }
+#suggestBtn, #reportsBtn, #plannerBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+
+    padding: 4px 10px;   /* ⬅ smaller height & width */
+    border-radius: 12px; /* ⬅ slightly tighter shape */
+
+    font-size: 12px;     /* ⬅ smaller text */
+    font-weight: 500;    /* ⬅ less bulky */
+
+    cursor: pointer;
+    margin-bottom: 0;
+    transition: all 0.2s ease;
+}
 #suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
 #suggestBox { position: absolute; bottom: 35px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 200px; overflow-y: auto; z-index: 10; }
 #closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; font-weight: bold; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
@@ -510,13 +524,12 @@ body.dark .ai-insights li {
     <div class="chat-header">
         <span></span>
         <div class="header-title">usemee</div>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button>
     </div>
 
     <div class="nav-buttons">
-        <button onclick="goToPage('index.html')">🏠 Home</button>
-        <button onclick="goToPage('about.html')">ℹ️ About</button>
-        <button onclick="goToPage('settings.html')">⚙️ Settings</button>
+        <button onclick="goToPage('index.html')">Home</button>
+        <button onclick="goToPage('about.html')">About</button>
+        <button onclick="goToPage('settings.html')">Settings</button>
     </div>
 
     <div class="chat-box" id="chat-box"></div>
@@ -536,10 +549,8 @@ body.dark .ai-insights li {
         </div>
 
         <input type="text" id="user-input" placeholder="Type your message...">
-
-        <div class="input-buttons">
-            <button id="voice-btn" onclick="startVoice()">🎤</button>
-            <button class="send-btn" onclick="sendMessage()">Send</button>
+        <button id="voice-btn" onclick="startVoice()">🎤</button>
+        <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
