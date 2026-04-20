@@ -83,39 +83,46 @@ body.dark .chart-container {
     background: #2a2a4a;
 }
 
-/* Report Styles */
+/* Report Container (keep simple) */
 .report-container {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 15px 0;
-    max-width: 600px;
+    margin: 10px 0;
 }
 
-body.dark .report-container {
-    background: #16213e;
+/* Header (minimal like text) */
+.report-header {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Make report sections look like suggestions */
+.report-section {
+    display: inline-block;
+    background: #f1f1f1;
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 15px;
+    margin: 5px 5px 0 0;
+    font-size: 13px;
+    cursor: default;
+    transition: 0.2s;
+}
+
+/* Hover like suggestions */
+.report-section:hover {
+    background: #444;
+    color: white;
+}
+
+/* Dark mode */
+body.dark .report-section {
+    background: #1a1a2e;
     color: #e0e0e0;
 }
 
-.report-header {
-    font-size: 1.5em;
-    font-weight: bold;
-    border-bottom: 3px solid #007bff;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-.report-section {
-    margin: 15px 0;
-    padding: 10px;
-    background: #f9f9f9;
-    border-left: 4px solid #007bff;
-    border-radius: 4px;
-}
-
-body.dark .report-section {
-    background: #0f3460;
-    border-left-color: #00d4ff;
+body.dark .report-section:hover {
+    background: #444;
+    color: white;
 }
 
 .modal {
@@ -172,7 +179,7 @@ body.dark .modal-content {
 
     <div class="chat-input-area">
         <div id="suggestWrapper">
-            <button id="showReports()">📊 Reports</button>
+            <button onclick="showReports()">📊 Reports</button>
             <button id="suggestBtn">💡 Suggestions</button>
             <div id="suggestBox">
                 <button id="closeBtn">✖</button>
