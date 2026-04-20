@@ -11,7 +11,7 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-colo
 body.dark { background-color: #1a1a2e; }
 .chat-container { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; display: flex; flex-direction: column; height: 600px; overflow: hidden; transition: background-color 0.3s; }
 body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; font-weight: 400; display: flex; justify-content: space-between; align-items: center; }
 body.dark .chat-header { background-color: #0f3460; }
 .header-title { flex: 1; text-align: center; }
 .nav-buttons { display: flex; justify-content: center; gap: 5px; padding: 10px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; flex-wrap: wrap; }
@@ -25,6 +25,50 @@ body.dark .chat-box { border-bottom: 1px solid #0f3460; }
 body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
 .message.bot { background-color: #f0f0f0; color: #000; padding: 8px 12px; border-radius: 15px; float: left; max-width: 70%; margin-right: auto; text-align: left; }
 body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
+.thinking-animation { 
+    background-color: #f0f0f0; 
+    color: #000; 
+    padding: 8px 12px; 
+    border-radius: 15px; 
+    float: left; 
+    max-width: 70%; 
+    margin-right: auto; 
+    text-align: left; 
+}
+body.dark .thinking-animation { 
+    background-color: #2a2a4a; 
+    color: #e0e0e0; 
+}
+.thinking-dots {
+    display: inline-flex;
+    gap: 4px;
+}
+.thinking-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #007bff;
+    animation: thinking 1.4s infinite;
+}
+body.dark .thinking-dots span {
+    background-color: #88c2ff;
+}
+.thinking-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.thinking-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+@keyframes thinking {
+    0%, 60%, 100% {
+        opacity: 0.3;
+        transform: translateY(0);
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+}
 .chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
 body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
 #suggestWrapper { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -800,7 +844,6 @@ const intents = [
 
     // ADD MORE UP TO ~200 INTENTS
 ];
-
 // ==================== MODAL FUNCTIONS ====================
 function showPlannerModal() {
     document.getElementById('plannerModal').style.display = 'block';
@@ -1619,6 +1662,32 @@ function addMessage(text, sender) {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+function showThinkingAnimation() {
+    const chatBox = document.getElementById('chat-box');
+    const thinkingDiv = document.createElement('div');
+    thinkingDiv.className = 'thinking-animation';
+    thinkingDiv.id = 'thinking-message';
+    thinkingDiv.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+    chatBox.appendChild(thinkingDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function typeWriterEffect(element, text, speed = 50) {
+    let index = 0;
+    element.textContent = '';
+    
+    function typeChar() {
+        if (index < text.length) {
+            element.textContent += text[index];
+            index++;
+            chatBox.scrollTop = chatBox.scrollHeight;
+            setTimeout(typeChar, speed);
+        }
+    }
+    
+    typeChar();
+}
+
 function sendMessage() {
     const input = $("#user-input").val().trim();
     if (!input) return;
@@ -1626,10 +1695,27 @@ function sendMessage() {
     addMessage(input, 'user');
     $("#user-input").val("");
 
+    // Show thinking animation
+    showThinkingAnimation();
+
     setTimeout(() => {
         const reply = getBotReply(input);
-        addMessage(reply, 'bot');
-    }, 500);
+        const thinkingElement = document.getElementById('thinking-message');
+        
+        if (thinkingElement) {
+            thinkingElement.remove();
+        }
+        
+        // Create new message element for bot reply
+        const chatBox = document.getElementById('chat-box');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', 'bot');
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        
+        // Apply typewriter effect
+        typeWriterEffect(msgDiv, reply, 30);
+    }, 1500);
 }
 
 $("#user-input").on('keypress', function(e) {
@@ -1688,7 +1774,18 @@ window.addEventListener("click", function(e) {
 });
 
 window.onload = () => {
-    addMessage("Hello! 👋 Ask me anything about business.", 'bot');
+    showThinkingAnimation();
+    setTimeout(() => {
+        const thinkingElement = document.getElementById('thinking-message');
+        if (thinkingElement) {
+            thinkingElement.remove();
+        }
+        const chatBox = document.getElementById('chat-box');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', 'bot');
+        chatBox.appendChild(msgDiv);
+        typeWriterEffect(msgDiv, "Hello! 👋 Ask me anything about business.", 30);
+    }, 1500);
 };
 </script>
 
