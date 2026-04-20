@@ -3,322 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Usemee - AI Business Intelligence Platform</title>
+<title>Usemee Chatbot</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    transition: background-color 0.3s;
-}
-
-body.dark {
-    background-color: #1a1a2e;
-}
-
-.main-container {
-    display: flex;
-    min-height: 100vh;
-    gap: 0;
-}
-
-.chat-section {
-    width: 500px;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    transition: all 0.3s;
-}
-
-body.dark .chat-section {
-    background: #16213e;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
-}
-
-.chat-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 1.3em;
-    font-weight: 600;
-}
-
-.nav-buttons {
-    display: flex;
-    justify-content: space-around;
-    gap: 5px;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-bottom: 1px solid #ccc;
-    flex-wrap: wrap;
-}
-
-body.dark .nav-buttons {
-    background-color: #0f3460;
-    border-bottom: 1px solid #1a1a2e;
-}
-
-.nav-buttons button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.80em;
-    font-weight: 600;
-    transition: all 0.3s;
-    flex: 1;
-    min-width: 70px;
-}
-
-.nav-buttons button:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-.chat-box {
-    flex-grow: 1;
-    padding: 15px;
-    overflow-y: auto;
-    border-bottom: 1px solid #eee;
-}
-
-body.dark .chat-box {
-    border-bottom: 1px solid #0f3460;
-}
-
-.message {
-    margin-bottom: 10px;
-    clear: both;
-    overflow-wrap: break-word;
-    animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.message.user {
-    background-color: #e6f7ff;
-    color: #000;
-    padding: 10px 15px;
-    border-radius: 15px;
-    float: right;
-    max-width: 80%;
-    margin-left: auto;
-    text-align: right;
-}
-
-body.dark .message.user {
-    background-color: #1e4d7b;
-    color: #e0e0e0;
-}
-
-.message.bot {
-    background-color: #f0f0f0;
-    color: #000;
-    padding: 10px 15px;
-    border-radius: 15px;
-    float: left;
-    max-width: 80%;
-    margin-right: auto;
-    text-align: left;
-}
-
-body.dark .message.bot {
-    background-color: #2a2a4a;
-    color: #e0e0e0;
-}
-
-.chat-input-area {
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    border-top: 1px solid #eee;
-    background-color: #fff;
-}
-
-body.dark .chat-input-area {
-    background-color: #16213e;
-    border-top: 1px solid #0f3460;
-}
-
-#suggestWrapper {
-    position: relative;
-    margin-bottom: 10px;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-#suggestBtn, #reportsBtn, #plannerBtn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-bottom: 0;
-    font-size: 0.80em;
-    font-weight: 600;
-    transition: all 0.3s;
-    flex: 1;
-    min-width: 70px;
-}
-
-#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover {
-    background-color: #0056b3;
-    transform: translateY(-2px);
-}
-
-#suggestBox {
-    position: absolute;
-    bottom: 40px;
-    left: 0;
-    background: #222;
-    color: white;
-    padding: 10px;
-    border-radius: 8px;
-    width: 100%;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-    display: none;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 10;
-}
-
-#closeBtn {
-    float: right;
-    background: red;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.suggestion {
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 4px;
-}
-
-.suggestion:hover {
-    background: #444;
-}
-
-.chat-input-area input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    background-color: #fff;
-    color: #000;
-    margin-bottom: 8px;
-    font-family: inherit;
-}
-
-body.dark .chat-input-area input {
-    background-color: #0f3460;
-    color: #e0e0e0;
-    border: 1px solid #444;
-}
-
-.chat-input-area input:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
-}
-
-.input-buttons {
-    display: flex;
-    gap: 5px;
-}
-
-.send-btn {
-    background-color: #28a745;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 20px;
-    color: white;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s;
-    flex: 1;
-}
-
-.send-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-}
-
+body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s; }
+body.dark { background-color: #1a1a2e; }
+.chat-container { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; display: flex; flex-direction: column; height: 600px; overflow: hidden; transition: background-color 0.3s; }
+body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; }
+body.dark .chat-header { background-color: #0f3460; }
+.nav-buttons { display: flex; justify-content: center; gap: 10px; padding: 10px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; flex-wrap: wrap; }
+body.dark .nav-buttons { background-color: #0f3460; border-bottom: 1px solid #1a1a2e; }
+.nav-buttons button { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 0.9em; font-weight: 600; }
+.nav-buttons button:hover { background-color: #0056b3; }
+.chat-box { flex-grow: 1; padding: 15px; overflow-y: auto; border-bottom: 1px solid #eee; }
+body.dark .chat-box { border-bottom: 1px solid #0f3460; }
+.message { margin-bottom: 10px; clear: both; overflow-wrap: break-word; }
+.message.user { background-color: #e6f7ff; color: #000; padding: 8px 12px; border-radius: 15px; float: right; max-width: 70%; margin-left: auto; text-align: right; }
+body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
+.message.bot { background-color: #f0f0f0; color: #000; padding: 8px 12px; border-radius: 15px; float: left; max-width: 70%; margin-right: auto; text-align: left; }
+body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
+.chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
+body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
+#suggestWrapper { position: relative; margin-bottom: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+#suggestBtn, #reportsBtn, #plannerBtn { background-color: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; margin-bottom: 0; font-size: 0.9em; font-weight: 600; flex: 1; min-width: 80px; }
+#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover { background-color: #0056b3; }
+#suggestBox { position: absolute; bottom: 40px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 200px; overflow-y: auto; z-index: 10; }
+#closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; font-weight: bold; }
+.suggestion { cursor: pointer; padding: 5px; }
+.suggestion:hover { background: #444; }
+.chat-input-area input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; background-color: #fff; color: #000; margin-bottom: 8px; }
+body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; border: 1px solid #444; }
+.input-buttons { display: flex; gap: 8px; }
+.chat-input-area .send-btn { background-color: #28a745; border: none; padding: 10px 20px; border-radius: 20px; color: white; cursor: pointer; font-weight: 600; }
+.chat-input-area .send-btn:hover { background-color: #218838; }
+.message.loading { font-style: italic; opacity: 0.7; }
 #voice-btn {
     border: none;
     background-color: #eee;
     padding: 10px 12px;
+    margin-left: 8px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
-    transition: all 0.2s;
+    transition: 0.2s;
 }
-
-#voice-btn:hover {
-    background-color: #ddd;
-}
-
+#voice-btn:hover { background-color: #ddd; }
 #voice-btn.listening {
     background-color: #ff4d4d;
     color: white;
     animation: pulse 1s infinite;
 }
-
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
+    0% { transform: scale(1); }
     50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
-
 body.dark #voice-btn {
     background-color: #0f3460;
     color: #e0e0e0;
 }
-
-.content-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+body.dark #voice-btn:hover {
+    background-color: #1a1a2e;
 }
 
-.content-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    font-size: 1.5em;
-    font-weight: 600;
-}
-
-.content-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 30px;
-    background: white;
-}
-
-body.dark .content-body {
-    background: #0f3460;
-    color: #e0e0e0;
-}
-
+/* MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -333,20 +83,14 @@ body.dark .content-body {
 
 .modal-content {
     background-color: white;
-    margin: 3% auto;
+    margin: 5% auto;
     padding: 30px;
     border-radius: 15px;
-    width: 95%;
-    max-width: 1000px;
-    max-height: 90vh;
+    width: 90%;
+    max-width: 900px;
+    max-height: 85vh;
     overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-    animation: modalSlideIn 0.3s ease-out;
-}
-
-@keyframes modalSlideIn {
-    from { opacity: 0; transform: translateY(-50px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 body.dark .modal-content {
@@ -370,7 +114,7 @@ body.dark .close-modal:hover {
     color: #fff;
 }
 
-/* FORM STYLES */
+/* INPUT STYLES */
 .input-group {
     display: flex;
     flex-direction: column;
@@ -396,7 +140,6 @@ body.dark .input-group label {
     border-radius: 8px;
     font-size: 1em;
     transition: all 0.3s;
-    font-family: inherit;
 }
 
 body.dark .input-group input,
@@ -411,10 +154,11 @@ body.dark .input-group textarea {
 .input-group select:focus,
 .input-group textarea:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
+/* BUTTONS */
 .button-group {
     display: flex;
     gap: 10px;
@@ -431,17 +175,17 @@ body.dark .input-group textarea {
     cursor: pointer;
     transition: all 0.3s;
     flex: 1;
-    min-width: 150px;
+    min-width: 120px;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     color: white;
 }
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
 
 .btn-secondary {
@@ -467,56 +211,40 @@ body.dark .btn-secondary {
 
 .btn-ai:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(245, 87, 108, 0.4);
-}
-
-.btn-download {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-}
-
-.btn-download:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 20px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
 }
 
 /* METRICS */
 .metrics-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
     margin: 20px 0;
 }
 
 .metric-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     color: white;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 10px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 .metric-icon {
-    font-size: 2.2em;
+    font-size: 2em;
     margin-bottom: 10px;
 }
 
 .metric-value {
-    font-size: 1.8em;
+    font-size: 1.6em;
     font-weight: bold;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .metric-label {
-    font-size: 0.9em;
-    opacity: 0.9;
-}
-
-.metric-change {
     font-size: 0.85em;
-    margin-top: 8px;
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 /* CHARTS */
@@ -529,14 +257,13 @@ body.dark .btn-secondary {
 
 .chart-box {
     background: white;
-    border-radius: 12px;
+    border-radius: 10px;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 body.dark .chart-box {
     background: #16213e;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .chart-title {
@@ -568,11 +295,10 @@ body.dark .chart-title {
 
 body.dark .data-table {
     background: #16213e;
-    color: #e0e0e0;
 }
 
 .data-table thead {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
     color: white;
 }
 
@@ -585,6 +311,7 @@ body.dark .data-table {
 
 body.dark .data-table td {
     border-bottom: 1px solid #444;
+    color: #e0e0e0;
 }
 
 .data-table tbody tr:hover {
@@ -595,6 +322,79 @@ body.dark .data-table tbody tr:hover {
     background: #0f3460;
 }
 
+/* REPORT SECTION */
+.report-section {
+    background: #f1f1f1;
+    color: #333;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #007bff;
+}
+
+body.dark .report-section {
+    background: #16213e;
+    color: #e0e0e0;
+    border-left: 4px solid #0056b3;
+}
+
+.report-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 15px;
+}
+
+body.dark .report-header {
+    color: #e0e0e0;
+}
+
+/* SWOT GRID */
+.swot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.swot-card {
+    padding: 20px;
+    border-radius: 8px;
+    color: white;
+}
+
+.swot-strengths {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.swot-weaknesses {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.swot-opportunities {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.swot-threats {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.swot-title {
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+}
+
+.swot-item {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
 /* AI INSIGHTS */
 .ai-insights {
     background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
@@ -602,11 +402,6 @@ body.dark .data-table tbody tr:hover {
     padding: 20px;
     border-radius: 8px;
     margin: 20px 0;
-}
-
-body.dark .ai-insights {
-    background: linear-gradient(135deg, rgba(240, 147, 251, 0.05) 0%, rgba(245, 87, 108, 0.05) 100%);
-    border-left: 4px solid #f093fb;
 }
 
 .ai-header {
@@ -629,6 +424,7 @@ body.dark .ai-insights p {
 .ai-insights ul {
     list-style: none;
     padding: 0;
+    margin: 10px 0;
 }
 
 .ai-insights li {
@@ -650,206 +446,13 @@ body.dark .ai-insights li {
     font-weight: bold;
 }
 
-.pro-tip-box {
-    margin-top: 15px;
-    padding: 15px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    border-radius: 8px;
-    font-weight: 600;
-}
-
-body.dark .pro-tip-box {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-/* REPORT STYLES */
-.report-container {
-    margin: 20px 0;
-}
-
-.report-header {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 15px;
-    border-bottom: 3px solid #667eea;
-    padding-bottom: 10px;
-}
-
-body.dark .report-header {
-    color: #e0e0e0;
-}
-
-.report-section {
-    background: #f9fafb;
-    border-left: 4px solid #667eea;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-body.dark .report-section {
-    background: #16213e;
-    border-left: 4px solid #f093fb;
-}
-
-.report-section b {
-    color: #667eea;
-    display: block;
-    margin-bottom: 10px;
-}
-
-body.dark .report-section b {
-    color: #f093fb;
-}
-
-/* SWOT */
-.swot-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-    margin: 20px 0;
-}
-
-.swot-card {
-    padding: 20px;
-    border-radius: 8px;
-    color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.swot-strengths {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.swot-weaknesses {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-.swot-opportunities {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-}
-
-.swot-threats {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.swot-title {
-    font-weight: 600;
-    margin-bottom: 12px;
-    font-size: 1.1em;
-}
-
-.swot-item {
-    background: rgba(255,255,255,0.2);
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin: 5px 0;
-    font-size: 0.9em;
-}
-
-/* TIMELINE */
-.timeline {
-    position: relative;
-    margin: 20px 0;
-}
-
-.timeline-item {
-    display: flex;
-    margin-bottom: 30px;
-    position: relative;
-    padding-left: 50px;
-}
-
-.timeline-item:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 5px;
-    width: 30px;
-    height: 30px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 50%;
-    border: 4px solid white;
-    box-shadow: 0 0 0 2px #667eea;
-}
-
-.timeline-item:not(:last-child):after {
-    content: '';
-    position: absolute;
-    left: 14px;
-    top: 35px;
-    width: 2px;
-    height: 30px;
-    background: #667eea;
-}
-
-.timeline-content {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    flex: 1;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-body.dark .timeline-content {
-    background: #16213e;
-}
-
-.timeline-date {
-    font-weight: 600;
-    color: #667eea;
-    margin-bottom: 5px;
-}
-
-.timeline-heading {
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-body.dark .timeline-heading {
-    color: #e0e0e0;
-}
-
-.timeline-text {
-    color: #666;
-}
-
-body.dark .timeline-text {
-    color: #bbb;
-}
-
-.section-title {
-    font-weight: 700;
-    color: #333;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    font-size: 1.05em;
-}
-
-body.dark .section-title {
-    color: #e0e0e0;
-}
-
 /* RESPONSIVE */
-@media (max-width: 1200px) {
-    .main-container {
-        flex-direction: column;
-    }
-
-    .chat-section {
-        width: 100%;
-        height: 400px;
-    }
-
-    .content-section {
-        flex: 1;
-    }
-}
-
 @media (max-width: 768px) {
+    .chat-container {
+        max-width: 100%;
+        height: 80vh;
+    }
+
     .charts-grid {
         grid-template-columns: 1fr;
     }
@@ -862,20 +465,6 @@ body.dark .section-title {
         min-width: auto;
     }
 
-    .chat-section {
-        height: 300px;
-    }
-
-    .nav-buttons {
-        flex-wrap: wrap;
-    }
-
-    .nav-buttons button {
-        min-width: auto;
-        font-size: 0.75em;
-        padding: 6px 10px;
-    }
-
     #suggestWrapper {
         flex-direction: column;
     }
@@ -883,79 +472,71 @@ body.dark .section-title {
     #suggestBtn, #reportsBtn, #plannerBtn {
         min-width: auto;
     }
+
+    .nav-buttons button {
+        font-size: 0.8em;
+        padding: 6px 12px;
+    }
+}
+
+.planner-input-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
 }
 </style>
 </head>
 <body>
 
-<div class="main-container">
-    <!-- CHAT SECTION -->
-    <div class="chat-section">
-        <div class="chat-header">💬 Usemee AI</div>
+<div class="chat-container">
+    <div class="chat-header">usemee</div>
 
-        <div class="nav-buttons">
-            <button onclick="showSection('chat')">💬 Chat</button>
-            <button onclick="showSection('planner')">📊 Planner</button>
-            <button onclick="showSection('reports')">📈 Reports</button>
-        </div>
-
-        <div class="chat-box" id="chat-box"></div>
-
-        <div class="chat-input-area">
-            <div id="suggestWrapper">
-                <button id="reportsBtn" onclick="showSection('reports')">📊 Reports</button>
-                <button id="plannerBtn" onclick="showSection('planner')">📊 Planner</button>
-                <button id="suggestBtn">💡 Tips</button>
-                <div id="suggestBox">
-                    <button id="closeBtn">✖</button>
-                    <p class="suggestion">what is business</p>
-                    <p class="suggestion">how to start a business</p>
-                    <p class="suggestion">create swot analysis</p>
-                    <p class="suggestion">financial planning</p>
-                </div>
-            </div>
-
-            <input type="text" id="user-input" placeholder="Type your message...">
-
-            <div class="input-buttons">
-                <button id="voice-btn" onclick="startVoice()">🎤</button>
-                <button class="send-btn" onclick="sendMessage()">Send</button>
-            </div>
-        </div>
+    <div class="nav-buttons">
+        <button onclick="showChatView()">💬 Chat</button>
+        <button onclick="showPlannerModal()">📊 Planner</button>
+        <button onclick="showReportsModal()">📈 Reports</button>
+        <button onclick="openPage('settings.html')">⚙️ Settings</button>
     </div>
 
-    <!-- CONTENT SECTION -->
-    <div class="content-section">
-        <div class="content-header" id="contentHeader">Welcome to Usemee</div>
-        <div class="content-body" id="contentBody">
-            <h2 style="text-align: center; margin: 50px 0;">🚀 Welcome to Usemee AI Business Platform</h2>
-            <p style="text-align: center; font-size: 1.1em;">Use the menu on the left to access:</p>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 40px 0;">
-                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px;">
-                    <div style="font-size: 2em; margin-bottom: 10px;">💬</div>
-                    <strong>Chat</strong>
-                    <p style="font-size: 0.9em; margin-top: 5px;">Ask business questions</p>
-                </div>
-                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 10px;">
-                    <div style="font-size: 2em; margin-bottom: 10px;">📊</div>
-                    <strong>Planner</strong>
-                    <p style="font-size: 0.9em; margin-top: 5px;">Financial projections</p>
-                </div>
-                <div style="text-align: center; padding: 20px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border-radius: 10px;">
-                    <div style="font-size: 2em; margin-bottom: 10px;">📈</div>
-                    <strong>Reports</strong>
-                    <p style="font-size: 0.9em; margin-top: 5px;">Business analysis</p>
-                </div>
+    <div class="chat-box" id="chat-box"></div>
+
+    <div class="chat-input-area">
+        <div id="suggestWrapper">
+            <button id="reportsBtn" onclick="showReportsModal()">📊 Reports</button>
+            <button id="plannerBtn" onclick="showPlannerModal()">📊 Planner</button>
+            <button id="suggestBtn">💡 Suggestions</button>
+            <div id="suggestBox">
+                <button id="closeBtn">✖</button>
+                <p class="suggestion">what is business</p>
+                <p class="suggestion">how to start a business</p>
+                <p class="suggestion">create swot analysis</p>
+                <p class="suggestion">financial planning</p>
             </div>
+        </div>
+
+        <input type="text" id="user-input" placeholder="Type your message...">
+
+        <div class="input-buttons">
+            <button id="voice-btn" onclick="startVoice()">🎤</button>
+            <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
     </div>
 </div>
 
-<!-- REPORTS MODAL -->
-<div id="reportModal" class="modal">
+<!-- PLANNER MODAL -->
+<div id="plannerModal" class="modal">
     <div class="modal-content">
-        <span class="close-modal" onclick="closeModal('reportModal')">&times;</span>
-        <div id="reportContent"></div>
+        <span class="close-modal" onclick="closePlannerModal()">&times;</span>
+        <div id="plannerContent"></div>
+    </div>
+</div>
+
+<!-- REPORTS MODAL -->
+<div id="reportsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeReportsModal()">&times;</span>
+        <div id="reportsContent"></div>
     </div>
 </div>
 
@@ -964,7 +545,6 @@ body.dark .section-title {
 
 <script>
 // ==================== GLOBAL STATE ====================
-let currentView = 'chat';
 let planData = {
     name: '',
     startDate: '',
@@ -976,10 +556,6 @@ let planData = {
     totalProjection: 0
 };
 
-let chartInstances = {};
-
-let swotMode = false;
-let swotStep = 0;
 let swotData = {
     business: "",
     strengths: [],
@@ -997,6 +573,8 @@ let reportData = {
     founded: "",
     description: ""
 };
+
+let chartInstances = {};
 
 const intents = [
     // GREETINGS
@@ -1187,120 +765,100 @@ const intents = [
     // ADD MORE UP TO ~200 INTENTS
 ];
 
-
-// ==================== VIEW MANAGEMENT ====================
-function showSection(section) {
-    currentView = section;
-    const contentBody = document.getElementById('contentBody');
-    const contentHeader = document.getElementById('contentHeader');
-
-    if (section === 'chat') {
-        contentHeader.textContent = '💬 Chat';
-        contentBody.innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <h2>Chat with Usemee AI</h2>
-                <p style="margin-top: 20px; color: #666;">Use the chat panel on the left to ask questions about business.</p>
-                <p style="margin-top: 40px; font-size: 0.95em; color: #999;">Try asking about:</p>
-                <ul style="text-align: left; display: inline-block; margin-top: 20px; list-style: none;">
-                    <li>✓ Business concepts</li>
-                    <li>✓ Financial planning</li>
-                    <li>✓ SWOT analysis</li>
-                    <li>✓ Business strategies</li>
-                </ul>
-            </div>
-        `;
-    } else if (section === 'planner') {
-        loadFinancialPlanner();
-    } else if (section === 'reports') {
-        loadReportsMenu();
-    }
+// ==================== MODAL FUNCTIONS ====================
+function showPlannerModal() {
+    document.getElementById('plannerModal').style.display = 'block';
+    loadPlannerContent();
 }
 
-// ==================== FINANCIAL PLANNER ====================
-function loadFinancialPlanner() {
-    const contentHeader = document.getElementById('contentHeader');
-    const contentBody = document.getElementById('contentBody');
+function closePlannerModal() {
+    document.getElementById('plannerModal').style.display = 'none';
+}
 
-    contentHeader.textContent = '💰 Financial Planner';
+function showReportsModal() {
+    document.getElementById('reportsModal').style.display = 'block';
+    loadReportsContent();
+}
+
+function closeReportsModal() {
+    document.getElementById('reportsModal').style.display = 'none';
+}
+
+function showChatView() {
+    addMessage("Chat view - you can ask me questions about business! 💬", 'bot');
+}
+
+// ==================== PLANNER ====================
+function loadPlannerContent() {
+    const content = document.getElementById('plannerContent');
     
-    contentBody.innerHTML = `
-        <div style="max-width: 1000px; margin: 0 auto;">
-            <h2>💰 Financial Planning Dashboard</h2>
-            <p style="margin: 20px 0; color: #666;">Create AI-powered financial plans with real-time charts and projections</p>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                <div class="input-group">
-                    <label>Plan Name</label>
-                    <input type="text" id="planName" placeholder="e.g., Q1 2026 Growth Plan" value="Q1 2026 Growth Plan">
-                </div>
-                <div class="input-group">
-                    <label>Starting Date</label>
-                    <input type="date" id="startDate" value="2026-01-01">
-                </div>
-                <div class="input-group">
-                    <label>Ending Date</label>
-                    <input type="date" id="endDate" value="2026-03-31">
-                </div>
-                <div class="input-group">
-                    <label>Initial Budget ($)</label>
-                    <input type="number" id="initialBudget" placeholder="50000" value="50000" min="1000">
-                </div>
-                <div class="input-group">
-                    <label>Monthly Growth (%)</label>
-                    <input type="number" id="growthRate" placeholder="5" value="5" min="0" max="100">
-                </div>
-                <div class="input-group">
-                    <label>Plan Type</label>
-                    <select id="planType">
-                        <option value="revenue">Revenue Growth</option>
-                        <option value="expense">Expense Management</option>
-                        <option value="investment">Investment Plan</option>
-                        <option value="savings">Savings Plan</option>
-                    </select>
-                </div>
+    content.innerHTML = `
+        <h2 style="color: #007bff; margin-bottom: 20px;">💰 Financial Planner</h2>
+        
+        <div class="planner-input-grid">
+            <div class="input-group">
+                <label>Plan Name</label>
+                <input type="text" id="planName" value="Q1 2026 Growth Plan">
             </div>
-
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="generatePlan()">📊 Generate Plan</button>
-                <button class="btn btn-ai" onclick="generateAIInsights()">🤖 AI Insights</button>
-                <button class="btn btn-secondary" onclick="clearPlan()">Reset</button>
+            <div class="input-group">
+                <label>Starting Date</label>
+                <input type="date" id="startDate" value="2026-01-01">
             </div>
-
-            <div class="metrics-grid" id="metricsGrid"></div>
-
-            <div class="charts-grid">
-                <div class="chart-box">
-                    <div class="chart-title">📈 Growth Projection</div>
-                    <div class="chart-container">
-                        <canvas id="projectionChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-box">
-                    <div class="chart-title">💹 Monthly Breakdown</div>
-                    <div class="chart-container">
-                        <canvas id="monthlyChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-box">
-                    <div class="chart-title">📊 Budget Distribution</div>
-                    <div class="chart-container">
-                        <canvas id="distributionChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-box">
-                    <div class="chart-title">🎯 Performance vs Target</div>
-                    <div class="chart-container">
-                        <canvas id="performanceChart"></canvas>
-                    </div>
-                </div>
+            <div class="input-group">
+                <label>Ending Date</label>
+                <input type="date" id="endDate" value="2026-03-31">
             </div>
-
-            <div id="aiInsights"></div>
-
-            <div class="chart-box" style="margin-top: 20px;">
-                <div class="chart-title">📋 Monthly Projections</div>
-                <table class="data-table" id="dataTable"></table>
+            <div class="input-group">
+                <label>Initial Budget ($)</label>
+                <input type="number" id="initialBudget" value="50000">
             </div>
+            <div class="input-group">
+                <label>Monthly Growth (%)</label>
+                <input type="number" id="growthRate" value="5">
+            </div>
+            <div class="input-group">
+                <label>Plan Type</label>
+                <select id="planType">
+                    <option value="revenue">Revenue Growth</option>
+                    <option value="expense">Expense Management</option>
+                    <option value="investment">Investment Plan</option>
+                    <option value="savings">Savings Plan</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="generatePlan()">📊 Generate Plan</button>
+            <button class="btn btn-ai" onclick="generateAIInsights()">🤖 AI Insights</button>
+            <button class="btn btn-secondary" onclick="clearPlan()">Reset</button>
+        </div>
+
+        <div class="metrics-grid" id="metricsGrid"></div>
+
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-title">📈 Growth Projection</div>
+                <div class="chart-container"><canvas id="projectionChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">💹 Monthly Breakdown</div>
+                <div class="chart-container"><canvas id="monthlyChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">📊 Budget Distribution</div>
+                <div class="chart-container"><canvas id="distributionChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">🎯 Performance vs Target</div>
+                <div class="chart-container"><canvas id="performanceChart"></canvas></div>
+            </div>
+        </div>
+
+        <div id="aiInsights"></div>
+
+        <div class="chart-box" style="margin-top: 20px;">
+            <div class="chart-title">📋 Monthly Projections</div>
+            <table class="data-table" id="dataTable"></table>
         </div>
     `;
 }
@@ -1318,17 +876,12 @@ function generatePlan() {
         return;
     }
 
-    if (new Date(planData.endDate) <= new Date(planData.startDate)) {
-        alert('❌ End date must be after start date');
-        return;
-    }
-
     calculateMonths();
     generateMonthlyProjections();
     displayMetrics();
     generateCharts();
     generateDataTable();
-    alert('✅ Plan generated successfully!');
+    alert('✅ Plan generated!');
 }
 
 function calculateMonths() {
@@ -1350,9 +903,7 @@ function calculateMonths() {
             budget: 0,
             expense: 0,
             revenue: 0,
-            profit: 0,
-            actualRevenue: 0,
-            variance: 0
+            profit: 0
         });
         current.setMonth(current.getMonth() + 1);
         monthIndex++;
@@ -1363,39 +914,26 @@ function generateMonthlyProjections() {
     let currentAmount = planData.initialBudget;
     planData.totalProjection = 0;
 
-    planData.months.forEach((month, index) => {
+    planData.months.forEach((month) => {
         const growth = (planData.growthRate / 100);
         currentAmount = currentAmount * (1 + growth);
 
-        const variance = (Math.random() - 0.5) * 0.1;
-        const variedAmount = currentAmount * (1 + variance);
-
         switch(planData.type) {
             case 'revenue':
-                month.revenue = Math.round(variedAmount);
-                month.budget = Math.round(variedAmount * 0.7);
-                month.expense = Math.round(variedAmount * 0.4);
+                month.revenue = Math.round(currentAmount);
+                month.budget = Math.round(currentAmount * 0.7);
+                month.expense = Math.round(currentAmount * 0.4);
                 month.profit = month.revenue - month.expense;
-                month.actualRevenue = Math.round(month.revenue * (0.85 + Math.random() * 0.2));
-                break;
-            case 'expense':
-                month.budget = Math.round(planData.initialBudget * (1 - growth * index));
-                month.expense = month.budget;
-                month.actualRevenue = Math.round(month.budget * 1.05);
                 break;
             case 'investment':
-                month.budget = Math.round(variedAmount);
-                month.revenue = Math.round(variedAmount * 0.08);
+                month.budget = Math.round(currentAmount);
+                month.revenue = Math.round(currentAmount * 0.08);
                 month.profit = month.revenue;
-                month.actualRevenue = Math.round(month.revenue * (0.9 + Math.random() * 0.15));
                 break;
-            case 'savings':
-                month.budget = Math.round(variedAmount);
-                month.actualRevenue = month.budget;
-                break;
+            default:
+                month.budget = Math.round(currentAmount);
         }
 
-        month.variance = month.actualRevenue - month.revenue;
         planData.totalProjection += month.budget;
     });
 }
@@ -1410,41 +948,16 @@ function displayMetrics() {
     const totalGrowth = ((finalMonth.budget - planData.initialBudget) / planData.initialBudget) * 100;
     
     const metrics = [
-        {
-            label: 'Total Projected',
-            value: '$' + planData.totalProjection.toLocaleString('en-US', {maximumFractionDigits: 0}),
-            change: '+' + planData.growthRate.toFixed(1) + '% monthly',
-            icon: '📊'
-        },
-        {
-            label: 'Average Monthly',
-            value: '$' + Math.round(planData.totalProjection / planData.months.length).toLocaleString('en-US', {maximumFractionDigits: 0}),
-            change: 'Per month',
-            icon: '💰'
-        },
-        {
-            label: 'Plan Duration',
-            value: planData.months.length + ' months',
-            change: 'From ' + new Date(planData.startDate).toLocaleDateString(),
-            icon: '📅'
-        },
-        {
-            label: 'Final Value',
-            value: '$' + (finalMonth.budget || 0).toLocaleString('en-US', {maximumFractionDigits: 0}),
-            change: totalGrowth.toFixed(1) + '% growth',
-            icon: '🎯'
-        }
+        { label: 'Total Projected', value: '$' + planData.totalProjection.toLocaleString(), icon: '📊' },
+        { label: 'Average Monthly', value: '$' + Math.round(planData.totalProjection / planData.months.length).toLocaleString(), icon: '💰' },
+        { label: 'Duration', value: planData.months.length + ' months', icon: '📅' },
+        { label: 'Final Value', value: '$' + (finalMonth.budget || 0).toLocaleString(), icon: '🎯' }
     ];
 
-    metrics.forEach((metric, index) => {
+    metrics.forEach((metric) => {
         const card = document.createElement('div');
         card.className = 'metric-card';
-        card.innerHTML = `
-            <div class="metric-icon">${metric.icon}</div>
-            <div class="metric-label">${metric.label}</div>
-            <div class="metric-value">${metric.value}</div>
-            <div class="metric-change">${metric.change}</div>
-        `;
+        card.innerHTML = `<div class="metric-icon">${metric.icon}</div><div class="metric-label">${metric.label}</div><div class="metric-value">${metric.value}</div>`;
         metricsGrid.appendChild(card);
     });
 }
@@ -1469,27 +982,24 @@ function generateProjectionChart() {
 
     const labels = planData.months.map(m => m.shortMonthName);
     const data = planData.months.map(m => m.budget);
-    const avgData = planData.months.map(m => m.budget * 0.85);
 
     chartInstances['projectionChart'] = new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
-            datasets: [
-                {
-                    label: 'Projected Budget',
-                    data: data,
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#667eea',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6
-                }
-            ]
+            datasets: [{
+                label: 'Projected Budget',
+                data: data,
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#007bff',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5
+            }]
         },
         options: {
             responsive: true,
@@ -1515,7 +1025,7 @@ function generateMonthlyChart() {
         {
             label: 'Budget',
             data: planData.months.map(m => m.budget),
-            backgroundColor: '#667eea'
+            backgroundColor: '#007bff'
         }
     ];
 
@@ -1523,7 +1033,7 @@ function generateMonthlyChart() {
         datasets.push({
             label: 'Revenue',
             data: planData.months.map(m => m.revenue),
-            backgroundColor: '#10b981'
+            backgroundColor: '#28a745'
         });
     }
 
@@ -1531,7 +1041,7 @@ function generateMonthlyChart() {
         datasets.push({
             label: 'Expense',
             data: planData.months.map(m => m.expense),
-            backgroundColor: '#ef4444'
+            backgroundColor: '#dc3545'
         });
     }
 
@@ -1542,9 +1052,7 @@ function generateMonthlyChart() {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                y: {
-                    ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } }
-                }
+                y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
             }
         }
     });
@@ -1556,20 +1064,16 @@ function generateDistributionChart() {
     if (!ctx) return;
 
     const totalBudget = planData.totalProjection;
-    const operations = Math.round(totalBudget * 0.4);
-    const marketing = Math.round(totalBudget * 0.25);
-    const development = Math.round(totalBudget * 0.2);
-    const misc = Math.round(totalBudget * 0.15);
 
     chartInstances['distributionChart'] = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Operations (40%)', 'Marketing (25%)', 'Development (20%)', 'Misc (15%)'],
+            labels: ['Operations', 'Marketing', 'Development', 'Miscellaneous'],
             datasets: [{
-                data: [operations, marketing, development, misc],
-                backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#f5576c'],
+                data: [totalBudget * 0.4, totalBudget * 0.25, totalBudget * 0.2, totalBudget * 0.15],
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
                 borderColor: '#fff',
-                borderWidth: 3
+                borderWidth: 2
             }]
         },
         options: {
@@ -1587,7 +1091,7 @@ function generatePerformanceChart() {
 
     const labels = planData.months.map(m => m.shortMonthName);
     const target = planData.months.map(m => m.budget);
-    const actual = planData.months.map(m => m.actualRevenue);
+    const actual = planData.months.map(m => Math.round(m.budget * (0.8 + Math.random() * 0.3)));
 
     chartInstances['performanceChart'] = new Chart(ctx, {
         type: 'radar',
@@ -1597,18 +1101,18 @@ function generatePerformanceChart() {
                 {
                     label: 'Target',
                     data: target,
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
                     borderWidth: 2,
-                    pointBackgroundColor: '#667eea'
+                    pointBackgroundColor: '#007bff'
                 },
                 {
                     label: 'Actual',
                     data: actual,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
                     borderWidth: 2,
-                    pointBackgroundColor: '#10b981'
+                    pointBackgroundColor: '#28a745'
                 }
             ]
         },
@@ -1616,9 +1120,7 @@ function generatePerformanceChart() {
             responsive: true,
             maintainAspectRatio: false,
             scales: {
-                r: {
-                    ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } }
-                }
+                r: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
             }
         }
     });
@@ -1631,22 +1133,18 @@ function generateDataTable() {
     table.innerHTML = '';
 
     const thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th>Month</th><th>Budget</th><th>Revenue</th><th>Expense</th><th>Profit</th><th>Status</th></tr>';
+    thead.innerHTML = '<tr><th>Month</th><th>Budget</th><th>Revenue</th><th>Expense</th><th>Profit</th></tr>';
     table.appendChild(thead);
 
     const tbody = document.createElement('tbody');
     planData.months.forEach(month => {
         const row = document.createElement('tr');
-        const statusText = month.profit > 0 ? '✅ Positive' : month.profit === 0 ? '➖ Break-even' : '⚠️ Negative';
-        const statusColor = month.profit > 0 ? '#10b981' : month.profit === 0 ? '#f59e0b' : '#ef4444';
-        
         row.innerHTML = `
             <td><strong>${month.monthName.split(' ')[0]}</strong></td>
-            <td>$${month.budget.toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-            <td>$${month.revenue.toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-            <td>$${month.expense.toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-            <td style="color: ${statusColor}; font-weight: 600;">$${month.profit.toLocaleString('en-US', {maximumFractionDigits: 0})}</td>
-            <td>${statusText}</td>
+            <td>$${month.budget.toLocaleString()}</td>
+            <td>$${month.revenue.toLocaleString()}</td>
+            <td>$${month.expense.toLocaleString()}</td>
+            <td style="color: ${month.profit > 0 ? '#28a745' : '#dc3545'}; font-weight: 600;">$${month.profit.toLocaleString()}</td>
         `;
         tbody.appendChild(row);
     });
@@ -1654,283 +1152,92 @@ function generateDataTable() {
 }
 
 function generateAIInsights() {
-    if (planData.months.length === 0) {
-        alert('⚠️ Please generate a plan first');
-        return;
-    }
-
     const aiSection = document.getElementById('aiInsights');
-    if (!aiSection) return;
+    if (!aiSection || planData.months.length === 0) return;
 
     const avgMonthly = planData.totalProjection / planData.months.length;
-    const finalMonth = planData.months[planData.months.length - 1];
-    const growth = ((finalMonth.budget - planData.initialBudget) / planData.initialBudget) * 100;
-
-    let summary, recommendations, risks, analysis, proTip;
-
-    switch(planData.type) {
-        case 'revenue':
-            summary = `Your revenue growth plan shows a ${planData.growthRate}% monthly growth trajectory, projecting to reach $${finalMonth.budget.toLocaleString('en-US', {maximumFractionDigits: 0})}. Total growth: ${growth.toFixed(1)}%.`;
-            recommendations = [
-                `🎯 Focus on customer acquisition in Month 1-2 for ${planData.growthRate}% growth`,
-                `📈 Allocate 30% of revenue to marketing for sustained growth`,
-                `💹 Monitor unit economics monthly to ensure profitability`,
-                `💰 Build cash reserves (3 months operating expenses)`,
-                `📊 Implement weekly analytics tracking`,
-                `🔄 Create customer feedback loops`
-            ];
-            risks = [
-                `🚨 Market saturation could reduce growth after ${Math.ceil(planData.months.length / 2)} months`,
-                `📉 Scaling costs may exceed revenue growth`,
-                `💸 Customer acquisition costs may increase`,
-                `⚙️ Operational bottlenecks could limit growth`,
-                `👥 Talent acquisition challenges`,
-                `🌐 Economic downturns could impact revenue`
-            ];
-            analysis = [
-                `Average Monthly Revenue: $${avgMonthly.toLocaleString('en-US', {maximumFractionDigits: 0})}`,
-                `Profit Margin: ${((finalMonth.profit / finalMonth.revenue) * 100).toFixed(1)}%`,
-                `Break-even Point: Month ${planData.months.findIndex(m => m.profit > 0) + 1 || 'Beyond plan'}`,
-                `Best Month: ${planData.months.reduce((max, m) => m.profit > max.profit ? m : max).monthName}`
-            ];
-            proTip = `Track weekly KPIs. If growth falls below ${(planData.growthRate / 4.33).toFixed(2)}% weekly, adjust immediately.`;
-            break;
-
-        case 'expense':
-            summary = `Your expense management plan targets operational cost reduction while maintaining service quality.`;
-            recommendations = [
-                '🔍 Audit all expenses in week 1',
-                '🤝 Negotiate with top 3-5 suppliers',
-                '⚙️ Implement automation to reduce overhead',
-                '📋 Set up daily expense tracking',
-                '💼 Create departmental budgets',
-                '🔄 Quarterly expense reviews'
-            ];
-            risks = [
-                '⚠️ Service quality may suffer from cuts',
-                '😔 Employee morale issues',
-                '🔧 Critical functions underfunded',
-                '❌ Missed market opportunities',
-                '🏢 Infrastructure aging',
-                '👥 Talent retention problems'
-            ];
-            analysis = [
-                `Starting Monthly Expenses: $${planData.months[0].expense.toLocaleString('en-US', {maximumFractionDigits: 0})}`,
-                `Monthly Savings: $${(planData.months[0].budget - finalMonth.budget).toLocaleString('en-US', {maximumFractionDigits: 0})}`,
-                `Total Savings: $${(planData.initialBudget * planData.months.length - planData.totalProjection).toLocaleString('en-US', {maximumFractionDigits: 0})}`
-            ];
-            proTip = `Use Pareto Principle: Focus on the 20% of expenses consuming 80% of budget.`;
-            break;
-
-        case 'investment':
-            summary = `Your investment plan projects ${planData.growthRate}% monthly returns, accumulating $${planData.totalProjection.toLocaleString('en-US', {maximumFractionDigits: 0})}.`;
-            recommendations = [
-                '🎯 Diversify across 4-5 asset classes',
-                '📈 Set profit targets at 25% gains',
-                '🛑 Use stop-loss orders at 10-15% drawdown',
-                '📊 Rebalance portfolio monthly',
-                '🏦 Keep 6 months emergency fund',
-                '📚 Study market fundamentals'
-            ];
-            risks = [
-                '📉 Market volatility could reduce returns',
-                '💥 Recession could cause 20-40% losses',
-                '🔒 Liquidity issues in emergencies',
-                '🔄 Inflation erosion of returns',
-                '😱 Emotional panic selling',
-                '💰 Unexpected market crashes'
-            ];
-            analysis = [
-                `Monthly Average Return: $${(avgMonthly - planData.initialBudget / planData.months.length).toLocaleString('en-US', {maximumFractionDigits: 0})}`,
-                `Annualized Return: ${(planData.growthRate * 12).toFixed(1)}%`,
-                `Total Growth: ${growth.toFixed(1)}%`,
-                `Starting Capital: $${planData.initialBudget.toLocaleString('en-US', {maximumFractionDigits: 0})}`
-            ];
-            proTip = `Don't chase highs. ${planData.growthRate}% monthly (${(planData.growthRate * 12).toFixed(1)}% annually) is exceptional.`;
-            break;
-
-        case 'savings':
-            summary = `Your savings plan accumulates $${planData.totalProjection.toLocaleString('en-US', {maximumFractionDigits: 0})} over ${planData.months.length} months.`;
-            recommendations = [
-                '🤖 Automate transfers on payday',
-                '💳 Use high-yield accounts (4-5% APY)',
-                '📂 Create goal-based sub-accounts',
-                '📈 Increase rate by 1-2% quarterly',
-                '🔐 Separate accounts for each goal',
-                '🎯 At 6 months, invest 50% of new savings'
-            ];
-            risks = [
-                '📊 Inflation erodes purchasing power',
-                '🚨 Emergency spending depletes fund',
-                '💸 Opportunity cost of not investing',
-                '🏦 Bank failure (though unlikely)',
-                '📉 Low interest rates',
-                '😔 Lifestyle inflation'
-            ];
-            analysis = [
-                `Monthly Savings Target: $${(planData.totalProjection / planData.months.length).toLocaleString('en-US', {maximumFractionDigits: 0})}`,
-                `Total Accumulated: $${planData.totalProjection.toLocaleString('en-US', {maximumFractionDigits: 0})}`,
-                `Months of Expenses: ${(planData.months.length / 12).toFixed(1)}`
-            ];
-            proTip = `Once you reach 6 months of expenses, shift 50% to investments for compound growth.`;
-            break;
-    }
 
     aiSection.innerHTML = `
         <div class="ai-insights">
-            <div class="ai-header">🤖 AI Financial Insights & Recommendations</div>
-            <p><strong>Summary:</strong> ${summary}</p>
+            <div class="ai-header">🤖 AI Financial Insights</div>
+            <p><strong>Plan Summary:</strong> Your ${planData.type} plan shows ${planData.growthRate}% monthly growth, projecting $${planData.totalProjection.toLocaleString()} total.</p>
+            <p><strong>Average Monthly:</strong> $${Math.round(avgMonthly).toLocaleString()}</p>
             
-            <div class="section-title">📌 Key Recommendations:</div>
+            <div style="margin-top: 15px; font-weight: 600;">Key Recommendations:</div>
             <ul>
-                ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                <li>Monitor progress weekly against these projections</li>
+                <li>Adjust strategy if actual results deviate >10% from targets</li>
+                <li>Build contingency reserves for unexpected changes</li>
+                <li>Review and rebalance quarterly</li>
             </ul>
-
-            <div class="section-title">⚠️ Potential Risks:</div>
-            <ul>
-                ${risks.map(risk => `<li>${risk}</li>`).join('')}
-            </ul>
-
-            <div class="section-title">📊 Financial Analysis:</div>
-            <ul>
-                ${analysis.map(item => `<li>${item}</li>`).join('')}
-            </ul>
-
-            <div class="pro-tip-box">
-                💡 Pro Tip: ${proTip}
-            </div>
         </div>
     `;
 }
 
 function clearPlan() {
     document.getElementById('planName').value = '';
-    document.getElementById('startDate').value = '2026-01-01';
-    document.getElementById('endDate').value = '2026-03-31';
     document.getElementById('initialBudget').value = '';
-    document.getElementById('growthRate').value = '';
     planData.months = [];
-    
-    const metricsGrid = document.getElementById('metricsGrid');
-    if (metricsGrid) metricsGrid.innerHTML = '';
-    
-    const aiInsights = document.getElementById('aiInsights');
-    if (aiInsights) aiInsights.innerHTML = '';
-    
-    const dataTable = document.getElementById('dataTable');
-    if (dataTable) dataTable.innerHTML = '';
-
+    document.getElementById('metricsGrid').innerHTML = '';
+    document.getElementById('aiInsights').innerHTML = '';
+    document.getElementById('dataTable').innerHTML = '';
     Object.keys(chartInstances).forEach(key => destroyChart(key));
-    alert('✅ Plan cleared');
 }
 
 // ==================== REPORTS ====================
-function loadReportsMenu() {
-    const contentHeader = document.getElementById('contentHeader');
-    const contentBody = document.getElementById('contentBody');
-
-    contentHeader.textContent = '📈 Reports & Analysis';
-
-    contentBody.innerHTML = `
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h2>📈 Business Reports & Analysis</h2>
-            <p style="margin: 20px 0; color: #666;">Choose a report type to generate detailed business analysis</p>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 40px 0;">
-                <div onclick="startSWOTReport()" style="padding: 25px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                    <div style="font-size: 2.5em; margin-bottom: 15px;">📊</div>
-                    <strong style="font-size: 1.1em;">SWOT Analysis</strong>
-                    <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">Analyze strengths, weaknesses, opportunities & threats</p>
-                </div>
-
-                <div onclick="startBusinessReport()" style="padding: 25px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                    <div style="font-size: 2.5em; margin-bottom: 15px;">📈</div>
-                    <strong style="font-size: 1.1em;">Business Report</strong>
-                    <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">Financial summary & performance metrics</p>
-                </div>
-
-                <div onclick="startProfitChart()" style="padding: 25px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border-radius: 10px; text-align: center; cursor: pointer; transition: all 0.3s;">
-                    <div style="font-size: 2.5em; margin-bottom: 15px;">💹</div>
-                    <strong style="font-size: 1.1em;">Profit Chart</strong>
-                    <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">Visual revenue vs expense breakdown</p>
-                </div>
-            </div>
+function loadReportsContent() {
+    const content = document.getElementById('reportsContent');
+    
+    content.innerHTML = `
+        <h2 style="color: #007bff; margin-bottom: 20px;">📈 Reports & Analysis</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+            <button class="btn btn-primary" onclick="startSWOTReport()" style="min-width: 100px; padding: 20px;">🔄 SWOT Analysis</button>
+            <button class="btn btn-primary" onclick="startBusinessReport()" style="min-width: 100px; padding: 20px;">📈 Business Report</button>
+            <button class="btn btn-primary" onclick="startProfitChart()" style="min-width: 100px; padding: 20px;">💹 Profit Chart</button>
         </div>
+        
+        <div id="reportContent" style="margin-top: 30px;"></div>
     `;
 }
 
 function startSWOTReport() {
-    swotMode = true;
-    swotStep = 1;
-    swotData = { business: "", strengths: [], weaknesses: [], opportunities: [], threats: [] };
-    
-    const contentBody = document.getElementById('contentBody');
-    contentBody.innerHTML = `
-        <div style="max-width: 600px; margin: 0 auto;">
-            <h2>🔄 Create SWOT Analysis</h2>
-            <div class="input-group" style="margin-top: 30px;">
-                <label>Business Name</label>
-                <input type="text" id="swotBusinessName" placeholder="Enter business name" autofocus>
-            </div>
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="continueSwot()">Continue →</button>
-                <button class="btn btn-secondary" onclick="loadReportsMenu()">Cancel</button>
-            </div>
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="input-group">
+            <label>Business Name</label>
+            <input type="text" id="swotBusinessName" placeholder="Enter business name" autofocus>
+        </div>
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="buildSwot()">Continue →</button>
         </div>
     `;
 }
 
-function continueSwot() {
-    const businessName = document.getElementById('swotBusinessName')?.value || '';
+function buildSwot() {
+    const businessName = document.getElementById('swotBusinessName')?.value;
     if (!businessName) {
         alert('Please enter a business name');
         return;
     }
 
     swotData.business = businessName;
-    swotStep = 2;
-    displaySwotForm();
-}
-
-function displaySwotForm() {
-    const contentBody = document.getElementById('contentBody');
-    contentBody.innerHTML = `
-        <div style="max-width: 600px; margin: 0 auto;">
-            <h2>🔄 SWOT Analysis: ${swotData.business}</h2>
-            
-            <div id="swotFormContent"></div>
-            
-            <div class="button-group" style="margin-top: 20px;">
-                <button class="btn btn-primary" onclick="completeSwot()">Finish & Generate Report</button>
-                <button class="btn btn-secondary" onclick="loadReportsMenu()">Cancel</button>
+    const reportContent = document.getElementById('reportContent');
+    
+    reportContent.innerHTML = `
+        <h3 style="margin-top: 20px;">🔄 SWOT Analysis: ${businessName}</h3>
+        
+        ${['strengths', 'weaknesses', 'opportunities', 'threats'].map(cat => `
+            <div style="margin-top: 20px;">
+                <label style="font-weight: 600; color: #007bff;">Add ${cat.charAt(0).toUpperCase() + cat.slice(1)}</label>
+                <input type="text" id="${cat}Input" placeholder="Enter ${cat}..." style="margin-bottom: 8px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%;">
+                <button class="btn btn-primary" style="width: 100%;" onclick="addSwotItem('${cat}')">+ Add</button>
+                <div id="${cat}List" style="margin-top: 10px;"></div>
             </div>
-        </div>
+        `).join('')}
+        
+        <button class="btn btn-primary" onclick="completeSwot()" style="margin-top: 20px; width: 100%;">Generate SWOT Report</button>
     `;
-
-    const formContent = document.getElementById('swotFormContent');
-    const categories = [
-        { key: 'strengths', label: 'Strengths 🟢', color: '#10b981' },
-        { key: 'weaknesses', label: 'Weaknesses 🔴', color: '#ef4444' },
-        { key: 'opportunities', label: 'Opportunities 🔵', color: '#f59e0b' },
-        { key: 'threats', label: 'Threats 🟠', color: '#667eea' }
-    ];
-
-    let html = '';
-    categories.forEach(cat => {
-        html += `
-            <div style="margin-bottom: 25px; padding: 20px; background: rgba(0,0,0,0.02); border-left: 4px solid ${cat.color}; border-radius: 8px;">
-                <h3 style="color: ${cat.color}; margin-bottom: 15px;">${cat.label}</h3>
-                <div id="${cat.key}List" style="margin-bottom: 15px;"></div>
-                <div class="input-group">
-                    <input type="text" id="${cat.key}Input" placeholder="Enter ${cat.label.toLowerCase()}..." onkeypress="if(event.key==='Enter') addSwotItem('${cat.key}')">
-                </div>
-                <button class="btn btn-primary" style="margin-top: 10px;" onclick="addSwotItem('${cat.key}')">+ Add ${cat.label.split(' ')[0]}</button>
-            </div>
-        `;
-    });
-
-    formContent.innerHTML = html;
-    renderSwotItems();
 }
 
 function addSwotItem(category) {
@@ -1943,31 +1250,24 @@ function addSwotItem(category) {
     }
 
     if (!swotData[category]) swotData[category] = [];
-    swotData[category].push({
-        description: value,
-        score: 3
-    });
+    swotData[category].push({ description: value, score: 3 });
 
     input.value = '';
     renderSwotItems();
 }
 
 function renderSwotItems() {
-    const categories = ['strengths', 'weaknesses', 'opportunities', 'threats'];
-    categories.forEach(cat => {
+    ['strengths', 'weaknesses', 'opportunities', 'threats'].forEach(cat => {
         const list = document.getElementById(cat + 'List');
         if (!list) return;
 
         list.innerHTML = '';
         swotData[cat].forEach((item, index) => {
             const div = document.createElement('div');
-            div.style.cssText = 'background: white; padding: 10px; margin-bottom: 8px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;';
+            div.style.cssText = 'background: #f0f0f0; padding: 8px; margin-bottom: 5px; border-radius: 4px; display: flex; justify-content: space-between;';
             div.innerHTML = `
-                <div>
-                    <strong>${item.description}</strong>
-                    <div style="font-size: 0.85em; color: #666;">Score: ${item.score}/5</div>
-                </div>
-                <button class="btn btn-secondary" style="padding: 5px 10px; min-width: auto; font-size: 0.85em;" onclick="removeSwotItem('${cat}', ${index})">Remove</button>
+                <span>${item.description}</span>
+                <button class="btn btn-secondary" style="padding: 3px 8px; font-size: 0.8em; min-width: auto;" onclick="removeSwotItem('${cat}', ${index})">Remove</button>
             `;
             list.appendChild(div);
         });
@@ -1980,10 +1280,8 @@ function removeSwotItem(category, index) {
 }
 
 function completeSwot() {
-    const hasItems = swotData.strengths.length > 0 && swotData.weaknesses.length > 0 && 
-                     swotData.opportunities.length > 0 && swotData.threats.length > 0;
-
-    if (!hasItems) {
+    if (swotData.strengths.length === 0 || swotData.weaknesses.length === 0 || 
+        swotData.opportunities.length === 0 || swotData.threats.length === 0) {
         alert('Please add at least one item to each category');
         return;
     }
@@ -1992,103 +1290,77 @@ function completeSwot() {
 }
 
 function generateSWOTReport() {
-    const contentBody = document.getElementById('contentBody');
-
     const top3 = (arr) => arr.sort((a, b) => b.score - a.score).slice(0, 3);
-
     const S = top3(swotData.strengths);
     const W = top3(swotData.weaknesses);
     const O = top3(swotData.opportunities);
     const T = top3(swotData.threats);
 
-    contentBody.innerHTML = `
-        <div style="max-width: 900px; margin: 0 auto;">
-            <div class="report-container">
-                <div class="report-header">📊 SWOT Analysis: ${swotData.business}</div>
-                
-                <div class="swot-grid">
-                    <div class="swot-card swot-strengths">
-                        <div class="swot-title">🟢 Strengths (${S.length})</div>
-                        ${S.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-                    </div>
-
-                    <div class="swot-card swot-weaknesses">
-                        <div class="swot-title">🔴 Weaknesses (${W.length})</div>
-                        ${W.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-                    </div>
-
-                    <div class="swot-card swot-opportunities">
-                        <div class="swot-title">🔵 Opportunities (${O.length})</div>
-                        ${O.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-                    </div>
-
-                    <div class="swot-card swot-threats">
-                        <div class="swot-title">🟠 Threats (${T.length})</div>
-                        ${T.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-                    </div>
-                </div>
-
-                <div class="report-section">
-                    <b>🚀 Strategic Recommendations</b><br>
-                    • Use strengths to capitalize on opportunities<br>
-                    • Address weaknesses to mitigate threats<br>
-                    • Consider partnerships to overcome weaknesses<br>
-                    • Monitor competitive landscape for threats<br>
-                    • Build on core competencies to maintain advantages
-                </div>
-
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-download" onclick="downloadReport('swot')">📥 Download PDF</button>
-                    <button class="btn btn-secondary" onclick="loadReportsMenu()" style="margin-left: 10px;">← Back</button>
-                </div>
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="report-header">📊 SWOT Analysis: ${swotData.business}</div>
+        
+        <div class="swot-grid">
+            <div class="swot-card swot-strengths">
+                <div class="swot-title">🟢 Strengths</div>
+                ${S.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
+            </div>
+            <div class="swot-card swot-weaknesses">
+                <div class="swot-title">🔴 Weaknesses</div>
+                ${W.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
+            </div>
+            <div class="swot-card swot-opportunities">
+                <div class="swot-title">🔵 Opportunities</div>
+                ${O.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
+            </div>
+            <div class="swot-card swot-threats">
+                <div class="swot-title">🟠 Threats</div>
+                ${T.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
             </div>
         </div>
-    `;
 
-    swotMode = false;
+        <div class="report-section" style="margin-top: 20px;">
+            <b>🚀 Strategic Recommendations</b><br>
+            • Use strengths to capitalize on opportunities<br>
+            • Address weaknesses to mitigate threats<br>
+            • Build partnerships to overcome weak areas<br>
+            • Monitor competition for threats<br>
+        </div>
+    `;
 }
 
 function startBusinessReport() {
-    const contentBody = document.getElementById('contentBody');
-    contentBody.innerHTML = `
-        <div style="max-width: 600px; margin: 0 auto;">
-            <h2>📈 Business Report Generator</h2>
-            <p style="margin: 20px 0; color: #666;">Enter your business information to generate a comprehensive report</p>
-            
-            <div class="input-group">
-                <label>Business Name</label>
-                <input type="text" id="reportBusinessName" placeholder="Your company name">
-            </div>
-            <div class="input-group">
-                <label>Industry</label>
-                <input type="text" id="reportIndustry" placeholder="e.g., Technology, Retail">
-            </div>
-            <div class="input-group">
-                <label>Description</label>
-                <textarea id="reportDescription" placeholder="Brief description of your business" style="min-height: 100px;"></textarea>
-            </div>
-            <div class="input-group">
-                <label>Annual Revenue ($)</label>
-                <input type="number" id="reportRevenue" placeholder="100000">
-            </div>
-            <div class="input-group">
-                <label>Annual Expenses ($)</label>
-                <input type="number" id="reportExpenses" placeholder="50000">
-            </div>
-            <div class="input-group">
-                <label>Number of Employees</label>
-                <input type="number" id="reportEmployees" placeholder="5">
-            </div>
-            <div class="input-group">
-                <label>Founded Year</label>
-                <input type="number" id="reportFounded" placeholder="2020">
-            </div>
-
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="generateFullBusinessReport()">Generate Report</button>
-                <button class="btn btn-secondary" onclick="loadReportsMenu()">Cancel</button>
-            </div>
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="input-group">
+            <label>Business Name</label>
+            <input type="text" id="reportBusinessName" placeholder="Your company">
         </div>
+        <div class="input-group">
+            <label>Industry</label>
+            <input type="text" id="reportIndustry" placeholder="e.g., Technology">
+        </div>
+        <div class="input-group">
+            <label>Description</label>
+            <textarea id="reportDescription" placeholder="Brief description" style="height: 80px;"></textarea>
+        </div>
+        <div class="input-group">
+            <label>Annual Revenue ($)</label>
+            <input type="number" id="reportRevenue" placeholder="100000">
+        </div>
+        <div class="input-group">
+            <label>Annual Expenses ($)</label>
+            <input type="number" id="reportExpenses" placeholder="50000">
+        </div>
+        <div class="input-group">
+            <label>Employees</label>
+            <input type="number" id="reportEmployees" placeholder="5">
+        </div>
+        <div class="input-group">
+            <label>Founded Year</label>
+            <input type="number" id="reportFounded" placeholder="2020">
+        </div>
+        <button class="btn btn-primary" onclick="generateFullBusinessReport()" style="width: 100%;">Generate Report</button>
     `;
 }
 
@@ -2103,114 +1375,84 @@ function generateFullBusinessReport() {
 
     const profit = reportData.revenue - reportData.expenses;
     const profitMargin = reportData.revenue > 0 ? ((profit / reportData.revenue) * 100).toFixed(2) : 0;
-    const revenuePerEmployee = reportData.employees > 0 ? (reportData.revenue / reportData.employees).toFixed(0) : 0;
     const yearsInBusiness = new Date().getFullYear() - reportData.founded;
 
-    const contentBody = document.getElementById('contentBody');
-    contentBody.innerHTML = `
-        <div style="max-width: 900px; margin: 0 auto;">
-            <div class="report-container">
-                <div class="report-header">📈 Business Report: ${reportData.businessName}</div>
-                
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-icon">💰</div>
-                        <div class="metric-label">Annual Revenue</div>
-                        <div class="metric-value">$${reportData.revenue.toLocaleString()}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">📊</div>
-                        <div class="metric-label">Annual Profit</div>
-                        <div class="metric-value" style="color: ${profit > 0 ? '#10b981' : '#ef4444'};">$${profit.toLocaleString()}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">📈</div>
-                        <div class="metric-label">Profit Margin</div>
-                        <div class="metric-value">${profitMargin}%</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">👥</div>
-                        <div class="metric-label">Team Size</div>
-                        <div class="metric-value">${reportData.employees}</div>
-                    </div>
-                </div>
-
-                <div class="report-section">
-                    <b>📋 Company Overview</b><br>
-                    Industry: ${reportData.industry}<br>
-                    Founded: ${reportData.founded}<br>
-                    Years in Business: ${yearsInBusiness}<br>
-                    Description: ${reportData.description || 'No description provided'}
-                </div>
-
-                <div class="report-section">
-                    <b>💰 Financial Summary</b><br>
-                    Annual Revenue: $${reportData.revenue.toLocaleString()}<br>
-                    Annual Expenses: $${reportData.expenses.toLocaleString()}<br>
-                    Annual Profit/Loss: <span style="color: ${profit > 0 ? '#10b981' : '#ef4444'}; font-weight: 600;">$${profit.toLocaleString()}</span><br>
-                    Profit Margin: ${profitMargin}%
-                </div>
-
-                <div class="report-section">
-                    <b>👥 Operations</b><br>
-                    Total Employees: ${reportData.employees}<br>
-                    Revenue per Employee: $${revenuePerEmployee.toLocaleString()}<br>
-                    Average Expense per Employee: $${Math.round(reportData.expenses / (reportData.employees || 1)).toLocaleString()}
-                </div>
-
-                <div class="report-section">
-                    <b>📊 Key Metrics</b><br>
-                    Business Status: ${profit > 0 ? '✅ <strong>Profitable</strong>' : '⚠️ <strong>Operating at Loss</strong>'}<br>
-                    Health Score: ${profit > reportData.expenses * 0.3 ? '🟢 Strong' : profit > 0 ? '🟡 Fair' : '🔴 Needs Attention'}<br>
-                    Growth Potential: ${reportData.revenue > 500000 ? 'Established' : reportData.revenue > 100000 ? 'Growing' : 'Early Stage'}
-                </div>
-
-                <div class="report-section">
-                    <b>💡 Recommendations</b><br>
-                    ${profit > 0 ? 
-                        `• Maintain current profit margins while exploring growth opportunities<br>
-                         • Consider reinvesting profits into marketing and product development<br>
-                         • Build strategic partnerships to expand market reach<br>` :
-                        `• Prioritize cost reduction and operational efficiency<br>
-                         • Review pricing strategy to improve revenue<br>
-                         • Focus on customer retention and acquisition<br>`}
-                    • Implement quarterly performance reviews<br>
-                    • Develop a 12-month financial forecast
-                </div>
-
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-download" onclick="downloadReport('business')">📥 Download PDF</button>
-                    <button class="btn btn-secondary" onclick="loadReportsMenu()" style="margin-left: 10px;">← Back</button>
-                </div>
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="report-header">📈 Business Report: ${reportData.businessName}</div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-label">Revenue</div>
+                <div class="metric-value">$${reportData.revenue.toLocaleString()}</div>
             </div>
+            <div class="metric-card">
+                <div class="metric-icon">📊</div>
+                <div class="metric-label">Profit</div>
+                <div class="metric-value" style="color: ${profit > 0 ? '#28a745' : '#dc3545'};">$${profit.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📈</div>
+                <div class="metric-label">Profit Margin</div>
+                <div class="metric-value">${profitMargin}%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">👥</div>
+                <div class="metric-label">Team Size</div>
+                <div class="metric-value">${reportData.employees}</div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <b>📋 Company Overview</b><br>
+            Industry: ${reportData.industry}<br>
+            Founded: ${reportData.founded}<br>
+            Years in Business: ${yearsInBusiness}<br>
+            Description: ${reportData.description || 'N/A'}
+        </div>
+
+        <div class="report-section">
+            <b>💰 Financial Summary</b><br>
+            Revenue: $${reportData.revenue.toLocaleString()}<br>
+            Expenses: $${reportData.expenses.toLocaleString()}<br>
+            Profit: <span style="color: ${profit > 0 ? '#28a745' : '#dc3545'}; font-weight: 600;">$${profit.toLocaleString()}</span><br>
+            Profit Margin: ${profitMargin}%
+        </div>
+
+        <div class="report-section">
+            <b>👥 Operations</b><br>
+            Employees: ${reportData.employees}<br>
+            Revenue per Employee: $${Math.round(reportData.revenue / (reportData.employees || 1)).toLocaleString()}
+        </div>
+
+        <div class="report-section">
+            <b>💡 Recommendations</b><br>
+            ${profit > 0 ? 
+                '• Maintain profitability and explore growth opportunities<br>• Consider reinvesting profits<br>' :
+                '• Focus on revenue growth and cost reduction<br>• Review pricing strategy<br>'}
+            • Implement quarterly performance reviews<br>
+            • Develop 12-month financial forecast
         </div>
     `;
 }
 
 function startProfitChart() {
-    const contentBody = document.getElementById('contentBody');
-    contentBody.innerHTML = `
-        <div style="max-width: 600px; margin: 0 auto;">
-            <h2>💹 Create Profit Chart</h2>
-            
-            <div class="input-group" style="margin-top: 30px;">
-                <label>Business Name</label>
-                <input type="text" id="chartBusinessName" placeholder="Your company name">
-            </div>
-            <div class="input-group">
-                <label>Annual Revenue ($)</label>
-                <input type="number" id="chartRevenue" placeholder="100000">
-            </div>
-            <div class="input-group">
-                <label>Annual Expenses ($)</label>
-                <input type="number" id="chartExpenses" placeholder="50000">
-            </div>
-
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="generateProfitVisualization()">Generate Chart</button>
-                <button class="btn btn-secondary" onclick="loadReportsMenu()">Cancel</button>
-            </div>
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="input-group">
+            <label>Business Name</label>
+            <input type="text" id="chartBusinessName" placeholder="Your company">
         </div>
+        <div class="input-group">
+            <label>Annual Revenue ($)</label>
+            <input type="number" id="chartRevenue" placeholder="100000">
+        </div>
+        <div class="input-group">
+            <label>Annual Expenses ($)</label>
+            <input type="number" id="chartExpenses" placeholder="50000">
+        </div>
+        <button class="btn btn-primary" onclick="generateProfitVisualization()" style="width: 100%;">Generate Chart</button>
     `;
 }
 
@@ -2219,75 +1461,53 @@ function generateProfitVisualization() {
     const revenue = parseFloat(document.getElementById('chartRevenue')?.value) || 0;
     const expenses = parseFloat(document.getElementById('chartExpenses')?.value) || 0;
 
-    if (revenue <= 0 || expenses < 0) {
-        alert('Please enter valid revenue and expenses');
+    if (revenue <= 0) {
+        alert('Please enter valid revenue');
         return;
     }
 
     destroyChart('profitChart');
+    destroyChart('profitDoughnut');
 
-    const contentBody = document.getElementById('contentBody');
-    contentBody.innerHTML = `
-        <div style="max-width: 900px; margin: 0 auto;">
-            <div class="report-container">
-                <div class="report-header">💹 Profit Analysis: ${businessName}</div>
-                
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-icon">📈</div>
-                        <div class="metric-label">Revenue</div>
-                        <div class="metric-value">$${revenue.toLocaleString()}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">📉</div>
-                        <div class="metric-label">Expenses</div>
-                        <div class="metric-value">$${expenses.toLocaleString()}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">💰</div>
-                        <div class="metric-label">Profit</div>
-                        <div class="metric-value" style="color: ${revenue - expenses > 0 ? '#10b981' : '#ef4444'};">$${(revenue - expenses).toLocaleString()}</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-icon">📊</div>
-                        <div class="metric-label">Profit Margin</div>
-                        <div class="metric-value">${revenue > 0 ? ((((revenue - expenses) / revenue) * 100).toFixed(1)) : 0}%</div>
-                    </div>
-                </div>
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="report-header">💹 Profit Analysis: ${businessName}</div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">📈</div>
+                <div class="metric-label">Revenue</div>
+                <div class="metric-value">$${revenue.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📉</div>
+                <div class="metric-label">Expenses</div>
+                <div class="metric-value">$${expenses.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-label">Profit</div>
+                <div class="metric-value" style="color: ${revenue - expenses > 0 ? '#28a745' : '#dc3545'};">$${(revenue - expenses).toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📊</div>
+                <div class="metric-label">Profit Margin</div>
+                <div class="metric-value">${((((revenue - expenses) / revenue) * 100).toFixed(1))}%</div>
+            </div>
+        </div>
 
-                <div class="charts-grid">
-                    <div class="chart-box">
-                        <div class="chart-title">💹 Revenue vs Expenses</div>
-                        <div class="chart-container">
-                            <canvas id="profitChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="chart-box">
-                        <div class="chart-title">📊 Profit Breakdown</div>
-                        <div class="chart-container">
-                            <canvas id="profitDoughnut"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="report-section">
-                    <b>📊 Financial Summary</b><br>
-                    Total Revenue: $${revenue.toLocaleString()}<br>
-                    Total Expenses: $${expenses.toLocaleString()}<br>
-                    Net Profit: <span style="color: ${revenue - expenses > 0 ? '#10b981' : '#ef4444'}; font-weight: 600;">$${(revenue - expenses).toLocaleString()}</span><br>
-                    Profit Margin: ${revenue > 0 ? ((((revenue - expenses) / revenue) * 100).toFixed(1)) : 0}%<br>
-                    Expense Ratio: ${revenue > 0 ? ((( expenses / revenue) * 100).toFixed(1)) : 0}%
-                </div>
-
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-download" onclick="downloadReport('profit')">📥 Download PDF</button>
-                    <button class="btn btn-secondary" onclick="loadReportsMenu()" style="margin-left: 10px;">← Back</button>
-                </div>
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-title">💹 Revenue vs Expenses</div>
+                <div class="chart-container"><canvas id="profitChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">📊 Profit Breakdown</div>
+                <div class="chart-container"><canvas id="profitDoughnut"></canvas></div>
             </div>
         </div>
     `;
 
-    // Generate chart
     setTimeout(() => {
         const ctx = document.getElementById('profitChart');
         if (ctx) {
@@ -2296,25 +1516,15 @@ function generateProfitVisualization() {
                 data: {
                     labels: [businessName],
                     datasets: [
-                        {
-                            label: 'Revenue',
-                            data: [revenue],
-                            backgroundColor: '#10b981'
-                        },
-                        {
-                            label: 'Expenses',
-                            data: [expenses],
-                            backgroundColor: '#ef4444'
-                        }
+                        { label: 'Revenue', data: [revenue], backgroundColor: '#28a745' },
+                        { label: 'Expenses', data: [expenses], backgroundColor: '#dc3545' }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } }
-                        }
+                        y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
                     }
                 }
             });
@@ -2328,7 +1538,7 @@ function generateProfitVisualization() {
                     labels: ['Profit', 'Expenses'],
                     datasets: [{
                         data: [revenue - expenses, expenses],
-                        backgroundColor: ['#10b981', '#ef4444'],
+                        backgroundColor: ['#28a745', '#dc3545'],
                         borderColor: '#fff',
                         borderWidth: 2
                     }]
@@ -2343,15 +1553,7 @@ function generateProfitVisualization() {
     }, 100);
 }
 
-function downloadReport(type) {
-    alert('📥 Report export feature requires additional setup. This can be implemented with html2pdf library.');
-}
-
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = "none";
-}
-
-// ==================== CHAT & BOT ====================
+// ==================== CHAT ====================
 function levenshteinDistance(a, b) {
     const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
     for(let i=0;i<=b.length;i++) matrix[i][0]=i;
@@ -2375,23 +1577,7 @@ function similarity(s1,s2) {
 }
 
 function getBotReply(input) {
-    if (swotMode) {
-        return "Please use the Reports menu to create SWOT analysis.";
-    }
-
     let userInput = input.toLowerCase();
-
-    if (userInput.includes("planner")) {
-        return "Click the 'Planner' button to create financial plans! 📊";
-    }
-
-    if (userInput.includes("report")) {
-        return "Click the 'Reports' button to generate business analysis! 📈";
-    }
-
-    if (userInput.includes("chart")) {
-        return "You can create charts in the Planner or Reports sections! 📊";
-    }
 
     let bestIntent = null;
     let bestScore = 0;
@@ -2410,7 +1596,7 @@ function getBotReply(input) {
         return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
     }
 
-    return "I can help with business concepts! Try asking about financials, SWOT analysis, or use the Planner and Reports sections. 💡";
+    return "I can help with business concepts! Try asking questions or use the Planner and Reports buttons. 💡";
 }
 
 function addMessage(text, sender) {
@@ -2447,7 +1633,6 @@ $(".suggestion").click(function() {
     $("#suggestBox").hide();
 });
 
-// Voice Recognition
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition;
 
@@ -2472,10 +1657,6 @@ if (SpeechRecognition) {
         document.getElementById("user-input").value = transcript;
         sendMessage();
     };
-
-    recognition.onerror = function(e) {
-        console.error("Voice error:", e.error);
-    };
 }
 
 function startVoice() {
@@ -2486,15 +1667,21 @@ function startVoice() {
     }
 }
 
+function openPage(page) {
+    window.location.href = page;
+}
+
 window.addEventListener("click", function(e) {
-    const modal = document.getElementById("reportModal");
-    if (e.target === modal) {
-        modal.style.display = "none";
+    if (e.target === document.getElementById("plannerModal")) {
+        closePlannerModal();
+    }
+    if (e.target === document.getElementById("reportsModal")) {
+        closeReportsModal();
     }
 });
 
 window.onload = () => {
-    addMessage("Hello! I'm your Business AI Assistant", 'bot');
+    addMessage("Hello! 👋 Ask me anything about business.", 'bot');
 };
 </script>
 
