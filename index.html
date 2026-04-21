@@ -1688,7 +1688,18 @@ window.addEventListener("click", function(e) {
 });
 
 window.onload = () => {
-    addMessage("Hello! 👋 Ask me anything about business.", 'bot');
+    showThinkingAnimation();
+    setTimeout(() => {
+        const thinkingElement = document.getElementById('thinking-message');
+        if (thinkingElement) {
+            thinkingElement.remove();
+        }
+        const chatBox = document.getElementById('chat-box');
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', 'bot');
+        chatBox.appendChild(msgDiv);
+        typeWriterEffect(msgDiv, "Hello! 👋 Ask me anything about business.", 100);
+    }, 1500);
 };
 </script>
 
