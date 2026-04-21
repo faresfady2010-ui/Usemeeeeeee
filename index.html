@@ -11,7 +11,7 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-colo
 body.dark { background-color: #1a1a2e; }
 .chat-container { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; display: flex; flex-direction: column; height: 600px; overflow: hidden; transition: background-color 0.3s; }
 body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; font-weight: 400; display: flex; justify-content: space-between; align-items: center; }
+.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
 body.dark .chat-header { background-color: #0f3460; }
 .header-title { flex: 1; text-align: center; }
 .nav-buttons { display: flex; justify-content: center; gap: 5px; padding: 10px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; flex-wrap: wrap; }
@@ -25,47 +25,10 @@ body.dark .chat-box { border-bottom: 1px solid #0f3460; }
 body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
 .message.bot { background-color: #f0f0f0; color: #000; padding: 8px 12px; border-radius: 15px; float: left; max-width: 70%; margin-right: auto; text-align: left; }
 body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
-
-/* Thinking Animation */
-.thinking-dots {
-    display: inline-flex;
-    gap: 4px;
-    padding: 8px 12px;
-}
-.thinking-dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #007bff;
-    animation: bounce 1.4s infinite;
-}
-body.dark .thinking-dots span {
-    background-color: #88c2ff;
-}
-.thinking-dots span:nth-child(1) {
-    animation-delay: 0s;
-}
-.thinking-dots span:nth-child(2) {
-    animation-delay: 0.2s;
-}
-.thinking-dots span:nth-child(3) {
-    animation-delay: 0.4s;
-}
-@keyframes bounce {
-    0%, 60%, 100% {
-        opacity: 0.3;
-        transform: translateY(0);
-    }
-    30% {
-        opacity: 1;
-        transform: translateY(-10px);
-    }
-}
-
 .chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
 body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
 #suggestWrapper { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-#suggestBtn, #plannerBtn, #analyzeBtn, #reportsBtn {
+#suggestBtn, #reportsBtn, #plannerBtn {
     background-color: #007bff;
     color: white;
     border: none;
@@ -77,7 +40,7 @@ body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0
     transition: all 0.2s ease;
     flex: 0;
 }
-#suggestBtn:hover, #plannerBtn:hover, #analyzeBtn:hover, #reportsBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
+#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
 #suggestBox { position: absolute; bottom: 35px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 200px; overflow-y: auto; z-index: 10; }
 #closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; font-weight: bold; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
 .suggestion { cursor: pointer; padding: 5px; border-radius: 3px; }
@@ -257,6 +220,16 @@ body.dark .btn-secondary {
     background: #e5e7eb;
 }
 
+.btn-ai {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.btn-ai:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+}
+
 /* METRICS */
 .metrics-grid {
     display: grid;
@@ -323,6 +296,47 @@ body.dark .chart-title {
 .chart-container {
     position: relative;
     height: 220px;
+}
+
+/* TABLE */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 0.9em;
+}
+
+body.dark .data-table {
+    background: #16213e;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+body.dark .data-table td {
+    border-bottom: 1px solid #444;
+    color: #e0e0e0;
+}
+
+.data-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+body.dark .data-table tbody tr:hover {
+    background: #0f3460;
 }
 
 /* REPORT SECTION */
@@ -400,37 +414,57 @@ body.dark .report-header {
     font-size: 0.85em;
 }
 
-/* CHOICE BUTTONS */
-.choice-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
+/* AI INSIGHTS */
+.ai-insights {
+    background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
+    border-left: 4px solid #f5576c;
+    padding: 15px;
+    border-radius: 8px;
     margin: 20px 0;
+    font-size: 0.95em;
 }
 
-.choice-btn {
-    padding: 20px 15px;
-    border: 2px solid #007bff;
-    border-radius: 10px;
-    background: white;
-    color: #007bff;
+.ai-header {
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
+    color: #f5576c;
+    margin-bottom: 10px;
     font-size: 1em;
 }
 
-body.dark .choice-btn {
-    background: #0f3460;
-    border-color: #007bff;
-    color: #88c2ff;
+.ai-insights p {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 6px;
 }
 
-.choice-btn:hover {
-    background: #007bff;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+body.dark .ai-insights p {
+    color: #bbb;
+}
+
+.ai-insights ul {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+}
+
+.ai-insights li {
+    color: #555;
+    margin: 6px 0;
+    padding-left: 18px;
+    position: relative;
+    font-size: 0.9em;
+}
+
+body.dark .ai-insights li {
+    color: #bbb;
+}
+
+.ai-insights li:before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #f5576c;
+    font-weight: bold;
 }
 
 /* RESPONSIVE */
@@ -456,7 +490,7 @@ body.dark .choice-btn {
         flex-direction: row;
     }
 
-    #suggestBtn, #plannerBtn, #analyzeBtn, #reportsBtn {
+    #suggestBtn, #reportsBtn, #plannerBtn {
         min-width: auto;
         flex: 0;
     }
@@ -472,46 +506,6 @@ body.dark .choice-btn {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 12px;
     margin-bottom: 15px;
-}
-
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    font-size: 0.9em;
-}
-
-body.dark .data-table {
-    background: #16213e;
-}
-
-.data-table thead {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-}
-
-.data-table th,
-.data-table td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-body.dark .data-table td {
-    border-bottom: 1px solid #444;
-    color: #e0e0e0;
-}
-
-.data-table tbody tr:hover {
-    background: #f9fafb;
-}
-
-body.dark .data-table tbody tr:hover {
-    background: #0f3460;
 }
 </style>
 </head>
@@ -534,9 +528,8 @@ body.dark .data-table tbody tr:hover {
 
     <div class="chat-input-area">
         <div id="suggestWrapper">
-            <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📋 Plan</button>
-            <button id="analyzeBtn" onclick="showAnalyzeModal()" style="flex: 0;">📊 Analyze</button>
-            <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0;">📄 Reports</button>
+            <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0;">📊 Reports</button>
+            <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📊 Planner</button>
             <button id="suggestBtn" style="flex: 0;">💡 Suggestions</button>
             <div id="suggestBox">
                 <button id="closeBtn">✖</button>
@@ -552,22 +545,15 @@ body.dark .data-table tbody tr:hover {
             <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
             <button class="send-btn" onclick="sendMessage()">Send</button>
         </div>
+        </div>
     </div>
 </div>
 
-<!-- BUSINESS PLAN MODAL -->
+<!-- PLANNER MODAL -->
 <div id="plannerModal" class="modal">
     <div class="modal-content">
         <span class="close-modal" onclick="closePlannerModal()">&times;</span>
         <div id="plannerContent"></div>
-    </div>
-</div>
-
-<!-- ANALYZE MODAL -->
-<div id="analyzeModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeAnalyzeModal()">&times;</span>
-        <div id="analyzeContent"></div>
     </div>
 </div>
 
@@ -583,7 +569,8 @@ body.dark .data-table tbody tr:hover {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-// ==================== DARK MODE ====================
+// ==================== DARK MODE (READ-ONLY) ====================
+// Apply saved dark mode on load - only controlled by settings.html
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
@@ -594,6 +581,35 @@ function goToPage(page) {
 }
 
 // ==================== GLOBAL STATE ====================
+let planData = {
+    name: '',
+    startDate: '',
+    endDate: '',
+    initialBudget: 0,
+    growthRate: 0,
+    type: '',
+    months: [],
+    totalProjection: 0
+};
+
+let swotData = {
+    business: "",
+    strengths: [],
+    weaknesses: [],
+    opportunities: [],
+    threats: []
+};
+
+let reportData = {
+    businessName: "",
+    industry: "",
+    revenue: 0,
+    expenses: 0,
+    employees: 0,
+    founded: "",
+    description: ""
+};
+
 let chartInstances = {};
 
 const intents = [
@@ -786,26 +802,13 @@ const intents = [
 ];
 
 // ==================== MODAL FUNCTIONS ====================
-function closePlannerModal() {
-    document.getElementById('plannerModal').style.display = 'none';
-}
-
 function showPlannerModal() {
     document.getElementById('plannerModal').style.display = 'block';
     loadPlannerContent();
 }
 
-function closeAnalyzeModal() {
-    document.getElementById('analyzeModal').style.display = 'none';
-}
-
-function showAnalyzeModal() {
-    document.getElementById('analyzeModal').style.display = 'block';
-    loadAnalyzeContent();
-}
-
-function closeReportsModal() {
-    document.getElementById('reportsModal').style.display = 'none';
+function closePlannerModal() {
+    document.getElementById('plannerModal').style.display = 'none';
 }
 
 function showReportsModal() {
@@ -813,325 +816,266 @@ function showReportsModal() {
     loadReportsContent();
 }
 
-// ==================== BUSINESS PLAN CONTENT ====================
+function closeReportsModal() {
+    document.getElementById('reportsModal').style.display = 'none';
+}
+
+// ==================== PLANNER ====================
 function loadPlannerContent() {
     const content = document.getElementById('plannerContent');
     
     content.innerHTML = `
-        <h2 style="color: #007bff; margin-bottom: 15px;">📋 Business Plan</h2>
+        <h2 style="color: #007bff; margin-bottom: 15px;">💰 Financial Planner</h2>
         
         <div class="planner-input-grid">
             <div class="input-group">
-                <label>Business Name</label>
-                <input type="text" id="businessName" placeholder="e.g., TechStart">
+                <label>Plan Name</label>
+                <input type="text" id="planName" value="Q1 2026 Growth Plan">
             </div>
             <div class="input-group">
-                <label>Industry</label>
-                <input type="text" id="industry" placeholder="e.g., Technology">
+                <label>Starting Date</label>
+                <input type="date" id="startDate" value="2026-01-01">
             </div>
             <div class="input-group">
-                <label>Target Market</label>
-                <input type="text" id="targetMarket" placeholder="e.g., Young professionals">
+                <label>Ending Date</label>
+                <input type="date" id="endDate" value="2026-03-31">
             </div>
             <div class="input-group">
                 <label>Initial Budget ($)</label>
-                <input type="number" id="initialBudget" placeholder="50000">
+                <input type="number" id="initialBudget" value="50000">
+            </div>
+            <div class="input-group">
+                <label>Monthly Growth (%)</label>
+                <input type="number" id="growthRate" value="5">
+            </div>
+            <div class="input-group">
+                <label>Plan Type</label>
+                <select id="planType">
+                    <option value="revenue">Revenue Growth</option>
+                    <option value="expense">Expense Management</option>
+                    <option value="investment">Investment Plan</option>
+                    <option value="savings">Savings Plan</option>
+                </select>
             </div>
         </div>
 
         <div class="button-group">
-            <button class="btn btn-primary" onclick="generatePlan()">📋 Generate</button>
-            <button class="btn btn-secondary" onclick="closePlannerModal()">Close</button>
+            <button class="btn btn-primary" onclick="generatePlan()">📊 Generate</button>
+            <button class="btn btn-ai" onclick="generateAIInsights()">🤖 AI Insights</button>
+            <button class="btn btn-secondary" onclick="clearPlan()">Reset</button>
         </div>
 
-        <div id="planResult" style="margin-top: 30px;"></div>
+        <div class="metrics-grid" id="metricsGrid"></div>
+
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-title">📈 Growth Projection</div>
+                <div class="chart-container"><canvas id="projectionChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">💹 Monthly Breakdown</div>
+                <div class="chart-container"><canvas id="monthlyChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">📊 Budget Distribution</div>
+                <div class="chart-container"><canvas id="distributionChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">🎯 Performance</div>
+                <div class="chart-container"><canvas id="performanceChart"></canvas></div>
+            </div>
+        </div>
+
+        <div id="aiInsights"></div>
+
+        <div class="chart-box" style="margin-top: 15px;">
+            <div class="chart-title">📋 Projections</div>
+            <table class="data-table" id="dataTable"></table>
+        </div>
     `;
 }
 
 function generatePlan() {
-    const businessName = document.getElementById('businessName')?.value?.trim();
-    const industry = document.getElementById('industry')?.value?.trim();
-    const targetMarket = document.getElementById('targetMarket')?.value?.trim();
-    const initialBudget = parseFloat(document.getElementById('initialBudget')?.value);
+    planData.name = document.getElementById('planName')?.value || '';
+    planData.startDate = document.getElementById('startDate')?.value || '';
+    planData.endDate = document.getElementById('endDate')?.value || '';
+    planData.initialBudget = parseFloat(document.getElementById('initialBudget')?.value) || 0;
+    planData.growthRate = parseFloat(document.getElementById('growthRate')?.value) || 0;
+    planData.type = document.getElementById('planType')?.value || 'revenue';
 
-    if (!businessName || !industry || !targetMarket || !initialBudget) {
+    if (!planData.name || !planData.startDate || !planData.endDate || !planData.initialBudget) {
         alert('❌ Please fill all fields');
         return;
     }
 
-    const resultDiv = document.getElementById('planResult');
-    
-    let html = `
-        <div class="report-header">📋 Business Plan: ${businessName}</div>
-        
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-icon">🏢</div>
-                <div class="metric-label">Industry</div>
-                <div class="metric-value" style="font-size: 1em;">${industry}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">👥</div>
-                <div class="metric-label">Target</div>
-                <div class="metric-value" style="font-size: 0.9em;">${targetMarket}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">💰</div>
-                <div class="metric-label">Budget</div>
-                <div class="metric-value">$${initialBudget.toLocaleString()}</div>
-            </div>
-        </div>
-
-        <div class="report-section">
-            <b>🔄 SWOT Analysis</b><br>
-            <div class="swot-grid">
-                <div class="swot-card swot-strengths">
-                    <div class="swot-title">Strengths</div>
-                    <div class="swot-item">✅ Unique value proposition</div>
-                    <div class="swot-item">✅ Strong team</div>
-                </div>
-                <div class="swot-card swot-weaknesses">
-                    <div class="swot-title">Weaknesses</div>
-                    <div class="swot-item">⚠️ Limited brand awareness</div>
-                    <div class="swot-item">⚠️ New market entrant</div>
-                </div>
-                <div class="swot-card swot-opportunities">
-                    <div class="swot-title">Opportunities</div>
-                    <div class="swot-item">🎯 Growing market demand</div>
-                    <div class="swot-item">🎯 Partnerships</div>
-                </div>
-                <div class="swot-card swot-threats">
-                    <div class="swot-title">Threats</div>
-                    <div class="swot-item">⛔ Strong competition</div>
-                    <div class="swot-item">⛔ Market changes</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="report-section">
-            <b>⚠️ Risk Analysis</b><br>
-            • Market Risk: Adapt to market changes quickly<br>
-            • Financial Risk: Build 3-6 month reserve fund<br>
-            • Competition Risk: Focus on differentiation<br>
-            • Operational Risk: Develop backup plans
-        </div>
-
-        <div class="report-section">
-            <b>📈 Growth Plan</b><br>
-            <b>Phase 1 (1-3 months):</b> Foundation & Market Entry<br>
-            <b>Phase 2 (4-9 months):</b> Growth & Scaling<br>
-            <b>Phase 3 (10-12 months):</b> Expansion & Profitability<br>
-            <b>Year 2+:</b> Market Leadership
-        </div>
-    `;
-
-    resultDiv.innerHTML = html;
+    calculateMonths();
+    generateMonthlyProjections();
+    displayMetrics();
+    generateCharts();
+    generateDataTable();
+    alert('✅ Plan generated!');
 }
 
-// ==================== ANALYZE CONTENT ====================
-function loadAnalyzeContent() {
-    const content = document.getElementById('analyzeContent');
-    
-    content.innerHTML = `
-        <h2 style="color: #007bff; margin-bottom: 15px;">📊 Analyze Business</h2>
+function calculateMonths() {
+    const start = new Date(planData.startDate);
+    const end = new Date(planData.endDate);
+    planData.months = [];
+    let current = new Date(start);
+    let monthIndex = 0;
+
+    while (current <= end) {
+        const monthName = current.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        const shortMonthName = current.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
         
-        <div class="choice-buttons">
-            <button class="choice-btn" onclick="showChartsMode()">
-                <div style="font-size: 2em; margin-bottom: 8px;">📈</div>
-                Financial Charts
-            </button>
-            <button class="choice-btn" onclick="showProfitMode()">
-                <div style="font-size: 2em; margin-bottom: 8px;">💰</div>
-                Profit Calculator
-            </button>
-        </div>
-
-        <div id="analyzeResult" style="margin-top: 30px;"></div>
-    `;
-}
-
-// ==================== CHARTS MODE ====================
-function showChartsMode() {
-    const resultDiv = document.getElementById('analyzeResult');
-    
-    resultDiv.innerHTML = `
-        <h3 style="color: #007bff; margin-bottom: 15px;">📈 Financial Charts</h3>
-        
-        <div class="planner-input-grid">
-            <div class="input-group">
-                <label>Business Name</label>
-                <input type="text" id="chartBusinessName" placeholder="e.g., TechStart">
-            </div>
-            <div class="input-group">
-                <label>Revenue ($)</label>
-                <input type="number" id="chartRevenue" placeholder="100000">
-            </div>
-            <div class="input-group">
-                <label>Expenses ($)</label>
-                <input type="number" id="chartExpenses" placeholder="50000">
-            </div>
-            <div class="input-group">
-                <label>Monthly Growth (%)</label>
-                <input type="number" id="chartGrowth" placeholder="5" value="5">
-            </div>
-        </div>
-
-        <div class="button-group">
-            <button class="btn btn-primary" onclick="generateChartsAnalysis()">📊 Generate Charts</button>
-            <button class="btn btn-secondary" onclick="loadAnalyzeContent()">← Back</button>
-        </div>
-
-        <div id="chartsDisplay" style="margin-top: 20px;"></div>
-    `;
-}
-
-function generateChartsAnalysis() {
-    const businessName = document.getElementById('chartBusinessName')?.value?.trim();
-    const revenue = parseFloat(document.getElementById('chartRevenue')?.value);
-    const expenses = parseFloat(document.getElementById('chartExpenses')?.value);
-    const growth = parseFloat(document.getElementById('chartGrowth')?.value) || 5;
-
-    if (!businessName || !revenue || !expenses) {
-        alert('❌ Please fill all fields');
-        return;
+        planData.months.push({
+            monthIndex: monthIndex,
+            date: new Date(current),
+            monthName: monthName,
+            shortMonthName: shortMonthName,
+            budget: 0,
+            expense: 0,
+            revenue: 0,
+            profit: 0
+        });
+        current.setMonth(current.getMonth() + 1);
+        monthIndex++;
     }
+}
 
-    const profit = revenue - expenses;
-    const displayDiv = document.getElementById('chartsDisplay');
+function generateMonthlyProjections() {
+    let currentAmount = planData.initialBudget;
+    planData.totalProjection = 0;
+
+    planData.months.forEach((month) => {
+        const growth = (planData.growthRate / 100);
+        currentAmount = currentAmount * (1 + growth);
+
+        switch(planData.type) {
+            case 'revenue':
+                month.revenue = Math.round(currentAmount);
+                month.budget = Math.round(currentAmount * 0.7);
+                month.expense = Math.round(currentAmount * 0.4);
+                month.profit = month.revenue - month.expense;
+                break;
+            case 'investment':
+                month.budget = Math.round(currentAmount);
+                month.revenue = Math.round(currentAmount * 0.08);
+                month.profit = month.revenue;
+                break;
+            default:
+                month.budget = Math.round(currentAmount);
+        }
+
+        planData.totalProjection += month.budget;
+    });
+}
+
+function displayMetrics() {
+    const metricsGrid = document.getElementById('metricsGrid');
+    if (!metricsGrid) return;
     
-    let html = `
-        <div class="report-header">📊 ${businessName} - Financial Analysis</div>
-        
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-icon">📈</div>
-                <div class="metric-label">Revenue</div>
-                <div class="metric-value">$${revenue.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📉</div>
-                <div class="metric-label">Expenses</div>
-                <div class="metric-value">$${expenses.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">💰</div>
-                <div class="metric-label">Profit</div>
-                <div class="metric-value" style="color: ${profit > 0 ? '#28a745' : '#dc3545'};">$${profit.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📊</div>
-                <div class="metric-label">Margin</div>
-                <div class="metric-value">${((profit / revenue) * 100).toFixed(1)}%</div>
-            </div>
-        </div>
+    metricsGrid.innerHTML = '';
 
-        <div class="charts-grid">
-            <div class="chart-box">
-                <div class="chart-title">💹 Revenue vs Expenses</div>
-                <div class="chart-container"><canvas id="revenueChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">💵 Profit Breakdown</div>
-                <div class="chart-container"><canvas id="profitChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">📈 12-Month Projection</div>
-                <div class="chart-container"><canvas id="projectionChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">🎯 Budget Distribution</div>
-                <div class="chart-container"><canvas id="distributionChart"></canvas></div>
-            </div>
-        </div>
-    `;
+    const finalMonth = planData.months[planData.months.length - 1] || {};
+    
+    const metrics = [
+        { label: 'Total', value: '$' + planData.totalProjection.toLocaleString(), icon: '📊' },
+        { label: 'Average', value: '$' + Math.round(planData.totalProjection / planData.months.length).toLocaleString(), icon: '💰' },
+        { label: 'Duration', value: planData.months.length + 'mo', icon: '📅' },
+        { label: 'Final', value: '$' + (finalMonth.budget || 0).toLocaleString(), icon: '🎯' }
+    ];
 
-    displayDiv.innerHTML = html;
-
-    setTimeout(() => {
-        createRevenueChart(businessName, revenue, expenses);
-        createProfitChart(revenue, expenses);
-        createProjectionChart(revenue, growth);
-        createDistributionChart(revenue);
-    }, 100);
-}
-
-function createRevenueChart(businessName, revenue, expenses) {
-    destroyChart('revenueChart');
-    const ctx = document.getElementById('revenueChart')?.getContext('2d');
-    if (!ctx) return;
-
-    chartInstances['revenueChart'] = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [businessName],
-            datasets: [
-                { label: 'Revenue', data: [revenue], backgroundColor: '#28a745' },
-                { label: 'Expenses', data: [expenses], backgroundColor: '#dc3545' }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
-            }
-        }
+    metrics.forEach((metric) => {
+        const card = document.createElement('div');
+        card.className = 'metric-card';
+        card.innerHTML = `<div class="metric-icon">${metric.icon}</div><div class="metric-label">${metric.label}</div><div class="metric-value">${metric.value}</div>`;
+        metricsGrid.appendChild(card);
     });
 }
 
-function createProfitChart(revenue, expenses) {
-    destroyChart('profitChart');
-    const ctx = document.getElementById('profitChart')?.getContext('2d');
-    if (!ctx) return;
-
-    chartInstances['profitChart'] = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Profit', 'Expenses'],
-            datasets: [{
-                data: [revenue - expenses, expenses],
-                backgroundColor: ['#28a745', '#dc3545'],
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
-        }
-    });
+function generateCharts() {
+    generateProjectionChart();
+    generateMonthlyChart();
+    generateDistributionChart();
+    generatePerformanceChart();
 }
 
-function createProjectionChart(revenue, growth) {
+function destroyChart(chartName) {
+    if (chartInstances[chartName]) {
+        chartInstances[chartName].destroy();
+    }
+}
+
+function generateProjectionChart() {
     destroyChart('projectionChart');
     const ctx = document.getElementById('projectionChart')?.getContext('2d');
     if (!ctx) return;
 
-    const months = [];
-    const projections = [];
-    let currentRevenue = revenue;
-
-    for (let i = 0; i < 12; i++) {
-        months.push(`M${i + 1}`);
-        currentRevenue = currentRevenue * (1 + (growth / 100));
-        projections.push(Math.round(currentRevenue));
-    }
+    const labels = planData.months.map(m => m.shortMonthName);
+    const data = planData.months.map(m => m.budget);
 
     chartInstances['projectionChart'] = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: months,
+            labels: labels,
             datasets: [{
-                label: 'Revenue Projection',
-                data: projections,
+                label: 'Budget',
+                data: data,
                 borderColor: '#007bff',
                 backgroundColor: 'rgba(0, 123, 255, 0.1)',
                 borderWidth: 2,
                 fill: true,
-                tension: 0.4
+                tension: 0.4,
+                pointBackgroundColor: '#007bff',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 1,
+                pointRadius: 4
             }]
         },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: true, position: 'top' } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } }
+                }
+            }
+        }
+    });
+}
+
+function generateMonthlyChart() {
+    destroyChart('monthlyChart');
+    const ctx = document.getElementById('monthlyChart')?.getContext('2d');
+    if (!ctx) return;
+
+    const labels = planData.months.map(m => m.shortMonthName);
+    const datasets = [
+        {
+            label: 'Budget',
+            data: planData.months.map(m => m.budget),
+            backgroundColor: '#007bff'
+        }
+    ];
+
+    if (planData.type === 'revenue') {
+        datasets.push({
+            label: 'Revenue',
+            data: planData.months.map(m => m.revenue),
+            backgroundColor: '#28a745'
+        });
+        datasets.push({
+            label: 'Expense',
+            data: planData.months.map(m => m.expense),
+            backgroundColor: '#dc3545'
+        });
+    }
+
+    chartInstances['monthlyChart'] = new Chart(ctx, {
+        type: 'bar',
+        data: { labels: labels, datasets: datasets },
         options: {
             responsive: true,
             maintainAspectRatio: false,
@@ -1142,17 +1086,19 @@ function createProjectionChart(revenue, growth) {
     });
 }
 
-function createDistributionChart(revenue) {
+function generateDistributionChart() {
     destroyChart('distributionChart');
     const ctx = document.getElementById('distributionChart')?.getContext('2d');
     if (!ctx) return;
 
+    const totalBudget = planData.totalProjection;
+
     chartInstances['distributionChart'] = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Operations', 'Marketing', 'Development', 'Misc'],
+            labels: ['Ops', 'Marketing', 'Dev', 'Misc'],
             datasets: [{
-                data: [revenue * 0.4, revenue * 0.25, revenue * 0.2, revenue * 0.15],
+                data: [totalBudget * 0.4, totalBudget * 0.25, totalBudget * 0.2, totalBudget * 0.15],
                 backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
                 borderColor: '#fff',
                 borderWidth: 2
@@ -1166,183 +1112,163 @@ function createDistributionChart(revenue) {
     });
 }
 
-// ==================== PROFIT CALCULATOR MODE ====================
-function showProfitMode() {
-    const resultDiv = document.getElementById('analyzeResult');
-    
-    resultDiv.innerHTML = `
-        <h3 style="color: #007bff; margin-bottom: 15px;">💰 Profit Calculator</h3>
-        
-        <div class="planner-input-grid">
-            <div class="input-group">
-                <label>Business Name</label>
-                <input type="text" id="profitBusinessName" placeholder="e.g., Business">
-            </div>
-            <div class="input-group">
-                <label>Revenue ($)</label>
-                <input type="number" id="profitRevenue" placeholder="100000">
-            </div>
-            <div class="input-group">
-                <label>Cost of Goods ($)</label>
-                <input type="number" id="profitCogs" placeholder="30000">
-            </div>
-            <div class="input-group">
-                <label>Operating Expenses ($)</label>
-                <input type="number" id="profitOpex" placeholder="20000">
-            </div>
-        </div>
+function generatePerformanceChart() {
+    destroyChart('performanceChart');
+    const ctx = document.getElementById('performanceChart')?.getContext('2d');
+    if (!ctx) return;
 
-        <div class="button-group">
-            <button class="btn btn-primary" onclick="calculateProfit()">💰 Calculate</button>
-            <button class="btn btn-secondary" onclick="loadAnalyzeContent()">��� Back</button>
-        </div>
+    const labels = planData.months.map(m => m.shortMonthName);
+    const target = planData.months.map(m => m.budget);
+    const actual = planData.months.map(m => Math.round(m.budget * (0.8 + Math.random() * 0.3)));
 
-        <div id="profitDisplay" style="margin-top: 20px;"></div>
+    chartInstances['performanceChart'] = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Target',
+                    data: target,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#007bff'
+                },
+                {
+                    label: 'Actual',
+                    data: actual,
+                    borderColor: '#28a745',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: '#28a745'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
+            }
+        }
+    });
+}
+
+function generateDataTable() {
+    const table = document.getElementById('dataTable');
+    if (!table) return;
+
+    table.innerHTML = '';
+
+    const thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>Month</th><th>Budget</th><th>Revenue</th><th>Expense</th><th>Profit</th></tr>';
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    planData.months.forEach(month => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${month.monthName.split(' ')[0]}</strong></td>
+            <td>$${month.budget.toLocaleString()}</td>
+            <td>$${month.revenue.toLocaleString()}</td>
+            <td>$${month.expense.toLocaleString()}</td>
+            <td style="color: ${month.profit > 0 ? '#28a745' : '#dc3545'}; font-weight: 600;">$${month.profit.toLocaleString()}</td>
+        `;
+        tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+}
+
+function generateAIInsights() {
+    const aiSection = document.getElementById('aiInsights');
+    if (!aiSection || planData.months.length === 0) return;
+
+    const avgMonthly = planData.totalProjection / planData.months.length;
+
+    aiSection.innerHTML = `
+        <div class="ai-insights">
+            <div class="ai-header">🤖 AI Insights</div>
+            <p><strong>Plan:</strong> ${planData.type} with ${planData.growthRate}% monthly growth = $${planData.totalProjection.toLocaleString()} total</p>
+            <p><strong>Average Monthly:</strong> $${Math.round(avgMonthly).toLocaleString()}</p>
+            <ul>
+                <li>Monitor weekly progress</li>
+                <li>Adjust if variance >10%</li>
+                <li>Build contingency reserves</li>
+                <li>Quarterly review</li>
+            </ul>
+        </div>
     `;
 }
 
-function calculateProfit() {
-    const businessName = document.getElementById('profitBusinessName')?.value?.trim();
-    const revenue = parseFloat(document.getElementById('profitRevenue')?.value);
-    const cogs = parseFloat(document.getElementById('profitCogs')?.value);
-    const opex = parseFloat(document.getElementById('profitOpex')?.value);
-
-    if (!businessName || !revenue || !cogs || !opex) {
-        alert('❌ Please fill all fields');
-        return;
-    }
-
-    const grossProfit = revenue - cogs;
-    const netProfit = grossProfit - opex;
-    const grossMargin = ((grossProfit / revenue) * 100).toFixed(2);
-    const netMargin = ((netProfit / revenue) * 100).toFixed(2);
-
-    const displayDiv = document.getElementById('profitDisplay');
-    
-    let html = `
-        <div class="report-header">💰 ${businessName} - Profit Analysis</div>
-        
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-icon">📈</div>
-                <div class="metric-label">Revenue</div>
-                <div class="metric-value">$${revenue.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">🏭</div>
-                <div class="metric-label">Gross Profit</div>
-                <div class="metric-value" style="color: #28a745;">$${grossProfit.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">💵</div>
-                <div class="metric-label">Net Profit</div>
-                <div class="metric-value" style="color: ${netProfit > 0 ? '#28a745' : '#dc3545'};">$${netProfit.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📊</div>
-                <div class="metric-label">Net Margin</div>
-                <div class="metric-value">${netMargin}%</div>
-            </div>
-        </div>
-
-        <div class="report-section">
-            <b>📋 Breakdown</b><br>
-            Revenue: $${revenue.toLocaleString()}<br>
-            Cost of Goods: $${cogs.toLocaleString()}<br>
-            Gross Profit: $${grossProfit.toLocaleString()} (${grossMargin}%)<br>
-            Operating Expenses: $${opex.toLocaleString()}<br>
-            <b style="color: ${netProfit > 0 ? '#28a745' : '#dc3545'};">Net Profit: $${netProfit.toLocaleString()} (${netMargin}%)</b>
-        </div>
-
-        <div class="report-section">
-            <b>💡 Insights</b><br>
-            ${netProfit > 0 ? 
-                '✅ Business is profitable. Focus on growth and scalability.' :
-                '⚠️ Business needs cost reduction or revenue increase.'}
-        </div>
-    `;
-
-    displayDiv.innerHTML = html;
+function clearPlan() {
+    document.getElementById('planName').value = '';
+    document.getElementById('initialBudget').value = '';
+    planData.months = [];
+    document.getElementById('metricsGrid').innerHTML = '';
+    document.getElementById('aiInsights').innerHTML = '';
+    document.getElementById('dataTable').innerHTML = '';
+    Object.keys(chartInstances).forEach(key => destroyChart(key));
 }
 
-function destroyChart(chartName) {
-    if (chartInstances[chartName]) {
-        chartInstances[chartName].destroy();
-    }
-}
-
-// ==================== REPORTS CONTENT ====================
+// ==================== REPORTS ====================
 function loadReportsContent() {
     const content = document.getElementById('reportsContent');
     
     content.innerHTML = `
-        <h2 style="color: #007bff; margin-bottom: 15px;">📄 Business Reports</h2>
+        <h2 style="color: #007bff; margin-bottom: 15px;">📈 Reports</h2>
         
-        <div class="choice-buttons">
-            <button class="choice-btn" onclick="showSWOTReport()">
-                <div style="font-size: 2em; margin-bottom: 8px;">🔄</div>
-                SWOT Report
-            </button>
-            <button class="choice-btn" onclick="showBusinessReport()">
-                <div style="font-size: 2em; margin-bottom: 8px;">📈</div>
-                Business Report
-            </button>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+            <button class="btn btn-primary" onclick="startSWOTReport()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">🔄 SWOT</button>
+            <button class="btn btn-primary" onclick="startBusinessReport()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">📈 Business</button>
+            <button class="btn btn-primary" onclick="startProfitChart()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">💹 Profit</button>
         </div>
-
-        <div id="reportResult" style="margin-top: 30px;"></div>
+        
+        <div id="reportContent" style="margin-top: 20px;"></div>
     `;
 }
 
-// ==================== SWOT REPORT ====================
-function showSWOTReport() {
-    const resultDiv = document.getElementById('reportResult');
-    
-    resultDiv.innerHTML = `
-        <h3 style="color: #007bff; margin-bottom: 15px;">🔄 SWOT Analysis</h3>
-        
+function startSWOTReport() {
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
         <div class="input-group">
             <label>Business Name</label>
             <input type="text" id="swotBusinessName" placeholder="Enter business name" autofocus>
         </div>
         <div class="button-group">
-            <button class="btn btn-primary" onclick="buildSWOT()">Continue →</button>
-            <button class="btn btn-secondary" onclick="loadReportsContent()">← Back</button>
+            <button class="btn btn-primary" onclick="buildSwot()">Continue →</button>
         </div>
-        
-        <div id="swotBuilder"></div>
     `;
 }
 
-function buildSWOT() {
-    const businessName = document.getElementById('swotBusinessName')?.value?.trim();
+function buildSwot() {
+    const businessName = document.getElementById('swotBusinessName')?.value;
     if (!businessName) {
         alert('Please enter a business name');
         return;
     }
 
-    const builderDiv = document.getElementById('swotBuilder');
+    swotData.business = businessName;
+    const reportContent = document.getElementById('reportContent');
     
-    builderDiv.innerHTML = `
-        <h4 style="margin-top: 15px; color: #007bff;">Add items for each category:</h4>
+    reportContent.innerHTML = `
+        <h3 style="margin-top: 15px;">🔄 SWOT: ${businessName}</h3>
         
         ${['strengths', 'weaknesses', 'opportunities', 'threats'].map(cat => `
             <div style="margin-top: 15px;">
                 <label style="font-weight: 600; color: #007bff; font-size: 0.95em;">${cat.charAt(0).toUpperCase() + cat.slice(1)}</label>
                 <input type="text" id="${cat}Input" placeholder="Enter..." style="margin-bottom: 6px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; font-size: 0.9em;">
-                <button class="btn btn-primary" style="width: 100%; padding: 8px; font-size: 0.85em;" onclick="addSwotItem('${cat}', '${businessName}')">+ Add</button>
+                <button class="btn btn-primary" style="width: 100%; padding: 8px; font-size: 0.85em;" onclick="addSwotItem('${cat}')">+ Add</button>
                 <div id="${cat}List" style="margin-top: 8px;"></div>
             </div>
         `).join('')}
         
-        <button class="btn btn-primary" onclick="completeSWOT('${businessName}')" style="margin-top: 15px; width: 100%; padding: 10px; font-size: 0.9em;">Generate SWOT Report</button>
+        <button class="btn btn-primary" onclick="completeSwot()" style="margin-top: 15px; width: 100%; padding: 10px; font-size: 0.9em;">Generate SWOT</button>
     `;
 }
 
-let swotData = { strengths: [], weaknesses: [], opportunities: [], threats: [] };
-
-function addSwotItem(category, businessName) {
+function addSwotItem(category) {
     const input = document.getElementById(category + 'Input');
-    const value = input?.value?.trim();
+    const value = input?.value.trim();
 
     if (!value) {
         alert('Please enter a value');
@@ -1350,7 +1276,7 @@ function addSwotItem(category, businessName) {
     }
 
     if (!swotData[category]) swotData[category] = [];
-    swotData[category].push(value);
+    swotData[category].push({ description: value, score: 3 });
 
     input.value = '';
     renderSwotItems();
@@ -1366,7 +1292,7 @@ function renderSwotItems() {
             const div = document.createElement('div');
             div.style.cssText = 'background: #f0f0f0; padding: 6px; margin-bottom: 4px; border-radius: 4px; display: flex; justify-content: space-between; font-size: 0.9em;';
             div.innerHTML = `
-                <span>${item}</span>
+                <span>${item.description}</span>
                 <button class="btn btn-secondary" style="padding: 2px 6px; font-size: 0.75em; min-width: auto;" onclick="removeSwotItem('${cat}', ${index})">✕</button>
             `;
             list.appendChild(div);
@@ -1379,38 +1305,43 @@ function removeSwotItem(category, index) {
     renderSwotItems();
 }
 
-function completeSWOT(businessName) {
+function completeSwot() {
     if (swotData.strengths.length === 0 || swotData.weaknesses.length === 0 || 
         swotData.opportunities.length === 0 || swotData.threats.length === 0) {
         alert('Please add at least one item to each category');
         return;
     }
 
-    generateSWOTReport(businessName);
+    generateSWOTReport();
 }
 
-function generateSWOTReport(businessName) {
-    const reportResult = document.getElementById('reportResult');
-    
-    reportResult.innerHTML = `
-        <div class="report-header">🔄 SWOT: ${businessName}</div>
+function generateSWOTReport() {
+    const top3 = (arr) => arr.sort((a, b) => b.score - a.score).slice(0, 3);
+    const S = top3(swotData.strengths);
+    const W = top3(swotData.weaknesses);
+    const O = top3(swotData.opportunities);
+    const T = top3(swotData.threats);
+
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="report-header">📊 SWOT: ${swotData.business}</div>
         
         <div class="swot-grid">
             <div class="swot-card swot-strengths">
                 <div class="swot-title">🟢 Strengths</div>
-                ${swotData.strengths.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+                ${S.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
             </div>
             <div class="swot-card swot-weaknesses">
                 <div class="swot-title">🔴 Weaknesses</div>
-                ${swotData.weaknesses.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+                ${W.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
             </div>
             <div class="swot-card swot-opportunities">
-                <div class="swot-title">🟡 Opportunities</div>
-                ${swotData.opportunities.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+                <div class="swot-title">🔵 Opportunities</div>
+                ${O.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
             </div>
             <div class="swot-card swot-threats">
-                <div class="swot-title">🔵 Threats</div>
-                ${swotData.threats.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+                <div class="swot-title">🟠 Threats</div>
+                ${T.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
             </div>
         </div>
 
@@ -1421,20 +1352,12 @@ function generateSWOTReport(businessName) {
             • Build strategic partnerships<br>
             • Monitor competitive landscape
         </div>
-
-        <div class="button-group">
-            <button class="btn btn-secondary" onclick="loadReportsContent()">← Back</button>
-        </div>
     `;
 }
 
-// ==================== BUSINESS REPORT ====================
-function showBusinessReport() {
-    const resultDiv = document.getElementById('reportResult');
-    
-    resultDiv.innerHTML = `
-        <h3 style="color: #007bff; margin-bottom: 15px;">📈 Business Report</h3>
-        
+function startBusinessReport() {
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
         <div class="planner-input-grid">
             <div class="input-group">
                 <label>Business Name</label>
@@ -1457,46 +1380,34 @@ function showBusinessReport() {
                 <input type="number" id="reportEmployees" placeholder="5">
             </div>
             <div class="input-group">
-                <label>Founded Year</label>
+                <label>Founded</label>
                 <input type="number" id="reportFounded" placeholder="2020">
             </div>
         </div>
-
-        <div class="button-group">
-            <button class="btn btn-primary" onclick="generateFullReport()">📊 Generate</button>
-            <button class="btn btn-secondary" onclick="loadReportsContent()">← Back</button>
-        </div>
-
-        <div id="fullReportDisplay" style="margin-top: 20px;"></div>
+        <button class="btn btn-primary" onclick="generateFullBusinessReport()" style="width: 100%; margin-top: 10px;">Generate</button>
     `;
 }
 
-function generateFullReport() {
-    const businessName = document.getElementById('reportBusinessName')?.value?.trim();
-    const industry = document.getElementById('reportIndustry')?.value?.trim();
-    const revenue = parseFloat(document.getElementById('reportRevenue')?.value);
-    const expenses = parseFloat(document.getElementById('reportExpenses')?.value);
-    const employees = parseInt(document.getElementById('reportEmployees')?.value);
-    const founded = parseInt(document.getElementById('reportFounded')?.value);
+function generateFullBusinessReport() {
+    reportData.businessName = document.getElementById('reportBusinessName')?.value || 'Unknown';
+    reportData.industry = document.getElementById('reportIndustry')?.value || 'General';
+    reportData.revenue = parseFloat(document.getElementById('reportRevenue')?.value) || 0;
+    reportData.expenses = parseFloat(document.getElementById('reportExpenses')?.value) || 0;
+    reportData.employees = parseInt(document.getElementById('reportEmployees')?.value) || 0;
+    reportData.founded = parseInt(document.getElementById('reportFounded')?.value) || new Date().getFullYear();
 
-    if (!businessName || !industry || !revenue || !expenses || !employees || !founded) {
-        alert('❌ Please fill all fields');
-        return;
-    }
+    const profit = reportData.revenue - reportData.expenses;
+    const profitMargin = reportData.revenue > 0 ? ((profit / reportData.revenue) * 100).toFixed(2) : 0;
 
-    const profit = revenue - expenses;
-    const profitMargin = ((profit / revenue) * 100).toFixed(2);
-
-    const displayDiv = document.getElementById('fullReportDisplay');
-    
-    let html = `
-        <div class="report-header">📈 Report: ${businessName}</div>
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="report-header">📈 Report: ${reportData.businessName}</div>
         
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-icon">💰</div>
                 <div class="metric-label">Revenue</div>
-                <div class="metric-value">$${revenue.toLocaleString()}</div>
+                <div class="metric-value">$${reportData.revenue.toLocaleString()}</div>
             </div>
             <div class="metric-card">
                 <div class="metric-icon">📊</div>
@@ -1511,35 +1422,149 @@ function generateFullReport() {
             <div class="metric-card">
                 <div class="metric-icon">👥</div>
                 <div class="metric-label">Team</div>
-                <div class="metric-value">${employees}</div>
+                <div class="metric-value">${reportData.employees}</div>
             </div>
         </div>
 
         <div class="report-section">
             <b>📋 Overview</b><br>
-            Industry: ${industry}<br>
-            Founded: ${founded}<br>
-            Revenue: $${revenue.toLocaleString()}<br>
-            Expenses: $${expenses.toLocaleString()}<br>
-            Profit: $${profit.toLocaleString()}<br>
-            Employees: ${employees}
+            Industry: ${reportData.industry}<br>
+            Founded: ${reportData.founded}<br>
+            Revenue: $${reportData.revenue.toLocaleString()}<br>
+            Expenses: $${reportData.expenses.toLocaleString()}<br>
+            Profit: $${profit.toLocaleString()}
         </div>
 
         <div class="report-section">
             <b>💡 Recommendations</b><br>
             ${profit > 0 ? 
-                '• Maintain profitability<br>• Explore growth opportunities<br>' :
-                '• Focus on revenue growth<br>• Reduce operational costs<br>'}
-            • Quarterly performance reviews<br>
-            • Build 5-year financial forecast<br>
-            • Invest in team development
+                '• Maintain profitability<br>• Explore growth<br>' :
+                '• Focus on revenue growth<br>• Reduce costs<br>'}
+            • Quarterly reviews<br>
+            • Build financial forecast
+        </div>
+    `;
+}
+
+function startProfitChart() {
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="planner-input-grid">
+            <div class="input-group">
+                <label>Business Name</label>
+                <input type="text" id="chartBusinessName" placeholder="Company">
+            </div>
+            <div class="input-group">
+                <label>Revenue ($)</label>
+                <input type="number" id="chartRevenue" placeholder="100000">
+            </div>
+            <div class="input-group">
+                <label>Expenses ($)</label>
+                <input type="number" id="chartExpenses" placeholder="50000">
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="generateProfitVisualization()" style="width: 100%; margin-top: 10px;">Generate</button>
+    `;
+}
+
+function generateProfitVisualization() {
+    const businessName = document.getElementById('chartBusinessName')?.value || 'Business';
+    const revenue = parseFloat(document.getElementById('chartRevenue')?.value) || 0;
+    const expenses = parseFloat(document.getElementById('chartExpenses')?.value) || 0;
+
+    if (revenue <= 0) {
+        alert('Please enter valid revenue');
+        return;
+    }
+
+    destroyChart('profitChart');
+    destroyChart('profitDoughnut');
+
+    const reportContent = document.getElementById('reportContent');
+    reportContent.innerHTML = `
+        <div class="report-header">💹 ${businessName}</div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">📈</div>
+                <div class="metric-label">Revenue</div>
+                <div class="metric-value">$${revenue.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📉</div>
+                <div class="metric-label">Expenses</div>
+                <div class="metric-value">$${expenses.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-label">Profit</div>
+                <div class="metric-value" style="color: ${revenue - expenses > 0 ? '#28a745' : '#dc3545'};">$${(revenue - expenses).toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📊</div>
+                <div class="metric-label">Margin</div>
+                <div class="metric-value">${((((revenue - expenses) / revenue) * 100).toFixed(1))}%</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-title">Revenue vs Expenses</div>
+                <div class="chart-container"><canvas id="profitChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">Profit Breakdown</div>
+                <div class="chart-container"><canvas id="profitDoughnut"></canvas></div>
+            </div>
         </div>
     `;
 
-    displayDiv.innerHTML = html;
+    setTimeout(() => {
+        const ctx = document.getElementById('profitChart');
+        if (ctx) {
+            chartInstances['profitChart'] = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [businessName],
+                    datasets: [
+                        { label: 'Revenue', data: [revenue], backgroundColor: '#28a745' },
+                        { label: 'Expenses', data: [expenses], backgroundColor: '#dc3545' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
+                    }
+                }
+            });
+        }
+
+        const ctx2 = document.getElementById('profitDoughnut');
+        if (ctx2) {
+            chartInstances['profitDoughnut'] = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Profit', 'Expenses'],
+                    datasets: [{
+                        data: [revenue - expenses, expenses],
+                        backgroundColor: ['#28a745', '#dc3545'],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+    }, 100);
 }
 
-// ==================== CHAT FUNCTIONS ====================
+// ==================== CHAT ====================
 function levenshteinDistance(a, b) {
     const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
     for(let i=0;i<=b.length;i++) matrix[i][0]=i;
@@ -1564,6 +1589,7 @@ function similarity(s1,s2) {
 
 function getBotReply(input) {
     let userInput = input.toLowerCase();
+
     let bestIntent = null;
     let bestScore = 0;
 
@@ -1581,34 +1607,7 @@ function getBotReply(input) {
         return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
     }
 
-    return "I can help with business! Try the Plan, Analyze, or Reports buttons to create comprehensive analyses. 💡";
-}
-
-function typeWriterEffect(element, text, speed = 50) {
-    let index = 0;
-    element.textContent = '';
-    const words = text.split(' ');
-    
-    function typeWord() {
-        if (index < words.length) {
-            element.textContent += (index > 0 ? ' ' : '') + words[index];
-            index++;
-            document.getElementById('chat-box').scrollTop = document.getElementById('chat-box').scrollHeight;
-            setTimeout(typeWord, speed);
-        }
-    }
-    
-    typeWord();
-}
-
-function showThinkingAnimation() {
-    const chatBox = document.getElementById('chat-box');
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', 'bot');
-    msgDiv.id = 'thinking-message';
-    msgDiv.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
-    chatBox.appendChild(msgDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
+    return "I can help with business concepts! Try the Planner and Reports buttons. 💡";
 }
 
 function addMessage(text, sender) {
@@ -1627,24 +1626,10 @@ function sendMessage() {
     addMessage(input, 'user');
     $("#user-input").val("");
 
-    showThinkingAnimation();
-
     setTimeout(() => {
         const reply = getBotReply(input);
-        const thinkingElement = document.getElementById('thinking-message');
-        
-        if (thinkingElement) {
-            thinkingElement.remove();
-        }
-        
-        const chatBox = document.getElementById('chat-box');
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('message', 'bot');
-        chatBox.appendChild(msgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-        
-        typeWriterEffect(msgDiv, reply, 100);
-    }, 1500);
+        addMessage(reply, 'bot');
+    }, 500);
 }
 
 $("#user-input").on('keypress', function(e) {
@@ -1697,27 +1682,13 @@ window.addEventListener("click", function(e) {
     if (e.target === document.getElementById("plannerModal")) {
         closePlannerModal();
     }
-    if (e.target === document.getElementById("analyzeModal")) {
-        closeAnalyzeModal();
-    }
     if (e.target === document.getElementById("reportsModal")) {
         closeReportsModal();
     }
 });
 
 window.onload = () => {
-    showThinkingAnimation();
-    setTimeout(() => {
-        const thinkingElement = document.getElementById('thinking-message');
-        if (thinkingElement) {
-            thinkingElement.remove();
-        }
-        const chatBox = document.getElementById('chat-box');
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('message', 'bot');
-        chatBox.appendChild(msgDiv);
-        typeWriterEffect(msgDiv, "Hello! 👋 I am a business chatbot that can help you analyze businesses or help you create your plan", 100);
-    }, 1500);
+    addMessage("Hello! 👋 Ask me anything about business.", 'bot');
 };
 </script>
 
