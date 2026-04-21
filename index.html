@@ -65,7 +65,7 @@ body.dark .thinking-dots span {
 .chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
 body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
 #suggestWrapper { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
-#suggestBtn, #reportsBtn, #plannerBtn {
+#suggestBtn, #plannerBtn, #analyzeBtn, #reportsBtn {
     background-color: #007bff;
     color: white;
     border: none;
@@ -77,7 +77,7 @@ body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0
     transition: all 0.2s ease;
     flex: 0;
 }
-#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
+#suggestBtn:hover, #plannerBtn:hover, #analyzeBtn:hover, #reportsBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
 #suggestBox { position: absolute; bottom: 35px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 200px; overflow-y: auto; z-index: 10; }
 #closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; font-weight: bold; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
 .suggestion { cursor: pointer; padding: 5px; border-radius: 3px; }
@@ -257,16 +257,6 @@ body.dark .btn-secondary {
     background: #e5e7eb;
 }
 
-.btn-ai {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-}
-
-.btn-ai:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
-}
-
 /* METRICS */
 .metrics-grid {
     display: grid;
@@ -333,47 +323,6 @@ body.dark .chart-title {
 .chart-container {
     position: relative;
     height: 220px;
-}
-
-/* TABLE */
-.data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    font-size: 0.9em;
-}
-
-body.dark .data-table {
-    background: #16213e;
-}
-
-.data-table thead {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-}
-
-.data-table th,
-.data-table td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-body.dark .data-table td {
-    border-bottom: 1px solid #444;
-    color: #e0e0e0;
-}
-
-.data-table tbody tr:hover {
-    background: #f9fafb;
-}
-
-body.dark .data-table tbody tr:hover {
-    background: #0f3460;
 }
 
 /* REPORT SECTION */
@@ -451,96 +400,37 @@ body.dark .report-header {
     font-size: 0.85em;
 }
 
-/* RISK GRID */
-.risk-grid {
+/* CHOICE BUTTONS */
+.choice-buttons {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 12px;
     margin: 20px 0;
 }
 
-.risk-card {
-    padding: 15px;
-    border-radius: 8px;
+.choice-btn {
+    padding: 20px 15px;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    background: white;
+    color: #007bff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1em;
+}
+
+body.dark .choice-btn {
+    background: #0f3460;
+    border-color: #007bff;
+    color: #88c2ff;
+}
+
+.choice-btn:hover {
+    background: #007bff;
     color: white;
-    font-size: 0.9em;
-    text-align: center;
-}
-
-.risk-high {
-    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
-}
-
-.risk-medium {
-    background: linear-gradient(135deg, #f97316 0%, #c2410c 100%);
-}
-
-.risk-low {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-}
-
-.risk-title {
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 1em;
-}
-
-.risk-value {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-/* AI INSIGHTS */
-.ai-insights {
-    background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
-    border-left: 4px solid #f5576c;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px 0;
-    font-size: 0.95em;
-}
-
-.ai-header {
-    font-weight: 600;
-    color: #f5576c;
-    margin-bottom: 10px;
-    font-size: 1em;
-}
-
-.ai-insights p {
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 6px;
-}
-
-body.dark .ai-insights p {
-    color: #bbb;
-}
-
-.ai-insights ul {
-    list-style: none;
-    padding: 0;
-    margin: 8px 0;
-}
-
-.ai-insights li {
-    color: #555;
-    margin: 6px 0;
-    padding-left: 18px;
-    position: relative;
-    font-size: 0.9em;
-}
-
-body.dark .ai-insights li {
-    color: #bbb;
-}
-
-.ai-insights li:before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: #f5576c;
-    font-weight: bold;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
 
 /* RESPONSIVE */
@@ -566,7 +456,7 @@ body.dark .ai-insights li {
         flex-direction: row;
     }
 
-    #suggestBtn, #reportsBtn, #plannerBtn {
+    #suggestBtn, #plannerBtn, #analyzeBtn, #reportsBtn {
         min-width: auto;
         flex: 0;
     }
@@ -584,43 +474,44 @@ body.dark .ai-insights li {
     margin-bottom: 15px;
 }
 
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e5e7eb;
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 0.9em;
 }
 
-body.dark .tabs {
-    border-bottom: 2px solid #444;
+body.dark .data-table {
+    background: #16213e;
 }
 
-.tab-btn {
-    padding: 10px 20px;
-    border: none;
-    background: none;
-    color: #555;
-    cursor: pointer;
-    font-weight: 600;
-    border-bottom: 3px solid transparent;
-    transition: all 0.3s;
+.data-table thead {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
 }
 
-body.dark .tab-btn {
-    color: #bbb;
+.data-table th,
+.data-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.tab-btn.active {
-    color: #007bff;
-    border-bottom-color: #007bff;
+body.dark .data-table td {
+    border-bottom: 1px solid #444;
+    color: #e0e0e0;
 }
 
-.tab-content {
-    display: none;
+.data-table tbody tr:hover {
+    background: #f9fafb;
 }
 
-.tab-content.active {
-    display: block;
+body.dark .data-table tbody tr:hover {
+    background: #0f3460;
 }
 </style>
 </head>
@@ -643,7 +534,9 @@ body.dark .tab-btn {
 
     <div class="chat-input-area">
         <div id="suggestWrapper">
-            <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📋 Business Plan</button>
+            <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📋 Plan</button>
+            <button id="analyzeBtn" onclick="showAnalyzeModal()" style="flex: 0;">📊 Analyze</button>
+            <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0;">📄 Reports</button>
             <button id="suggestBtn" style="flex: 0;">💡 Suggestions</button>
             <div id="suggestBox">
                 <button id="closeBtn">✖</button>
@@ -670,11 +563,27 @@ body.dark .tab-btn {
     </div>
 </div>
 
+<!-- ANALYZE MODAL -->
+<div id="analyzeModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeAnalyzeModal()">&times;</span>
+        <div id="analyzeContent"></div>
+    </div>
+</div>
+
+<!-- REPORTS MODAL -->
+<div id="reportsModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeReportsModal()">&times;</span>
+        <div id="reportsContent"></div>
+    </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-// ==================== DARK MODE (READ-ONLY) ====================
+// ==================== DARK MODE ====================
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
@@ -685,25 +594,6 @@ function goToPage(page) {
 }
 
 // ==================== GLOBAL STATE ====================
-let planData = {
-    businessName: '',
-    industry: '',
-    startDate: '',
-    targetMarket: '',
-    initialBudget: 0,
-    fundingSources: '',
-    months: [],
-    totalProjection: 0,
-    swot: {
-        strengths: [],
-        weaknesses: [],
-        opportunities: [],
-        threats: []
-    },
-    risks: [],
-    growthPlan: []
-};
-
 let chartInstances = {};
 
 const intents = [
@@ -714,7 +604,6 @@ const intents = [
     {tag:"profit",patterns:["what is profit"],responses:["Profit is the money left after subtracting costs from revenue. 💰"]},
     {tag:"revenue",patterns:["what is revenue"],responses:["Revenue is the total income a business earns from sales. 📊"]},
     {tag:"start_business",patterns:["how to start a business"],responses:["Key steps: 1️⃣ Idea 2️⃣ Research 3️⃣ Plan 4️⃣ Finances 5️⃣ Marketing 6️⃣ Launch"]},
-    {tag:"swot",patterns:["swot"],responses:["SWOT analysis helps identify your business Strengths, Weaknesses, Opportunities, and Threats! 📊"]},
 ];
 
 // ==================== MODAL FUNCTIONS ====================
@@ -727,134 +616,39 @@ function showPlannerModal() {
     loadPlannerContent();
 }
 
-// ==================== BUSINESS PLAN GENERATION ====================
-function generateAutoSwot(businessData) {
-    const swot = {
-        strengths: [
-            "✅ Passion and dedication",
-            "✅ Unique value proposition",
-            "✅ Strong team commitment",
-            "✅ Cost-effective operations"
-        ],
-        weaknesses: [
-            "⚠️ Limited initial capital",
-            "⚠️ Lack of brand awareness",
-            "⚠️ Limited resources",
-            "⚠️ New market entrant"
-        ],
-        opportunities: [
-            "🎯 Growing market demand",
-            "🎯 Digital transformation trends",
-            "🎯 Partnership opportunities",
-            "🎯 Expansion possibilities"
-        ],
-        threats: [
-            "⛔ Strong competition",
-            "⛔ Market volatility",
-            "⛔ Economic downturns",
-            "⛔ Regulatory changes"
-        ]
-    };
-    return swot;
+function closeAnalyzeModal() {
+    document.getElementById('analyzeModal').style.display = 'none';
 }
 
-function generateRiskAnalysis(businessData) {
-    const risks = [
-        {
-            title: "Market Risk",
-            level: "Medium",
-            description: "Changes in customer preferences or market demand",
-            mitigation: "Conduct regular market research and adapt quickly"
-        },
-        {
-            title: "Financial Risk",
-            level: "Medium",
-            description: "Cash flow management and unexpected expenses",
-            mitigation: "Build 3-6 month emergency fund reserve"
-        },
-        {
-            title: "Operational Risk",
-            level: "Low",
-            description: "Supply chain and operational disruptions",
-            mitigation: "Develop backup suppliers and process documentation"
-        },
-        {
-            title: "Competition Risk",
-            level: "High",
-            description: "Intense competition from established businesses",
-            mitigation: "Focus on unique differentiation strategy"
-        },
-        {
-            title: "Regulatory Risk",
-            level: "Medium",
-            description: "Changes in laws and regulations",
-            mitigation: "Stay updated with industry compliance requirements"
-        }
-    ];
-    return risks;
+function showAnalyzeModal() {
+    document.getElementById('analyzeModal').style.display = 'block';
+    loadAnalyzeContent();
 }
 
-function generateGrowthPlan(businessData) {
-    const growthPlan = [
-        {
-            phase: "Phase 1: Foundation (Months 1-3)",
-            goals: [
-                "🎯 Establish business infrastructure",
-                "🎯 Acquire first 50 customers",
-                "🎯 Build brand presence",
-                "🎯 Create 3 revenue streams"
-            ],
-            targetMetrics: "Break-even point, 50+ customers"
-        },
-        {
-            phase: "Phase 2: Growth (Months 4-9)",
-            goals: [
-                "🚀 Scale marketing efforts",
-                "🚀 Expand customer base to 500+",
-                "🚀 Increase revenue by 50%",
-                "🚀 Hire additional team members"
-            ],
-            targetMetrics: "500 customers, 50% revenue growth"
-        },
-        {
-            phase: "Phase 3: Expansion (Months 10-12)",
-            goals: [
-                "📈 Explore new markets",
-                "📈 Launch new products/services",
-                "📈 Establish partnerships",
-                "📈 Achieve 100% profitability"
-            ],
-            targetMetrics: "1000+ customers, 100% profitable"
-        },
-        {
-            phase: "Phase 4: Scaling (Year 2+)",
-            goals: [
-                "🌟 Regional expansion",
-                "🌟 Multiple revenue streams",
-                "🌟 Team growth to 10+ members",
-                "🌟 Industry recognition"
-            ],
-            targetMetrics: "Regional presence, $1M+ revenue"
-        }
-    ];
-    return growthPlan;
+function closeReportsModal() {
+    document.getElementById('reportsModal').style.display = 'none';
 }
 
-// ==================== PLANNER CONTENT ====================
+function showReportsModal() {
+    document.getElementById('reportsModal').style.display = 'block';
+    loadReportsContent();
+}
+
+// ==================== BUSINESS PLAN CONTENT ====================
 function loadPlannerContent() {
     const content = document.getElementById('plannerContent');
     
     content.innerHTML = `
-        <h2 style="color: #007bff; margin-bottom: 15px;">📋 Business Plan Generator</h2>
+        <h2 style="color: #007bff; margin-bottom: 15px;">📋 Business Plan</h2>
         
         <div class="planner-input-grid">
             <div class="input-group">
                 <label>Business Name</label>
-                <input type="text" id="businessName" placeholder="e.g., TechStart Solutions">
+                <input type="text" id="businessName" placeholder="e.g., TechStart">
             </div>
             <div class="input-group">
                 <label>Industry</label>
-                <input type="text" id="industry" placeholder="e.g., Technology, Retail">
+                <input type="text" id="industry" placeholder="e.g., Technology">
             </div>
             <div class="input-group">
                 <label>Target Market</label>
@@ -864,232 +658,706 @@ function loadPlannerContent() {
                 <label>Initial Budget ($)</label>
                 <input type="number" id="initialBudget" placeholder="50000">
             </div>
-            <div class="input-group">
-                <label>Funding Source</label>
-                <select id="fundingSource">
-                    <option value="personal">Personal Savings</option>
-                    <option value="loan">Bank Loan</option>
-                    <option value="investors">Angel Investors</option>
-                    <option value="mixed">Mixed Sources</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Start Date</label>
-                <input type="date" id="startDate">
-            </div>
         </div>
 
         <div class="button-group">
-            <button class="btn btn-primary" onclick="generateBusinessPlan()">📋 Generate Plan</button>
+            <button class="btn btn-primary" onclick="generatePlan()">📋 Generate</button>
             <button class="btn btn-secondary" onclick="closePlannerModal()">Close</button>
         </div>
 
-        <div id="businessPlanResult" style="margin-top: 30px;"></div>
+        <div id="planResult" style="margin-top: 30px;"></div>
     `;
 }
 
-function generateBusinessPlan() {
+function generatePlan() {
     const businessName = document.getElementById('businessName')?.value?.trim();
     const industry = document.getElementById('industry')?.value?.trim();
     const targetMarket = document.getElementById('targetMarket')?.value?.trim();
     const initialBudget = parseFloat(document.getElementById('initialBudget')?.value);
-    const fundingSource = document.getElementById('fundingSource')?.value;
-    const startDate = document.getElementById('startDate')?.value;
 
-    if (!businessName || !industry || !targetMarket || !initialBudget || !startDate) {
+    if (!businessName || !industry || !targetMarket || !initialBudget) {
         alert('❌ Please fill all fields');
         return;
     }
 
-    // Generate SWOT
-    planData.swot = generateAutoSwot({ businessName, industry });
-
-    // Generate Risks
-    planData.risks = generateRiskAnalysis({ businessName, industry });
-
-    // Generate Growth Plan
-    planData.growthPlan = generateGrowthPlan({ businessName });
-
-    planData.businessName = businessName;
-    planData.industry = industry;
-    planData.targetMarket = targetMarket;
-    planData.initialBudget = initialBudget;
-    planData.fundingSources = fundingSource;
-    planData.startDate = startDate;
-
-    displayBusinessPlanResult();
-}
-
-function displayBusinessPlanResult() {
-    const resultDiv = document.getElementById('businessPlanResult');
+    const resultDiv = document.getElementById('planResult');
     
     let html = `
-        <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('overview')">📊 Overview</button>
-            <button class="tab-btn" onclick="switchTab('swot')">🔄 SWOT</button>
-            <button class="tab-btn" onclick="switchTab('risks')">⚠️ Risks</button>
-            <button class="tab-btn" onclick="switchTab('growth')">📈 Growth</button>
-        </div>
-
-        <!-- OVERVIEW TAB -->
-        <div id="overview" class="tab-content active">
-            <div class="report-header">📋 Business Plan: ${planData.businessName}</div>
-            
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-icon">🏢</div>
-                    <div class="metric-label">Industry</div>
-                    <div class="metric-value">${planData.industry}</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-icon">👥</div>
-                    <div class="metric-label">Target Market</div>
-                    <div class="metric-value" style="font-size: 1em;">${planData.targetMarket}</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-icon">💰</div>
-                    <div class="metric-label">Initial Budget</div>
-                    <div class="metric-value">$${planData.initialBudget.toLocaleString()}</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-icon">📅</div>
-                    <div class="metric-label">Start Date</div>
-                    <div class="metric-value" style="font-size: 0.9em;">${planData.startDate}</div>
-                </div>
+        <div class="report-header">📋 Business Plan: ${businessName}</div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">🏢</div>
+                <div class="metric-label">Industry</div>
+                <div class="metric-value" style="font-size: 1em;">${industry}</div>
             </div>
-
-            <div class="report-section">
-                <b>📝 Executive Summary</b><br>
-                ${planData.businessName} is a ${planData.industry} business targeting ${planData.targetMarket}. 
-                With an initial investment of $${planData.initialBudget.toLocaleString()}, the business aims to establish 
-                market presence, build customer base, and achieve profitability within 12 months.
+            <div class="metric-card">
+                <div class="metric-icon">👥</div>
+                <div class="metric-label">Target</div>
+                <div class="metric-value" style="font-size: 0.9em;">${targetMarket}</div>
             </div>
-
-            <div class="report-section">
-                <b>💼 Key Success Factors</b><br>
-                • Unique value proposition and clear differentiation<br>
-                • Strong customer focus and retention<br>
-                • Effective marketing and brand building<br>
-                • Efficient financial management<br>
-                • Quality team and partnerships
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-label">Budget</div>
+                <div class="metric-value">$${initialBudget.toLocaleString()}</div>
             </div>
         </div>
 
-        <!-- SWOT TAB -->
-        <div id="swot" class="tab-content">
-            <div class="report-header">🔄 SWOT Analysis</div>
+        <div class="report-section">
+            <b>🔄 SWOT Analysis</b><br>
             <div class="swot-grid">
                 <div class="swot-card swot-strengths">
-                    <div class="swot-title">🟢 Strengths</div>
-                    ${planData.swot.strengths.map(s => `<div class="swot-item">${s}</div>`).join('')}
+                    <div class="swot-title">Strengths</div>
+                    <div class="swot-item">✅ Unique value proposition</div>
+                    <div class="swot-item">✅ Strong team</div>
                 </div>
                 <div class="swot-card swot-weaknesses">
-                    <div class="swot-title">🔴 Weaknesses</div>
-                    ${planData.swot.weaknesses.map(w => `<div class="swot-item">${w}</div>`).join('')}
+                    <div class="swot-title">Weaknesses</div>
+                    <div class="swot-item">⚠️ Limited brand awareness</div>
+                    <div class="swot-item">⚠️ New market entrant</div>
                 </div>
                 <div class="swot-card swot-opportunities">
-                    <div class="swot-title">🟡 Opportunities</div>
-                    ${planData.swot.opportunities.map(o => `<div class="swot-item">${o}</div>`).join('')}
+                    <div class="swot-title">Opportunities</div>
+                    <div class="swot-item">🎯 Growing market demand</div>
+                    <div class="swot-item">🎯 Partnerships</div>
                 </div>
                 <div class="swot-card swot-threats">
-                    <div class="swot-title">🔵 Threats</div>
-                    ${planData.swot.threats.map(t => `<div class="swot-item">${t}</div>`).join('')}
-                </div>
-            </div>
-
-            <div class="report-section">
-                <b>💡 SWOT Insights</b><br>
-                • Leverage strengths to capitalize on opportunities<br>
-                • Address weaknesses to mitigate threats<br>
-                • Develop contingency plans for identified threats<br>
-                • Build strategic partnerships to overcome weaknesses
-            </div>
-        </div>
-
-        <!-- RISKS TAB -->
-        <div id="risks" class="tab-content">
-            <div class="report-header">⚠️ Risk Analysis & Mitigation</div>
-            ${planData.risks.map(risk => `
-                <div class="report-section">
-                    <b>${risk.title}</b>
-                    <div style="margin-top: 10px;">
-                        <div style="display: inline-block; padding: 4px 12px; border-radius: 4px; 
-                                    background: ${risk.level === 'High' ? '#dc2626' : risk.level === 'Medium' ? '#f97316' : '#22c55e'}; 
-                                    color: white; font-weight: 600; margin-bottom: 8px;">
-                            ${risk.level} Risk
-                        </div>
-                    </div>
-                    <p><b>Description:</b> ${risk.description}</p>
-                    <p><b>Mitigation Strategy:</b> ${risk.mitigation}</p>
-                </div>
-            `).join('')}
-
-            <div class="report-section">
-                <b>📊 Risk Matrix</b><br>
-                <div class="risk-grid">
-                    <div class="risk-card risk-high">
-                        <div class="risk-title">🔴 High Risk</div>
-                        <div class="risk-value">1</div>
-                        <div style="font-size: 0.8em; margin-top: 8px;">Competition</div>
-                    </div>
-                    <div class="risk-card risk-medium">
-                        <div class="risk-title">🟡 Medium Risk</div>
-                        <div class="risk-value">3</div>
-                        <div style="font-size: 0.8em; margin-top: 8px;">Market, Financial, Regulatory</div>
-                    </div>
-                    <div class="risk-card risk-low">
-                        <div class="risk-title">🟢 Low Risk</div>
-                        <div class="risk-value">1</div>
-                        <div style="font-size: 0.8em; margin-top: 8px;">Operational</div>
-                    </div>
+                    <div class="swot-title">Threats</div>
+                    <div class="swot-item">⛔ Strong competition</div>
+                    <div class="swot-item">⛔ Market changes</div>
                 </div>
             </div>
         </div>
 
-        <!-- GROWTH TAB -->
-        <div id="growth" class="tab-content">
-            <div class="report-header">📈 Growth Plan (12+ Months)</div>
-            ${planData.growthPlan.map((phase, idx) => `
-                <div class="report-section">
-                    <b style="color: #007bff; font-size: 1.1em;">${phase.phase}</b>
-                    <p style="margin: 12px 0; font-weight: 600;">Goals:</p>
-                    <ul style="margin: 8px 0; padding-left: 20px;">
-                        ${phase.goals.map(g => `<li>${g}</li>`).join('')}
-                    </ul>
-                    <p style="margin-top: 12px; background: #e6f7ff; padding: 8px; border-radius: 4px; font-weight: 600;">
-                        📊 Target Metrics: ${phase.targetMetrics}
-                    </p>
-                </div>
-            `).join('')}
+        <div class="report-section">
+            <b>⚠️ Risk Analysis</b><br>
+            • Market Risk: Adapt to market changes quickly<br>
+            • Financial Risk: Build 3-6 month reserve fund<br>
+            • Competition Risk: Focus on differentiation<br>
+            • Operational Risk: Develop backup plans
+        </div>
 
-            <div class="report-section">
-                <b>🎯 Long-term Vision</b><br>
-                Transform ${planData.businessName} into a market leader in the ${planData.industry} space 
-                with sustainable growth, strong customer loyalty, and profitability. Achieve regional or 
-                national presence within 2-3 years with a talented team and innovative offerings.
-            </div>
+        <div class="report-section">
+            <b>📈 Growth Plan</b><br>
+            <b>Phase 1 (1-3 months):</b> Foundation & Market Entry<br>
+            <b>Phase 2 (4-9 months):</b> Growth & Scaling<br>
+            <b>Phase 3 (10-12 months):</b> Expansion & Profitability<br>
+            <b>Year 2+:</b> Market Leadership
         </div>
     `;
 
     resultDiv.innerHTML = html;
 }
 
-function switchTab(tabName) {
-    // Hide all tab contents
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
+// ==================== ANALYZE CONTENT ====================
+function loadAnalyzeContent() {
+    const content = document.getElementById('analyzeContent');
+    
+    content.innerHTML = `
+        <h2 style="color: #007bff; margin-bottom: 15px;">📊 Analyze Business</h2>
+        
+        <div class="choice-buttons">
+            <button class="choice-btn" onclick="showChartsMode()">
+                <div style="font-size: 2em; margin-bottom: 8px;">📈</div>
+                Financial Charts
+            </button>
+            <button class="choice-btn" onclick="showProfitMode()">
+                <div style="font-size: 2em; margin-bottom: 8px;">💰</div>
+                Profit Calculator
+            </button>
+        </div>
+
+        <div id="analyzeResult" style="margin-top: 30px;"></div>
+    `;
+}
+
+// ==================== CHARTS MODE ====================
+function showChartsMode() {
+    const resultDiv = document.getElementById('analyzeResult');
+    
+    resultDiv.innerHTML = `
+        <h3 style="color: #007bff; margin-bottom: 15px;">📈 Financial Charts</h3>
+        
+        <div class="planner-input-grid">
+            <div class="input-group">
+                <label>Business Name</label>
+                <input type="text" id="chartBusinessName" placeholder="e.g., TechStart">
+            </div>
+            <div class="input-group">
+                <label>Revenue ($)</label>
+                <input type="number" id="chartRevenue" placeholder="100000">
+            </div>
+            <div class="input-group">
+                <label>Expenses ($)</label>
+                <input type="number" id="chartExpenses" placeholder="50000">
+            </div>
+            <div class="input-group">
+                <label>Monthly Growth (%)</label>
+                <input type="number" id="chartGrowth" placeholder="5" value="5">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="generateChartsAnalysis()">📊 Generate Charts</button>
+            <button class="btn btn-secondary" onclick="loadAnalyzeContent()">← Back</button>
+        </div>
+
+        <div id="chartsDisplay" style="margin-top: 20px;"></div>
+    `;
+}
+
+function generateChartsAnalysis() {
+    const businessName = document.getElementById('chartBusinessName')?.value?.trim();
+    const revenue = parseFloat(document.getElementById('chartRevenue')?.value);
+    const expenses = parseFloat(document.getElementById('chartExpenses')?.value);
+    const growth = parseFloat(document.getElementById('chartGrowth')?.value) || 5;
+
+    if (!businessName || !revenue || !expenses) {
+        alert('❌ Please fill all fields');
+        return;
+    }
+
+    const profit = revenue - expenses;
+    const displayDiv = document.getElementById('chartsDisplay');
+    
+    let html = `
+        <div class="report-header">📊 ${businessName} - Financial Analysis</div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">📈</div>
+                <div class="metric-label">Revenue</div>
+                <div class="metric-value">$${revenue.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📉</div>
+                <div class="metric-label">Expenses</div>
+                <div class="metric-value">$${expenses.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-label">Profit</div>
+                <div class="metric-value" style="color: ${profit > 0 ? '#28a745' : '#dc3545'};">$${profit.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📊</div>
+                <div class="metric-label">Margin</div>
+                <div class="metric-value">${((profit / revenue) * 100).toFixed(1)}%</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-title">💹 Revenue vs Expenses</div>
+                <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">💵 Profit Breakdown</div>
+                <div class="chart-container"><canvas id="profitChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">📈 12-Month Projection</div>
+                <div class="chart-container"><canvas id="projectionChart"></canvas></div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">🎯 Budget Distribution</div>
+                <div class="chart-container"><canvas id="distributionChart"></canvas></div>
+            </div>
+        </div>
+    `;
+
+    displayDiv.innerHTML = html;
+
+    setTimeout(() => {
+        createRevenueChart(businessName, revenue, expenses);
+        createProfitChart(revenue, expenses);
+        createProjectionChart(revenue, growth);
+        createDistributionChart(revenue);
+    }, 100);
+}
+
+function createRevenueChart(businessName, revenue, expenses) {
+    destroyChart('revenueChart');
+    const ctx = document.getElementById('revenueChart')?.getContext('2d');
+    if (!ctx) return;
+
+    chartInstances['revenueChart'] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [businessName],
+            datasets: [
+                { label: 'Revenue', data: [revenue], backgroundColor: '#28a745' },
+                { label: 'Expenses', data: [expenses], backgroundColor: '#dc3545' }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
+            }
+        }
     });
+}
 
-    // Remove active class from all buttons
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
+function createProfitChart(revenue, expenses) {
+    destroyChart('profitChart');
+    const ctx = document.getElementById('profitChart')?.getContext('2d');
+    if (!ctx) return;
+
+    chartInstances['profitChart'] = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Profit', 'Expenses'],
+            datasets: [{
+                data: [revenue - expenses, expenses],
+                backgroundColor: ['#28a745', '#dc3545'],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
     });
+}
 
-    // Show selected tab
-    document.getElementById(tabName).classList.add('active');
+function createProjectionChart(revenue, growth) {
+    destroyChart('projectionChart');
+    const ctx = document.getElementById('projectionChart')?.getContext('2d');
+    if (!ctx) return;
 
-    // Add active class to clicked button
-    event.target.classList.add('active');
+    const months = [];
+    const projections = [];
+    let currentRevenue = revenue;
+
+    for (let i = 0; i < 12; i++) {
+        months.push(`M${i + 1}`);
+        currentRevenue = currentRevenue * (1 + (growth / 100));
+        projections.push(Math.round(currentRevenue));
+    }
+
+    chartInstances['projectionChart'] = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Revenue Projection',
+                data: projections,
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
+            }
+        }
+    });
+}
+
+function createDistributionChart(revenue) {
+    destroyChart('distributionChart');
+    const ctx = document.getElementById('distributionChart')?.getContext('2d');
+    if (!ctx) return;
+
+    chartInstances['distributionChart'] = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Operations', 'Marketing', 'Development', 'Misc'],
+            datasets: [{
+                data: [revenue * 0.4, revenue * 0.25, revenue * 0.2, revenue * 0.15],
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+}
+
+// ==================== PROFIT CALCULATOR MODE ====================
+function showProfitMode() {
+    const resultDiv = document.getElementById('analyzeResult');
+    
+    resultDiv.innerHTML = `
+        <h3 style="color: #007bff; margin-bottom: 15px;">💰 Profit Calculator</h3>
+        
+        <div class="planner-input-grid">
+            <div class="input-group">
+                <label>Business Name</label>
+                <input type="text" id="profitBusinessName" placeholder="e.g., Business">
+            </div>
+            <div class="input-group">
+                <label>Revenue ($)</label>
+                <input type="number" id="profitRevenue" placeholder="100000">
+            </div>
+            <div class="input-group">
+                <label>Cost of Goods ($)</label>
+                <input type="number" id="profitCogs" placeholder="30000">
+            </div>
+            <div class="input-group">
+                <label>Operating Expenses ($)</label>
+                <input type="number" id="profitOpex" placeholder="20000">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="calculateProfit()">💰 Calculate</button>
+            <button class="btn btn-secondary" onclick="loadAnalyzeContent()">��� Back</button>
+        </div>
+
+        <div id="profitDisplay" style="margin-top: 20px;"></div>
+    `;
+}
+
+function calculateProfit() {
+    const businessName = document.getElementById('profitBusinessName')?.value?.trim();
+    const revenue = parseFloat(document.getElementById('profitRevenue')?.value);
+    const cogs = parseFloat(document.getElementById('profitCogs')?.value);
+    const opex = parseFloat(document.getElementById('profitOpex')?.value);
+
+    if (!businessName || !revenue || !cogs || !opex) {
+        alert('❌ Please fill all fields');
+        return;
+    }
+
+    const grossProfit = revenue - cogs;
+    const netProfit = grossProfit - opex;
+    const grossMargin = ((grossProfit / revenue) * 100).toFixed(2);
+    const netMargin = ((netProfit / revenue) * 100).toFixed(2);
+
+    const displayDiv = document.getElementById('profitDisplay');
+    
+    let html = `
+        <div class="report-header">💰 ${businessName} - Profit Analysis</div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">📈</div>
+                <div class="metric-label">Revenue</div>
+                <div class="metric-value">$${revenue.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">🏭</div>
+                <div class="metric-label">Gross Profit</div>
+                <div class="metric-value" style="color: #28a745;">$${grossProfit.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">💵</div>
+                <div class="metric-label">Net Profit</div>
+                <div class="metric-value" style="color: ${netProfit > 0 ? '#28a745' : '#dc3545'};">$${netProfit.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📊</div>
+                <div class="metric-label">Net Margin</div>
+                <div class="metric-value">${netMargin}%</div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <b>📋 Breakdown</b><br>
+            Revenue: $${revenue.toLocaleString()}<br>
+            Cost of Goods: $${cogs.toLocaleString()}<br>
+            Gross Profit: $${grossProfit.toLocaleString()} (${grossMargin}%)<br>
+            Operating Expenses: $${opex.toLocaleString()}<br>
+            <b style="color: ${netProfit > 0 ? '#28a745' : '#dc3545'};">Net Profit: $${netProfit.toLocaleString()} (${netMargin}%)</b>
+        </div>
+
+        <div class="report-section">
+            <b>💡 Insights</b><br>
+            ${netProfit > 0 ? 
+                '✅ Business is profitable. Focus on growth and scalability.' :
+                '⚠️ Business needs cost reduction or revenue increase.'}
+        </div>
+    `;
+
+    displayDiv.innerHTML = html;
+}
+
+function destroyChart(chartName) {
+    if (chartInstances[chartName]) {
+        chartInstances[chartName].destroy();
+    }
+}
+
+// ==================== REPORTS CONTENT ====================
+function loadReportsContent() {
+    const content = document.getElementById('reportsContent');
+    
+    content.innerHTML = `
+        <h2 style="color: #007bff; margin-bottom: 15px;">📄 Business Reports</h2>
+        
+        <div class="choice-buttons">
+            <button class="choice-btn" onclick="showSWOTReport()">
+                <div style="font-size: 2em; margin-bottom: 8px;">🔄</div>
+                SWOT Report
+            </button>
+            <button class="choice-btn" onclick="showBusinessReport()">
+                <div style="font-size: 2em; margin-bottom: 8px;">📈</div>
+                Business Report
+            </button>
+        </div>
+
+        <div id="reportResult" style="margin-top: 30px;"></div>
+    `;
+}
+
+// ==================== SWOT REPORT ====================
+function showSWOTReport() {
+    const resultDiv = document.getElementById('reportResult');
+    
+    resultDiv.innerHTML = `
+        <h3 style="color: #007bff; margin-bottom: 15px;">🔄 SWOT Analysis</h3>
+        
+        <div class="input-group">
+            <label>Business Name</label>
+            <input type="text" id="swotBusinessName" placeholder="Enter business name" autofocus>
+        </div>
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="buildSWOT()">Continue →</button>
+            <button class="btn btn-secondary" onclick="loadReportsContent()">← Back</button>
+        </div>
+        
+        <div id="swotBuilder"></div>
+    `;
+}
+
+function buildSWOT() {
+    const businessName = document.getElementById('swotBusinessName')?.value?.trim();
+    if (!businessName) {
+        alert('Please enter a business name');
+        return;
+    }
+
+    const builderDiv = document.getElementById('swotBuilder');
+    
+    builderDiv.innerHTML = `
+        <h4 style="margin-top: 15px; color: #007bff;">Add items for each category:</h4>
+        
+        ${['strengths', 'weaknesses', 'opportunities', 'threats'].map(cat => `
+            <div style="margin-top: 15px;">
+                <label style="font-weight: 600; color: #007bff; font-size: 0.95em;">${cat.charAt(0).toUpperCase() + cat.slice(1)}</label>
+                <input type="text" id="${cat}Input" placeholder="Enter..." style="margin-bottom: 6px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; font-size: 0.9em;">
+                <button class="btn btn-primary" style="width: 100%; padding: 8px; font-size: 0.85em;" onclick="addSwotItem('${cat}', '${businessName}')">+ Add</button>
+                <div id="${cat}List" style="margin-top: 8px;"></div>
+            </div>
+        `).join('')}
+        
+        <button class="btn btn-primary" onclick="completeSWOT('${businessName}')" style="margin-top: 15px; width: 100%; padding: 10px; font-size: 0.9em;">Generate SWOT Report</button>
+    `;
+}
+
+let swotData = { strengths: [], weaknesses: [], opportunities: [], threats: [] };
+
+function addSwotItem(category, businessName) {
+    const input = document.getElementById(category + 'Input');
+    const value = input?.value?.trim();
+
+    if (!value) {
+        alert('Please enter a value');
+        return;
+    }
+
+    if (!swotData[category]) swotData[category] = [];
+    swotData[category].push(value);
+
+    input.value = '';
+    renderSwotItems();
+}
+
+function renderSwotItems() {
+    ['strengths', 'weaknesses', 'opportunities', 'threats'].forEach(cat => {
+        const list = document.getElementById(cat + 'List');
+        if (!list) return;
+
+        list.innerHTML = '';
+        swotData[cat].forEach((item, index) => {
+            const div = document.createElement('div');
+            div.style.cssText = 'background: #f0f0f0; padding: 6px; margin-bottom: 4px; border-radius: 4px; display: flex; justify-content: space-between; font-size: 0.9em;';
+            div.innerHTML = `
+                <span>${item}</span>
+                <button class="btn btn-secondary" style="padding: 2px 6px; font-size: 0.75em; min-width: auto;" onclick="removeSwotItem('${cat}', ${index})">✕</button>
+            `;
+            list.appendChild(div);
+        });
+    });
+}
+
+function removeSwotItem(category, index) {
+    swotData[category].splice(index, 1);
+    renderSwotItems();
+}
+
+function completeSWOT(businessName) {
+    if (swotData.strengths.length === 0 || swotData.weaknesses.length === 0 || 
+        swotData.opportunities.length === 0 || swotData.threats.length === 0) {
+        alert('Please add at least one item to each category');
+        return;
+    }
+
+    generateSWOTReport(businessName);
+}
+
+function generateSWOTReport(businessName) {
+    const reportResult = document.getElementById('reportResult');
+    
+    reportResult.innerHTML = `
+        <div class="report-header">🔄 SWOT: ${businessName}</div>
+        
+        <div class="swot-grid">
+            <div class="swot-card swot-strengths">
+                <div class="swot-title">🟢 Strengths</div>
+                ${swotData.strengths.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+            </div>
+            <div class="swot-card swot-weaknesses">
+                <div class="swot-title">🔴 Weaknesses</div>
+                ${swotData.weaknesses.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+            </div>
+            <div class="swot-card swot-opportunities">
+                <div class="swot-title">🟡 Opportunities</div>
+                ${swotData.opportunities.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+            </div>
+            <div class="swot-card swot-threats">
+                <div class="swot-title">🔵 Threats</div>
+                ${swotData.threats.map((x, i) => `<div class="swot-item">${i+1}. ${x}</div>`).join('')}
+            </div>
+        </div>
+
+        <div class="report-section" style="margin-top: 15px;">
+            <b>🚀 Recommendations</b><br>
+            • Use strengths to capitalize on opportunities<br>
+            • Address weaknesses to mitigate threats<br>
+            • Build strategic partnerships<br>
+            • Monitor competitive landscape
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-secondary" onclick="loadReportsContent()">← Back</button>
+        </div>
+    `;
+}
+
+// ==================== BUSINESS REPORT ====================
+function showBusinessReport() {
+    const resultDiv = document.getElementById('reportResult');
+    
+    resultDiv.innerHTML = `
+        <h3 style="color: #007bff; margin-bottom: 15px;">📈 Business Report</h3>
+        
+        <div class="planner-input-grid">
+            <div class="input-group">
+                <label>Business Name</label>
+                <input type="text" id="reportBusinessName" placeholder="Company">
+            </div>
+            <div class="input-group">
+                <label>Industry</label>
+                <input type="text" id="reportIndustry" placeholder="e.g., Tech">
+            </div>
+            <div class="input-group">
+                <label>Revenue ($)</label>
+                <input type="number" id="reportRevenue" placeholder="100000">
+            </div>
+            <div class="input-group">
+                <label>Expenses ($)</label>
+                <input type="number" id="reportExpenses" placeholder="50000">
+            </div>
+            <div class="input-group">
+                <label>Employees</label>
+                <input type="number" id="reportEmployees" placeholder="5">
+            </div>
+            <div class="input-group">
+                <label>Founded Year</label>
+                <input type="number" id="reportFounded" placeholder="2020">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-primary" onclick="generateFullReport()">📊 Generate</button>
+            <button class="btn btn-secondary" onclick="loadReportsContent()">← Back</button>
+        </div>
+
+        <div id="fullReportDisplay" style="margin-top: 20px;"></div>
+    `;
+}
+
+function generateFullReport() {
+    const businessName = document.getElementById('reportBusinessName')?.value?.trim();
+    const industry = document.getElementById('reportIndustry')?.value?.trim();
+    const revenue = parseFloat(document.getElementById('reportRevenue')?.value);
+    const expenses = parseFloat(document.getElementById('reportExpenses')?.value);
+    const employees = parseInt(document.getElementById('reportEmployees')?.value);
+    const founded = parseInt(document.getElementById('reportFounded')?.value);
+
+    if (!businessName || !industry || !revenue || !expenses || !employees || !founded) {
+        alert('❌ Please fill all fields');
+        return;
+    }
+
+    const profit = revenue - expenses;
+    const profitMargin = ((profit / revenue) * 100).toFixed(2);
+
+    const displayDiv = document.getElementById('fullReportDisplay');
+    
+    let html = `
+        <div class="report-header">📈 Report: ${businessName}</div>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-label">Revenue</div>
+                <div class="metric-value">$${revenue.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📊</div>
+                <div class="metric-label">Profit</div>
+                <div class="metric-value" style="color: ${profit > 0 ? '#28a745' : '#dc3545'};">$${profit.toLocaleString()}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">📈</div>
+                <div class="metric-label">Margin</div>
+                <div class="metric-value">${profitMargin}%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">👥</div>
+                <div class="metric-label">Team</div>
+                <div class="metric-value">${employees}</div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <b>📋 Overview</b><br>
+            Industry: ${industry}<br>
+            Founded: ${founded}<br>
+            Revenue: $${revenue.toLocaleString()}<br>
+            Expenses: $${expenses.toLocaleString()}<br>
+            Profit: $${profit.toLocaleString()}<br>
+            Employees: ${employees}
+        </div>
+
+        <div class="report-section">
+            <b>💡 Recommendations</b><br>
+            ${profit > 0 ? 
+                '• Maintain profitability<br>• Explore growth opportunities<br>' :
+                '• Focus on revenue growth<br>• Reduce operational costs<br>'}
+            • Quarterly performance reviews<br>
+            • Build 5-year financial forecast<br>
+            • Invest in team development
+        </div>
+    `;
+
+    displayDiv.innerHTML = html;
 }
 
 // ==================== CHAT FUNCTIONS ====================
@@ -1117,7 +1385,6 @@ function similarity(s1,s2) {
 
 function getBotReply(input) {
     let userInput = input.toLowerCase();
-
     let bestIntent = null;
     let bestScore = 0;
 
@@ -1135,7 +1402,7 @@ function getBotReply(input) {
         return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
     }
 
-    return "I can help with business concepts! Try the Business Plan button to create a comprehensive plan with automated SWOT, risk analysis, and growth strategy. 💡";
+    return "I can help with business! Try the Plan, Analyze, or Reports buttons to create comprehensive analyses. 💡";
 }
 
 function typeWriterEffect(element, text, speed = 50) {
@@ -1247,10 +1514,15 @@ function startVoice() {
     }
 }
 
-// ==================== WINDOW EVENTS ====================
 window.addEventListener("click", function(e) {
     if (e.target === document.getElementById("plannerModal")) {
         closePlannerModal();
+    }
+    if (e.target === document.getElementById("analyzeModal")) {
+        closeAnalyzeModal();
+    }
+    if (e.target === document.getElementById("reportsModal")) {
+        closeReportsModal();
     }
 });
 
@@ -1265,7 +1537,7 @@ window.onload = () => {
         const msgDiv = document.createElement('div');
         msgDiv.classList.add('message', 'bot');
         chatBox.appendChild(msgDiv);
-        typeWriterEffect(msgDiv, "Hello! 👋 I can help you create a comprehensive business plan with automated SWOT analysis, risk assessment, and growth strategy. Click on 'Business Plan' to get started!", 100);
+        typeWriterEffect(msgDiv, "Hello! 👋 I can help you create business plans, analyze finances, and generate professional reports. Click Plan, Analyze, or Reports to get started!", 100);
     }, 1500);
 };
 </script>
