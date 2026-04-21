@@ -1609,7 +1609,6 @@ function getBotReply(input) {
 
     return "I can help with business concepts! Try the Planner and Reports buttons. 💡";
 }
-
 function addMessage(text, sender) {
     const chatBox = document.getElementById('chat-box');
     const msgDiv = document.createElement('div');
@@ -1618,19 +1617,41 @@ function addMessage(text, sender) {
     chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
-
-function sendMessage() {
+const msgDiv = document.getElementById(loadingId);
+        msgDiv.innerHTML = ""; // Clear the "Thinking..." text
+        typeText(msgDiv, finalReply, 20);
+        
+        // If you have the voice function from before:
+        if (typeof speakResponse === "function") {
+            speakResponse(finalReply.replace(/-/g, "")); 
+        }
+    }, 500 + Math.random() * 800);
+}   
+    function sendMessage() {
     const input = $("#user-input").val().trim();
     if (!input) return;
 
     addMessage(input, 'user');
     $("#user-input").val("");
 
-    setTimeout(() => {
-        const reply = getBotReply(input);
-        addMessage(reply, 'bot');
-    }, 500);
-}
+    const loadingId = "msg-" + Date.now();
+    addMessage("Thinking...", 'bot', loadingId);
+
+    setTimeout(async () => {
+        // --- MULTI-QUESTION LOGIC START ---
+        // Split by "and", ".", or "?"
+        const questions = input.toLowerCase().split(/and|[\.\?]/g).filter(q => q.trim().length > 2);
+        
+        let finalReply = "";
+        
+        if (questions.length > 1) {
+            // Process each question and join them with a clear break
+            const replies = questions.map(q => getBotReply(q.trim()));
+            finalReply = replies.join("\n\n---\n\n"); 
+        } else {
+            // Just a single question
+            finalReply = getBotReply(input);
+        }
 
 $("#user-input").on('keypress', function(e) {
     if (e.key === 'Enter') sendMessage();
