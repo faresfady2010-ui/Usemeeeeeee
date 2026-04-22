@@ -29,16 +29,16 @@ body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
 body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
 #suggestWrapper { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
 #suggestBtn, #reportsBtn, #plannerBtn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex: 0;
+background-color: #007bff;
+color: white;
+border: none;
+padding: 6px 10px;
+border-radius: 12px;
+font-size: 11px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.2s ease;
+flex: 0;
 }
 #suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
 #suggestBox { position: absolute; bottom: 35px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 200px; overflow-y: auto; z-index: 10; }
@@ -51,518 +51,518 @@ body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; bo
 .chat-input-area .send-btn { background-color: #28a745; border: none; padding: 8px 14px; border-radius: 20px; color: white; cursor: pointer; font-weight: 600; font-size: 0.85em; transition: all 0.3s; white-space: nowrap; }
 .chat-input-area .send-btn:hover { background-color: #218838; transform: translateY(-1px); }
 #voice-btn {
-    border: none;
-    background-color: #eee;
-    padding: 8px 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.2s;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+border: none;
+background-color: #eee;
+padding: 8px 10px;
+border-radius: 50%;
+cursor: pointer;
+font-size: 14px;
+transition: 0.2s;
+width: 36px;
+height: 36px;
+display: flex;
+align-items: center;
+justify-content: center;
 }
 #voice-btn:hover { background-color: #ddd; }
 #voice-btn.listening {
-    background-color: #ff4d4d;
-    color: white;
-    animation: pulse 1s infinite;
+background-color: #ff4d4d;
+color: white;
+animation: pulse 1s infinite;
 }
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+0% { transform: scale(1); }
+50% { transform: scale(1.1); }
+100% { transform: scale(1); }
 }
 body.dark #voice-btn {
-    background-color: #0f3460;
-    color: #e0e0e0;
+background-color: #0f3460;
+color: #e0e0e0;
 }
 body.dark #voice-btn:hover {
-    background-color: #1a1a2e;
+background-color: #1a1a2e;
 }
 
 /* MODAL */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    overflow-y: auto;
+display: none;
+position: fixed;
+z-index: 1000;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.5);
+overflow-y: auto;
 }
 
 .modal-content {
-    background-color: white;
-    margin: 5% auto;
-    padding: 30px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 900px;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+background-color: white;
+margin: 5% auto;
+padding: 30px;
+border-radius: 15px;
+width: 90%;
+max-width: 900px;
+max-height: 85vh;
+overflow-y: auto;
+box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
 body.dark .modal-content {
-    background-color: #16213e;
-    color: #e0e0e0;
+background-color: #16213e;
+color: #e0e0e0;
 }
 
 .close-modal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+color: #aaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+cursor: pointer;
 }
 
 .close-modal:hover {
-    color: #000;
+color: #000;
 }
 
 body.dark .close-modal:hover {
-    color: #fff;
+color: #fff;
 }
 
 /* INPUT STYLES */
 .input-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+display: flex;
+flex-direction: column;
+margin-bottom: 15px;
 }
 
 .input-group label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #555;
-    font-size: 0.95em;
+font-weight: 600;
+margin-bottom: 8px;
+color: #555;
+font-size: 0.95em;
 }
 
 body.dark .input-group label {
-    color: #bbb;
+color: #bbb;
 }
 
 .input-group input,
 .input-group select,
 .input-group textarea {
-    padding: 12px;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: all 0.3s;
-    font-family: Arial, sans-serif;
+padding: 12px;
+border: 2px solid #e5e7eb;
+border-radius: 8px;
+font-size: 1em;
+transition: all 0.3s;
+font-family: Arial, sans-serif;
 }
 
 body.dark .input-group input,
 body.dark .input-group select,
 body.dark .input-group textarea {
-    background-color: #0f3460;
-    color: #e0e0e0;
-    border: 2px solid #444;
+background-color: #0f3460;
+color: #e0e0e0;
+border: 2px solid #444;
 }
 
 .input-group input:focus,
 .input-group select:focus,
 .input-group textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+outline: none;
+border-color: #007bff;
+box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
 /* BUTTONS */
 .button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+display: flex;
+gap: 10px;
+margin-top: 20px;
+flex-wrap: wrap;
 }
 
 .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    flex: 1;
-    min-width: 100px;
+padding: 10px 20px;
+border: none;
+border-radius: 8px;
+font-size: 0.95em;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+flex: 1;
+min-width: 100px;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+color: white;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
 
 .btn-secondary {
-    background: #f3f4f6;
-    color: #333;
-    border: 2px solid #e5e7eb;
+background: #f3f4f6;
+color: #333;
+border: 2px solid #e5e7eb;
 }
 
 body.dark .btn-secondary {
-    background: #16213e;
-    color: #e0e0e0;
-    border: 2px solid #444;
+background: #16213e;
+color: #e0e0e0;
+border: 2px solid #444;
 }
 
 .btn-secondary:hover {
-    background: #e5e7eb;
+background: #e5e7eb;
 }
 
 .btn-ai {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
+background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+color: white;
 }
 
 .btn-ai:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
 }
 
 /* METRICS */
 .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin: 20px 0;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+gap: 12px;
+margin: 20px 0;
 }
 
 .metric-card {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+color: white;
+padding: 15px;
+border-radius: 10px;
+text-align: center;
+box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 .metric-icon {
-    font-size: 1.8em;
-    margin-bottom: 8px;
+font-size: 1.8em;
+margin-bottom: 8px;
 }
 
 .metric-value {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-bottom: 4px;
+font-size: 1.4em;
+font-weight: bold;
+margin-bottom: 4px;
 }
 
 .metric-label {
-    font-size: 0.8em;
-    opacity: 0.9;
+font-size: 0.8em;
+opacity: 0.9;
 }
 
 /* CHARTS */
 .charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 15px;
-    margin: 20px 0;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+gap: 15px;
+margin: 20px 0;
 }
 
 .chart-box {
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+background: white;
+border-radius: 10px;
+padding: 15px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 body.dark .chart-box {
-    background: #16213e;
+background: #16213e;
 }
 
 .chart-title {
-    font-size: 1em;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: #333;
+font-size: 1em;
+font-weight: 600;
+margin-bottom: 12px;
+color: #333;
 }
 
 body.dark .chart-title {
-    color: #e0e0e0;
+color: #e0e0e0;
 }
 
 .chart-container {
-    position: relative;
-    height: 220px;
+position: relative;
+height: 220px;
 }
 
 /* TABLE */
 .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    font-size: 0.9em;
+width: 100%;
+border-collapse: collapse;
+margin: 20px 0;
+background: white;
+border-radius: 8px;
+overflow: hidden;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+font-size: 0.9em;
 }
 
 body.dark .data-table {
-    background: #16213e;
+background: #16213e;
 }
 
 .data-table thead {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+color: white;
 }
 
 .data-table th,
 .data-table td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+padding: 10px 12px;
+text-align: left;
+border-bottom: 1px solid #e5e7eb;
 }
 
 body.dark .data-table td {
-    border-bottom: 1px solid #444;
-    color: #e0e0e0;
+border-bottom: 1px solid #444;
+color: #e0e0e0;
 }
 
 .data-table tbody tr:hover {
-    background: #f9fafb;
+background: #f9fafb;
 }
 
 body.dark .data-table tbody tr:hover {
-    background: #0f3460;
+background: #0f3460;
 }
 
 /* REPORT SECTION */
 .report-section {
-    background: #f1f1f1;
-    color: #333;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 15px 0;
-    border-left: 4px solid #007bff;
-    font-size: 0.95em;
+background: #f1f1f1;
+color: #333;
+padding: 15px;
+border-radius: 8px;
+margin: 15px 0;
+border-left: 4px solid #007bff;
+font-size: 0.95em;
 }
 
 body.dark .report-section {
-    background: #16213e;
-    color: #e0e0e0;
-    border-left: 4px solid #0056b3;
+background: #16213e;
+color: #e0e0e0;
+border-left: 4px solid #0056b3;
 }
 
 .report-header {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-    border-bottom: 3px solid #007bff;
-    padding-bottom: 12px;
+font-size: 1.4em;
+font-weight: bold;
+color: #333;
+margin-bottom: 20px;
+border-bottom: 3px solid #007bff;
+padding-bottom: 12px;
 }
 
 body.dark .report-header {
-    color: #e0e0e0;
+color: #e0e0e0;
 }
 
 /* SWOT GRID */
 .swot-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin: 20px 0;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+gap: 12px;
+margin: 20px 0;
 }
 
 .swot-card {
-    padding: 15px;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.9em;
+padding: 15px;
+border-radius: 8px;
+color: white;
+font-size: 0.9em;
 }
 
 .swot-strengths {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
 .swot-weaknesses {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 }
 
 .swot-opportunities {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 }
 
 .swot-threats {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
 }
 
 .swot-title {
-    font-weight: 600;
-    margin-bottom: 10px;
-    font-size: 1em;
+font-weight: 600;
+margin-bottom: 10px;
+font-size: 1em;
 }
 
 .swot-item {
-    background: rgba(255,255,255,0.2);
-    padding: 6px 10px;
-    border-radius: 5px;
-    margin: 4px 0;
-    font-size: 0.85em;
+background: rgba(255,255,255,0.2);
+padding: 6px 10px;
+border-radius: 5px;
+margin: 4px 0;
+font-size: 0.85em;
 }
 
 /* AI INSIGHTS */
 .ai-insights {
-    background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
-    border-left: 4px solid #f5576c;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px 0;
-    font-size: 0.95em;
+background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
+border-left: 4px solid #f5576c;
+padding: 15px;
+border-radius: 8px;
+margin: 20px 0;
+font-size: 0.95em;
 }
 
 .ai-header {
-    font-weight: 600;
-    color: #f5576c;
-    margin-bottom: 10px;
-    font-size: 1em;
+font-weight: 600;
+color: #f5576c;
+margin-bottom: 10px;
+font-size: 1em;
 }
 
 .ai-insights p {
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 6px;
+color: #555;
+line-height: 1.5;
+margin-bottom: 6px;
 }
 
 body.dark .ai-insights p {
-    color: #bbb;
+color: #bbb;
 }
 
 .ai-insights ul {
-    list-style: none;
-    padding: 0;
-    margin: 8px 0;
+list-style: none;
+padding: 0;
+margin: 8px 0;
 }
 
 .ai-insights li {
-    color: #555;
-    margin: 6px 0;
-    padding-left: 18px;
-    position: relative;
-    font-size: 0.9em;
+color: #555;
+margin: 6px 0;
+padding-left: 18px;
+position: relative;
+font-size: 0.9em;
 }
 
 body.dark .ai-insights li {
-    color: #bbb;
+color: #bbb;
 }
 
 .ai-insights li:before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: #f5576c;
-    font-weight: bold;
+content: '→';
+position: absolute;
+left: 0;
+color: #f5576c;
+font-weight: bold;
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    .chat-container {
-        max-width: 100%;
-        height: 80vh;
-    }
+.chat-container {
+max-width: 100%;
+height: 80vh;
+}
 
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
+.charts-grid {
+grid-template-columns: 1fr;
+}
 
-    .button-group {
-        flex-direction: column;
-    }
+.button-group {
+flex-direction: column;
+}
 
-    .btn {
-        min-width: auto;
-    }
+.btn {
+min-width: auto;
+}
 
-    #suggestWrapper {
-        flex-direction: row;
-    }
+#suggestWrapper {
+flex-direction: row;
+}
 
-    #suggestBtn, #reportsBtn, #plannerBtn {
-        min-width: auto;
-        flex: 0;
-    }
+#suggestBtn, #reportsBtn, #plannerBtn {
+min-width: auto;
+flex: 0;
+}
 
-    .nav-buttons button {
-        font-size: 0.75em;
-        padding: 5px 10px;
-    }
+.nav-buttons button {
+font-size: 0.75em;
+padding: 5px 10px;
+}
 }
 
 .planner-input-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-bottom: 15px;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+gap: 12px;
+margin-bottom: 15px;
 }
 </style>
 </head>
 <body>
 
 <div class="chat-container">
-    <div class="chat-header">
-        <span></span>
-        <div class="header-title">usemee</div>
-        <span></span>
-    </div>
+<div class="chat-header">
+<span></span>
+<div class="header-title">usemee</div>
+<span></span>
+</div>
 
-    <div class="nav-buttons">
-        <button onclick="goToPage('index.html')">Home</button>
-        <button onclick="goToPage('about.html')">About</button>
-        <button onclick="goToPage('settings.html')">Settings</button>
-    </div>
+<div class="nav-buttons">
+<button onclick="goToPage('index.html')">Home</button>
+<button onclick="goToPage('about.html')">About</button>
+<button onclick="goToPage('settings.html')">Settings</button>
+</div>
 
-    <div class="chat-box" id="chat-box"></div>
+<div class="chat-box" id="chat-box"></div>
 
-    <div class="chat-input-area">
-        <div id="suggestWrapper">
-            <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0;">📊 Reports</button>
-            <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📊 Planner</button>
-            <button id="suggestBtn" style="flex: 0;">💡 Suggestions</button>
-            <div id="suggestBox">
-                <button id="closeBtn">✖</button>
-                <p class="suggestion">what is business</p>
-                <p class="suggestion">how to start a business</p>
-                <p class="suggestion">create swot analysis</p>
-                <p class="suggestion">financial planning</p>
-            </div>
-        </div>
+<div class="chat-input-area">
+<div id="suggestWrapper">
+<button id="reportsBtn" onclick="showReportsModal()" style="flex: 0;">📊 Reports</button>
+<button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📊 Planner</button>
+<button id="suggestBtn" style="flex: 0;">💡 Suggestions</button>
+<div id="suggestBox">
+<button id="closeBtn">✖</button>
+<p class="suggestion">what is business</p>
+<p class="suggestion">how to start a business</p>
+<p class="suggestion">create swot analysis</p>
+<p class="suggestion">financial planning</p>
+</div>
+</div>
 
-        <div class="input-row">
-            <input type="text" id="user-input" placeholder="Type your message...">
-            <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
-            <button class="send-btn" onclick="sendMessage()">Send</button>
-        </div>
-        </div>
-    </div>
+<div class="input-row">
+<input type="text" id="user-input" placeholder="Type your message...">
+<button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
+<button class="send-btn" onclick="sendMessage()">Send</button>
+</div>
+</div>
+</div>
 </div>
 
 <!-- PLANNER MODAL -->
 <div id="plannerModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closePlannerModal()">&times;</span>
-        <div id="plannerContent"></div>
-    </div>
+<div class="modal-content">
+<span class="close-modal" onclick="closePlannerModal()">&times;</span>
+<div id="plannerContent"></div>
+</div>
 </div>
 
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeReportsModal()">&times;</span>
-        <div id="reportsContent"></div>
-    </div>
+<div class="modal-content">
+<span class="close-modal" onclick="closeReportsModal()">&times;</span>
+<div id="reportsContent"></div>
+</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -572,1123 +572,1407 @@ body.dark .ai-insights li {
 // ==================== DARK MODE (READ-ONLY) ====================
 // Apply saved dark mode on load - only controlled by settings.html
 if (localStorage.getItem('darkMode') === 'enabled') {
-    document.body.classList.add('dark');
+document.body.classList.add('dark');
 }
 
 // ==================== NAVIGATION ====================
 function goToPage(page) {
-    window.location.href = page;
+window.location.href = page;
 }
 
 // ==================== GLOBAL STATE ====================
 let planData = {
-    name: '',
-    startDate: '',
-    endDate: '',
-    initialBudget: 0,
-    growthRate: 0,
-    type: '',
-    months: [],
-    totalProjection: 0
+name: '',
+startDate: '',
+endDate: '',
+initialBudget: 0,
+growthRate: 0,
+type: '',
+months: [],
+totalProjection: 0
 };
 
 let swotData = {
-    business: "",
-    strengths: [],
-    weaknesses: [],
-    opportunities: [],
-    threats: []
+business: "",
+strengths: [],
+weaknesses: [],
+opportunities: [],
+threats: []
 };
 
 let reportData = {
-    businessName: "",
-    industry: "",
-    revenue: 0,
-    expenses: 0,
-    employees: 0,
-    founded: "",
-    description: ""
+businessName: "",
+industry: "",
+revenue: 0,
+expenses: 0,
+employees: 0,
+founded: "",
+description: ""
 };
 
 let chartInstances = {};
 
 const intents = [
-    // GREETINGS
-    {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
-    {tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
-    {tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},  
-    {tag:"okays",patterns:["okay","ok"],responses:["👍 Got it. What do you want to work on next?"]},
+// GREETINGS
+{tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
+{tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
+{tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},
+{tag:"okays",patterns:["okay","ok"],responses:["👍 Got it. What do you want to work on next?"]},
 
-    // BUSINESS BASICS
-    {tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers in exchange for money."]},
-    {tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
-    {tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
+// BUSINESS BASICS
+{tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers in exchange for money."]},
+{tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
+{tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
 
-    // MONEY
-    {tag:"profit",patterns:["what is profit","profit meaning"],responses:["Profit is the money left after subtracting costs from revenue."]},
-    {tag:"revenue",patterns:["what is revenue","income of business"],responses:["Revenue is the total income a business earns from sales."]},
-    {tag:"costs",patterns:["what are costs","business expenses"],responses:["Costs are the money spent to run a business."]},
-    {tag:"loss",patterns:["what is loss"],responses:["Loss happens when costs are higher than revenue."]},
-    {tag:"cash_flow",patterns:["cash flow"],responses:["Cash flow shows money coming in and going out of a business."]},
+// MONEY
+{tag:"profit",patterns:["what is profit","profit meaning"],responses:["Profit is the money left after subtracting costs from revenue."]},
+{tag:"revenue",patterns:["what is revenue","income of business"],responses:["Revenue is the total income a business earns from sales."]},
+{tag:"costs",patterns:["what are costs","business expenses"],responses:["Costs are the money spent to run a business."]},
+{tag:"loss",patterns:["what is loss"],responses:["Loss happens when costs are higher than revenue."]},
+{tag:"cash_flow",patterns:["cash flow"],responses:["Cash flow shows money coming in and going out of a business."]},
 
-    // ENTREPRENEURSHIP
-    {tag:"entrepreneur",patterns:["what is entrepreneur"],responses:["An entrepreneur is someone who starts and manages a business."]},
-    {tag:"entrepreneurship",patterns:["what is entrepreneurship"],responses:["Entrepreneurship is the process of creating and running a business."]},
-    {tag:"startup",patterns:["what is startup"],responses:["A startup is a newly created business."]},
+// ENTREPRENEURSHIP
+{tag:"entrepreneur",patterns:["what is entrepreneur"],responses:["An entrepreneur is someone who starts and manages a business."]},
+{tag:"entrepreneurship",patterns:["what is entrepreneurship"],responses:["Entrepreneurship is the process of creating and running a business."]},
+{tag:"startup",patterns:["what is startup"],responses:["A startup is a newly created business."]},
 
-    // MARKETING
-    {tag:"marketing",patterns:["what is marketing"],responses:["Marketing involves promoting and selling products or services."]},
-    {tag:"advertising",patterns:["what is advertising"],responses:["Advertising is paid promotion of products or services."]},
-    {tag:"branding",patterns:["what is branding"],responses:["Branding creates a unique identity for a business."]},
-    {tag:"target_market",patterns:["target market"],responses:["Target market is the specific group of customers a business aims to reach."]},
+// MARKETING
+{tag:"marketing",patterns:["what is marketing"],responses:["Marketing involves promoting and selling products or services."]},
+{tag:"advertising",patterns:["what is advertising"],responses:["Advertising is paid promotion of products or services."]},
+{tag:"branding",patterns:["what is branding"],responses:["Branding creates a unique identity for a business."]},
+{tag:"target_market",patterns:["target market"],responses:["Target market is the specific group of customers a business aims to reach."]},
 
-    // PRODUCTS
-    {tag:"product",patterns:["what is product"],responses:["A product is something a business sells to customers."]},
-    {tag:"service",patterns:["what is service"],responses:["A service is an activity provided to customers."]},
-    {tag:"product_development",patterns:["product development"],responses:["Product development involves creating new products."]},
+// PRODUCTS
+{tag:"product",patterns:["what is product"],responses:["A product is something a business sells to customers."]},
+{tag:"service",patterns:["what is service"],responses:["A service is an activity provided to customers."]},
+{tag:"product_development",patterns:["product development"],responses:["Product development involves creating new products."]},
 
-    // MARKET
-    {tag:"market",patterns:["what is market"],responses:["A market is where buyers and sellers interact."]},
-    {tag:"demand",patterns:["what is demand"],responses:["Demand is how much people want a product."]},
-    {tag:"supply",patterns:["what is supply"],responses:["Supply is how much of a product is available."]},
-    {tag:"competition",patterns:["competition"],responses:["Competition is rivalry between businesses."]},
+// MARKET
+{tag:"market",patterns:["what is market"],responses:["A market is where buyers and sellers interact."]},
+{tag:"demand",patterns:["what is demand"],responses:["Demand is how much people want a product."]},
+{tag:"supply",patterns:["what is supply"],responses:["Supply is how much of a product is available."]},
+{tag:"competition",patterns:["competition"],responses:["Competition is rivalry between businesses."]},
 
-    // MANAGEMENT
-    {tag:"management",patterns:["what is management"],responses:["Management involves planning and controlling business activities."]},
-    {tag:"leadership",patterns:["leadership"],responses:["Leadership is guiding and motivating people."]},
-    {tag:"teamwork",patterns:["teamwork"],responses:["Teamwork is working together to achieve goals."]},
-    {tag:"communication",patterns:["communication"],responses:["Communication is sharing information effectively."]},
+// MANAGEMENT
+{tag:"management",patterns:["what is management"],responses:["Management involves planning and controlling business activities."]},
+{tag:"leadership",patterns:["leadership"],responses:["Leadership is guiding and motivating people."]},
+{tag:"teamwork",patterns:["teamwork"],responses:["Teamwork is working together to achieve goals."]},
+{tag:"communication",patterns:["communication"],responses:["Communication is sharing information effectively."]},
 
-    // FINANCE
-    {tag:"finance",patterns:["what is finance"],responses:["Finance is managing money in a business."]},
-    {tag:"budget",patterns:["budget"],responses:["A budget is a financial plan of income and expenses."]},
-    {tag:"investment",patterns:["investment"],responses:["Investment is putting money into something to earn profit."]},
-    {tag:"risk",patterns:["risk"],responses:["Risk is the chance of losing money."]},
+// FINANCE
+{tag:"finance",patterns:["what is finance"],responses:["Finance is managing money in a business."]},
+{tag:"budget",patterns:["budget"],responses:["A budget is a financial plan of income and expenses."]},
+{tag:"investment",patterns:["investment"],responses:["Investment is putting money into something to earn profit."]},
+{tag:"risk",patterns:["risk"],responses:["Risk is the chance of losing money."]},
 
-    // OPERATIONS
-    {tag:"operations",patterns:["operations"],responses:["Operations manage daily business activities."]},
-    {tag:"production",patterns:["production"],responses:["Production is creating goods or services."]},
-    {tag:"quality",patterns:["quality"],responses:["Quality means how good a product or service is."]},
+// OPERATIONS
+{tag:"operations",patterns:["operations"],responses:["Operations manage daily business activities."]},
+{tag:"production",patterns:["production"],responses:["Production is creating goods or services."]},
+{tag:"quality",patterns:["quality"],responses:["Quality means how good a product or service is."]},
 
-    // SALES
-    {tag:"sales",patterns:["sales"],responses:["Sales involve selling products to customers."]},
-    {tag:"pricing",patterns:["pricing"],responses:["Pricing is setting the value of a product."]},
-    {tag:"discount",patterns:["discount"],responses:["A discount reduces the price of a product."]},
+// SALES
+{tag:"sales",patterns:["sales"],responses:["Sales involve selling products to customers."]},
+{tag:"pricing",patterns:["pricing"],responses:["Pricing is setting the value of a product."]},
+{tag:"discount",patterns:["discount"],responses:["A discount reduces the price of a product."]},
 
-    // HR
-    {tag:"human_resources",patterns:["human resources","hr"],responses:["HR manages employees in a business."]},
-    {tag:"recruitment",patterns:["recruitment"],responses:["Recruitment is hiring employees."]},
-    {tag:"training",patterns:["training"],responses:["Training improves employee skills."]},
-    {tag:"motivation",patterns:["motivation"],responses:["Motivation encourages employees to work better."]},
+// HR
+{tag:"human_resources",patterns:["human resources","hr"],responses:["HR manages employees in a business."]},
+{tag:"recruitment",patterns:["recruitment"],responses:["Recruitment is hiring employees."]},
+{tag:"training",patterns:["training"],responses:["Training improves employee skills."]},
+{tag:"motivation",patterns:["motivation"],responses:["Motivation encourages employees to work better."]},
 
-    // ECONOMY
-    {tag:"economy",patterns:["economy"],responses:["Economy is the system of production and consumption."]},
-    {tag:"globalization",patterns:["globalization"],responses:["Globalization connects businesses worldwide."]},
-    {tag:"ecommerce",patterns:["ecommerce"],responses:["Ecommerce is buying and selling online."]},
+// ECONOMY
+{tag:"economy",patterns:["economy"],responses:["Economy is the system of production and consumption."]},
+{tag:"globalization",patterns:["globalization"],responses:["Globalization connects businesses worldwide."]},
+{tag:"ecommerce",patterns:["ecommerce"],responses:["Ecommerce is buying and selling online."]},
 
-    // ETHICS
-    {tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
-    {tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
+// ETHICS
+{tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
+{tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
 
-    // ACCOUNTING
-    {tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
-    {tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
-    {tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
-    {tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
+// ACCOUNTING
+{tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
+{tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
+{tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
+{tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
 
-    // SUCCESS
-    {tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
-    {tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
-    {tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
+// SUCCESS
+{tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
+{tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
+{tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
 
-    // BUSINESS CREATION
-    {tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
+// BUSINESS CREATION
+{tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
 `Here are the key steps to create a business:
 
-1️⃣ Idea Generation  
-2️⃣ Market Research  
-3️⃣ Business Plan  
-4️⃣ Legal Structure  
-5️⃣ Register Your Business  
-6️⃣ Finances  
-7️⃣ Branding  
-8️⃣ Build Your Product/Service  
-9️⃣ Marketing  
+1️⃣ Idea Generation
+2️⃣ Market Research
+3️⃣ Business Plan
+4️⃣ Legal Structure
+5️⃣ Register Your Business
+6️⃣ Finances
+7️⃣ Branding
+8️⃣ Build Your Product/Service
+9️⃣ Marketing
 🔟 Launch & Grow`
-    ]},
-    // STRATEGY & ANALYSIS
-    {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
-    {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
-    {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
-    {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
-    {tag:"niche_market",patterns:["what is a niche","niche market meaning"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
+]},
+// STRATEGY & ANALYSIS
+{tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
+{tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
+{tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
+{tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
+{tag:"niche_market",patterns:["what is a niche","niche market meaning"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
 
-    // DIGITAL PRESENCE & TECH
-    {tag:"seo",patterns:["what is seo","search engine optimization"],responses:["SEO is the process of improving your website to increase its visibility when people search for products or services."]},
-    {tag:"social_media_marketing",patterns:["social media marketing","marketing on instagram","facebook ads"],responses:["This involves using social media platforms to connect with your audience to build your brand and increase sales."]},
-    {tag:"content_marketing",patterns:["what is content marketing"],responses:["Content marketing focuses on creating and sharing valuable, relevant content to attract and retain customers."]},
-    {tag:"saas",patterns:["what is saas","software as a service"],responses:["SaaS is a software distribution model where a provider hosts applications and makes them available to customers over the internet."]},
-    {tag:"b2b",patterns:["what is b2b","business to business"],responses:["B2B describes businesses that sell products or services to other businesses rather than to individual consumers."]},
-    {tag:"b2c",patterns:["what is b2c","business to consumer"],responses:["B2C refers to businesses selling products and services directly to individual customers."]},
+// DIGITAL PRESENCE & TECH
+{tag:"seo",patterns:["what is seo","search engine optimization"],responses:["SEO is the process of improving your website to increase its visibility when people search for products or services."]},
+{tag:"social_media_marketing",patterns:["social media marketing","marketing on instagram","facebook ads"],responses:["This involves using social media platforms to connect with your audience to build your brand and increase sales."]},
+{tag:"content_marketing",patterns:["what is content marketing"],responses:["Content marketing focuses on creating and sharing valuable, relevant content to attract and retain customers."]},
+{tag:"saas",patterns:["what is saas","software as a service"],responses:["SaaS is a software distribution model where a provider hosts applications and makes them available to customers over the internet."]},
+{tag:"b2b",patterns:["what is b2b","business to business"],responses:["B2B describes businesses that sell products or services to other businesses rather than to individual consumers."]},
+{tag:"b2c",patterns:["what is b2c","business to consumer"],responses:["B2C refers to businesses selling products and services directly to individual customers."]},
 
-    // CUSTOMER EXPERIENCE
-    {tag:"customer_retention",patterns:["customer retention","keeping customers"],responses:["Customer retention refers to the activities a company uses to reduce the number of customer defections."]},
-    {tag:"customer_feedback",patterns:["importance of feedback","customer reviews"],responses:["Feedback helps businesses understand customer needs and improve their products or services."]},
-    {tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company’s relationships and interactions with customers and potential customers."]},
-    {tag:"user_experience",patterns:["what is ux","user experience"],responses:["UX refers to the overall experience a person has when interacting with a product, especially in terms of how easy or pleasing it is to use."]},
+// CUSTOMER EXPERIENCE
+{tag:"customer_retention",patterns:["customer retention","keeping customers"],responses:["Customer retention refers to the activities a company uses to reduce the number of customer defections."]},
+{tag:"customer_feedback",patterns:["importance of feedback","customer reviews"],responses:["Feedback helps businesses understand customer needs and improve their products or services."]},
+{tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company’s relationships and interactions with customers and potential customers."]},
+{tag:"user_experience",patterns:["what is ux","user experience"],responses:["UX refers to the overall experience a person has when interacting with a product, especially in terms of how easy or pleasing it is to use."]},
 
-    // ADVANCED FINANCE & LEGAL
-    {tag:"roi",patterns:["what is roi","return on investment"],responses:["ROI is a measure used to evaluate the efficiency of an investment."]},
-    {tag:"equity_financing",patterns:["what is equity financing"],responses:["Equity financing is the process of raising capital through the sale of shares in an enterprise."]},
-    {tag:"debt_financing",patterns:["what is debt financing","business loans"],responses:["Debt financing occurs when a firm raises money for working capital or capital expenditures by selling debt instruments (loans)."]},
-    {tag:"intellectual_property",patterns:["what is ip","intellectual property"],responses:["IP refers to creations of the mind, such as inventions, literary works, designs, symbols, and names used in commerce."]},
-    {tag:"trademark",patterns:["what is a trademark","brand protection"],responses:["A trademark is a recognizable sign, design, or expression which identifies products or services of a particular source."]},
-    {tag:"patent",patterns:["what is a patent"],responses:["A patent is a government authority or license conferring a right or title for a set period, especially the sole right to exclude others from making, using, or selling an invention."]},
+// ADVANCED FINANCE & LEGAL
+{tag:"roi",patterns:["what is roi","return on investment"],responses:["ROI is a measure used to evaluate the efficiency of an investment."]},
+{tag:"equity_financing",patterns:["what is equity financing"],responses:["Equity financing is the process of raising capital through the sale of shares in an enterprise."]},
+{tag:"debt_financing",patterns:["what is debt financing","business loans"],responses:["Debt financing occurs when a firm raises money for working capital or capital expenditures by selling debt instruments (loans)."]},
+{tag:"intellectual_property",patterns:["what is ip","intellectual property"],responses:["IP refers to creations of the mind, such as inventions, literary works, designs, symbols, and names used in commerce."]},
+{tag:"trademark",patterns:["what is a trademark","brand protection"],responses:["A trademark is a recognizable sign, design, or expression which identifies products or services of a particular source."]},
+{tag:"patent",patterns:["what is a patent"],responses:["A patent is a government authority or license conferring a right or title for a set period, especially the sole right to exclude others from making, using, or selling an invention."]},
 
-    // OPERATIONS & LOGISTICS
-    {tag:"supply_chain",patterns:["supply chain management","scm"],responses:["The supply chain is the entire process of making and selling commercial goods, from the supply of materials to the sale to the customer."]},
-    {tag:"outsourcing",patterns:["what is outsourcing"],responses:["Outsourcing is hiring a party outside a company to perform services or create goods that were traditionally performed in-house."]},
-    {tag:"inventory_management",patterns:["inventory management","stock control"],responses:["Inventory management is the process of ordering, storing, using, and selling a company's inventory."]},
-    {tag:"wholesale",patterns:["what is wholesale"],responses:["Wholesale is the sale of goods in large quantities to be retailed by others."]},
+// OPERATIONS & LOGISTICS
+{tag:"supply_chain",patterns:["supply chain management","scm"],responses:["The supply chain is the entire process of making and selling commercial goods, from the supply of materials to the sale to the customer."]},
+{tag:"outsourcing",patterns:["what is outsourcing"],responses:["Outsourcing is hiring a party outside a company to perform services or create goods that were traditionally performed in-house."]},
+{tag:"inventory_management",patterns:["inventory management","stock control"],responses:["Inventory management is the process of ordering, storing, using, and selling a company's inventory."]},
+{tag:"wholesale",patterns:["what is wholesale"],responses:["Wholesale is the sale of goods in large quantities to be retailed by others."]},
 
-    // MISC / INTERACTIVE
-    {tag:"business_joke",patterns:["tell me a business joke","joke about work"],responses:["Why did the doughnut maker retire? He was tired of the hole business!"]},
-    {tag:"motivation_quote",patterns:["give me a quote","business motivation"],responses:["'The way to get started is to quit talking and begin doing.' - Walt Disney"]},
-    {tag:"pivot",patterns:["what is a pivot","business pivot"],responses:["A pivot is when a company shifts its business strategy to accommodate changes in its industry, customer preferences, or competition."]},
-    // CORE ASPECTS OF MAKING A BUSINESS
-    {tag:"value_creation",patterns:["main aspect of business","core of business","value creation"],responses:["The main aspect of a business is creating value. If you provide something that people find useful, they will be willing to pay for it."]},
-    {tag:"problem_solving",patterns:["solving problems","business ideas come from","identifying needs"],responses:["Successful businesses are built on solving a specific problem for a specific group of people. No problem, no business."]},
-    {tag:"sustainability",patterns:["business sustainability","long term success"],responses:["A key aspect of making a business is ensuring it is sustainable—meaning it can generate enough profit to continue operating for years to come."]},
-    {tag:"value_proposition",patterns:["what is a value proposition","why should customers buy"],responses:["A value proposition is the core reason why a customer should choose you over a competitor. it defines the unique benefit you provide."]},
-    {tag:"customer_centricity",patterns:["importance of customers","focusing on the customer"],responses:["The heart of any business is the customer. Without understanding and serving their needs, a business cannot survive."]},
+// MISC / INTERACTIVE
+{tag:"business_joke",patterns:["tell me a business joke","joke about work"],responses:["Why did the doughnut maker retire? He was tired of the hole business!"]},
+{tag:"motivation_quote",patterns:["give me a quote","business motivation"],responses:["'The way to get started is to quit talking and begin doing.' - Walt Disney"]},
+{tag:"pivot",patterns:["what is a pivot","business pivot"],responses:["A pivot is when a company shifts its business strategy to accommodate changes in its industry, customer preferences, or competition."]},
+// CORE ASPECTS OF MAKING A BUSINESS
+{tag:"value_creation",patterns:["main aspect of business","core of business","value creation"],responses:["The main aspect of a business is creating value. If you provide something that people find useful, they will be willing to pay for it."]},
+{tag:"problem_solving",patterns:["solving problems","business ideas come from","identifying needs"],responses:["Successful businesses are built on solving a specific problem for a specific group of people. No problem, no business."]},
+{tag:"sustainability",patterns:["business sustainability","long term success"],responses:["A key aspect of making a business is ensuring it is sustainable—meaning it can generate enough profit to continue operating for years to come."]},
+{tag:"value_proposition",patterns:["what is a value proposition","why should customers buy"],responses:["A value proposition is the core reason why a customer should choose you over a competitor. it defines the unique benefit you provide."]},
+{tag:"customer_centricity",patterns:["importance of customers","focusing on the customer"],responses:["The heart of any business is the customer. Without understanding and serving their needs, a business cannot survive."]},
 
-    // LEGAL & STRUCTURAL ASPECTS
-    {tag:"business_structure",patterns:["types of business","legal structure","sole proprietorship","llc"],responses:["Choosing a structure (like a Sole Proprietorship, Partnership, or LLC) is a main aspect that affects your taxes, liability, and paperwork."]},
-    {tag:"business_model",patterns:["what is a business model","how to make money"],responses:["A business model is your 'map' for making money. It explains what you sell, who you sell to, and how you deliver that value."]},
-    
-    // THE PEOPLE ASPECT
-    {tag:"human_capital",patterns:["importance of employees","people in business","hiring the right team"],responses:["A business is only as good as its people. Building a team with the right skills and culture is a vital aspect of growth."]},
-    {tag:"company_culture",patterns:["what is company culture","work environment"],responses:["Culture is the shared values and behaviors of a company. A strong culture keeps employees motivated and loyal."]},
+// LEGAL & STRUCTURAL ASPECTS
+{tag:"business_structure",patterns:["types of business","legal structure","sole proprietorship","llc"],responses:["Choosing a structure (like a Sole Proprietorship, Partnership, or LLC) is a main aspect that affects your taxes, liability, and paperwork."]},
+{tag:"business_model",patterns:["what is a business model","how to make money"],responses:["A business model is your 'map' for making money. It explains what you sell, who you sell to, and how you deliver that value."]},
 
-    // THE EXECUTION ASPECT
-    {tag:"execution",patterns:["importance of execution","idea vs execution"],responses:["Having an idea is easy; the main aspect of business is execution—the ability to turn that idea into a working, profitable reality."]},
-    {tag:"iteration",patterns:["pivot and change","improving the business","iteration"],responses:["Making a business involves constant iteration: listening to feedback, fixing what's broken, and improving your product over time."]},
-    {tag:"resilience",patterns:["business mindset","staying in business","resilience"],responses:["Mental toughness is a key aspect. Most businesses face failures early on, so the ability to bounce back is essential."]},
+// THE PEOPLE ASPECT
+{tag:"human_capital",patterns:["importance of employees","people in business","hiring the right team"],responses:["A business is only as good as its people. Building a team with the right skills and culture is a vital aspect of growth."]},
+{tag:"company_culture",patterns:["what is company culture","work environment"],responses:["Culture is the shared values and behaviors of a company. A strong culture keeps employees motivated and loyal."]},
 
-    // FINANCIAL VIABILITY
-    {tag:"profitability",patterns:["is the business viable","making a profit","financial health"],responses:["A business must eventually become profitable. If expenses always exceed revenue, it's a hobby, not a business."]},
-    {tag:"capital",patterns:["starting capital","funding the business"],responses:["You need resources—whether it's your own savings, a loan, or investors—to get the engine of your business running."]},
-    // STRATEGIC FOUNDATIONS
-    {tag:"market_need",patterns:["identifying a market need","gap in the market","finding an opportunity"],responses:["A main aspect of making a business is finding a 'gap'—a problem that isn't being solved well by others—and filling it."]},
-    {tag:"timing",patterns:["importance of timing","business timing","when to launch"],responses:["Timing is a critical aspect. Launching too early (before the market is ready) or too late (when it's crowded) can determine success or failure."]},
-    {tag:"differentiation",patterns:["how to stand out","differentiation strategy"],responses:["To succeed, a business must be different. This could be through lower prices, better quality, faster service, or a unique brand personality."]},
+// THE EXECUTION ASPECT
+{tag:"execution",patterns:["importance of execution","idea vs execution"],responses:["Having an idea is easy; the main aspect of business is execution—the ability to turn that idea into a working, profitable reality."]},
+{tag:"iteration",patterns:["pivot and change","improving the business","iteration"],responses:["Making a business involves constant iteration: listening to feedback, fixing what's broken, and improving your product over time."]},
+{tag:"resilience",patterns:["business mindset","staying in business","resilience"],responses:["Mental toughness is a key aspect. Most businesses face failures early on, so the ability to bounce back is essential."]},
 
-    // EXIT STRATEGIES (THE END GAME)
-    {tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]},
-    {tag:"ipo",patterns:["what is an ipo","going public"],responses:["An Initial Public Offering (IPO) is when a private company offers shares to the public for the first time to raise capital."]},
-    {tag:"acquisition",patterns:["business acquisition","being bought out"],responses:["An acquisition occurs when one company buys most or all of another company's shares to take control of it."]},
+// FINANCIAL VIABILITY
+{tag:"profitability",patterns:["is the business viable","making a profit","financial health"],responses:["A business must eventually become profitable. If expenses always exceed revenue, it's a hobby, not a business."]},
+{tag:"capital",patterns:["starting capital","funding the business"],responses:["You need resources—whether it's your own savings, a loan, or investors—to get the engine of your business running."]},
+// STRATEGIC FOUNDATIONS
+{tag:"market_need",patterns:["identifying a market need","gap in the market","finding an opportunity"],responses:["A main aspect of making a business is finding a 'gap'—a problem that isn't being solved well by others—and filling it."]},
+{tag:"timing",patterns:["importance of timing","business timing","when to launch"],responses:["Timing is a critical aspect. Launching too early (before the market is ready) or too late (when it's crowded) can determine success or failure."]},
+{tag:"differentiation",patterns:["how to stand out","differentiation strategy"],responses:["To succeed, a business must be different. This could be through lower prices, better quality, faster service, or a unique brand personality."]},
 
-    // RISK & RECOVERY
-    {tag:"pivot_vs_persevere",patterns:["should i pivot or persevere","when to change direction"],responses:["Deciding whether to stick with a plan (persevere) or change the fundamental strategy (pivot) is one of the hardest aspects of management."]},
-    {tag:"burn_rate",patterns:["what is burn rate","spending money fast"],responses:["Burn rate is the pace at which a new company uses up its initial capital before generating positive cash flow."]},
-    {tag:"contingency_plan",patterns:["plan b","emergency business plan"],responses:["A contingency plan is a 'Plan B' for when things go wrong, such as a financial crisis or a major competitor entering the market."]},
-    
-    // NEWS & CURRENT EVENTS
-    {tag:"news",patterns:["what is the news","latest news","current news","business news","tell me the news"],responses:["Let me fetch the latest news for you..."]},
-    {tag:"news_business",patterns:["business news","recent business","what's happening in business"],responses:["Let me get the latest business news..."]},
-    {tag:"news_technology",patterns:["tech news","technology news","latest tech"],responses:["Let me get the latest technology news..."]},
+// EXIT STRATEGIES (THE END GAME)
+{tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]},
+{tag:"ipo",patterns:["what is an ipo","going public"],responses:["An Initial Public Offering (IPO) is when a private company offers shares to the public for the first time to raise capital."]},
+{tag:"acquisition",patterns:["business acquisition","being bought out"],responses:["An acquisition occurs when one company buys most or all of another company's shares to take control of it."]},
 
-    // ADD MORE UP TO ~200 INTENTS
+// RISK & RECOVERY
+{tag:"pivot_vs_persevere",patterns:["should i pivot or persevere","when to change direction"],responses:["Deciding whether to stick with a plan (persevere) or change the fundamental strategy (pivot) is one of the hardest aspects of management."]},
+{tag:"burn_rate",patterns:["what is burn rate","spending money fast"],responses:["Burn rate is the pace at which a new company uses up its initial capital before generating positive cash flow."]},
+{tag:"contingency_plan",patterns:["plan b","emergency business plan"],responses:["A contingency plan is a 'Plan B' for when things go wrong, such as a financial crisis or a major competitor entering the market."]},
+
+// NEWS & CURRENT EVENTS
+{tag:"news",patterns:["what is the news","latest news","current news","business news","tell me the news"],responses:["Let me fetch the latest news for you..."]},
+{tag:"news_business",patterns:["business news","recent business","what's happening in business"],responses:["Let me get the latest business news..."]},
+{tag:"news_technology",patterns:["tech news","technology news","latest tech"],responses:["Let me get the latest technology news..."]},
+
+// BUSINESS COMPARISON
+{tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
+
+// ADD MORE UP TO ~200 INTENTS
+];
+
+// ==================== BUSINESS COMPARISON DATABASE ====================
+const businessDatabase = [
+  {
+    name: "Apple Inc.",
+    country: "USA",
+    industry: "Technology",
+    founded: 1976,
+    revenue: 383285, // millions
+    employees: 161000,
+    marketCap: 3200000,
+    profitMargin: 25.2,
+    growth: 9.2,
+    description: "Designs, manufactures, and markets smartphones, computers, wearables, and software"
+  },
+  {
+    name: "Microsoft Corporation",
+    country: "USA",
+    industry: "Technology",
+    founded: 1975,
+    revenue: 198252,
+    employees: 226000,
+    marketCap: 3100000,
+    profitMargin: 43.8,
+    growth: 16.0,
+    description: "Cloud computing, software, and enterprise solutions provider"
+  },
+  {
+    name: "Amazon.com",
+    country: "USA",
+    industry: "E-commerce & Cloud",
+    founded: 1994,
+    revenue: 574785,
+    employees: 1608000,
+    marketCap: 2100000,
+    profitMargin: 6.3,
+    growth: 10.8,
+    description: "E-commerce and cloud computing giant with AWS serving enterprise clients"
+  },
+  {
+    name: "Tesla Inc.",
+    country: "USA",
+    industry: "Automotive & Energy",
+    founded: 2003,
+    revenue: 81462,
+    employees: 150000,
+    marketCap: 520000,
+    profitMargin: 10.8,
+    growth: 21.5,
+    description: "Electric vehicles and renewable energy solutions manufacturer"
+  },
+  {
+    name: "Meta Platforms",
+    country: "USA",
+    industry: "Technology & Social Media",
+    founded: 2004,
+    revenue: 114609,
+    employees: 86482,
+    marketCap: 580000,
+    profitMargin: 23.2,
+    growth: 23.1,
+    description: "Social media and metaverse technology platform"
+  },
+  {
+    name: "Google/Alphabet",
+    country: "USA",
+    industry: "Technology & Advertising",
+    founded: 1998,
+    revenue: 307394,
+    employees: 190234,
+    marketCap: 2200000,
+    profitMargin: 25.5,
+    growth: 14.8,
+    description: "Search engine, advertising network, and cloud services provider"
+  },
+  {
+    name: "Netflix",
+    country: "USA",
+    industry: "Entertainment & Streaming",
+    founded: 1997,
+    revenue: 33160,
+    employees: 12800,
+    marketCap: 280000,
+    profitMargin: 19.4,
+    growth: 12.7,
+    description: "Streaming media and entertainment content provider"
+  },
+  {
+    name: "NVIDIA",
+    country: "USA",
+    industry: "Semiconductor & AI",
+    founded: 1993,
+    revenue: 120730,
+    employees: 28000,
+    marketCap: 1200000,
+    profitMargin: 55.9,
+    growth: 126.0,
+    description: "GPU and AI chip manufacturer leading AI infrastructure"
+  },
+  {
+    name: "Toyota Motor",
+    country: "Japan",
+    industry: "Automotive",
+    founded: 1937,
+    revenue: 279379,
+    employees: 373000,
+    marketCap: 280000,
+    profitMargin: 11.2,
+    growth: 5.8,
+    description: "World's largest automaker by revenue known for hybrid technology"
+  },
+  {
+    name: "Samsung Electronics",
+    country: "South Korea",
+    industry: "Electronics & Semiconductor",
+    founded: 1969,
+    revenue: 222235,
+    employees: 267600,
+    marketCap: 330000,
+    profitMargin: 14.5,
+    growth: 17.2,
+    description: "Smartphone, semiconductor, and consumer electronics manufacturer"
+  }
 ];
 
 // ==================== MODAL FUNCTIONS ====================
 function showPlannerModal() {
-    document.getElementById('plannerModal').style.display = 'block';
-    loadPlannerContent();
+document.getElementById('plannerModal').style.display = 'block';
+loadPlannerContent();
 }
 
 function closePlannerModal() {
-    document.getElementById('plannerModal').style.display = 'none';
+document.getElementById('plannerModal').style.display = 'none';
 }
 
 function showReportsModal() {
-    document.getElementById('reportsModal').style.display = 'block';
-    loadReportsContent();
+document.getElementById('reportsModal').style.display = 'block';
+loadReportsContent();
 }
 
 function closeReportsModal() {
-    document.getElementById('reportsModal').style.display = 'none';
+document.getElementById('reportsModal').style.display = 'none';
 }
 
 // ==================== PLANNER ====================
 function loadPlannerContent() {
-    const content = document.getElementById('plannerContent');
-    
-    content.innerHTML = `
-        <h2 style="color: #007bff; margin-bottom: 15px;">💰 Financial Planner</h2>
-        
-        <div class="planner-input-grid">
-            <div class="input-group">
-                <label>Plan Name</label>
-                <input type="text" id="planName" value="Q1 2026 Growth Plan">
-            </div>
-            <div class="input-group">
-                <label>Starting Date</label>
-                <input type="date" id="startDate" value="2026-01-01">
-            </div>
-            <div class="input-group">
-                <label>Ending Date</label>
-                <input type="date" id="endDate" value="2026-03-31">
-            </div>
-            <div class="input-group">
-                <label>Initial Budget ($)</label>
-                <input type="number" id="initialBudget" value="50000">
-            </div>
-            <div class="input-group">
-                <label>Monthly Growth (%)</label>
-                <input type="number" id="growthRate" value="5">
-            </div>
-            <div class="input-group">
-                <label>Plan Type</label>
-                <select id="planType">
-                    <option value="revenue">Revenue Growth</option>
-                    <option value="expense">Expense Management</option>
-                    <option value="investment">Investment Plan</option>
-                    <option value="savings">Savings Plan</option>
-                </select>
-            </div>
-        </div>
+const content = document.getElementById('plannerContent');
 
-        <div class="button-group">
-            <button class="btn btn-primary" onclick="generatePlan()">📊 Generate</button>
-            <button class="btn btn-ai" onclick="generateAIInsights()">🤖 AI Insights</button>
-            <button class="btn btn-secondary" onclick="clearPlan()">Reset</button>
-        </div>
+content.innerHTML = `
+<h2 style="color: #007bff; margin-bottom: 15px;">💰 Financial Planner</h2>
 
-        <div class="metrics-grid" id="metricsGrid"></div>
+<div class="planner-input-grid">
+<div class="input-group">
+<label>Plan Name</label>
+<input type="text" id="planName" value="Q1 2026 Growth Plan">
+</div>
+<div class="input-group">
+<label>Starting Date</label>
+<input type="date" id="startDate" value="2026-01-01">
+</div>
+<div class="input-group">
+<label>Ending Date</label>
+<input type="date" id="endDate" value="2026-03-31">
+</div>
+<div class="input-group">
+<label>Initial Budget ($)</label>
+<input type="number" id="initialBudget" value="50000">
+</div>
+<div class="input-group">
+<label>Monthly Growth (%)</label>
+<input type="number" id="growthRate" value="5">
+</div>
+<div class="input-group">
+<label>Plan Type</label>
+<select id="planType">
+<option value="revenue">Revenue Growth</option>
+<option value="expense">Expense Management</option>
+<option value="investment">Investment Plan</option>
+<option value="savings">Savings Plan</option>
+</select>
+</div>
+</div>
 
-        <div class="charts-grid">
-            <div class="chart-box">
-                <div class="chart-title">📈 Growth Projection</div>
-                <div class="chart-container"><canvas id="projectionChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">💹 Monthly Breakdown</div>
-                <div class="chart-container"><canvas id="monthlyChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">📊 Budget Distribution</div>
-                <div class="chart-container"><canvas id="distributionChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">🎯 Performance</div>
-                <div class="chart-container"><canvas id="performanceChart"></canvas></div>
-            </div>
-        </div>
+<div class="button-group">
+<button class="btn btn-primary" onclick="generatePlan()">📊 Generate</button>
+<button class="btn btn-ai" onclick="generateAIInsights()">🤖 AI Insights</button>
+<button class="btn btn-secondary" onclick="clearPlan()">Reset</button>
+</div>
 
-        <div id="aiInsights"></div>
+<div class="metrics-grid" id="metricsGrid"></div>
 
-        <div class="chart-box" style="margin-top: 15px;">
-            <div class="chart-title">📋 Projections</div>
-            <table class="data-table" id="dataTable"></table>
-        </div>
-    `;
+<div class="charts-grid">
+<div class="chart-box">
+<div class="chart-title">📈 Growth Projection</div>
+<div class="chart-container"><canvas id="projectionChart"></canvas></div>
+</div>
+<div class="chart-box">
+<div class="chart-title">💹 Monthly Breakdown</div>
+<div class="chart-container"><canvas id="monthlyChart"></canvas></div>
+</div>
+<div class="chart-box">
+<div class="chart-title">📊 Budget Distribution</div>
+<div class="chart-container"><canvas id="distributionChart"></canvas></div>
+</div>
+<div class="chart-box">
+<div class="chart-title">🎯 Performance</div>
+<div class="chart-container"><canvas id="performanceChart"></canvas></div>
+</div>
+</div>
+
+<div id="aiInsights"></div>
+
+<div class="chart-box" style="margin-top: 15px;">
+<div class="chart-title">📋 Projections</div>
+<table class="data-table" id="dataTable"></table>
+</div>
+`;
 }
 
 function generatePlan() {
-    planData.name = document.getElementById('planName')?.value || '';
-    planData.startDate = document.getElementById('startDate')?.value || '';
-    planData.endDate = document.getElementById('endDate')?.value || '';
-    planData.initialBudget = parseFloat(document.getElementById('initialBudget')?.value) || 0;
-    planData.growthRate = parseFloat(document.getElementById('growthRate')?.value) || 0;
-    planData.type = document.getElementById('planType')?.value || 'revenue';
+planData.name = document.getElementById('planName')?.value || '';
+planData.startDate = document.getElementById('startDate')?.value || '';
+planData.endDate = document.getElementById('endDate')?.value || '';
+planData.initialBudget = parseFloat(document.getElementById('initialBudget')?.value) || 0;
+planData.growthRate = parseFloat(document.getElementById('growthRate')?.value) || 0;
+planData.type = document.getElementById('planType')?.value || 'revenue';
 
-    if (!planData.name || !planData.startDate || !planData.endDate || !planData.initialBudget) {
-        alert('❌ Please fill all fields');
-        return;
-    }
+if (!planData.name || !planData.startDate || !planData.endDate || !planData.initialBudget) {
+alert('❌ Please fill all fields');
+return;
+}
 
-    calculateMonths();
-    generateMonthlyProjections();
-    displayMetrics();
-    generateCharts();
-    generateDataTable();
-    alert('✅ Plan generated!');
+calculateMonths();
+generateMonthlyProjections();
+displayMetrics();
+generateCharts();
+generateDataTable();
+alert('✅ Plan generated!');
 }
 
 function calculateMonths() {
-    const start = new Date(planData.startDate);
-    const end = new Date(planData.endDate);
-    planData.months = [];
-    let current = new Date(start);
-    let monthIndex = 0;
+const start = new Date(planData.startDate);
+const end = new Date(planData.endDate);
+planData.months = [];
+let current = new Date(start);
+let monthIndex = 0;
 
-    while (current <= end) {
-        const monthName = current.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-        const shortMonthName = current.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
-        
-        planData.months.push({
-            monthIndex: monthIndex,
-            date: new Date(current),
-            monthName: monthName,
-            shortMonthName: shortMonthName,
-            budget: 0,
-            expense: 0,
-            revenue: 0,
-            profit: 0
-        });
-        current.setMonth(current.getMonth() + 1);
-        monthIndex++;
-    }
+while (current <= end) {
+const monthName = current.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+const shortMonthName = current.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+
+planData.months.push({
+monthIndex: monthIndex,
+date: new Date(current),
+monthName: monthName,
+shortMonthName: shortMonthName,
+budget: 0,
+expense: 0,
+revenue: 0,
+profit: 0
+});
+current.setMonth(current.getMonth() + 1);
+monthIndex++;
+}
 }
 
 function generateMonthlyProjections() {
-    let currentAmount = planData.initialBudget;
-    planData.totalProjection = 0;
+let currentAmount = planData.initialBudget;
+planData.totalProjection = 0;
 
-    planData.months.forEach((month) => {
-        const growth = (planData.growthRate / 100);
-        currentAmount = currentAmount * (1 + growth);
+planData.months.forEach((month) => {
+const growth = (planData.growthRate / 100);
+currentAmount = currentAmount * (1 + growth);
 
-        switch(planData.type) {
-            case 'revenue':
-                month.revenue = Math.round(currentAmount);
-                month.budget = Math.round(currentAmount * 0.7);
-                month.expense = Math.round(currentAmount * 0.4);
-                month.profit = month.revenue - month.expense;
-                break;
-            case 'investment':
-                month.budget = Math.round(currentAmount);
-                month.revenue = Math.round(currentAmount * 0.08);
-                month.profit = month.revenue;
-                break;
-            default:
-                month.budget = Math.round(currentAmount);
-        }
+switch(planData.type) {
+case 'revenue':
+month.revenue = Math.round(currentAmount);
+month.budget = Math.round(currentAmount * 0.7);
+month.expense = Math.round(currentAmount * 0.4);
+month.profit = month.revenue - month.expense;
+break;
+case 'investment':
+month.budget = Math.round(currentAmount);
+month.revenue = Math.round(currentAmount * 0.08);
+month.profit = month.revenue;
+break;
+default:
+month.budget = Math.round(currentAmount);
+}
 
-        planData.totalProjection += month.budget;
-    });
+planData.totalProjection += month.budget;
+});
 }
 
 function displayMetrics() {
-    const metricsGrid = document.getElementById('metricsGrid');
-    if (!metricsGrid) return;
-    
-    metricsGrid.innerHTML = '';
+const metricsGrid = document.getElementById('metricsGrid');
+if (!metricsGrid) return;
 
-    const finalMonth = planData.months[planData.months.length - 1] || {};
-    
-    const metrics = [
-        { label: 'Total', value: '$' + planData.totalProjection.toLocaleString(), icon: '📊' },
-        { label: 'Average', value: '$' + Math.round(planData.totalProjection / planData.months.length).toLocaleString(), icon: '💰' },
-        { label: 'Duration', value: planData.months.length + 'mo', icon: '📅' },
-        { label: 'Final', value: '$' + (finalMonth.budget || 0).toLocaleString(), icon: '🎯' }
-    ];
+metricsGrid.innerHTML = '';
 
-    metrics.forEach((metric) => {
-        const card = document.createElement('div');
-        card.className = 'metric-card';
-        card.innerHTML = `<div class="metric-icon">${metric.icon}</div><div class="metric-label">${metric.label}</div><div class="metric-value">${metric.value}</div>`;
-        metricsGrid.appendChild(card);
-    });
+const finalMonth = planData.months[planData.months.length - 1] || {};
+
+const metrics = [
+{ label: 'Total', value: '$' + planData.totalProjection.toLocaleString(), icon: '📊' },
+{ label: 'Average', value: '$' + Math.round(planData.totalProjection / planData.months.length).toLocaleString(), icon: '💰' },
+{ label: 'Duration', value: planData.months.length + 'mo', icon: '📅' },
+{ label: 'Final', value: '$' + (finalMonth.budget || 0).toLocaleString(), icon: '🎯' }
+];
+
+metrics.forEach((metric) => {
+const card = document.createElement('div');
+card.className = 'metric-card';
+card.innerHTML = `<div class="metric-icon">${metric.icon}</div><div class="metric-label">${metric.label}</div><div class="metric-value">${metric.value}</div>`;
+metricsGrid.appendChild(card);
+});
 }
 
 function generateCharts() {
-    generateProjectionChart();
-    generateMonthlyChart();
-    generateDistributionChart();
-    generatePerformanceChart();
+generateProjectionChart();
+generateMonthlyChart();
+generateDistributionChart();
+generatePerformanceChart();
 }
 
 function destroyChart(chartName) {
-    if (chartInstances[chartName]) {
-        chartInstances[chartName].destroy();
-    }
+if (chartInstances[chartName]) {
+chartInstances[chartName].destroy();
+}
 }
 
 function generateProjectionChart() {
-    destroyChart('projectionChart');
-    const ctx = document.getElementById('projectionChart')?.getContext('2d');
-    if (!ctx) return;
+destroyChart('projectionChart');
+const ctx = document.getElementById('projectionChart')?.getContext('2d');
+if (!ctx) return;
 
-    const labels = planData.months.map(m => m.shortMonthName);
-    const data = planData.months.map(m => m.budget);
+const labels = planData.months.map(m => m.shortMonthName);
+const data = planData.months.map(m => m.budget);
 
-    chartInstances['projectionChart'] = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Budget',
-                data: data,
-                borderColor: '#007bff',
-                backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4,
-                pointBackgroundColor: '#007bff',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 1,
-                pointRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: true, position: 'top' } },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } }
-                }
-            }
-        }
-    });
+chartInstances['projectionChart'] = new Chart(ctx, {
+type: 'line',
+data: {
+labels: labels,
+datasets: [{
+label: 'Budget',
+data: data,
+borderColor: '#007bff',
+backgroundColor: 'rgba(0, 123, 255, 0.1)',
+borderWidth: 2,
+fill: true,
+tension: 0.4,
+pointBackgroundColor: '#007bff',
+pointBorderColor: '#fff',
+pointBorderWidth: 1,
+pointRadius: 4
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: { legend: { display: true, position: 'top' } },
+scales: {
+y: {
+beginAtZero: true,
+ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } }
+}
+}
+}
+});
 }
 
 function generateMonthlyChart() {
-    destroyChart('monthlyChart');
-    const ctx = document.getElementById('monthlyChart')?.getContext('2d');
-    if (!ctx) return;
+destroyChart('monthlyChart');
+const ctx = document.getElementById('monthlyChart')?.getContext('2d');
+if (!ctx) return;
 
-    const labels = planData.months.map(m => m.shortMonthName);
-    const datasets = [
-        {
-            label: 'Budget',
-            data: planData.months.map(m => m.budget),
-            backgroundColor: '#007bff'
-        }
-    ];
+const labels = planData.months.map(m => m.shortMonthName);
+const datasets = [
+{
+label: 'Budget',
+data: planData.months.map(m => m.budget),
+backgroundColor: '#007bff'
+}
+];
 
-    if (planData.type === 'revenue') {
-        datasets.push({
-            label: 'Revenue',
-            data: planData.months.map(m => m.revenue),
-            backgroundColor: '#28a745'
-        });
-        datasets.push({
-            label: 'Expense',
-            data: planData.months.map(m => m.expense),
-            backgroundColor: '#dc3545'
-        });
-    }
+if (planData.type === 'revenue') {
+datasets.push({
+label: 'Revenue',
+data: planData.months.map(m => m.revenue),
+backgroundColor: '#28a745'
+});
+datasets.push({
+label: 'Expense',
+data: planData.months.map(m => m.expense),
+backgroundColor: '#dc3545'
+});
+}
 
-    chartInstances['monthlyChart'] = new Chart(ctx, {
-        type: 'bar',
-        data: { labels: labels, datasets: datasets },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
-            }
-        }
-    });
+chartInstances['monthlyChart'] = new Chart(ctx, {
+type: 'bar',
+data: { labels: labels, datasets: datasets },
+options: {
+responsive: true,
+maintainAspectRatio: false,
+scales: {
+y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
+}
+}
+});
 }
 
 function generateDistributionChart() {
-    destroyChart('distributionChart');
-    const ctx = document.getElementById('distributionChart')?.getContext('2d');
-    if (!ctx) return;
+destroyChart('distributionChart');
+const ctx = document.getElementById('distributionChart')?.getContext('2d');
+if (!ctx) return;
 
-    const totalBudget = planData.totalProjection;
+const totalBudget = planData.totalProjection;
 
-    chartInstances['distributionChart'] = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Ops', 'Marketing', 'Dev', 'Misc'],
-            datasets: [{
-                data: [totalBudget * 0.4, totalBudget * 0.25, totalBudget * 0.2, totalBudget * 0.15],
-                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
-                borderColor: '#fff',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { position: 'bottom' } }
-        }
-    });
+chartInstances['distributionChart'] = new Chart(ctx, {
+type: 'doughnut',
+data: {
+labels: ['Ops', 'Marketing', 'Dev', 'Misc'],
+datasets: [{
+data: [totalBudget * 0.4, totalBudget * 0.25, totalBudget * 0.2, totalBudget * 0.15],
+backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545'],
+borderColor: '#fff',
+borderWidth: 2
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: { legend: { position: 'bottom' } }
+}
+});
 }
 
 function generatePerformanceChart() {
-    destroyChart('performanceChart');
-    const ctx = document.getElementById('performanceChart')?.getContext('2d');
-    if (!ctx) return;
+destroyChart('performanceChart');
+const ctx = document.getElementById('performanceChart')?.getContext('2d');
+if (!ctx) return;
 
-    const labels = planData.months.map(m => m.shortMonthName);
-    const target = planData.months.map(m => m.budget);
-    const actual = planData.months.map(m => Math.round(m.budget * (0.8 + Math.random() * 0.3)));
+const labels = planData.months.map(m => m.shortMonthName);
+const target = planData.months.map(m => m.budget);
+const actual = planData.months.map(m => Math.round(m.budget * (0.8 + Math.random() * 0.3)));
 
-    chartInstances['performanceChart'] = new Chart(ctx, {
-        type: 'radar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Target',
-                    data: target,
-                    borderColor: '#007bff',
-                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#007bff'
-                },
-                {
-                    label: 'Actual',
-                    data: actual,
-                    borderColor: '#28a745',
-                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: '#28a745'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                r: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
-            }
-        }
-    });
+chartInstances['performanceChart'] = new Chart(ctx, {
+type: 'radar',
+data: {
+labels: labels,
+datasets: [
+{
+label: 'Target',
+data: target,
+borderColor: '#007bff',
+backgroundColor: 'rgba(0, 123, 255, 0.1)',
+borderWidth: 2,
+pointBackgroundColor: '#007bff'
+},
+{
+label: 'Actual',
+data: actual,
+borderColor: '#28a745',
+backgroundColor: 'rgba(40, 167, 69, 0.1)',
+borderWidth: 2,
+pointBackgroundColor: '#28a745'
+}
+]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+scales: {
+r: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
+}
+}
+});
 }
 
 function generateDataTable() {
-    const table = document.getElementById('dataTable');
-    if (!table) return;
+const table = document.getElementById('dataTable');
+if (!table) return;
 
-    table.innerHTML = '';
+table.innerHTML = '';
 
-    const thead = document.createElement('thead');
-    thead.innerHTML = '<tr><th>Month</th><th>Budget</th><th>Revenue</th><th>Expense</th><th>Profit</th></tr>';
-    table.appendChild(thead);
+const thead = document.createElement('thead');
+thead.innerHTML = '<tr><th>Month</th><th>Budget</th><th>Revenue</th><th>Expense</th><th>Profit</th></tr>';
+table.appendChild(thead);
 
-    const tbody = document.createElement('tbody');
-    planData.months.forEach(month => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${month.monthName.split(' ')[0]}</strong></td>
-            <td>$${month.budget.toLocaleString()}</td>
-            <td>$${month.revenue.toLocaleString()}</td>
-            <td>$${month.expense.toLocaleString()}</td>
-            <td style="color: ${month.profit > 0 ? '#28a745' : '#dc3545'}; font-weight: 600;">$${month.profit.toLocaleString()}</td>
-        `;
-        tbody.appendChild(row);
-    });
-    table.appendChild(tbody);
+const tbody = document.createElement('tbody');
+planData.months.forEach(month => {
+const row = document.createElement('tr');
+row.innerHTML = `
+<td><strong>${month.monthName.split(' ')[0]}</strong></td>
+<td>$${month.budget.toLocaleString()}</td>
+<td>$${month.revenue.toLocaleString()}</td>
+<td>$${month.expense.toLocaleString()}</td>
+<td style="color: ${month.profit > 0 ? '#28a745' : '#dc3545'}; font-weight: 600;">$${month.profit.toLocaleString()}</td>
+`;
+tbody.appendChild(row);
+});
+table.appendChild(tbody);
 }
 
 function generateAIInsights() {
-    const aiSection = document.getElementById('aiInsights');
-    if (!aiSection || planData.months.length === 0) return;
+const aiSection = document.getElementById('aiInsights');
+if (!aiSection || planData.months.length === 0) return;
 
-    const avgMonthly = planData.totalProjection / planData.months.length;
+const avgMonthly = planData.totalProjection / planData.months.length;
 
-    aiSection.innerHTML = `
-        <div class="ai-insights">
-            <div class="ai-header">🤖 AI Insights</div>
-            <p><strong>Plan:</strong> ${planData.type} with ${planData.growthRate}% monthly growth = $${planData.totalProjection.toLocaleString()} total</p>
-            <p><strong>Average Monthly:</strong> $${Math.round(avgMonthly).toLocaleString()}</p>
-            <ul>
-                <li>Monitor weekly progress</li>
-                <li>Adjust if variance >10%</li>
-                <li>Build contingency reserves</li>
-                <li>Quarterly review</li>
-            </ul>
-        </div>
-    `;
+aiSection.innerHTML = `
+<div class="ai-insights">
+<div class="ai-header">🤖 AI Insights</div>
+<p><strong>Plan:</strong> ${planData.type} with ${planData.growthRate}% monthly growth = $${planData.totalProjection.toLocaleString()} total</p>
+<p><strong>Average Monthly:</strong> $${Math.round(avgMonthly).toLocaleString()}</p>
+<ul>
+<li>Monitor weekly progress</li>
+<li>Adjust if variance >10%</li>
+<li>Build contingency reserves</li>
+<li>Quarterly review</li>
+</ul>
+</div>
+`;
 }
 
 function clearPlan() {
-    document.getElementById('planName').value = '';
-    document.getElementById('initialBudget').value = '';
-    planData.months = [];
-    document.getElementById('metricsGrid').innerHTML = '';
-    document.getElementById('aiInsights').innerHTML = '';
-    document.getElementById('dataTable').innerHTML = '';
-    Object.keys(chartInstances).forEach(key => destroyChart(key));
+document.getElementById('planName').value = '';
+document.getElementById('initialBudget').value = '';
+planData.months = [];
+document.getElementById('metricsGrid').innerHTML = '';
+document.getElementById('aiInsights').innerHTML = '';
+document.getElementById('dataTable').innerHTML = '';
+Object.keys(chartInstances).forEach(key => destroyChart(key));
 }
 
 // ==================== REPORTS ====================
 function loadReportsContent() {
-    const content = document.getElementById('reportsContent');
-    
-    content.innerHTML = `
-        <h2 style="color: #007bff; margin-bottom: 15px;">📈 Reports</h2>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
-            <button class="btn btn-primary" onclick="startSWOTReport()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">🔄 SWOT</button>
-            <button class="btn btn-primary" onclick="startBusinessReport()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">📈 Business</button>
-            <button class="btn btn-primary" onclick="startProfitChart()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">💹 Profit</button>
-        </div>
-        
-        <div id="reportContent" style="margin-top: 20px;"></div>
-    `;
+const content = document.getElementById('reportsContent');
+
+content.innerHTML = `
+<h2 style="color: #007bff; margin-bottom: 15px;">📈 Reports</h2>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;">
+<button class="btn btn-primary" onclick="startSWOTReport()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">🔄 SWOT</button>
+<button class="btn btn-primary" onclick="startBusinessReport()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">📈 Business</button>
+<button class="btn btn-primary" onclick="startProfitChart()" style="min-width: 100px; padding: 15px; font-size: 0.9em;">💹 Profit</button>
+</div>
+
+<div id="reportContent" style="margin-top: 20px;"></div>
+`;
 }
 
 function startSWOTReport() {
-    const reportContent = document.getElementById('reportContent');
-    reportContent.innerHTML = `
-        <div class="input-group">
-            <label>Business Name</label>
-            <input type="text" id="swotBusinessName" placeholder="Enter business name" autofocus>
-        </div>
-        <div class="button-group">
-            <button class="btn btn-primary" onclick="buildSwot()">Continue →</button>
-        </div>
-    `;
+const reportContent = document.getElementById('reportContent');
+reportContent.innerHTML = `
+<div class="input-group">
+<label>Business Name</label>
+<input type="text" id="swotBusinessName" placeholder="Enter business name" autofocus>
+</div>
+<div class="button-group">
+<button class="btn btn-primary" onclick="buildSwot()">Continue →</button>
+</div>
+`;
 }
 
 function buildSwot() {
-    const businessName = document.getElementById('swotBusinessName')?.value;
-    if (!businessName) {
-        alert('Please enter a business name');
-        return;
-    }
+const businessName = document.getElementById('swotBusinessName')?.value;
+if (!businessName) {
+alert('Please enter a business name');
+return;
+}
 
-    swotData.business = businessName;
-    const reportContent = document.getElementById('reportContent');
-    
-    reportContent.innerHTML = `
-        <h3 style="margin-top: 15px;">🔄 SWOT: ${businessName}</h3>
-        
-        ${['strengths', 'weaknesses', 'opportunities', 'threats'].map(cat => `
-            <div style="margin-top: 15px;">
-                <label style="font-weight: 600; color: #007bff; font-size: 0.95em;">${cat.charAt(0).toUpperCase() + cat.slice(1)}</label>
-                <input type="text" id="${cat}Input" placeholder="Enter..." style="margin-bottom: 6px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; font-size: 0.9em;">
-                <button class="btn btn-primary" style="width: 100%; padding: 8px; font-size: 0.85em;" onclick="addSwotItem('${cat}')">+ Add</button>
-                <div id="${cat}List" style="margin-top: 8px;"></div>
-            </div>
-        `).join('')}
-        
-        <button class="btn btn-primary" onclick="completeSwot()" style="margin-top: 15px; width: 100%; padding: 10px; font-size: 0.9em;">Generate SWOT</button>
-    `;
+swotData.business = businessName;
+const reportContent = document.getElementById('reportContent');
+
+reportContent.innerHTML = `
+<h3 style="margin-top: 15px;">🔄 SWOT: ${businessName}</h3>
+
+${['strengths', 'weaknesses', 'opportunities', 'threats'].map(cat => `
+<div style="margin-top: 15px;">
+<label style="font-weight: 600; color: #007bff; font-size: 0.95em;">${cat.charAt(0).toUpperCase() + cat.slice(1)}</label>
+<input type="text" id="${cat}Input" placeholder="Enter..." style="margin-bottom: 6px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; font-size: 0.9em;">
+<button class="btn btn-primary" style="width: 100%; padding: 8px; font-size: 0.85em;" onclick="addSwotItem('${cat}')">+ Add</button>
+<div id="${cat}List" style="margin-top: 8px;"></div>
+</div>
+`).join('')}
+
+<button class="btn btn-primary" onclick="completeSwot()" style="margin-top: 15px; width: 100%; padding: 10px; font-size: 0.9em;">Generate SWOT</button>
+`;
 }
 
 function addSwotItem(category) {
-    const input = document.getElementById(category + 'Input');
-    const value = input?.value.trim();
+const input = document.getElementById(category + 'Input');
+const value = input?.value.trim();
 
-    if (!value) {
-        alert('Please enter a value');
-        return;
-    }
+if (!value) {
+alert('Please enter a value');
+return;
+}
 
-    if (!swotData[category]) swotData[category] = [];
-    swotData[category].push({ description: value, score: 3 });
+if (!swotData[category]) swotData[category] = [];
+swotData[category].push({ description: value, score: 3 });
 
-    input.value = '';
-    renderSwotItems();
+input.value = '';
+renderSwotItems();
 }
 
 function renderSwotItems() {
-    ['strengths', 'weaknesses', 'opportunities', 'threats'].forEach(cat => {
-        const list = document.getElementById(cat + 'List');
-        if (!list) return;
+['strengths', 'weaknesses', 'opportunities', 'threats'].forEach(cat => {
+const list = document.getElementById(cat + 'List');
+if (!list) return;
 
-        list.innerHTML = '';
-        swotData[cat].forEach((item, index) => {
-            const div = document.createElement('div');
-            div.style.cssText = 'background: #f0f0f0; padding: 6px; margin-bottom: 4px; border-radius: 4px; display: flex; justify-content: space-between; font-size: 0.9em;';
-            div.innerHTML = `
-                <span>${item.description}</span>
-                <button class="btn btn-secondary" style="padding: 2px 6px; font-size: 0.75em; min-width: auto;" onclick="removeSwotItem('${cat}', ${index})">✕</button>
-            `;
-            list.appendChild(div);
-        });
-    });
+list.innerHTML = '';
+swotData[cat].forEach((item, index) => {
+const div = document.createElement('div');
+div.style.cssText = 'background: #f0f0f0; padding: 6px; margin-bottom: 4px; border-radius: 4px; display: flex; justify-content: space-between; font-size: 0.9em;';
+div.innerHTML = `
+<span>${item.description}</span>
+<button class="btn btn-secondary" style="padding: 2px 6px; font-size: 0.75em; min-width: auto;" onclick="removeSwotItem('${cat}', ${index})">✕</button>
+`;
+list.appendChild(div);
+});
+});
 }
 
 function removeSwotItem(category, index) {
-    swotData[category].splice(index, 1);
-    renderSwotItems();
+swotData[category].splice(index, 1);
+renderSwotItems();
 }
 
 function completeSwot() {
-    if (swotData.strengths.length === 0 || swotData.weaknesses.length === 0 || 
-        swotData.opportunities.length === 0 || swotData.threats.length === 0) {
-        alert('Please add at least one item to each category');
-        return;
-    }
+if (swotData.strengths.length === 0 || swotData.weaknesses.length === 0 ||
+swotData.opportunities.length === 0 || swotData.threats.length === 0) {
+alert('Please add at least one item to each category');
+return;
+}
 
-    generateSWOTReport();
+generateSWOTReport();
 }
 
 function generateSWOTReport() {
-    const top3 = (arr) => arr.sort((a, b) => b.score - a.score).slice(0, 3);
-    const S = top3(swotData.strengths);
-    const W = top3(swotData.weaknesses);
-    const O = top3(swotData.opportunities);
-    const T = top3(swotData.threats);
+const top3 = (arr) => arr.sort((a, b) => b.score - a.score).slice(0, 3);
+const S = top3(swotData.strengths);
+const W = top3(swotData.weaknesses);
+const O = top3(swotData.opportunities);
+const T = top3(swotData.threats);
 
-    const reportContent = document.getElementById('reportContent');
-    reportContent.innerHTML = `
-        <div class="report-header">📊 SWOT: ${swotData.business}</div>
-        
-        <div class="swot-grid">
-            <div class="swot-card swot-strengths">
-                <div class="swot-title">🟢 Strengths</div>
-                ${S.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-            </div>
-            <div class="swot-card swot-weaknesses">
-                <div class="swot-title">🔴 Weaknesses</div>
-                ${W.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-            </div>
-            <div class="swot-card swot-opportunities">
-                <div class="swot-title">🔵 Opportunities</div>
-                ${O.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-            </div>
-            <div class="swot-card swot-threats">
-                <div class="swot-title">🟠 Threats</div>
-                ${T.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
-            </div>
-        </div>
+const reportContent = document.getElementById('reportContent');
+reportContent.innerHTML = `
+<div class="report-header">📊 SWOT: ${swotData.business}</div>
 
-        <div class="report-section" style="margin-top: 15px;">
-            <b>🚀 Recommendations</b><br>
-            • Use strengths to capitalize on opportunities<br>
-            • Address weaknesses to mitigate threats<br>
-            • Build strategic partnerships<br>
-            • Monitor competitive landscape
-        </div>
-    `;
+<div class="swot-grid">
+<div class="swot-card swot-strengths">
+<div class="swot-title">🟢 Strengths</div>
+${S.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
+</div>
+<div class="swot-card swot-weaknesses">
+<div class="swot-title">🔴 Weaknesses</div>
+${W.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
+</div>
+<div class="swot-card swot-opportunities">
+<div class="swot-title">🔵 Opportunities</div>
+${O.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
+</div>
+<div class="swot-card swot-threats">
+<div class="swot-title">🟠 Threats</div>
+${T.map((x, i) => `<div class="swot-item">${i+1}. ${x.description}</div>`).join('')}
+</div>
+</div>
+
+<div class="report-section" style="margin-top: 15px;">
+<b>🚀 Recommendations</b><br>
+• Use strengths to capitalize on opportunities<br>
+• Address weaknesses to mitigate threats<br>
+• Build strategic partnerships<br>
+• Monitor competitive landscape
+</div>
+`;
 }
 
 function startBusinessReport() {
-    const reportContent = document.getElementById('reportContent');
-    reportContent.innerHTML = `
-        <div class="planner-input-grid">
-            <div class="input-group">
-                <label>Business Name</label>
-                <input type="text" id="reportBusinessName" placeholder="Company">
-            </div>
-            <div class="input-group">
-                <label>Industry</label>
-                <input type="text" id="reportIndustry" placeholder="e.g., Tech">
-            </div>
-            <div class="input-group">
-                <label>Revenue ($)</label>
-                <input type="number" id="reportRevenue" placeholder="100000">
-            </div>
-            <div class="input-group">
-                <label>Expenses ($)</label>
-                <input type="number" id="reportExpenses" placeholder="50000">
-            </div>
-            <div class="input-group">
-                <label>Employees</label>
-                <input type="number" id="reportEmployees" placeholder="5">
-            </div>
-            <div class="input-group">
-                <label>Founded</label>
-                <input type="number" id="reportFounded" placeholder="2020">
-            </div>
-        </div>
-        <button class="btn btn-primary" onclick="generateFullBusinessReport()" style="width: 100%; margin-top: 10px;">Generate</button>
-    `;
+const reportContent = document.getElementById('reportContent');
+reportContent.innerHTML = `
+<div class="planner-input-grid">
+<div class="input-group">
+<label>Business Name</label>
+<input type="text" id="reportBusinessName" placeholder="Company">
+</div>
+<div class="input-group">
+<label>Industry</label>
+<input type="text" id="reportIndustry" placeholder="e.g., Tech">
+</div>
+<div class="input-group">
+<label>Revenue ($)</label>
+<input type="number" id="reportRevenue" placeholder="100000">
+</div>
+<div class="input-group">
+<label>Expenses ($)</label>
+<input type="number" id="reportExpenses" placeholder="50000">
+</div>
+<div class="input-group">
+<label>Employees</label>
+<input type="number" id="reportEmployees" placeholder="5">
+</div>
+<div class="input-group">
+<label>Founded</label>
+<input type="number" id="reportFounded" placeholder="2020">
+</div>
+</div>
+<button class="btn btn-primary" onclick="generateFullBusinessReport()" style="width: 100%; margin-top: 10px;">Generate</button>
+`;
 }
 
 function generateFullBusinessReport() {
-    reportData.businessName = document.getElementById('reportBusinessName')?.value || 'Unknown';
-    reportData.industry = document.getElementById('reportIndustry')?.value || 'General';
-    reportData.revenue = parseFloat(document.getElementById('reportRevenue')?.value) || 0;
-    reportData.expenses = parseFloat(document.getElementById('reportExpenses')?.value) || 0;
-    reportData.employees = parseInt(document.getElementById('reportEmployees')?.value) || 0;
-    reportData.founded = parseInt(document.getElementById('reportFounded')?.value) || new Date().getFullYear();
+reportData.businessName = document.getElementById('reportBusinessName')?.value || 'Unknown';
+reportData.industry = document.getElementById('reportIndustry')?.value || 'General';
+reportData.revenue = parseFloat(document.getElementById('reportRevenue')?.value) || 0;
+reportData.expenses = parseFloat(document.getElementById('reportExpenses')?.value) || 0;
+reportData.employees = parseInt(document.getElementById('reportEmployees')?.value) || 0;
+reportData.founded = parseInt(document.getElementById('reportFounded')?.value) || new Date().getFullYear();
 
-    const profit = reportData.revenue - reportData.expenses;
-    const profitMargin = reportData.revenue > 0 ? ((profit / reportData.revenue) * 100).toFixed(2) : 0;
+const profit = reportData.revenue - reportData.expenses;
+const profitMargin = reportData.revenue > 0 ? ((profit / reportData.revenue) * 100).toFixed(2) : 0;
 
-    const reportContent = document.getElementById('reportContent');
-    reportContent.innerHTML = `
-        <div class="report-header">📈 Report: ${reportData.businessName}</div>
-        
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-icon">💰</div>
-                <div class="metric-label">Revenue</div>
-                <div class="metric-value">$${reportData.revenue.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📊</div>
-                <div class="metric-label">Profit</div>
-                <div class="metric-value" style="color: ${profit > 0 ? '#28a745' : '#dc3545'};">$${profit.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📈</div>
-                <div class="metric-label">Margin</div>
-                <div class="metric-value">${profitMargin}%</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">👥</div>
-                <div class="metric-label">Team</div>
-                <div class="metric-value">${reportData.employees}</div>
-            </div>
-        </div>
+const reportContent = document.getElementById('reportContent');
+reportContent.innerHTML = `
+<div class="report-header">📈 Report: ${reportData.businessName}</div>
 
-        <div class="report-section">
-            <b>📋 Overview</b><br>
-            Industry: ${reportData.industry}<br>
-            Founded: ${reportData.founded}<br>
-            Revenue: $${reportData.revenue.toLocaleString()}<br>
-            Expenses: $${reportData.expenses.toLocaleString()}<br>
-            Profit: $${profit.toLocaleString()}
-        </div>
+<div class="metrics-grid">
+<div class="metric-card">
+<div class="metric-icon">💰</div>
+<div class="metric-label">Revenue</div>
+<div class="metric-value">$${reportData.revenue.toLocaleString()}</div>
+</div>
+<div class="metric-card">
+<div class="metric-icon">📊</div>
+<div class="metric-label">Profit</div>
+<div class="metric-value" style="color: ${profit > 0 ? '#28a745' : '#dc3545'};">$${profit.toLocaleString()}</div>
+</div>
+<div class="metric-card">
+<div class="metric-icon">📈</div>
+<div class="metric-label">Margin</div>
+<div class="metric-value">${profitMargin}%</div>
+</div>
+<div class="metric-card">
+<div class="metric-icon">👥</div>
+<div class="metric-label">Team</div>
+<div class="metric-value">${reportData.employees}</div>
+</div>
+</div>
 
-        <div class="report-section">
-            <b>💡 Recommendations</b><br>
-            ${profit > 0 ? 
-                '• Maintain profitability<br>• Explore growth<br>' :
-                '• Focus on revenue growth<br>• Reduce costs<br>'}
-            • Quarterly reviews<br>
-            • Build financial forecast
-        </div>
-    `;
+<div class="report-section">
+<b>📋 Overview</b><br>
+Industry: ${reportData.industry}<br>
+Founded: ${reportData.founded}<br>
+Revenue: $${reportData.revenue.toLocaleString()}<br>
+Expenses: $${reportData.expenses.toLocaleString()}<br>
+Profit: $${profit.toLocaleString()}
+</div>
+
+<div class="report-section">
+<b>💡 Recommendations</b><br>
+${profit > 0 ?
+'• Maintain profitability<br>• Explore growth<br>' :
+'• Focus on revenue growth<br>• Reduce costs<br>'}
+• Quarterly reviews<br>
+• Build financial forecast
+</div>
+`;
 }
 
 function startProfitChart() {
-    const reportContent = document.getElementById('reportContent');
-    reportContent.innerHTML = `
-        <div class="planner-input-grid">
-            <div class="input-group">
-                <label>Business Name</label>
-                <input type="text" id="chartBusinessName" placeholder="Company">
-            </div>
-            <div class="input-group">
-                <label>Revenue ($)</label>
-                <input type="number" id="chartRevenue" placeholder="100000">
-            </div>
-            <div class="input-group">
-                <label>Expenses ($)</label>
-                <input type="number" id="chartExpenses" placeholder="50000">
-            </div>
-        </div>
-        <button class="btn btn-primary" onclick="generateProfitVisualization()" style="width: 100%; margin-top: 10px;">Generate</button>
-    `;
+const reportContent = document.getElementById('reportContent');
+reportContent.innerHTML = `
+<div class="planner-input-grid">
+<div class="input-group">
+<label>Business Name</label>
+<input type="text" id="chartBusinessName" placeholder="Company">
+</div>
+<div class="input-group">
+<label>Revenue ($)</label>
+<input type="number" id="chartRevenue" placeholder="100000">
+</div>
+<div class="input-group">
+<label>Expenses ($)</label>
+<input type="number" id="chartExpenses" placeholder="50000">
+</div>
+</div>
+<button class="btn btn-primary" onclick="generateProfitVisualization()" style="width: 100%; margin-top: 10px;">Generate</button>
+`;
 }
 
 function generateProfitVisualization() {
-    const businessName = document.getElementById('chartBusinessName')?.value || 'Business';
-    const revenue = parseFloat(document.getElementById('chartRevenue')?.value) || 0;
-    const expenses = parseFloat(document.getElementById('chartExpenses')?.value) || 0;
+const businessName = document.getElementById('chartBusinessName')?.value || 'Business';
+const revenue = parseFloat(document.getElementById('chartRevenue')?.value) || 0;
+const expenses = parseFloat(document.getElementById('chartExpenses')?.value) || 0;
 
-    if (revenue <= 0) {
-        alert('Please enter valid revenue');
-        return;
-    }
+if (revenue <= 0) {
+alert('Please enter valid revenue');
+return;
+}
 
-    destroyChart('profitChart');
-    destroyChart('profitDoughnut');
+destroyChart('profitChart');
+destroyChart('profitDoughnut');
 
-    const reportContent = document.getElementById('reportContent');
-    reportContent.innerHTML = `
-        <div class="report-header">💹 ${businessName}</div>
-        
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <div class="metric-icon">📈</div>
-                <div class="metric-label">Revenue</div>
-                <div class="metric-value">$${revenue.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📉</div>
-                <div class="metric-label">Expenses</div>
-                <div class="metric-value">$${expenses.toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">💰</div>
-                <div class="metric-label">Profit</div>
-                <div class="metric-value" style="color: ${revenue - expenses > 0 ? '#28a745' : '#dc3545'};">$${(revenue - expenses).toLocaleString()}</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">📊</div>
-                <div class="metric-label">Margin</div>
-                <div class="metric-value">${((((revenue - expenses) / revenue) * 100).toFixed(1))}%</div>
-            </div>
-        </div>
+const reportContent = document.getElementById('reportContent');
+reportContent.innerHTML = `
+<div class="report-header">💹 ${businessName}</div>
 
-        <div class="charts-grid">
-            <div class="chart-box">
-                <div class="chart-title">Revenue vs Expenses</div>
-                <div class="chart-container"><canvas id="profitChart"></canvas></div>
-            </div>
-            <div class="chart-box">
-                <div class="chart-title">Profit Breakdown</div>
-                <div class="chart-container"><canvas id="profitDoughnut"></canvas></div>
-            </div>
-        </div>
-    `;
+<div class="metrics-grid">
+<div class="metric-card">
+<div class="metric-icon">📈</div>
+<div class="metric-label">Revenue</div>
+<div class="metric-value">$${revenue.toLocaleString()}</div>
+</div>
+<div class="metric-card">
+<div class="metric-icon">📉</div>
+<div class="metric-label">Expenses</div>
+<div class="metric-value">$${expenses.toLocaleString()}</div>
+</div>
+<div class="metric-card">
+<div class="metric-icon">💰</div>
+<div class="metric-label">Profit</div>
+<div class="metric-value" style="color: ${revenue - expenses > 0 ? '#28a745' : '#dc3545'};">$${(revenue - expenses).toLocaleString()}</div>
+</div>
+<div class="metric-card">
+<div class="metric-icon">📊</div>
+<div class="metric-label">Margin</div>
+<div class="metric-value">${((((revenue - expenses) / revenue) * 100).toFixed(1))}%</div>
+</div>
+</div>
 
-    setTimeout(() => {
-        const ctx = document.getElementById('profitChart');
-        if (ctx) {
-            chartInstances['profitChart'] = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: [businessName],
-                    datasets: [
-                        { label: 'Revenue', data: [revenue], backgroundColor: '#28a745' },
-                        { label: 'Expenses', data: [expenses], backgroundColor: '#dc3545' }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
-                    }
-                }
-            });
-        }
+<div class="charts-grid">
+<div class="chart-box">
+<div class="chart-title">Revenue vs Expenses</div>
+<div class="chart-container"><canvas id="profitChart"></canvas></div>
+</div>
+<div class="chart-box">
+<div class="chart-title">Profit Breakdown</div>
+<div class="chart-container"><canvas id="profitDoughnut"></canvas></div>
+</div>
+</div>
+`;
 
-        const ctx2 = document.getElementById('profitDoughnut');
-        if (ctx2) {
-            chartInstances['profitDoughnut'] = new Chart(ctx2, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Profit', 'Expenses'],
-                    datasets: [{
-                        data: [revenue - expenses, expenses],
-                        backgroundColor: ['#28a745', '#dc3545'],
-                        borderColor: '#fff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom' } }
-                }
-            });
-        }
-    }, 100);
+setTimeout(() => {
+const ctx = document.getElementById('profitChart');
+if (ctx) {
+chartInstances['profitChart'] = new Chart(ctx, {
+type: 'bar',
+data: {
+labels: [businessName],
+datasets: [
+{ label: 'Revenue', data: [revenue], backgroundColor: '#28a745' },
+{ label: 'Expenses', data: [expenses], backgroundColor: '#dc3545' }
+]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+scales: {
+y: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } } }
+}
+}
+});
+}
+
+const ctx2 = document.getElementById('profitDoughnut');
+if (ctx2) {
+chartInstances['profitDoughnut'] = new Chart(ctx2, {
+type: 'doughnut',
+data: {
+labels: ['Profit', 'Expenses'],
+datasets: [{
+data: [revenue - expenses, expenses],
+backgroundColor: ['#28a745', '#dc3545'],
+borderColor: '#fff',
+borderWidth: 2
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: { legend: { position: 'bottom' } }
+}
+});
+}
+}, 100);
+}
+
+// ==================== BUSINESS COMPARISON ====================
+function showBusinessComparison(userInput) {
+const chatBox = document.getElementById('chat-box');
+
+// Extract business names from input or show random comparison
+let businessesToCompare = [];
+const inputLower = userInput.toLowerCase();
+
+// Try to find mentioned businesses
+businessDatabase.forEach(biz => {
+  if (inputLower.includes(biz.name.toLowerCase().split(' ')[0])) {
+    businessesToCompare.push(biz);
+  }
+});
+
+// If no businesses found, suggest top comparisons
+if (businessesToCompare.length < 2) {
+  businessesToCompare = [
+    businessDatabase.find(b => b.name === "Apple Inc."),
+    businessDatabase.find(b => b.name === "Microsoft Corporation"),
+    businessDatabase.find(b => b.name === "Tesla Inc.")
+  ];
+}
+
+// Limit to 3 businesses for clear comparison
+if (businessesToCompare.length > 3) {
+  businessesToCompare = businessesToCompare.slice(0, 3);
+}
+
+// Ensure at least 2 businesses
+if (businessesToCompare.length < 2) {
+  businessesToCompare = businessDatabase.slice(0, 2);
+}
+
+displayComparisonAnalysis(businessesToCompare);
+}
+
+function displayComparisonAnalysis(businesses) {
+setTimeout(() => {
+  const chatBox = document.getElementById('chat-box');
+  const comparisonDiv = document.createElement('div');
+  comparisonDiv.classList.add('message', 'bot');
+  comparisonDiv.style.cssText = 'max-width: 100% !important; float: none !important; margin-left: auto !important; margin-right: auto !important; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #333; padding: 15px;';
+
+  // Build comparison HTML
+  let html = `<div style="margin-bottom: 15px;"><strong style="color: #007bff; font-size: 1.1em;">📊 Business Comparison Analysis</strong></div>`;
+
+  // Metrics comparison
+  html += `<div style="margin-bottom: 15px; overflow-x: auto;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+      <tr style="background: #007bff; color: white;">
+        <th style="padding: 8px; text-align: left; border: 1px solid #ccc;">Metric</th>
+        ${businesses.map(b => `<th style="padding: 8px; text-align: center; border: 1px solid #ccc;">${b.name}</th>`).join('')}
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ccc; font-weight: 600;">Revenue</td>
+        ${businesses.map(b => `<td style="padding: 8px; border: 1px solid #ccc; text-align: center;">$${b.revenue}M</td>`).join('')}
+      </tr>
+      <tr style="background: #f9f9f9;">
+        <td style="padding: 8px; border: 1px solid #ccc; font-weight: 600;">Employees</td>
+        ${businesses.map(b => `<td style="padding: 8px; border: 1px solid #ccc; text-align: center;">${b.employees.toLocaleString()}</td>`).join('')}
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ccc; font-weight: 600;">Profit Margin</td>
+        ${businesses.map(b => `<td style="padding: 8px; border: 1px solid #ccc; text-align: center; color: #28a745; font-weight: bold;">${b.profitMargin}%</td>`).join('')}
+      </tr>
+      <tr style="background: #f9f9f9;">
+        <td style="padding: 8px; border: 1px solid #ccc; font-weight: 600;">Growth Rate</td>
+        ${businesses.map(b => `<td style="padding: 8px; border: 1px solid #ccc; text-align: center; color: #0056b3; font-weight: bold;">${b.growth}%</td>`).join('')}
+      </tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ccc; font-weight: 600;">Market Cap</td>
+        ${businesses.map(b => `<td style="padding: 8px; border: 1px solid #ccc; text-align: center;">$${b.marketCap}M</td>`).join('')}
+      </tr>
+    </table>
+  </div>`;
+
+  // Analysis section
+  html += `<div style="background: white; padding: 12px; border-radius: 6px; border-left: 4px solid #f5576c; margin-top: 10px;">
+    <strong style="color: #f5576c; display: block; margin-bottom: 8px;">🔍 Key Analysis:</strong>`;
+
+  // Revenue Analysis
+  const maxRevenue = Math.max(...businesses.map(b => b.revenue));
+  const leader = businesses.find(b => b.revenue === maxRevenue);
+  html += `<p style="margin: 6px 0; font-size: 0.95em;">💰 <strong>Revenue Leader:</strong> ${leader.name} with $${leader.revenue}M (${Math.round(leader.revenue / businesses.reduce((a, b) => a + b.revenue, 0) * 100)}% of total)</p>`;
+
+  // Profitability Analysis
+  const mostProfitable = businesses.reduce((a, b) => a.profitMargin > b.profitMargin ? a : b);
+  html += `<p style="margin: 6px 0; font-size: 0.95em;">📈 <strong>Most Profitable:</strong> ${mostProfitable.name} with ${mostProfitable.profitMargin}% profit margin</p>`;
+
+  // Growth Analysis
+  const fastestGrowing = businesses.reduce((a, b) => a.growth > b.growth ? a : b);
+  html += `<p style="margin: 6px 0; font-size: 0.95em;">🚀 <strong>Fastest Growing:</strong> ${fastestGrowing.name} at ${fastestGrowing.growth}% annual growth</p>`;
+
+  // Efficiency Analysis
+  const revenuePerEmployee = businesses.map(b => ({ name: b.name, rpe: (b.revenue / b.employees).toFixed(2) }));
+  const mostEfficient = revenuePerEmployee.reduce((a, b) => a.rpe > b.rpe ? a : b);
+  html += `<p style="margin: 6px 0; font-size: 0.95em;">⚡ <strong>Most Efficient:</strong> ${mostEfficient.name} generates $${mostEfficient.rpe}M per employee</p>`;
+
+  // Strategic Positioning
+  const totalMarketCap = businesses.reduce((a, b) => a + b.marketCap, 0);
+  html += `<p style="margin: 6px 0; font-size: 0.95em;">🎯 <strong>Market Position:</strong> Combined market cap of $${totalMarketCap}M</p>`;
+
+  html += `</div>`;
+
+  // Recommendation
+  html += `<div style="background: #e8f5e9; padding: 12px; border-radius: 6px; margin-top: 10px; border-left: 4px solid #10b981;">
+    <strong style="color: #10b981; display: block; margin-bottom: 8px;">💡 Strategic Insights:</strong>
+    <ul style="margin: 0; padding-left: 20px; font-size: 0.95em;">
+      <li>${leader.name} dominates by revenue but ${mostProfitable.name} shows better profitability metrics</li>
+      <li>${fastestGrowing.name} demonstrates the strongest market momentum with ${fastestGrowing.growth}% growth</li>
+      <li>Consider industry position: ${businesses[0].industry} vs ${businesses[1].industry}${businesses[2] ? ' vs ' + businesses[2].industry : ''}</li>
+      <li>Diversification opportunity across ${new Set(businesses.map(b => b.industry)).size} different sectors</li>
+    </ul>
+  </div>`;
+
+  comparisonDiv.innerHTML = html;
+  chatBox.appendChild(comparisonDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}, 800);
 }
 
 // ==================== CHAT ====================
 function levenshteinDistance(a, b) {
-    const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
-    for(let i=0;i<=b.length;i++) matrix[i][0]=i;
-    for(let j=0;j<=a.length;j++) matrix[0][j]=j;
-    for(let i=1;i<=b.length;i++) {
-        for(let j=1;j<=a.length;j++) {
-            const cost = a[j-1]===b[i-1]?0:1;
-            matrix[i][j] = Math.min(matrix[i-1][j]+1, matrix[i][j-1]+1, matrix[i-1][j-1]+cost);
-        }
-    }
-    return matrix[b.length][a.length];
+const matrix = Array.from({length: b.length+1}, (_,i)=>Array(a.length+1).fill(0));
+for(let i=0;i<=b.length;i++) matrix[i][0]=i;
+for(let j=0;j<=a.length;j++) matrix[0][j]=j;
+for(let i=1;i<=b.length;i++) {
+for(let j=1;j<=a.length;j++) {
+const cost = a[j-1]===b[i-1]?0:1;
+matrix[i][j] = Math.min(matrix[i-1][j]+1, matrix[i][j-1]+1, matrix[i-1][j-1]+cost);
+}
+}
+return matrix[b.length][a.length];
 }
 
 function similarity(s1,s2) {
-    s1 = s1.toLowerCase();
-    s2 = s2.toLowerCase();
-    const longer = s1.length > s2.length ? s1 : s2;
-    const shorter = s1.length > s2.length ? s2 : s1;
-    if(longer.length===0) return 1.0;
-    return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
+s1 = s1.toLowerCase();
+s2 = s2.toLowerCase();
+const longer = s1.length > s2.length ? s1 : s2;
+const shorter = s1.length > s2.length ? s2 : s1;
+if(longer.length===0) return 1.0;
+return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
 function getBotReply(input) {
-    let userInput = input.toLowerCase();
+let userInput = input.toLowerCase();
 
-    let bestIntent = null;
-    let bestScore = 0;
+// Check for business comparison first
+if (userInput.includes('compare') && (userInput.includes('business') || userInput.includes('company') || userInput.includes('companies'))) {
+  showBusinessComparison(userInput);
+  return "🔍 Analyzing businesses for comparison...";
+}
 
-    for (const intent of intents) {
-        for (const pattern of intent.patterns) {
-            const score = similarity(userInput, pattern);
-            if (score > bestScore) {
-                bestScore = score;
-                bestIntent = intent;
-            }
-        }
-    }
+let bestIntent = null;
+let bestScore = 0;
 
-    if (bestScore > 0.55 && bestIntent) {
-        return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
-    }
+for (const intent of intents) {
+for (const pattern of intent.patterns) {
+const score = similarity(userInput, pattern);
+if (score > bestScore) {
+bestScore = score;
+bestIntent = intent;
+}
+}
+}
 
-    return "I can help with business concepts! Try the Planner and Reports buttons. 💡";
+if (bestScore > 0.55 && bestIntent) {
+return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
+}
+
+return "I can help with business concepts! Try the Planner and Reports buttons. 💡";
 }
 
 function addMessage(text, sender) {
+const chatBox = document.getElementById('chat-box');
+const msgDiv = document.createElement('div');
+msgDiv.classList.add('message', sender);
+chatBox.appendChild(msgDiv);
+chatBox.scrollTop = chatBox.scrollHeight;
+
+if (sender === 'bot') {
+  // Typing animation for bot messages
+  typeMessage(msgDiv, text);
+} else {
+  msgDiv.textContent = text;
+}
+}
+
+function typeMessage(element, text) {
+let charIndex = 0;
+let wordBuffer = '';
+const speed = 30; // milliseconds per character
+
+function typeNextCharacter() {
+  if (charIndex < text.length) {
+    const char = text[charIndex];
+    wordBuffer += char;
+    element.textContent = wordBuffer;
+    
+    // Scroll chat box to bottom
     const chatBox = document.getElementById('chat-box');
-    const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', sender);
-    msgDiv.textContent = text;
-    chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
+    
+    charIndex++;
+    setTimeout(typeNextCharacter, speed);
+  }
+}
+
+typeNextCharacter();
 }
 
 function sendMessage() {
-    const input = $("#user-input").val().trim();
-    if (!input) return;
+const input = $("#user-input").val().trim();
+if (!input) return;
 
-    addMessage(input, 'user');
-    $("#user-input").val("");
+addMessage(input, 'user');
+$("#user-input").val("");
 
-    setTimeout(() => {
-        const reply = getBotReply(input);
-        addMessage(reply, 'bot');
-    }, 500);
+setTimeout(() => {
+const reply = getBotReply(input);
+addMessage(reply, 'bot');
+}, 500);
 }
 
 $("#user-input").on('keypress', function(e) {
-    if (e.key === 'Enter') sendMessage();
+if (e.key === 'Enter') sendMessage();
 });
 
 $("#suggestBtn").click(() => $("#suggestBox").toggle());
 $("#closeBtn").click(() => $("#suggestBox").hide());
 $(".suggestion").click(function() {
-    $("#user-input").val($(this).text());
-    sendMessage();
-    $("#suggestBox").hide();
+$("#user-input").val($(this).text());
+sendMessage();
+$("#suggestBox").hide();
 });
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition;
 
 if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.lang = "en-US";
-    recognition.continuous = false;
-    recognition.interimResults = false;
+recognition = new SpeechRecognition();
+recognition.lang = "en-US";
+recognition.continuous = false;
+recognition.interimResults = false;
 
-    recognition.onstart = () => {
-        const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.add("listening");
-    };
+recognition.onstart = () => {
+const btn = document.getElementById("voice-btn");
+if(btn) btn.classList.add("listening");
+};
 
-    recognition.onend = () => {
-        const btn = document.getElementById("voice-btn");
-        if(btn) btn.classList.remove("listening");
-    };
+recognition.onend = () => {
+const btn = document.getElementById("voice-btn");
+if(btn) btn.classList.remove("listening");
+};
 
-    recognition.onresult = function(event) {
-        const transcript = event.results[0][0].transcript;
-        document.getElementById("user-input").value = transcript;
-        sendMessage();
-    };
+recognition.onresult = function(event) {
+const transcript = event.results[0][0].transcript;
+document.getElementById("user-input").value = transcript;
+sendMessage();
+};
 }
 
 function startVoice() {
-    if(recognition) {
-        recognition.start();
-    } else {
-        alert("Speech recognition not supported");
-    }
+if(recognition) {
+recognition.start();
+} else {
+alert("Speech recognition not supported");
+}
 }
 
 window.addEventListener("click", function(e) {
-    if (e.target === document.getElementById("plannerModal")) {
-        closePlannerModal();
-    }
-    if (e.target === document.getElementById("reportsModal")) {
-        closeReportsModal();
-    }
+if (e.target === document.getElementById("plannerModal")) {
+closePlannerModal();
+}
+if (e.target === document.getElementById("reportsModal")) {
+closeReportsModal();
+}
 });
 
 window.onload = () => {
-    addMessage("Hello! 👋 Ask me anything about business.", 'bot');
+addMessage("Hello! 👋 Ask me anything about business.", 'bot');
 };
 </script>
 
