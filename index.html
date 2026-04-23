@@ -535,6 +535,8 @@ margin-bottom: 15px;
 <button id="closeBtn">✖</button>
 <p class="suggestion">what is business</p>
 <p class="suggestion">how to start a business</p>
+<p class="suggestion">create swot analysis</p>
+<p class="suggestion">financial planning</p>
 </div>
 </div>
 
@@ -714,6 +716,7 @@ const intents = [
 9️⃣ Marketing
 🔟 Launch & Grow`
 ]},
+{tag:"idea_generator",patterns:["give me business ideas","business idea","startup idea","product ideas","generate idea","help me brainstorm","idea generation","new business idea","idea for startup","create idea","what should i build","startup ideas","business ideas"],responses:["Let me brainstorm a few strong ideas for you..."]},
 // STRATEGY & ANALYSIS
 {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
 {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
@@ -785,8 +788,6 @@ const intents = [
 {tag:"exit_strategy",patterns:["what is an exit strategy","selling a business"],responses:["An exit strategy is a plan for how an entrepreneur will sell their company or transfer ownership to someone else."]},
 {tag:"ipo",patterns:["what is an ipo","going public"],responses:["An Initial Public Offering (IPO) is when a private company offers shares to the public for the first time to raise capital."]},
 {tag:"acquisition",patterns:["business acquisition","being bought out"],responses:["An acquisition occurs when one company buys most or all of another company's shares to take control of it."]},
-{tag:"business cap",patterns:["what is business cap","business cap"],responses:["it is how much the whole company is worth, based on what people are willing to pay for it. It gives you an idea of whether a company is small, medium, or large."]},
-{tag:"market cap",patterns:["what is market cap","market cap"],responses:["is the total value of a company in the stock market, meaning how much the company is worth overall based on the price of its shares and how many shares exist; it reflects what investors believe the company is worth at a given time and is used to compare the size of different companies, showing whether a company is considered small, medium, or large."]},
 
 // RISK & RECOVERY
 {tag:"pivot_vs_persevere",patterns:["should i pivot or persevere","when to change direction"],responses:["Deciding whether to stick with a plan (persevere) or change the fundamental strategy (pivot) is one of the hardest aspects of management."]},
@@ -1836,6 +1837,50 @@ if(longer.length===0) return 1.0;
 return (longer.length - levenshteinDistance(longer, shorter)) / longer.length;
 }
 
+function generateIdeaReply() {
+const ideaCategories = [
+  {
+    category: 'Sustainable Services',
+    examples: [
+      'Subscription-based home composting kits for busy urban families',
+      'A mobile app that connects local farmers with direct delivery customers',
+      'Eco-friendly packaging consulting for small e-commerce brands'
+    ]
+  },
+  {
+    category: 'Tech & Productivity',
+    examples: [
+      'AI-powered meeting summarization for remote teams',
+      'A task planner that builds micro-goals based on your calendar',
+      'A skill-swapping platform for freelancers and startups'
+    ]
+  },
+  {
+    category: 'Health & Lifestyle',
+    examples: [
+      'A mental wellness subscription box designed for entrepreneurs',
+      'A telehealth coaching service for nutrition and productivity',
+      'A community marketplace for local fitness instructors and pop-up classes'
+    ]
+  },
+  {
+    category: 'Local Business',
+    examples: [
+      'A neighborhood concierge service for busy professionals',
+      'A digital loyalty program tailored to independent cafés',
+      'A small business delivery cooperative for same-day orders'
+    ]
+  }
+];
+const selected = ideaCategories[Math.floor(Math.random() * ideaCategories.length)];
+return `Here are some fresh idea suggestions in ${selected.category}:
+• ${selected.examples[0]}
+• ${selected.examples[1]}
+• ${selected.examples[2]}
+
+If you want more, ask for ideas in a specific industry or for a specific customer need.`;
+}
+
 function getBotReply(input) {
 let userInput = input.toLowerCase();
 
@@ -1859,7 +1904,10 @@ bestIntent = intent;
 }
 
 if (bestScore > 0.55 && bestIntent) {
-return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
+  if (bestIntent.tag === 'idea_generator') {
+    return generateIdeaReply();
+  }
+  return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
 }
 
 return "I can help with business concepts! Try the Planner and Reports buttons. 💡";
