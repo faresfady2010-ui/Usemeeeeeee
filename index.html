@@ -629,6 +629,7 @@ const intents = [
 {tag:"revenue",patterns:["what is revenue","income of business"],responses:["Revenue is the total income a business earns from sales."]},
 {tag:"costs",patterns:["what are costs","business expenses"],responses:["Costs are the money spent to run a business."]},
 {tag:"loss",patterns:["what is loss"],responses:["Loss happens when costs are higher than revenue."]},
+{tag:"profit_prediction",patterns:["predict profit","estimate profit","profit forecast","profit or loss","profit prediction","will i make a profit","will i have a loss","calculate profit","calculate loss","estimate loss","forecast profit"],responses:["Share your revenue and expense numbers and I can estimate whether that means profit or loss."]},
 {tag:"cash_flow",patterns:["cash flow"],responses:["Cash flow shows money coming in and going out of a business."]},
 
 // ENTREPRENEURSHIP
@@ -717,6 +718,7 @@ const intents = [
 🔟 Launch & Grow`
 ]},
 {tag:"idea_generator",patterns:["give me business ideas","business idea","startup idea","product ideas","generate idea","help me brainstorm","idea generation","new business idea","idea for startup","create idea","what should i build","startup ideas","business ideas"],responses:["Let me brainstorm a few strong ideas for you..."]},
+{tag:"profit_prediction",patterns:["predict profit","estimate profit","profit forecast","profit or loss","profit prediction","will i make a profit","will i have a loss","calculate profit","calculate loss","estimate loss","forecast profit"],responses:["Share your revenue and expense numbers and I can estimate whether that means profit or loss."]},
 // STRATEGY & ANALYSIS
 {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
 {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
@@ -735,7 +737,7 @@ const intents = [
 // CUSTOMER EXPERIENCE
 {tag:"customer_retention",patterns:["customer retention","keeping customers"],responses:["Customer retention refers to the activities a company uses to reduce the number of customer defections."]},
 {tag:"customer_feedback",patterns:["importance of feedback","customer reviews"],responses:["Feedback helps businesses understand customer needs and improve their products or services."]},
-{tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company’s relationships and interactions with customers and potential customers."]},
+{tag:"crm",patterns:["what is crm","customer relationship management"],responses:["CRM is technology for managing all your company's relationships and interactions with customers and potential customers."]},
 {tag:"user_experience",patterns:["what is ux","user experience"],responses:["UX refers to the overall experience a person has when interacting with a product, especially in terms of how easy or pleasing it is to use."]},
 
 // ADVANCED FINANCE & LEGAL
@@ -801,8 +803,6 @@ const intents = [
 
 // BUSINESS COMPARISON
 {tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
-
-// ADD MORE UP TO ~200 INTENTS
 ];
 
 // ==================== BUSINESS COMPARISON DATABASE ====================
@@ -812,7 +812,7 @@ const businessDatabase = [
     country: "USA",
     industry: "Technology",
     founded: 1976,
-    revenue: 383285, // millions
+    revenue: 383285,
     employees: 161000,
     marketCap: 3200000,
     profitMargin: 25.2,
@@ -1881,13 +1881,140 @@ return `Here are some fresh idea suggestions in ${selected.category}:
 If you want more, ask for ideas in a specific industry or for a specific customer need.`;
 }
 
+function parseFinancialAmount(value) {
+  if (!value) return null;
+  let text = value.toLowerCase().replace(/,/g, '').trim();
+  let multiplier = 1;
+  if (text.match(/billion|bn/)) multiplier = 1000;
+  else if (text.match(/million|m/)) multiplier = 1;
+  else if (text.match(/thousand|k/)) multiplier = 0.001;
+  text = text.replace(/(billion|million|thousand|bn|m|k)/g, '').replace(/[^0-9.]/g, '');
+  const number = parseFloat(text);
+  return isNaN(number) ? null : number * multiplier;
+}
+
+function extractFinancialValues(text) {
+  const result = { revenue: null, expenses: null };
+  const revenueRegex = /(revenue|income|sales)\s*(?:is|=|:?|of)?\s*\$?\s*([0-9,.]+\s*(?:billion|million|thousand|bn|m|k)?)/gi;
+  const expenseRegex = /(expense|expenses|cost|costs)\s*(?:is|=|:?|of)?\s*\$?\s*([0-9,.]+\s*(?:billion|million|thousand|bn|m|k)?)/gi;
+  let match;
+  while ((match = revenueRegex.exec(text)) !== null) {
+    result.revenue = parseFinancialAmount(match[2]) || result.revenue;
+  }
+  while ((match = expenseRegex.exec(text)) !== null) {
+    result.expenses = parseFinancialAmount(match[2]) || result.expenses;
+  }
+  return result;
+}
+
+function predictProfitLoss(text) {
+  const values = extractFinancialValues(text);
+  if (values.revenue !== null && values.expenses !== null) {
+    const profit = values.revenue - values.expenses;
+    const margin = values.revenue > 0 ? ((profit / values.revenue) * 100).toFixed(1) : '0.0';
+    const amount = Math.abs(profit).toLocaleString(undefined, { maximumFractionDigits: 2 });
+    const verdict = profit >= 0 ? 'profit' : 'loss';
+    const advice = profit >= 0
+      ? 'This looks healthy, but keep watching expenses as the business scales.'
+      : 'This shows a loss, so you should lower costs or increase revenue to move toward profitability.';
+    return `Based on revenue of $${values.revenue.toLocaleString()} and expenses of $${values.expenses.toLocaleString()}, this scenario results in a ${verdict} of $${amount} (${margin}% margin). ${advice}`;
+  }
+  if (values.revenue !== null && values.expenses === null) {
+    return `I can estimate profit or loss if you tell me expenses. Right now I only see revenue of $${values.revenue.toLocaleString()}.`;
+  }
+  if (values.expenses !== null && values.revenue === null) {
+    return `I can estimate profit or loss if you tell me revenue. Right now I only see expenses of $${values.expenses.toLocaleString()}.`;
+  }
+  if (text.match(/predict|estimate|forecast|calculate|profit|loss/)) {
+    return 'To predict profit or loss, I need both revenue and expense values. Profit = Revenue - Expenses.';
+  }
+  return null;
+}
+
+function findGenericBusinessAnswer(input) {
+  const knowledgeBank = [
+    {keywords:['liquidity','cash flow available'], response:'Liquidity refers to how quickly an asset can be converted into cash. High liquidity means you can access money fast when needed.'},
+    {keywords:['yield farming','passive income'], response:'Yield farming involves providing liquidity to crypto protocols to earn rewards or interest on your digital assets.'},
+    {keywords:['nft','digital asset'], response:'NFT stands for Non-Fungible Token - a unique digital asset that represents ownership of something on the blockchain.'},
+    {keywords:['cryptocurrency','crypto'], response:'Cryptocurrency is digital money secured by cryptography, operating independently of central banks.'},
+    {keywords:['blockchain','distributed ledger'], response:'Blockchain is a distributed database that records transactions across many computers, ensuring security and transparency.'},
+    {keywords:['web3','decentralized'], response:'Web3 is the next generation of the internet focusing on decentralization, giving users more control over data and assets.'},
+    {keywords:['smart contract','automation'], response:'Smart contracts are self-executing code on blockchain networks that automatically enforce agreements.'},
+    {keywords:['defi','decentralized finance'], response:'DeFi (Decentralized Finance) provides financial services like lending and trading without traditional intermediaries.'},
+    {keywords:['dao','autonomous organization'], response:'DAO (Decentralized Autonomous Organization) is an organization governed by smart contracts and token holders.'},
+    {keywords:['metaverse','virtual world'], response:'Metaverse is a virtual reality space where users interact through avatars and can engage in commerce.'},
+    {keywords:['web2','social media'], response:'Web2 refers to the current internet era dominated by social media platforms and centralized services.'},
+    {keywords:['api','integration'], response:'API (Application Programming Interface) allows software applications to communicate and share data.'},
+    {keywords:['seo','search ranking'], response:'SEO (Search Engine Optimization) improves website visibility in search results through various techniques.'},
+    {keywords:['sas','software','subscription'], response:'SaaS (Software as a Service) delivers software applications online, typically on a subscription basis.'},
+    {keywords:['business model','revenue stream'], response:'A business model describes how a company generates revenue and delivers value to customers.'},
+    {keywords:['market research','customer insights'], response:'Market research involves gathering and analyzing data about customers, competitors, and market trends.'},
+    {keywords:['pricing strategy','revenue optimization'], response:'Pricing strategy involves setting competitive prices that maximize revenue while remaining attractive to customers.'},
+    {keywords:['marketing','customer acquisition'], response:'Marketing is the process of promoting products or services to attract and retain customers.'},
+    {keywords:['cash flow','financial liquidity'], response:'Cash flow represents money coming in and going out of a business, essential for operations.'},
+    {keywords:['break even','profitability'], response:'Break-even is the point where revenue equals costs, neither making profit nor loss.'},
+    {keywords:['revenue','income'], response:'Revenue is the total income a business earns from sales before deducting expenses.'},
+    {keywords:['profit','earnings'], response:'Profit is the money remaining after subtracting all costs and expenses from revenue.'},
+    {keywords:['loss','negative profit'], response:'Loss occurs when expenses exceed revenue, resulting in negative earnings.'},
+    {keywords:['investment','capital'], response:'Investment involves putting money into a business or assets expecting financial returns.'},
+    {keywords:['customers','audience'], response:'Customers are the people or organizations who purchase products or services from a business.'},
+    {keywords:['swot','analysis'], response:'SWOT analysis examines Strengths, Weaknesses, Opportunities, and Threats for strategic decision-making.'},
+    {keywords:['startup','new business'], response:'A startup is an early-stage business built around a new idea, often designed to grow rapidly.'},
+    {keywords:['scale','growth'], response:'Scaling involves growing a business to handle increased demand without proportionally increasing costs.'},
+    {keywords:['risk','uncertainty'], response:'Risk is the possibility of losing money or facing setbacks in business decisions.'},
+    {keywords:['brand','identity'], response:'Brand represents how customers perceive a business, including its values, personality, and reputation.'},
+    {keywords:['customer experience','ux'], response:'Customer experience encompasses all interactions between customers and a business, affecting satisfaction and loyalty.'},
+    {keywords:['strategy','planning'], response:'Strategy is a comprehensive plan for how a business will achieve its goals and compete in the market.'},
+    {keywords:['employees','team'], response:'Employees are the people who work for a business and contribute to its success and operations.'},
+    {keywords:['finance','money management'], response:'Finance involves managing money within a business including budgeting, investments, and financial planning.'},
+    {keywords:['competition','competitors'], response:'Competition involves other businesses offering similar products or services in the same market.'},
+    {keywords:['target market','audience'], response:'Target market is the specific group of customers most likely to buy a product or service.'},
+    {keywords:['product development','innovation'], response:'Product development involves creating, testing, and improving products to meet customer needs.'},
+    {keywords:['sales','transactions'], response:'Sales involve convincing customers to purchase products or services through negotiation and persuasion.'},
+    {keywords:['advertising','promotion'], response:'Advertising is paid communication promoting products or services to reach potential customers.'},
+    {keywords:['social media','marketing'], response:'Social media marketing involves using platforms to connect with audiences and build brand awareness.'},
+    {keywords:['content marketing','storytelling'], response:'Content marketing creates valuable information to attract and engage customers while establishing expertise.'},
+    {keywords:['supply chain','production'], response:'Supply chain encompasses all processes involved in producing and delivering products from raw materials to customers.'},
+    {keywords:['inventory','stock'], response:'Inventory management involves tracking and controlling product stock to meet customer demand efficiently.'},
+    {keywords:['wholesaler','distributor'], response:'Wholesalers buy products in bulk at discounts and resell them to retailers or other businesses.'},
+    {keywords:['franchise','business model'], response:'Franchising allows entrepreneurs to operate businesses under an established brand and system for a fee.'}
+  ];
+  
+  const normalized = input.toLowerCase();
+  
+  for (const entry of knowledgeBank) {
+    if (entry.keywords.every(k => normalized.includes(k))) {
+      return entry.response;
+    }
+  }
+  
+  for (const entry of knowledgeBank) {
+    if (entry.keywords.some(k => normalized.includes(k))) {
+      return entry.response;
+    }
+  }
+  
+  return null;
+}
+
 function getBotReply(input) {
 let userInput = input.toLowerCase();
+
+const predictionTrigger = /(predict|estimate|forecast|calculate|profit or loss|profit forecast|loss forecast|will i make a profit|will i have a loss)/;
+const prediction = predictProfitLoss(userInput);
+if (prediction && (predictionTrigger.test(userInput) || /\d/.test(userInput))) {
+  return prediction;
+}
 
 // Check for business comparison first
 if (userInput.includes('compare') && (userInput.includes('business') || userInput.includes('company') || userInput.includes('companies'))) {
   showBusinessComparison(userInput);
   return "🔍 Analyzing businesses for comparison...";
+}
+
+const genericAnswer = findGenericBusinessAnswer(userInput);
+if (genericAnswer) {
+  return genericAnswer;
 }
 
 let bestIntent = null;
@@ -1921,7 +2048,6 @@ chatBox.appendChild(msgDiv);
 chatBox.scrollTop = chatBox.scrollHeight;
 
 if (sender === 'bot') {
-  // Typing animation for bot messages
   typeMessage(msgDiv, text);
 } else {
   msgDiv.textContent = text;
@@ -1931,7 +2057,7 @@ if (sender === 'bot') {
 function typeMessage(element, text) {
 let charIndex = 0;
 let wordBuffer = '';
-const speed = 30; // milliseconds per character
+const speed = 30;
 
 function typeNextCharacter() {
   if (charIndex < text.length) {
@@ -1939,7 +2065,6 @@ function typeNextCharacter() {
     wordBuffer += char;
     element.textContent = wordBuffer;
     
-    // Scroll chat box to bottom
     const chatBox = document.getElementById('chat-box');
     chatBox.scrollTop = chatBox.scrollHeight;
     
