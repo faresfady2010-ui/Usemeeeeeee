@@ -1919,7 +1919,17 @@ function predictProfitLoss(text) {
       : 'This shows a loss, so you should lower costs or increase revenue to move toward profitability.';
     return `Based on revenue of $${values.revenue.toLocaleString()} and expenses of $${values.expenses.toLocaleString()}, this scenario results in a ${verdict} of $${amount} (${margin}% margin). ${advice}`;
   }
-  
+  if (values.revenue !== null && values.expenses === null) {
+    return `I can estimate profit or loss if you tell me expenses. Right now I only see revenue of $${values.revenue.toLocaleString()}.`;
+  }
+  if (values.expenses !== null && values.revenue === null) {
+    return `I can estimate profit or loss if you tell me revenue. Right now I only see expenses of $${values.expenses.toLocaleString()}.`;
+  }
+  if (text.match(/predict|estimate|forecast|calculate|profit|loss/)) {
+    return 'To predict profit or loss, I need both revenue and expense values. Profit = Revenue - Expenses.';
+  }
+  return null;
+}
 
 function findGenericBusinessAnswer(input) {
   const knowledgeBank = [
