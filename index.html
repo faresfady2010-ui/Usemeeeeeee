@@ -531,7 +531,7 @@ margin-bottom: 15px;
 <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0;">📊 Reports</button>
 <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📊 Planner</button>
 <button id="suggestBtn" style="flex: 0;">💡 Suggestions</button>
-<button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #17a2b8; color: white;">🧮 Calculator</button>
+<button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0;">🧮 Calculator</button>
 <div id="suggestBox">
 <button id="closeBtn">✖</button>
 <p class="suggestion">what is business</p>
@@ -1052,7 +1052,7 @@ const intents = [
     {tag:"term_accrual",patterns:["accrual accounting","accruals"],responses:["Accrual: Expense or income recorded when earned/incurred, not when cash changes hands. 📅"]},
     {tag:"term_receivables",patterns:["accounts receivable","receivables"],responses:["Accounts Receivable: Money customers owe you. Asset on balance sheet. 🤝"]},
     {tag:"term_payables",patterns:["accounts payable","payables"],responses:["Accounts Payable: Money you owe suppliers. Liability on balance sheet. 💳"]},
-    {tag:"term_inventory",patterns:["inventory","stock","merchandise"],responses:["Inventory: Products held for sale. Current asset. Affects cash flow and profit. 📦"]},
+    {tag:"term_inventory",patterns:["inventory","merchandise"],responses:["Inventory: Products held for sale. Current asset. Affects cash flow and profit. 📦"]},
     {tag:"term_goodwill",patterns:["goodwill","brand value"],responses:["Goodwill: Premium paid when acquiring a company above its asset value. Intangible asset. 🏢"]},
     {tag:"term_cogs",patterns:["cost of goods sold","cogs"],responses:["COGS: Direct costs to produce goods (materials, labor). Revenue - COGS = Gross Profit. 🏭"]},
     {tag:"term_operating_expense",patterns:["operating expenses","opex"],responses:["Operating Expenses: Costs to run business (rent, utilities, salaries). Excludes COGS. 💼"]},
