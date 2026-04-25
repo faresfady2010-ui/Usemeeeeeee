@@ -528,10 +528,10 @@ margin-bottom: 15px;
 
 <div class="chat-input-area">
 <div id="suggestWrapper">
-<button id="reportsBtn" onclick="showReportsModal()" style="flex: 0; background-color: #007bff; color: white;">📊 Reports</button>
-<button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0; background-color: #007bff; color: white;">📊 Planner</button>
-<button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white;">💡 Suggestions</button>
-<button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #007bff; color: white;">🧮 Calculator</button>
+<button id="reportsBtn" onclick="showReportsModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Reports</button>
+<button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Planner</button>
+<button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">💡 Suggestions</button>
+<button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">🧮 Calculator</button>
 <div id="suggestBox">
 <button id="closeBtn">✖</button>
 <p class="suggestion">what is business</p>
@@ -2801,8 +2801,19 @@ if (bestScore > 0.55 && bestIntent) {
     return generateIdeaReply();
   }
   if (bestIntent.tag === 'stock_lookup') {
-    setTimeout(() => showStockModal(), 1000);
-    return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
+    // Extract stock symbol from input (e.g., "AAPL stock" -> "AAPL")
+    const symbolMatch = userInput.match(/\b[A-Z]{1,5}\b/);
+    if (symbolMatch) {
+      setTimeout(() => {
+        showStockModal();
+        document.getElementById('stockSymbol').value = symbolMatch[0];
+        getStockData();
+      }, 1000);
+      return `Fetching stock data for ${symbolMatch[0]}...`;
+    } else {
+      setTimeout(() => showStockModal(), 1000);
+      return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
+    }
   }
   return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
 }
