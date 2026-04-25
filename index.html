@@ -528,9 +528,9 @@ margin-bottom: 15px;
 
 <div class="chat-input-area">
 <div id="suggestWrapper">
-<button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">💡 Suggestions</button>
 <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Reports</button>
 <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Planner</button>
+<button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">💡 Suggestions</button>
 <button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">🧮 Calculator</button>
 <button id="proBtn" onclick="showProfessionalModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">💼 Pro Tools</button>
 <div id="suggestBox">
@@ -1532,19 +1532,19 @@ template = `
 <h4>📋 Business Plan Template</h4>
 <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
 <h5>Executive Summary</h5>
-<p>[Company description, mission, and objectives]</p>
+<div contenteditable="true" style="min-height: 60px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">[Company description, mission, and objectives]</div>
 
 <h5>Market Analysis</h5>
-<p>[Industry overview, target market, competition]</p>
+<div contenteditable="true" style="min-height: 60px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">[Industry overview, target market, competition]</div>
 
 <h5>Products/Services</h5>
-<p>[Detailed description of offerings]</p>
+<div contenteditable="true" style="min-height: 60px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">[Detailed description of offerings]</div>
 
 <h5>Marketing Strategy</h5>
-<p>[Marketing plan and sales strategy]</p>
+<div contenteditable="true" style="min-height: 60px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">[Marketing plan and sales strategy]</div>
 
 <h5>Financial Projections</h5>
-<p>[Revenue forecasts, expense budgets, break-even analysis]</p>
+<div contenteditable="true" style="min-height: 60px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">[Revenue forecasts, expense budgets, break-even analysis]</div>
 </div>
 `;
 break;
@@ -1553,16 +1553,16 @@ template = `
 <h4>📄 Service Contract Template</h4>
 <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
 <h5>Parties Involved</h5>
-<p>Service Provider: [Your Company Name]<br>Client: [Client Name]</p>
+<div contenteditable="true" style="min-height: 40px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">Service Provider: [Your Company Name]<br>Client: [Client Name]</div>
 
 <h5>Services</h5>
-<p>[Detailed description of services to be provided]</p>
+<div contenteditable="true" style="min-height: 60px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">[Detailed description of services to be provided]</div>
 
 <h5>Terms & Conditions</h5>
-<p>Payment terms, deliverables, timelines, and responsibilities</p>
+<div contenteditable="true" style="min-height: 60px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">Payment terms, deliverables, timelines, and responsibilities</div>
 
 <h5>Signatures</h5>
-<p>___________________________<br>Service Provider Signature</p>
+<div contenteditable="true" style="min-height: 40px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">___________________________<br>Service Provider Signature</div>
 </div>
 `;
 break;
@@ -1571,16 +1571,16 @@ template = `
 <h4>💰 Invoice Template</h4>
 <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
 <h5>Invoice Details</h5>
-<p>Invoice #: [Number]<br>Date: [Date]<br>Due Date: [Date]</p>
+<div contenteditable="true" style="min-height: 40px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">Invoice #: [Number]<br>Date: [Date]<br>Due Date: [Date]</div>
 
 <h5>Bill To:</h5>
-<p>[Client Name]<br>[Client Address]</p>
+<div contenteditable="true" style="min-height: 40px; border: 1px solid #ccc; padding: 8px; border-radius: 4px; background: white; margin-bottom: 15px;">[Client Name]<br>[Client Address]</div>
 
 <h5>Items:</h5>
 <table style="width: 100%; border-collapse: collapse;">
 <tr style="background: #007bff; color: white;"><th style="padding: 8px;">Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr>
-<tr><td style="padding: 8px; border: 1px solid #ddd;">[Item 1]</td><td style="padding: 8px; border: 1px solid #ddd;">1</td><td style="padding: 8px; border: 1px solid #ddd;">$100</td><td style="padding: 8px; border: 1px solid #ddd;">$100</td></tr>
-<tr style="background: #f9f9f9;"><td colspan="3" style="padding: 8px; text-align: right;"><strong>Total:</strong></td><td style="padding: 8px;"><strong>$100</strong></td></tr>
+<tr><td contenteditable="true" style="padding: 8px; border: 1px solid #ddd;">[Item 1]</td><td contenteditable="true" style="padding: 8px; border: 1px solid #ddd;">1</td><td contenteditable="true" style="padding: 8px; border: 1px solid #ddd;">$100</td><td contenteditable="true" style="padding: 8px; border: 1px solid #ddd;">$100</td></tr>
+<tr style="background: #f9f9f9;"><td colspan="3" style="padding: 8px; text-align: right;"><strong>Total:</strong></td><td contenteditable="true" style="padding: 8px;"><strong>$100</strong></td></tr>
 </table>
 </div>
 `;
@@ -1590,15 +1590,15 @@ template = `
 <h4>🎯 Pitch Deck Outline</h4>
 <div style="background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px;">
 <ol>
-<li><strong>Problem</strong> - What problem are you solving?</li>
-<li><strong>Solution</strong> - How does your product/service solve it?</li>
-<li><strong>Market Opportunity</strong> - How big is the market?</li>
-<li><strong>Product Demo</strong> - Show your product in action</li>
-<li><strong>Business Model</strong> - How will you make money?</li>
-<li><strong>Competition</strong> - Who else is in this space?</li>
-<li><strong>Financials</strong> - Revenue projections and funding needs</li>
-<li><strong>Team</strong> - Who is building this?</li>
-<li><strong>Ask</strong> - What are you asking for?</li>
+<li><strong>Problem</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">What problem are you solving?</span></li>
+<li><strong>Solution</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">How does your product/service solve it?</span></li>
+<li><strong>Market Opportunity</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">How big is the market?</span></li>
+<li><strong>Product Demo</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">Show your product in action</span></li>
+<li><strong>Business Model</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">How will you make money?</span></li>
+<li><strong>Competition</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">Who else is in this space?</span></li>
+<li><strong>Financials</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">Revenue projections and funding needs</span></li>
+<li><strong>Team</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">Who is building this?</span></li>
+<li><strong>Ask</strong> - <span contenteditable="true" style="border: 1px solid #ccc; padding: 2px 4px; border-radius: 2px; background: white;">What are you asking for?</span></li>
 </ol>
 </div>
 `;
