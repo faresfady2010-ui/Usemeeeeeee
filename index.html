@@ -903,7 +903,267 @@ const intents = [
 {tag:"news",patterns:["what is the news","latest news","current news","business news","tell me the news"],responses:["Let me fetch the latest news for you..."]},
 {tag:"news_business",patterns:["business news","recent business","what's happening in business"],responses:["Let me get the latest business news..."]},
 {tag:"news_technology",patterns:["tech news","technology news","latest tech"],responses:["Let me get the latest technology news..."]},
+  {tag:"customer_service",patterns:["customer service","support","help desk"],responses:["Customer service is the backbone of any business. Good support builds loyalty and retention. 📞"]},
+    {tag:"customer_satisfaction",patterns:["customer satisfaction","satisfaction score","nps"],responses:["Customer satisfaction (NPS) measures loyalty. Aim for scores above 50 to indicate strong business health. 😊"]},
+    {tag:"complaint_management",patterns:["handling complaints","manage complaints","complaint resolution"],responses:["Handle complaints quickly and professionally. It's an opportunity to turn unhappy customers into loyal advocates! ✅"]},
 
+    // DIGITAL TRANSFORMATION
+    {tag:"digital_transformation",patterns:["digital transformation","going digital","automation"],responses:["Digital transformation increases efficiency, reduces costs, and improves customer experience. It's essential in 2026! 💻"]},
+    {tag:"ai_business",patterns:["artificial intelligence in business","ai implementation","machine learning"],responses:["AI automates tasks, improves decision-making, and enhances customer experience. It's revolutionizing business! 🤖"]},
+    {tag:"big_data",patterns:["big data","data analytics","business intelligence"],responses:["Big data helps businesses understand customers better, predict trends, and make informed decisions. 📊"]},
+
+    // SUPPLY CHAIN
+    {tag:"supply_chain",patterns:["supply chain management","logistics","inventory"],responses:["Supply chain management optimizes costs and ensures products reach customers efficiently. 🚚"]},
+    {tag:"just_in_time",patterns:["just in time","jit inventory"],responses:["Just-in-time inventory reduces waste and storage costs by ordering exactly when needed. ⏰"]},
+    {tag:"vendor_management",patterns:["vendor management","supplier relationships"],responses:["Good vendor relationships ensure quality products, better prices, and reliable delivery. 🤝"]},
+
+    // PRICING STRATEGIES
+    {tag:"pricing_strategies",patterns:["pricing strategies","price optimization","dynamic pricing"],responses:["Pricing strategies include cost-plus, value-based, competitive, and dynamic pricing. Choose based on your market. 💰"]},
+    {tag:"penetration_pricing",patterns:["penetration pricing","market entry pricing"],responses:["Penetration pricing sets low prices to enter markets quickly and gain market share. 📍"]},
+    {tag:"premium_pricing",patterns:["premium pricing","luxury pricing"],responses:["Premium pricing is used for high-quality, exclusive products to create perceived value. ✨"]},
+    {tag:"bundling",patterns:["product bundling","package deals"],responses:["Bundling combines products for a better deal, increasing customer value and sales. 📦"]},
+
+    // MARKET ANALYSIS
+    {tag:"market_segmentation",patterns:["market segmentation","customer segments"],responses:["Market segmentation divides customers into groups for targeted marketing. Different segments need different strategies! 🎯"]},
+    {tag:"competitive_analysis",patterns:["competitive analysis","competitor research"],responses:["Analyze competitors' strengths, weaknesses, and strategies to find your unique advantage. 🔍"]},
+    {tag:"market_trends",patterns:["market trends","industry trends","future outlook"],responses:["Understanding trends helps you stay ahead of competition and adapt to market changes. 📈"]},
+    {tag:"consumer_behavior",patterns:["consumer behavior","buying patterns","customer psychology"],responses:["Understanding why customers buy helps you market better and improve products. 🧠"]},
+
+    // EMPLOYEE MANAGEMENT
+    {tag:"employee_retention",patterns:["employee retention","keeping employees","staff turnover"],responses:["High retention saves costs of hiring/training. Offer competitive pay, growth, and positive culture! 👥"]},
+    {tag:"performance_management",patterns:["performance management","kpis","employee evaluation"],responses:["Track KPIs and conduct regular evaluations to ensure employee productivity and growth. 📋"]},
+    {tag:"employee_engagement",patterns:["employee engagement","workplace culture","team morale"],responses:["Engaged employees are more productive and loyal. Foster a positive, inclusive workplace culture. 😊"]},
+    {tag:"compensation_benefits",patterns:["salary","benefits","compensation","health insurance"],responses:["Competitive compensation and benefits attract top talent and reduce turnover. 💸"]},
+
+    // SUSTAINABILITY & CSR
+    {tag:"corporate_responsibility",patterns:["corporate responsibility","csr","social impact"],responses:["CSR shows your business cares about society. It improves brand image and attracts conscious consumers. 🌍"]},
+    {tag:"environmental_sustainability",patterns:["sustainability","eco-friendly","green business"],responses:["Sustainable practices reduce costs, appeal to eco-conscious customers, and protect the environment. 🌱"]},
+    {tag:"ethical_business",patterns:["business ethics","fair trade","ethical practices"],responses:["Ethical practices build trust, loyalty, and long-term success. Integrity is priceless! ✨"]},
+
+    // SALES TECHNIQUES
+    {tag:"sales_funnel",patterns:["sales funnel","conversion funnel","customer journey"],responses:["Sales funnel shows the path from awareness → consideration → decision → purchase. Optimize each stage! 🔔"]},
+    {tag:"cross_selling",patterns:["cross selling","upselling","product recommendations"],responses:["Cross-selling increases revenue by recommending related products. Upselling promotes premium versions. 📈"]},
+    {tag:"cold_calling",patterns:["cold calling","outbound sales"],responses:["Cold calling requires persistence and a strong pitch. Focus on value, not the sale! 📞"]},
+    {tag:"sales_pipeline",patterns:["sales pipeline","pipeline management"],responses:["A healthy pipeline ensures consistent revenue. Track leads at each stage and follow up regularly. 📊"]},
+
+    // MARKETING CHANNELS
+    {tag:"email_marketing",patterns:["email marketing","newsletters","email campaigns"],responses:["Email marketing has high ROI. Build lists, segment audiences, and send personalized messages. 📧"]},
+    {tag:"influencer_marketing",patterns:["influencer marketing","brand ambassadors"],responses:["Influencers reach engaged audiences authentically. Choose influencers aligned with your brand values. 🌟"]},
+    {tag:"affiliate_marketing",patterns:["affiliate marketing","commission based"],responses:["Affiliate marketing: pay commissions for sales. Cost-effective way to expand reach! 💼"]},
+    {tag:"guerrilla_marketing",patterns:["guerrilla marketing","unconventional marketing"],responses:["Guerrilla marketing uses creative, low-cost tactics for maximum impact. Think outside the box! 🎨"]},
+
+    // PRODUCT LIFECYCLE
+    {tag:"product_lifecycle",patterns:["product lifecycle","intro","growth","maturity","decline"],responses:["Products go through: Introduction → Growth → Maturity → Decline. Manage strategies accordingly! 📦"]},
+    {tag:"product_launch",patterns:["product launch","launching","new product"],responses:["Successful launches need planning, marketing, and timing. Create buzz before launch! 🚀"]},
+    {tag:"product_positioning",patterns:["product positioning","market positioning"],responses:["Position your product to stand out. Focus on unique benefits vs competitors. 🎯"]},
+
+    // BUSINESS MODELS
+    {tag:"subscription_model",patterns:["subscription model","recurring revenue"],responses:["Subscription models create predictable revenue. Focus on retention and customer lifetime value. 📅"]},
+    {tag:"freemium_model",patterns:["freemium","free trial"],responses:["Freemium attracts users with free access, converts some to paying customers. 🎁"]},
+    {tag:"marketplace_model",patterns:["marketplace","platform business"],responses:["Marketplace connects buyers and sellers, taking a commission. Network effects drive growth! 🏪"]},
+    {tag:"franchise_model",patterns:["franchising","franchise"],responses:["Franchising lets others use your brand/model for a fee. Rapid expansion with less capital! 🏢"]},
+
+    // BUSINESS METRICS
+    {tag:"burn_rate",patterns:["burn rate","cash burn","runway"],responses:["Burn rate: how fast you spend cash. Startups track this carefully to ensure survival! 🔥"]},
+    {tag:"churn_rate",patterns:["churn rate","customer churn"],responses:["Churn rate: % of customers who leave. Lower churn = higher lifetime value. Track and reduce it! 📉"]},
+    {tag:"cac",patterns:["customer acquisition cost","cac"],responses:["CAC: cost to acquire one customer. Lower CAC + higher LTV = profitable business! 💵"]},
+    {tag:"ltv",patterns:["lifetime value","customer lifetime value","ltv"],responses:["LTV: total revenue from a customer. Improve by increasing frequency, price, or retention! 💰"]},
+    {tag:"roi",patterns:["return on investment","roi"],responses:["ROI measures profit from an investment. Calculate: (Gain - Cost) / Cost × 100%. 📊"]},
+
+    // NEGOTIATION & DEALS
+    {tag:"negotiation",patterns:["negotiation","negotiate deals","contract negotiation"],responses:["Good negotiation skills save money and build relationships. Win-win outcomes are best! 🤝"]},
+    {tag:"business_deals",patterns:["business deals","partnerships","strategic alliances"],responses:["Strategic partnerships accelerate growth. Choose partners with aligned goals and values. 🤝"]},
+
+    // CRISIS MANAGEMENT
+    {tag:"crisis_management",patterns:["crisis management","handling crisis","reputation damage"],responses:["Crisis management: communicate quickly, take responsibility, and show action. Transparency builds trust! ⚠️"]},
+    {tag:"business_failure",patterns:["business failure","bankruptcy","failure lessons"],responses:["Learn from failures. Analyze what went wrong, adapt, and try again. Many successful founders failed first! 📚"]},
+
+    // FUNDING & INVESTMENT
+    {tag:"venture_capital",patterns:["venture capital","vc funding","venture investors"],responses:["VC funding: investors provide capital for equity. Great for high-growth potential startups! 💰"]},
+    {tag:"crowdfunding",patterns:["crowdfunding","kickstarter"],responses:["Crowdfunding raises money from many people. Good for validation and building community! 👥"]},
+    {tag:"angel_investors",patterns:["angel investors","angel funding"],responses:["Angel investors: individuals who fund early-stage businesses. Often provide mentorship too! 😇"]},
+    {tag:"ipo",patterns:["ipo","initial public offering","going public"],responses:["IPO: when a company goes public. Opens access to capital markets but requires transparency. 📈"]},
+
+    // REMOTE WORK
+    {tag:"remote_work",patterns:["remote work","work from home","distributed team"],responses:["Remote work increases flexibility and access to global talent. Requires strong communication tools! 🏠"]},
+    {tag:"team_collaboration",patterns:["team collaboration","remote collaboration"],responses:["Collaboration tools (Slack, Asana) are essential for remote teams. Strong communication = success! 💬"]},
+
+    // SCALING
+    {tag:"scaling",patterns:["scaling business","growth scaling"],responses:["Scaling means growing revenue while managing costs. Automate processes and build systems! 🚀"]},
+    {tag:"international_expansion",patterns:["international expansion","global market","entering new countries"],responses:["Expand internationally by researching markets, adapting to local cultures, and finding local partners. 🌍"]},
+
+    // TECHNOLOGY
+    {tag:"cloud_computing",patterns:["cloud computing","aws","cloud services"],responses:["Cloud computing reduces IT costs and enables scalability. Pay only for what you use! ☁️"]},
+    {tag:"cybersecurity",patterns:["cybersecurity","data security","protection"],responses:["Protect customer data and systems. Cybersecurity breaches damage reputation and cost money. 🔐"]},
+
+    // ACCOUNTING & FINANCE
+    {tag:"accounting",patterns:["accounting","bookkeeping","financial records"],responses:["Good accounting tracks money, ensures compliance, and provides insights for decisions. 📊"]},
+    {tag:"tax",patterns:["taxes","tax strategy","deductions"],responses:["Understand tax obligations and plan strategically. Work with accountants to minimize taxes legally! 💼"]},
+    {tag:"cash_management",patterns:["cash management","cash flow","liquidity"],responses:["Manage cash carefully. Strong cash flow is more important than profit for survival! 💵"]},
+
+    // QUALITY ASSURANCE
+    {tag:"quality_control",patterns:["quality control","quality assurance","qa"],responses:["QA ensures products meet standards. High quality = fewer returns and happier customers! ✅"]},
+    {tag:"continuous_improvement",patterns:["continuous improvement","kaizen"],responses:["Continuous improvement: constantly find small ways to improve. Small changes compound! 📈"]},
+
+    // BRANDING
+    {tag:"brand_identity",patterns:["brand identity","logo","brand design"],responses:["Strong brand identity differentiates you. Invest in design, messaging, and consistency! 🎨"]},
+    {tag:"brand_loyalty",patterns:["brand loyalty","customer loyalty"],responses:["Build loyalty through quality, consistency, and emotional connection. Loyal customers are brand advocates! ❤️"]},
+    {tag:"rebranding",patterns:["rebranding","brand refresh"],responses:["Rebranding can modernize your image or address market changes. Do it thoughtfully! 🔄"]},
+
+    // NETWORKING
+    {tag:"networking",patterns:["networking","business networking","connections"],responses:["Network actively. Relationships lead to partnerships, customers, and opportunities! 🤝"]},
+    {tag:"business_events",patterns:["business events","conferences","trade shows"],responses:["Attend industry events to learn, network, and stay current. Great ROI on time and money! 🎤"]},
+
+    // TIME MANAGEMENT
+    {tag:"time_management",patterns:["time management","productivity","prioritization"],responses:["Manage time by prioritizing high-impact tasks. Focus on what moves the needle! ⏱️"]},
+    {tag:"delegation",patterns:["delegation","delegating tasks"],responses:["Delegate tasks to free your time for strategic work. Trust your team! 🎯"]},
+
+    // CUSTOMER RETENTION
+    {tag:"loyalty_programs",patterns:["loyalty program","rewards program"],responses:["Loyalty programs encourage repeat purchases. Low-cost way to increase revenue! 🎁"]},
+    {tag:"personalization",patterns:["personalization","personalized experience"],responses:["Personalize customer experience to increase satisfaction and sales. Use data wisely! 👤"]}, 
+    {tag:"term_asset",patterns:["what is asset","define asset","asset meaning"],responses:["Asset: Something of value owned by a business (cash, property, equipment). Assets = Liabilities + Equity. 💰"]},
+    {tag:"term_liability",patterns:["what is liability","define liability","liability meaning"],responses:["Liability: Money or obligation a business owes (debt, loans, accounts payable). Reduces net worth. 📊"]},
+    {tag:"term_equity",patterns:["what is equity","equity meaning","owner's equity"],responses:["Equity: Owner's ownership stake in the business. Equity = Assets - Liabilities. 🏦"]},
+    {tag:"term_balance_sheet",patterns:["balance sheet","what is balance sheet"],responses:["Balance Sheet: Financial statement showing Assets, Liabilities, and Equity at a specific time. 📋"]},
+    {tag:"term_income_statement",patterns:["income statement","profit and loss statement","p&l"],responses:["Income Statement: Shows Revenue - Expenses = Net Income over a period. Also called P&L. 📈"]},
+    {tag:"term_cash_flow",patterns:["cash flow statement","what is cash flow"],responses:["Cash Flow: Money coming in and going out. Positive flow = survival. Different from profit! 💵"]},
+    {tag:"term_depreciation",patterns:["depreciation","asset depreciation"],responses:["Depreciation: Gradual decrease in asset value over time. Recorded as expense. 📉"]},
+    {tag:"term_amortization",patterns:["amortization","intangible assets"],responses:["Amortization: Gradual reduction of intangible assets (patents, goodwill) over time. Similar to depreciation. 📝"]},
+    {tag:"term_accrual",patterns:["accrual accounting","accruals"],responses:["Accrual: Expense or income recorded when earned/incurred, not when cash changes hands. 📅"]},
+    {tag:"term_receivables",patterns:["accounts receivable","receivables"],responses:["Accounts Receivable: Money customers owe you. Asset on balance sheet. 🤝"]},
+    {tag:"term_payables",patterns:["accounts payable","payables"],responses:["Accounts Payable: Money you owe suppliers. Liability on balance sheet. 💳"]},
+    {tag:"term_inventory",patterns:["inventory","stock","merchandise"],responses:["Inventory: Products held for sale. Current asset. Affects cash flow and profit. 📦"]},
+    {tag:"term_goodwill",patterns:["goodwill","brand value"],responses:["Goodwill: Premium paid when acquiring a company above its asset value. Intangible asset. 🏢"]},
+    {tag:"term_cogs",patterns:["cost of goods sold","cogs"],responses:["COGS: Direct costs to produce goods (materials, labor). Revenue - COGS = Gross Profit. 🏭"]},
+    {tag:"term_operating_expense",patterns:["operating expenses","opex"],responses:["Operating Expenses: Costs to run business (rent, utilities, salaries). Excludes COGS. 💼"]},
+    {tag:"term_ebitda",patterns:["ebitda","earnings before interest"],responses:["EBITDA: Earnings Before Interest, Taxes, Depreciation, Amortization. Measure of operating performance. 📊"]},
+    {tag:"term_gross_margin",patterns:["gross margin","gross profit margin"],responses:["Gross Margin: (Revenue - COGS) / Revenue × 100%. Shows production efficiency. 📈"]},
+    {tag:"term_net_margin",patterns:["net margin","net profit margin"],responses:["Net Margin: Net Income / Revenue × 100%. Shows overall profitability. 💹"]},
+    {tag:"term_roe",patterns:["return on equity","roe"],responses:["ROE: Net Income / Equity × 100%. Shows how well equity generates profits. 🎯"]},
+    {tag:"term_roa",patterns:["return on assets","roa"],responses:["ROA: Net Income / Total Assets × 100%. Shows asset efficiency. 📊"]},
+
+    // BUSINESS STRUCTURE TERMS
+    {tag:"term_sole_proprietorship",patterns:["sole proprietorship","sole proprietor"],responses:["Sole Proprietorship: Business owned by one person. Simplest structure but unlimited personal liability. 👤"]},
+    {tag:"term_partnership",patterns:["partnership","general partnership"],responses:["Partnership: Business owned by 2+ people. Shared profits & losses. Partners liable for each other's actions. 👥"]},
+    {tag:"term_llc",patterns:["llc","limited liability company"],responses:["LLC: Limited Liability Company. Combines sole proprietor simplicity with corporate liability protection. 🏢"]},
+    {tag:"term_corporation",patterns:["corporation","c corporation"],responses:["Corporation: Legal entity separate from owners. Complex structure but liability protection and tax benefits. 🏛️"]},
+    {tag:"term_s_corp",patterns:["s corporation","s corp"],responses:["S-Corp: Similar to C-Corp but taxed as partnership. Tax advantages for qualified businesses. 📋"]},
+    {tag:"term_nonprofit",patterns:["nonprofit","non-profit organization"],responses:["Nonprofit: Organization for charitable/social mission. No profits to owners. Tax-exempt. 🤲"]},
+    {tag:"term_franchise",patterns:["franchise","franchisee","franchisor"],responses:["Franchise: Business model where franchisee pays franchisor for brand/system use. Fast growth model. 🏪"]},
+    {tag:"term_subsidiary",patterns:["subsidiary","subsidiary company"],responses:["Subsidiary: Company owned/controlled by another company (parent company). Separate legal entity. 🏢"]},
+    {tag:"term_joint_venture",patterns:["joint venture","jv"],responses:["Joint Venture: Two+ companies partner for specific project. Share risks, costs, and profits. 🤝"]},
+
+    // MARKETING TERMS
+    {tag:"term_market_share",patterns:["market share","market penetration"],responses:["Market Share: Your revenue ÷ Total market revenue × 100%. Higher = stronger position. 📊"]},
+    {tag:"term_market_size",patterns:["market size","tam"],responses:["Market Size (TAM): Total addressable market - total potential revenue if you captured entire market. 🌍"]},
+    {tag:"term_seo",patterns:["seo","search engine optimization"],responses:["SEO: Optimize website/content for search engines. Increases organic traffic and visibility. 🔍"]},
+    {tag:"term_sem",patterns:["sem","search engine marketing"],responses:["SEM: Paid search advertising (Google Ads). Pay per click. Immediate visibility. 💰"]},
+    {tag:"term_ctr",patterns:["click through rate","ctr"],responses:["CTR: Click-Through Rate = Clicks ÷ Impressions × 100%. Measures ad/link effectiveness. 📈"]},
+    {tag:"term_conversion_rate",patterns:["conversion rate","conversion"],responses:["Conversion Rate: Visitors who take desired action ÷ Total visitors × 100%. Key metric! 🎯"]},
+    {tag:"term_bounce_rate",patterns:["bounce rate"],responses:["Bounce Rate: % of visitors who leave without taking action. Lower is better. 📉"]},
+    {tag:"term_impression",patterns:["impression","ad impression"],responses:["Impression: One display of your ad. Charged per 1000 impressions (CPM) in some models. 👁️"]},
+    {tag:"term_cpm",patterns:["cpm","cost per thousand"],responses:["CPM: Cost Per Mille (1000 impressions). Used in display/video advertising. 💵"]},
+    {tag:"term_cpc",patterns:["cpc","cost per click"],responses:["CPC: Cost Per Click. You pay when someone clicks your ad. 💳"]},
+    {tag:"term_cpa",patterns:["cpa","cost per acquisition"],responses:["CPA: Cost Per Action/Acquisition. Pay only when customer completes desired action. 🎁"]},
+    {tag:"term_roas",patterns:["roas","return on ad spend"],responses:["ROAS: Revenue ÷ Ad Spend. If ROAS > 1, ads are profitable! 📈"]},
+    {tag:"term_brand_awareness",patterns:["brand awareness","top of mind"],responses:["Brand Awareness: % of target market who know your brand. First step of customer journey. 🧠"]},
+    {tag:"term_brand_equity",patterns:["brand equity","brand value"],responses:["Brand Equity: Value customers place on your brand. Strong brands command premium prices. 💎"]},
+    {tag:"term_positioning",patterns:["positioning","market positioning"],responses:["Positioning: How your brand is perceived vs competitors. Defines unique space in market. 🎯"]},
+    {tag:"term_segmentation",patterns:["segmentation","market segments"],responses:["Segmentation: Dividing market into groups with similar needs. Target each with tailored strategies. 📍"]},
+    {tag:"term_personalization",patterns:["personalization","customer personalization"],responses:["Personalization: Tailoring experience to individual customers using data. Increases conversion! 👤"]},
+    {tag:"term_retargeting",patterns:["retargeting","remarketing"],responses:["Retargeting: Show ads to people who visited your site but didn't convert. Recovery strategy. 🔄"]},
+
+    // SALES TERMS
+    {tag:"term_lead",patterns:["what is lead","sales lead"],responses:["Lead: Potential customer who showed interest. Needs nurturing to become customer. 🎯"]},
+    {tag:"term_prospect",patterns:["prospect","sales prospect"],responses:["Prospect: Qualified lead likely to buy. Ready for sales conversation. 💼"]},
+    {tag:"term_sales_cycle",patterns:["sales cycle","sales process"],responses:["Sales Cycle: Time from first contact to closing deal. Varies by industry and product. ⏰"]},
+    {tag:"term_pipeline",patterns:["pipeline","sales pipeline"],responses:["Pipeline: All opportunities in sales process at different stages. Key metric for forecasting. 📊"]},
+    {tag:"term_qualified_lead",patterns:["qualified lead","lead qualification"],responses:["Qualified Lead: Lead matching criteria (budget, authority, need, timeline). More likely to convert. ✅"]},
+    {tag:"term_mrr",patterns:["mrr","monthly recurring revenue"],responses:["MRR: Monthly Recurring Revenue. Total predictable monthly revenue from subscriptions. 📅"]},
+    {tag:"term_arr",patterns:["arr","annual recurring revenue"],responses:["ARR: Annual Recurring Revenue = MRR × 12. Key metric for subscription businesses. 📈"]},
+    {tag:"term_payback_period",patterns:["payback period","customer payback"],responses:["Payback Period: Time to recover customer acquisition cost from their purchases. Lower is better! ⏳"]},
+
+    // OPERATIONAL TERMS
+    {tag:"term_sop",patterns:["sop","standard operating procedure"],responses:["SOP: Standard Operating Procedure. Documented steps for consistent process execution. 📋"]},
+    {tag:"term_kpi",patterns:["kpi","key performance indicator"],responses:["KPI: Key Performance Indicator. Measurable metric tracking progress toward goals. 🎯"]},
+    {tag:"term_oee",patterns:["oee","overall equipment effectiveness"],responses:["OEE: Overall Equipment Effectiveness. Measures production efficiency: Availability × Performance × Quality. 🏭"]},
+    {tag:"term_lean",patterns:["lean manufacturing","lean"],responses:["Lean: Philosophy to eliminate waste and maximize value. Continuous improvement culture. 📉"]},
+    {tag:"term_six_sigma",patterns:["six sigma","quality control"],responses:["Six Sigma: Data-driven methodology to reduce defects and improve quality. Aims for 99.99966% accuracy. 🎯"]},
+    {tag:"term_agile",patterns:["agile","agile methodology"],responses:["Agile: Iterative approach to projects with flexibility and frequent feedback. Common in tech. 🔄"]},
+    {tag:"term_scrum",patterns:["scrum","sprint"],responses:["Scrum: Agile framework with 2-week sprints and daily standup meetings. Popular in software development. 🏃"]},
+    {tag:"term_waterfall",patterns:["waterfall method","waterfall model"],responses:["Waterfall: Traditional project management with sequential phases (requirements → design → build → test). 🌊"]},
+
+    // HUMAN RESOURCES TERMS
+    {tag:"term_fte",patterns:["fte","full time equivalent"],responses:["FTE: Full-Time Equivalent. One FTE = one full-time employee. Calculate part-time staff as fractions. 👤"]},
+    {tag:"term_hr",patterns:["hr","human resources"],responses:["HR: Human Resources. Manages recruitment, onboarding, payroll, benefits, and employee relations. 👥"]},
+    {tag:"term_recruitment",patterns:["recruitment","hiring"],responses:["Recruitment: Process of finding and hiring new employees. Includes sourcing, screening, interviewing. 🔍"]},
+    {tag:"term_onboarding",patterns:["onboarding","employee onboarding"],responses:["Onboarding: Process of integrating new employee into organization. Includes training and orientation. 🎓"]},
+    {tag:"term_training",patterns:["training","professional development"],responses:["Training: Developing employee skills through courses, mentoring, and practice. Improves performance! 📚"]},
+    {tag:"term_performance_review",patterns:["performance review","annual review"],responses:["Performance Review: Evaluation of employee work quality, achievements, and areas for improvement. 📋"]},
+    {tag:"term_compensation",patterns:["compensation","salary package"],responses:["Compensation: Total pay package (salary, bonus, benefits, equity). Attracts and retains talent. 💰"]},
+    {tag:"term_benefits",patterns:["employee benefits","health insurance"],responses:["Benefits: Non-monetary compensation (health insurance, retirement, vacation). Important for retention! 🏥"]},
+    {tag:"term_equity_compensation",patterns:["stock options","equity","esop"],responses:["Equity Compensation: Pay in company stock or options. Aligns employee interests with company success. 📈"]},
+    {tag:"term_burnout",patterns:["burnout","employee burnout"],responses:["Burnout: Physical/emotional exhaustion from overwork. Leads to reduced productivity and turnover. 🔥"]},
+
+    // TECHNOLOGY TERMS
+    {tag:"term_saas",patterns:["saas","software as a service"],responses:["SaaS: Software as a Service. Cloud-based software accessed via subscription (e.g., Salesforce, Slack). ☁️"]},
+    {tag:"term_paas",patterns:["paas","platform as a service"],responses:["PaaS: Platform as a Service. Cloud platform for developers to build applications (e.g., Heroku). 🛠️"]},
+    {tag:"term_iaas",patterns:["iaas","infrastructure as a service"],responses:["IaaS: Infrastructure as a Service. Rented computing resources (e.g., AWS, Azure). 💻"]},
+    {tag:"term_api",patterns:["api","application programming interface"],responses:["API: Application Programming Interface. Allows different software to communicate and share data. 🔌"]},
+    {tag:"term_sdk",patterns:["sdk","software development kit"],responses:["SDK: Software Development Kit. Tools and libraries for developers to build applications. 🛠️"]},
+    {tag:"term_database",patterns:["database","data storage"],responses:["Database: Organized data storage system. Enables quick retrieval and analysis of information. 📊"]},
+    {tag:"term_analytics",patterns:["analytics","data analytics","web analytics"],responses:["Analytics: Collecting and analyzing data to understand performance and user behavior. 📈"]},
+    {tag:"term_crm",patterns:["crm","customer relationship management"],responses:["CRM: Customer Relationship Management software. Manages customer interactions, sales, and service. 📱"]},
+    {tag:"term_erp",patterns:["erp","enterprise resource planning"],responses:["ERP: Enterprise Resource Planning. Integrates all business processes (finance, HR, inventory). 📊"]},
+    {tag:"term_cybersecurity",patterns:["cybersecurity","data security"],responses:["Cybersecurity: Protecting systems and data from unauthorized access and attacks. Critical! 🔐"]},
+
+    // ACCOUNTING TERMS
+    {tag:"term_audit",patterns:["audit","financial audit"],responses:["Audit: Independent examination of financial records to verify accuracy and compliance. 📋"]},
+    {tag:"term_reconciliation",patterns:["reconciliation","account reconciliation"],responses:["Reconciliation: Comparing records to ensure they match and identify discrepancies. 🔍"]},
+    {tag:"term_invoice",patterns:["invoice","billing"],responses:["Invoice: Bill sent to customer requesting payment for goods/services. Essential for tracking receivables. 📄"]},
+    {tag:"term_purchase_order",patterns:["purchase order","po"],responses:["Purchase Order: Document from buyer to seller requesting goods/services with terms and price. 📝"]},
+    {tag:"term_tax_deduction",patterns:["tax deduction","business expense"],responses:["Tax Deduction: Business expense reducing taxable income. Includes office supplies, utilities, travel. 🧾"]},
+    {tag:"term_tax_credit",patterns:["tax credit"],responses:["Tax Credit: Direct reduction in taxes owed (better than deduction). For specific activities like R&D. 💰"]},
+    {tag:"term_withholding",patterns:["withholding","tax withholding"],responses:["Withholding: Taxes deducted from employee paycheck. Sent to government by employer. 💳"]},
+    {tag:"term_filing",patterns:["tax filing","filing taxes"],responses:["Tax Filing: Submitting tax returns to government. Deadline typically April 15 in US. 📅"]},
+
+    // LEGAL TERMS
+    {tag:"term_contract",patterns:["contract","agreement"],responses:["Contract: Legal agreement between parties outlining terms and obligations. Binding and enforceable. 📜"]},
+    {tag:"term_liability_legal",patterns:["legal liability","responsibility"],responses:["Liability: Legal responsibility for damages or losses. Protect with insurance and proper structure! ⚖️"]},
+    {tag:"term_ip",patterns:["intellectual property","ip"],responses:["IP: Intellectual Property. Intangible creations (patents, trademarks, copyrights, trade secrets). 🧠"]},
+    {tag:"term_patent",patterns:["patent","invention protection"],responses:["Patent: Legal protection for inventions. Grants exclusive rights for defined period (usually 20 years). 🔒"]},
+    {tag:"term_trademark",patterns:["trademark","brand name protection"],responses:["Trademark: Legal protection for brand name, logo, or slogan. Prevents competitor use. ™️"]},
+    {tag:"term_copyright",patterns:["copyright","creative works"],responses:["Copyright: Legal protection for creative works (writing, music, software). Automatic protection. ©️"]},
+    {tag:"term_nda",patterns:["nda","non-disclosure agreement"],responses:["NDA: Non-Disclosure Agreement. Confidentiality contract preventing disclosure of sensitive information. 🤐"]},
+    {tag:"term_non_compete",patterns:["non-compete","non-compete clause"],responses:["Non-Compete: Clause restricting employee/contractor from competing after employment ends. 🚫"]},
+    {tag:"term_llc_liability",patterns:["llc liability protection","limited liability"],responses:["LLC Liability: Business liability doesn't extend to personal assets (in most cases). Personal assets protected. 🛡️"]},
+
+    // INVESTMENT TERMS
+    {tag:"term_dividend",patterns:["dividend","stock dividend"],responses:["Dividend: Portion of company profits distributed to shareholders. Can be cash or stock. 💵"]},
+    {tag:"term_stock",patterns:["stock","equity stake"],responses:["Stock: Share of company ownership. Stockholders own portion and have voting rights. 📈"]},
+    {tag:"term_bond",patterns:["bond","debt security"],responses:["Bond: Loan security. Bondholder lends money to company/government, receives interest payments. 💳"]},
+    {tag:"term_mutual_fund",patterns:["mutual fund","investment fund"],responses:["Mutual Fund: Pool of investor money managed by professionals, diversified across securities. 📊"]},
+    {tag:"term_index_fund",patterns:["index fund","etf"],responses:["Index Fund/ETF: Fund tracking market index (S&P 500) for diversified, low-cost investing. 📈"]},
+    {tag:"term_vc_funding",patterns:["venture capital","vc round"],responses:["VC Funding: Investment by VC firms in high-growth potential startups. Often includes mentorship. 💰"]},
+    {tag:"term_valuation",patterns:["valuation","company valuation"],responses:["Valuation: Estimated market value of company. Determined by revenue, assets, growth potential. 💎"]},
+    {tag:"term_burn_rate",patterns:["burn rate","cash burn"],responses:["Burn Rate: Speed of cash spending before profitability. Monthly burn rate = monthly losses. 🔥"]},
+
+    // SUPPLY CHAIN TERMS
+    {tag:"term_logistics",patterns:["logistics","supply chain"],responses:["Logistics: Management of goods movement from production to customer. Includes shipping, warehousing. 🚚"]},
+    {tag:"term_warehouse",patterns:["warehouse","storage"],responses:["Warehouse: Facility storing inventory. Managed for efficient retrieval and fulfillment. 🏢"]},
+    {tag:"term_distribution",patterns:["distribution","distribution center"],responses:["Distribution: Network of facilities and processes getting products to customers. Critical for efficiency. 📦"]},
+    {tag:"term_fulfillment",patterns:["fulfillment","order fulfillment"],responses:["Fulfillment: Complete process from order placement to delivery. Includes picking, packing, shipping. 📦"]},
+    {tag:"term_procurement",patterns:["procurement","sourcing"],responses:["Procurement: Process of acquiring goods/services from suppliers. Manages vendor relationships. 🤝"]},
+    {tag:"term_inventory_management",patterns:["inventory management","stock control"],responses:["Inventory Management: Balancing supply and demand. Too much = high costs, Too little = stockouts. ⚖️"]},
+    {tag:"term_backorder",patterns:["backorder","out of stock"],responses:["Backorder: Customer order for out-of-stock item. Fulfilled when inventory available again. 📋"]},
+
+    // MARKET TERMS
+    {tag:"term_monopoly",patterns:["monopoly","market monopoly"],responses:["Monopoly: Single seller dominates market. High prices, limited customer choice. Regulated by antitrust laws. 🏛️"]},
+    {tag:"term_oligopoly",patterns:["oligopoly","few competitors"],responses:["Oligopoly: Few companies dominate market. Can coordinate (tacitly) on pricing. 🤐"]},
+    {tag:"term_perfect_competition",patterns:["perfect competition","competitive market"],responses:["Perfect Competition: Many competitors, identical products, easy entry/exit. Prices determined by market. ⚖️"]},
+    {tag:"term_monopolistic_competition",patterns:["monopolistic competition"],responses:["Monopolistic Competition: Many competitors with differentiated products. Some pricing power. 📊"]},
+    {tag:"term_bull_market",patterns:["bull market","rising market"],responses:["Bull Market: Market with rising prices and investor optimism. Good for buyers. 📈"]},
+    {tag:"term_bear_market",patterns:["bear market","falling market"],responses:["Bear Market: Market with falling prices and investor pessimism. Risk for buyers. 📉"]},
 // BUSINESS COMPARISON
 {tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
 ];
