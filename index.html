@@ -531,6 +531,7 @@ margin-bottom: 15px;
 <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0;">📊 Reports</button>
 <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0;">📊 Planner</button>
 <button id="suggestBtn" style="flex: 0;">💡 Suggestions</button>
+<button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #17a2b8; color: white;">🧮 Calculator</button>
 <div id="suggestBox">
 <button id="closeBtn">✖</button>
 <p class="suggestion">what is business</p>
@@ -562,6 +563,22 @@ margin-bottom: 15px;
 <div class="modal-content">
 <span class="close-modal" onclick="closeReportsModal()">&times;</span>
 <div id="reportsContent"></div>
+</div>
+</div>
+
+<!-- CALCULATOR MODAL -->
+<div id="calculatorModal" class="modal">
+<div class="modal-content">
+<span class="close-modal" onclick="closeCalculatorModal()">&times;</span>
+<div id="calculatorContent"></div>
+</div>
+</div>
+
+<!-- STOCK MODAL -->
+<div id="stockModal" class="modal">
+<div class="modal-content">
+<span class="close-modal" onclick="closeStockModal()">&times;</span>
+<div id="stockContent"></div>
 </div>
 </div>
 
@@ -818,12 +835,14 @@ const intents = [
 7️⃣ Branding
 8️⃣ Build Your Product/Service
 9️⃣ Marketing
-🔟 Launch & Grow`
+🔟 Launch & Grow
+
+💡 What specific step would you like more details on?`
 ]},
 {tag:"idea_generator",patterns:["give me business ideas","business idea","startup idea","product ideas","generate idea","help me brainstorm","idea generation","new business idea","idea for startup","create idea","what should i build","startup ideas","business ideas"],responses:["Let me brainstorm a few strong ideas for you..."]},
 {tag:"profit_prediction",patterns:["predict profit","estimate profit","profit forecast","profit or loss","profit prediction","will i make a profit","will i have a loss","calculate profit","calculate loss","estimate loss","forecast profit"],responses:["Share your revenue and expense numbers and I can estimate whether that means profit or loss."]},
 // STRATEGY & ANALYSIS
-{tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position."]},
+{tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position. 💡 Want me to help you create a SWOT for your business?"]},
 {tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
 {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
 {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
@@ -1021,6 +1040,7 @@ const intents = [
     // CUSTOMER RETENTION
     {tag:"loyalty_programs",patterns:["loyalty program","rewards program"],responses:["Loyalty programs encourage repeat purchases. Low-cost way to increase revenue! 🎁"]},
     {tag:"personalization",patterns:["personalization","personalized experience"],responses:["Personalize customer experience to increase satisfaction and sales. Use data wisely! 👤"]}, 
+    {tag:"stock_lookup",patterns:["stock","stock price","get stock","stock data","stock info","stock market","stock quote"],responses:["I'll open the stock lookup tool for you. Please enter a stock symbol."]},
     {tag:"term_asset",patterns:["what is asset","define asset","asset meaning"],responses:["Asset: Something of value owned by a business (cash, property, equipment). Assets = Liabilities + Equity. 💰"]},
     {tag:"term_liability",patterns:["what is liability","define liability","liability meaning"],responses:["Liability: Money or obligation a business owes (debt, loans, accounts payable). Reduces net worth. 📊"]},
     {tag:"term_equity",patterns:["what is equity","equity meaning","owner's equity"],responses:["Equity: Owner's ownership stake in the business. Equity = Assets - Liabilities. 🏦"]},
@@ -1311,6 +1331,26 @@ function closeReportsModal() {
 document.getElementById('reportsModal').style.display = 'none';
 }
 
+// ==================== CALCULATOR ====================
+function showCalculatorModal() {
+document.getElementById('calculatorModal').style.display = 'block';
+loadCalculatorContent();
+}
+
+function closeCalculatorModal() {
+document.getElementById('calculatorModal').style.display = 'none';
+}
+
+// ==================== STOCK ====================
+function showStockModal() {
+document.getElementById('stockModal').style.display = 'block';
+loadStockContent();
+}
+
+function closeStockModal() {
+document.getElementById('stockModal').style.display = 'none';
+}
+
 // ==================== PLANNER ====================
 function loadPlannerContent() {
 const content = document.getElementById('plannerContent');
@@ -1353,6 +1393,7 @@ content.innerHTML = `
 <div class="button-group">
 <button class="btn btn-primary" onclick="generatePlan()">📊 Generate</button>
 <button class="btn btn-ai" onclick="generateAIInsights()">🤖 AI Insights</button>
+<button class="btn btn-secondary" onclick="exportPlan()">📄 Export PDF</button>
 <button class="btn btn-secondary" onclick="clearPlan()">Reset</button>
 </div>
 
@@ -1374,6 +1415,10 @@ content.innerHTML = `
 <div class="chart-box">
 <div class="chart-title">🎯 Performance</div>
 <div class="chart-container"><canvas id="performanceChart"></canvas></div>
+</div>
+<div class="chart-box">
+<div class="chart-title">🔮 6-Month Forecast</div>
+<div class="chart-container"><canvas id="forecastChart"></canvas></div>
 </div>
 </div>
 
@@ -1473,7 +1518,9 @@ const metrics = [
 { label: 'Total', value: '$' + planData.totalProjection.toLocaleString(), icon: '📊' },
 { label: 'Average', value: '$' + Math.round(planData.totalProjection / planData.months.length).toLocaleString(), icon: '💰' },
 { label: 'Duration', value: planData.months.length + 'mo', icon: '📅' },
-{ label: 'Final', value: '$' + (finalMonth.budget || 0).toLocaleString(), icon: '🎯' }
+{ label: 'Final', value: '$' + (finalMonth.budget || 0).toLocaleString(), icon: '🎯' },
+{ label: 'Growth Rate', value: planData.growthRate + '%', icon: '📈' },
+{ label: 'ROI Est.', value: Math.round((planData.totalProjection / (planData.initialBudget * planData.months.length)) * 100) + '%', icon: '💹' }
 ];
 
 metrics.forEach((metric) => {
@@ -1489,6 +1536,7 @@ generateProjectionChart();
 generateMonthlyChart();
 generateDistributionChart();
 generatePerformanceChart();
+generateForecastChart();
 }
 
 function destroyChart(chartName) {
@@ -1645,6 +1693,54 @@ r: { ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0)
 });
 }
 
+function generateForecastChart() {
+destroyChart('forecastChart');
+const ctx = document.getElementById('forecastChart')?.getContext('2d');
+if (!ctx) return;
+
+const labels = [];
+const data = [];
+let currentAmount = planData.months.length > 0 ? planData.months[planData.months.length - 1].budget : planData.initialBudget;
+
+for (let i = 1; i <= 6; i++) {
+const growth = (planData.growthRate / 100);
+currentAmount = currentAmount * (1 + growth);
+labels.push(`Month +${i}`);
+data.push(Math.round(currentAmount));
+}
+
+chartInstances['forecastChart'] = new Chart(ctx, {
+type: 'line',
+data: {
+labels: labels,
+datasets: [{
+label: 'Forecasted Budget',
+data: data,
+borderColor: '#f5576c',
+backgroundColor: 'rgba(245, 87, 108, 0.1)',
+borderWidth: 2,
+fill: true,
+tension: 0.4,
+pointBackgroundColor: '#f5576c',
+pointBorderColor: '#fff',
+pointBorderWidth: 1,
+pointRadius: 4
+}]
+},
+options: {
+responsive: true,
+maintainAspectRatio: false,
+plugins: { legend: { display: true, position: 'top' } },
+scales: {
+y: {
+beginAtZero: true,
+ticks: { callback: function(value) { return '$' + (value / 1000).toFixed(0) + 'k'; } }
+}
+}
+}
+});
+}
+
 function generateDataTable() {
 const table = document.getElementById('dataTable');
 if (!table) return;
@@ -1699,6 +1795,42 @@ document.getElementById('metricsGrid').innerHTML = '';
 document.getElementById('aiInsights').innerHTML = '';
 document.getElementById('dataTable').innerHTML = '';
 Object.keys(chartInstances).forEach(key => destroyChart(key));
+}
+
+// ==================== EXPORT ====================
+function exportPlan() {
+if (planData.months.length === 0) {
+alert('Please generate a plan first');
+return;
+}
+
+const { jsPDF } = window.jspdf;
+const doc = new jsPDF();
+
+doc.setFontSize(20);
+doc.text('Financial Plan Report', 20, 30);
+
+doc.setFontSize(12);
+doc.text(`Plan Name: ${planData.name}`, 20, 50);
+doc.text(`Type: ${planData.type}`, 20, 60);
+doc.text(`Start Date: ${planData.startDate}`, 20, 70);
+doc.text(`End Date: ${planData.endDate}`, 20, 80);
+doc.text(`Initial Budget: $${planData.initialBudget.toLocaleString()}`, 20, 90);
+doc.text(`Growth Rate: ${planData.growthRate}%`, 20, 100);
+doc.text(`Total Projection: $${planData.totalProjection.toLocaleString()}`, 20, 110);
+
+doc.text('Monthly Breakdown:', 20, 130);
+let y = 140;
+planData.months.forEach(month => {
+doc.text(`${month.monthName}: $${month.budget.toLocaleString()}`, 20, y);
+y += 10;
+if (y > 270) {
+doc.addPage();
+y = 30;
+}
+});
+
+doc.save(`${planData.name.replace(/\s+/g, '_')}_plan.pdf`);
 }
 
 // ==================== REPORTS ====================
@@ -2055,6 +2187,245 @@ plugins: { legend: { position: 'bottom' } }
 }, 100);
 }
 
+// ==================== CALCULATOR ====================
+function loadCalculatorContent() {
+const content = document.getElementById('calculatorContent');
+
+content.innerHTML = `
+<h2 style="color: #007bff; margin-bottom: 15px;">🧮 Financial Calculators</h2>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 20px;">
+<button class="btn btn-primary" onclick="showBreakEvenCalc()">Break-Even</button>
+<button class="btn btn-primary" onclick="showROICalc()">ROI Calculator</button>
+<button class="btn btn-primary" onclick="showLoanCalc()">Loan Calculator</button>
+<button class="btn btn-primary" onclick="showTaxCalc()">Tax Estimator</button>
+</div>
+
+<div id="calcDisplay"></div>
+`;
+}
+
+function showBreakEvenCalc() {
+const display = document.getElementById('calcDisplay');
+display.innerHTML = `
+<h3>Break-Even Calculator</h3>
+<div class="input-group">
+<label>Fixed Costs ($)</label>
+<input type="number" id="fixedCosts" placeholder="10000">
+</div>
+<div class="input-group">
+<label>Variable Cost per Unit ($)</label>
+<input type="number" id="variableCost" placeholder="5">
+</div>
+<div class="input-group">
+<label>Selling Price per Unit ($)</label>
+<input type="number" id="sellingPrice" placeholder="10">
+</div>
+<button class="btn btn-primary" onclick="calculateBreakEven()">Calculate</button>
+<div id="breakEvenResult" style="margin-top: 15px;"></div>
+`;
+}
+
+function calculateBreakEven() {
+const fixed = parseFloat(document.getElementById('fixedCosts').value) || 0;
+const variable = parseFloat(document.getElementById('variableCost').value) || 0;
+const price = parseFloat(document.getElementById('sellingPrice').value) || 0;
+
+if (price <= variable) {
+document.getElementById('breakEvenResult').innerHTML = '<p style="color: red;">Selling price must be higher than variable cost.</p>';
+return;
+}
+
+const contribution = price - variable;
+const units = Math.ceil(fixed / contribution);
+const revenue = units * price;
+
+document.getElementById('breakEvenResult').innerHTML = `
+<div class="report-section">
+<p><strong>Break-Even Point:</strong> ${units.toLocaleString()} units</p>
+<p><strong>Revenue Needed:</strong> $${revenue.toLocaleString()}</p>
+<p><strong>Contribution Margin:</strong> $${contribution.toFixed(2)} per unit</p>
+</div>
+`;
+}
+
+function showROICalc() {
+const display = document.getElementById('calcDisplay');
+display.innerHTML = `
+<h3>ROI Calculator</h3>
+<div class="input-group">
+<label>Initial Investment ($)</label>
+<input type="number" id="initialInvest" placeholder="10000">
+</div>
+<div class="input-group">
+<label>Net Profit ($)</label>
+<input type="number" id="netProfit" placeholder="2000">
+</div>
+<button class="btn btn-primary" onclick="calculateROI()">Calculate</button>
+<div id="roiResult" style="margin-top: 15px;"></div>
+`;
+}
+
+function calculateROI() {
+const invest = parseFloat(document.getElementById('initialInvest').value) || 0;
+const profit = parseFloat(document.getElementById('netProfit').value) || 0;
+
+if (invest === 0) {
+document.getElementById('roiResult').innerHTML = '<p style="color: red;">Investment cannot be zero.</p>';
+return;
+}
+
+const roi = ((profit / invest) * 100).toFixed(2);
+
+document.getElementById('roiResult').innerHTML = `
+<div class="report-section">
+<p><strong>ROI:</strong> ${roi}%</p>
+<p><strong>Net Profit:</strong> $${profit.toLocaleString()}</p>
+<p><strong>Investment:</strong> $${invest.toLocaleString()}</p>
+</div>
+`;
+}
+
+function showLoanCalc() {
+const display = document.getElementById('calcDisplay');
+display.innerHTML = `
+<h3>Loan Calculator</h3>
+<div class="input-group">
+<label>Loan Amount ($)</label>
+<input type="number" id="loanAmount" placeholder="10000">
+</div>
+<div class="input-group">
+<label>Interest Rate (%)</label>
+<input type="number" id="interestRate" placeholder="5" step="0.1">
+</div>
+<div class="input-group">
+<label>Loan Term (Years)</label>
+<input type="number" id="loanTerm" placeholder="5">
+</div>
+<button class="btn btn-primary" onclick="calculateLoan()">Calculate</button>
+<div id="loanResult" style="margin-top: 15px;"></div>
+`;
+}
+
+function calculateLoan() {
+const amount = parseFloat(document.getElementById('loanAmount').value) || 0;
+const rate = (parseFloat(document.getElementById('interestRate').value) || 0) / 100 / 12;
+const term = (parseFloat(document.getElementById('loanTerm').value) || 0) * 12;
+
+if (amount === 0 || rate === 0 || term === 0) {
+document.getElementById('loanResult').innerHTML = '<p style="color: red;">Please fill all fields.</p>';
+return;
+}
+
+const payment = (amount * rate * Math.pow(1 + rate, term)) / (Math.pow(1 + rate, term) - 1);
+const total = payment * term;
+const interest = total - amount;
+
+document.getElementById('loanResult').innerHTML = `
+<div class="report-section">
+<p><strong>Monthly Payment:</strong> $${payment.toFixed(2)}</p>
+<p><strong>Total Interest:</strong> $${interest.toFixed(2)}</p>
+<p><strong>Total Amount:</strong> $${total.toFixed(2)}</p>
+</div>
+`;
+}
+
+function showTaxCalc() {
+const display = document.getElementById('calcDisplay');
+display.innerHTML = `
+<h3>Tax Estimator (Simple)</h3>
+<div class="input-group">
+<label>Annual Revenue ($)</label>
+<input type="number" id="annualRevenue" placeholder="50000">
+</div>
+<div class="input-group">
+<label>Deductible Expenses ($)</label>
+<input type="number" id="deductibles" placeholder="10000">
+</div>
+<div class="input-group">
+<label>Tax Rate (%)</label>
+<input type="number" id="taxRate" placeholder="25" step="0.1">
+</div>
+<button class="btn btn-primary" onclick="calculateTax()">Calculate</button>
+<div id="taxResult" style="margin-top: 15px;"></div>
+`;
+}
+
+function calculateTax() {
+const revenue = parseFloat(document.getElementById('annualRevenue').value) || 0;
+const expenses = parseFloat(document.getElementById('deductibles').value) || 0;
+const rate = (parseFloat(document.getElementById('taxRate').value) || 0) / 100;
+
+const taxable = revenue - expenses;
+const tax = taxable * rate;
+
+document.getElementById('taxResult').innerHTML = `
+<div class="report-section">
+<p><strong>Taxable Income:</strong> $${taxable.toLocaleString()}</p>
+<p><strong>Estimated Tax:</strong> $${tax.toFixed(2)}</p>
+<p><strong>After Tax:</strong> $${(taxable - tax).toFixed(2)}</p>
+</div>
+`;
+}
+
+// ==================== STOCK ====================
+function loadStockContent() {
+const content = document.getElementById('stockContent');
+
+content.innerHTML = `
+<h2 style="color: #007bff; margin-bottom: 15px;">📈 Stock Market Integration</h2>
+
+<div class="input-group">
+<label>Stock Symbol (e.g., AAPL, GOOGL)</label>
+<input type="text" id="stockSymbol" placeholder="AAPL" style="text-transform: uppercase;">
+</div>
+<button class="btn btn-primary" onclick="getStockData()">Get Stock Data</button>
+
+<div id="stockResult" style="margin-top: 20px;"></div>
+`;
+}
+
+function getStockData() {
+const symbol = document.getElementById('stockSymbol').value.trim().toUpperCase();
+if (!symbol) {
+alert('Please enter a stock symbol');
+return;
+}
+
+document.getElementById('stockResult').innerHTML = '<p>Loading stock data...</p>';
+
+// Using a free API (you may need to sign up for a key)
+const apiKey = 'demo'; // Replace with actual API key
+const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${apiKey}`;
+
+fetch(url)
+.then(response => response.json())
+.then(data => {
+if (data['Global Quote']) {
+const quote = data['Global Quote'];
+const price = parseFloat(quote['05. price']);
+const change = parseFloat(quote['09. change']);
+const changePercent = quote['10. change percent'];
+
+document.getElementById('stockResult').innerHTML = `
+<div class="report-section">
+<h3>${symbol} Stock Data</h3>
+<p><strong>Current Price:</strong> $${price.toFixed(2)}</p>
+<p><strong>Change:</strong> ${change >= 0 ? '+' : ''}$${change.toFixed(2)} (${changePercent})</p>
+<p><strong>Volume:</strong> ${quote['06. volume']}</p>
+<p><strong>Last Updated:</strong> ${quote['07. latest trading day']}</p>
+</div>
+`;
+} else {
+document.getElementById('stockResult').innerHTML = '<p style="color: red;">Stock symbol not found or API limit reached.</p>';
+}
+})
+.catch(error => {
+document.getElementById('stockResult').innerHTML = '<p style="color: red;">Error fetching stock data. Please try again.</p>';
+console.error('Stock API error:', error);
+});
+}
+
 // ==================== BUSINESS COMPARISON ====================
 function showBusinessComparison(userInput) {
 const chatBox = document.getElementById('chat-box');
@@ -2207,7 +2578,9 @@ const ideaCategories = [
     examples: [
       'Subscription-based home composting kits for busy urban families',
       'A mobile app that connects local farmers with direct delivery customers',
-      'Eco-friendly packaging consulting for small e-commerce brands'
+      'Eco-friendly packaging consulting for small e-commerce brands',
+      'Solar panel installation service with financing options',
+      'Zero-waste grocery delivery with reusable containers'
     ]
   },
   {
@@ -2215,7 +2588,9 @@ const ideaCategories = [
     examples: [
       'AI-powered meeting summarization for remote teams',
       'A task planner that builds micro-goals based on your calendar',
-      'A skill-swapping platform for freelancers and startups'
+      'A skill-swapping platform for freelancers and startups',
+      'Automated social media content generator for small businesses',
+      'Virtual reality training platform for employee onboarding'
     ]
   },
   {
@@ -2223,7 +2598,9 @@ const ideaCategories = [
     examples: [
       'A mental wellness subscription box designed for entrepreneurs',
       'A telehealth coaching service for nutrition and productivity',
-      'A community marketplace for local fitness instructors and pop-up classes'
+      'A community marketplace for local fitness instructors and pop-up classes',
+      'Personalized meal planning app with grocery delivery',
+      'Senior care coordination platform connecting families with caregivers'
     ]
   },
   {
@@ -2231,17 +2608,43 @@ const ideaCategories = [
     examples: [
       'A neighborhood concierge service for busy professionals',
       'A digital loyalty program tailored to independent cafés',
-      'A small business delivery cooperative for same-day orders'
+      'A small business delivery cooperative for same-day orders',
+      'Local artisan marketplace with virtual showrooms',
+      'Community skill-sharing platform for local workshops'
+    ]
+  },
+  {
+    category: 'E-commerce & Retail',
+    examples: [
+      'Niche subscription box service for hobbyists',
+      'Dropshipping platform for handmade goods',
+      'Virtual try-on technology for online clothing stores',
+      'AI-powered product recommendation engine',
+      'Sustainable fashion rental service'
+    ]
+  },
+  {
+    category: 'Education & Learning',
+    examples: [
+      'Online platform for skill-based micro-courses',
+      'Language exchange app with business networking',
+      'Corporate training gamification platform',
+      'Personalized learning paths for career development',
+      'Mentorship marketplace connecting experts with learners'
     ]
   }
 ];
 const selected = ideaCategories[Math.floor(Math.random() * ideaCategories.length)];
-return `Here are some fresh idea suggestions in ${selected.category}:
+return `Here are some fresh idea suggestions in **${selected.category}**:
 • ${selected.examples[0]}
 • ${selected.examples[1]}
 • ${selected.examples[2]}
+• ${selected.examples[3]}
+• ${selected.examples[4]}
 
-If you want more, ask for ideas in a specific industry or for a specific customer need.`;
+💡 **Pro Tip:** Start with a minimum viable product and validate with potential customers.
+
+Want ideas in a specific industry? Try asking: "business ideas for [industry]" or "ideas for [budget range]".`;
 }
 
 function parseFinancialAmount(value) {
@@ -2396,6 +2799,10 @@ bestIntent = intent;
 if (bestScore > 0.55 && bestIntent) {
   if (bestIntent.tag === 'idea_generator') {
     return generateIdeaReply();
+  }
+  if (bestIntent.tag === 'stock_lookup') {
+    setTimeout(() => showStockModal(), 1000);
+    return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
   }
   return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
 }
