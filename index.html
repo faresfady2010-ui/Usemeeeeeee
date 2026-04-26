@@ -11,10 +11,10 @@ body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: 
 body.dark { background-color: #1a1a2e; }
 
 /* SIDEBAR LAYOUT */
-.app-wrapper { display: flex; width: 100%; max-width: 800px; height: 100vh; }
-.sidebar { width: 260px; background-color: #fff; border-right: 1px solid #ddd; display: flex; flex-direction: column; transition: all 0.3s; position: relative; z-index: 50; }
+.app-wrapper { display: flex; width: 100%; max-width: 600px; height: 100vh; }
+.sidebar { flex: 0 0 260px; background-color: #fff; border-right: 1px solid #ddd; display: flex; flex-direction: column; transition: all 0.3s; position: relative; z-index: 50; }
 body.dark .sidebar { background-color: #0f3460; border-right: 1px solid #1a1a2e; }
-.sidebar.closed { width: 0; overflow: hidden; }
+.sidebar.closed { position: absolute; left: -260px; }
 .sidebar-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
 body.dark .sidebar-header { border-bottom: 1px solid #1a1a2e; }
 .sidebar-title { font-size: 1.1em; font-weight: 600; color: #007bff; }
