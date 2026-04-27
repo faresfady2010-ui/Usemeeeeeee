@@ -17,7 +17,10 @@ body {
   font-family: Arial, sans-serif; 
   background-color: #f4f4f4; 
   display: flex; 
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
+  padding: 20px;
   transition: background-color 0.3s;
 }
 
@@ -25,28 +28,43 @@ body.dark {
   background-color: #1a1a2e; 
 }
 
+/* CHAT CONTAINER WRAPPER */
+.chat-wrapper {
+  display: flex;
+  width: 100%;
+  max-width: 800px;
+  height: 600px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+body.dark .chat-wrapper {
+  background: #16213e;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
 /* SIDEBAR STYLES */
 .sidebar {
   width: 250px;
   background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
   color: white;
-  position: fixed;
-  left: 0;
-  top: 0;
-  height: 100vh;
-  overflow-y: auto;
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  z-index: 999;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px 0 0 8px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
 }
 
 body.dark .sidebar {
   background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
 }
 
-.sidebar.active {
-  transform: translateX(0);
+.sidebar.collapsed {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
 }
 
 .sidebar-header {
@@ -70,11 +88,18 @@ body.dark .sidebar {
   font-size: 1.5em;
   cursor: pointer;
   padding: 0;
+  transition: transform 0.2s;
+}
+
+.close-sidebar:hover {
+  transform: scale(1.2);
 }
 
 .sidebar-menu {
   list-style: none;
   padding: 20px 0;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .sidebar-menu li {
@@ -98,90 +123,49 @@ body.dark .sidebar {
   padding-left: 25px;
 }
 
-.sidebar-menu a.active {
-  background: rgba(255,255,255,0.3);
-  border-left: 4px solid white;
-}
-
 .menu-icon {
   font-size: 1.3em;
   min-width: 30px;
   text-align: center;
 }
 
-/* HAMBURGER BUTTON */
+/* HAMBURGER BUTTON IN HEADER */
 .hamburger-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px;
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  background: transparent;
   border: none;
   color: white;
   font-size: 1.5em;
   cursor: pointer;
-  border-radius: 50%;
-  z-index: 1000;
+  padding: 5px 10px;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  transition: all 0.3s;
 }
 
 .hamburger-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-body.dark .hamburger-btn {
-  background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 100%);
-}
-
-/* OVERLAY */
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.5);
-  display: none;
-  z-index: 998;
-}
-
-.sidebar-overlay.active {
-  display: block;
-}
-
-/* MAIN CONTENT WRAPPER */
-.main-content {
+/* MAIN CHAT AREA */
+.chat-main {
   flex: 1;
-  margin-left: 0;
-  transition: margin-left 0.3s;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .chat-container { 
   background-color: #fff; 
-  border-radius: 8px; 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-  width: 100%; 
-  max-width: 500px; 
+  width: 100%;
   display: flex; 
   flex-direction: column; 
-  height: 600px; 
+  height: 100%;
   overflow: hidden;
 }
 
 body.dark .chat-container { 
-  background-color: #16213e; 
-  box-shadow: 0 2px 10px rgba(0,0,0,0.5); 
+  background-color: #16213e;
 }
 
 .chat-header { 
@@ -193,11 +177,18 @@ body.dark .chat-container {
   font-weight: 600; 
   display: flex; 
   justify-content: space-between; 
-  align-items: center; 
+  align-items: center;
+  border-radius: 0;
 }
 
 body.dark .chat-header { 
   background-color: #0f3460; 
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .header-title { 
@@ -248,6 +239,7 @@ body.dark .chat-box {
   border-bottom: 1px solid #0f3460; 
 }
 
+/* TYPING ANIMATION */
 .message { 
   margin-bottom: 10px; 
   clear: both; 
@@ -278,12 +270,69 @@ body.dark .message.user {
   float: left; 
   max-width: 70%; 
   margin-right: auto; 
-  text-align: left; 
+  text-align: left;
+  animation: fadeIn 0.3s ease-in;
 }
 
 body.dark .message.bot { 
   background-color: #2a2a4a; 
   color: #e0e0e0; 
+}
+
+/* TYPING INDICATOR */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #f0f0f0;
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 15px;
+  float: left;
+  max-width: 70px;
+  margin-right: auto;
+}
+
+body.dark .typing-indicator {
+  background-color: #2a2a4a;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #999;
+  animation: typing 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .chat-input-area { 
@@ -325,18 +374,21 @@ body.dark .chat-input-area {
 }
 
 #suggestBox { 
-  position: absolute; 
-  bottom: 35px; 
-  left: 0; 
+  position: relative;
   background: #222; 
   color: white; 
   padding: 10px; 
   border-radius: 8px; 
-  width: 100%; 
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
+  width: 100%;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   display: none; 
   max-height: 200px;
   overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+#suggestBox.show {
+  display: block;
 }
 
 #closeBtn { 
@@ -578,16 +630,6 @@ body.dark .btn-secondary {
   background: #e5e7eb;
 }
 
-.btn-ai {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
-}
-
-.btn-ai:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
-}
-
 /* METRICS */
 .metrics-grid {
   display: grid;
@@ -621,42 +663,37 @@ body.dark .btn-secondary {
   opacity: 0.9;
 }
 
-/* CHARTS */
-.charts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 15px;
-  margin: 20px 0;
-}
-
-.chart-box {
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-body.dark .chart-box {
-  background: #16213e;
-}
-
-.chart-title {
-  font-size: 1em;
-  font-weight: 600;
-  margin-bottom: 12px;
+/* REPORT SECTION */
+.report-section {
+  background: #f1f1f1;
   color: #333;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border-left: 4px solid #007bff;
+  font-size: 0.95em;
 }
 
-body.dark .chart-title {
+body.dark .report-section {
+  background: #16213e;
+  color: #e0e0e0;
+  border-left: 4px solid #0056b3;
+}
+
+.report-header {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #007bff;
+  padding-bottom: 12px;
+}
+
+body.dark .report-header {
   color: #e0e0e0;
 }
 
-.chart-container {
-  position: relative;
-  height: 220px;
-}
-
-/* TABLE */
+/* DATA TABLE */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -697,235 +734,85 @@ body.dark .data-table tbody tr:hover {
   background: #0f3460;
 }
 
-/* REPORT SECTION */
-.report-section {
-  background: #f1f1f1;
-  color: #333;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 15px 0;
-  border-left: 4px solid #007bff;
-  font-size: 0.95em;
-}
-
-body.dark .report-section {
-  background: #16213e;
-  color: #e0e0e0;
-  border-left: 4px solid #0056b3;
-}
-
-.report-header {
-  font-size: 1.4em;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
-  border-bottom: 3px solid #007bff;
-  padding-bottom: 12px;
-}
-
-body.dark .report-header {
-  color: #e0e0e0;
-}
-
-/* SWOT GRID */
-.swot-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
-  margin: 20px 0;
-}
-
-.swot-card {
-  padding: 15px;
-  border-radius: 8px;
-  color: white;
-  font-size: 0.9em;
-}
-
-.swot-strengths {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-}
-
-.swot-weaknesses {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-}
-
-.swot-opportunities {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-}
-
-.swot-threats {
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-}
-
-.swot-title {
-  font-weight: 600;
-  margin-bottom: 10px;
-  font-size: 1em;
-}
-
-.swot-item {
-  background: rgba(255,255,255,0.2);
-  padding: 6px 10px;
-  border-radius: 5px;
-  margin: 4px 0;
-  font-size: 0.85em;
-}
-
-/* AI INSIGHTS */
-.ai-insights {
-  background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
-  border-left: 4px solid #f5576c;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 20px 0;
-  font-size: 0.95em;
-}
-
-.ai-header {
-  font-weight: 600;
-  color: #f5576c;
-  margin-bottom: 10px;
-  font-size: 1em;
-}
-
-.ai-insights p {
-  color: #555;
-  line-height: 1.5;
-  margin-bottom: 6px;
-}
-
-body.dark .ai-insights p {
-  color: #bbb;
-}
-
-.ai-insights ul {
-  list-style: none;
-  padding: 0;
-  margin: 8px 0;
-}
-
-.ai-insights li {
-  color: #555;
-  margin: 6px 0;
-  padding-left: 18px;
-  position: relative;
-  font-size: 0.9em;
-}
-
-body.dark .ai-insights li {
-  color: #bbb;
-}
-
-.ai-insights li:before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  color: #f5576c;
-  font-weight: bold;
-}
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .chat-container {
+  .chat-wrapper {
+    width: 100%;
     max-width: 100%;
-    height: 80vh;
+    height: 85vh;
   }
 
-  .charts-grid {
-    grid-template-columns: 1fr;
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 999;
+    border-radius: 0;
   }
 
-  .button-group {
-    flex-direction: column;
+  .sidebar.collapsed {
+    width: 0;
   }
-
-  .btn {
-    min-width: auto;
-  }
-
-  #suggestWrapper {
-    flex-direction: row;
-  }
-
-  #suggestBtn, #reportsBtn, #plannerBtn {
-    min-width: auto;
-    flex: 0;
-  }
-
-  .nav-buttons button {
-    font-size: 0.75em;
-    padding: 5px 10px;
-  }
-}
-
-.planner-input-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  margin-bottom: 15px;
 }
 </style>
 </head>
 <body>
 
-<!-- HAMBURGER MENU BUTTON -->
-<button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
-
-<!-- SIDEBAR OVERLAY -->
-<div class="sidebar-overlay" onclick="closeSidebar()"></div>
-
-<!-- SIDEBAR -->
-<nav class="sidebar">
-  <div class="sidebar-header">
-    <span class="sidebar-title">Menu</span>
-    <button class="close-sidebar" onclick="closeSidebar()">✕</button>
-  </div>
-  <ul class="sidebar-menu">
-    <li><a href="#" onclick="showReportsModal(); closeSidebar(); return false;"><span class="menu-icon">📊</span> Reports</a></li>
-    <li><a href="#" onclick="showCalculatorModal(); closeSidebar(); return false;"><span class="menu-icon">🧮</span> Calculator</a></li>
-    <li><a href="#" onclick="showPlannerModal(); closeSidebar(); return false;"><span class="menu-icon">📅</span> Planner</a></li>
-    <li><a href="about.html"><span class="menu-icon">ℹ️</span> About</a></li>
-    <li><a href="settings.html"><span class="menu-icon">⚙️</span> Settings</a></li>
-  </ul>
-</nav>
-
-<!-- MAIN CONTENT -->
-<div class="main-content">
-  <div class="chat-container">
-    <div class="chat-header">
-      <span></span>
-      <div class="header-title">usemee</div>
-      <span></span>
+<!-- CHAT WRAPPER -->
+<div class="chat-wrapper">
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Menu</span>
+      <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
     </div>
+    <ul class="sidebar-menu">
+      <li><a href="#" onclick="showReportsModal(); return false;"><span class="menu-icon">📊</span> Reports</a></li>
+      <li><a href="#" onclick="showCalculatorModal(); return false;"><span class="menu-icon">🧮</span> Calculator</a></li>
+      <li><a href="#" onclick="showPlannerModal(); return false;"><span class="menu-icon">📅</span> Planner</a></li>
+    </ul>
+  </nav>
 
-    <div class="nav-buttons">
-      <button onclick="goToPage('index.html')">Home</button>
-      <button onclick="goToPage('about.html')">About</button>
-      <button onclick="goToPage('settings.html')">Settings</button>
-    </div>
-
-    <div class="chat-box" id="chat-box"></div>
-
-    <div class="chat-input-area">
-      <div id="suggestWrapper">
-        <button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">💡 Suggestions</button>
-        <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Reports</button>
-        <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📅 Planner</button>
-        <button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">🧮 Calculator</button>
-        <div id="suggestBox">
-          <button id="closeBtn">✖</button>
-          <p class="suggestion">what is business</p>
-          <p class="suggestion">how to start a business</p>
-          <p class="suggestion">create swot analysis</p>
-          <p class="suggestion">financial planning</p>
+  <!-- MAIN CHAT AREA -->
+  <div class="chat-main">
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="header-left">
+          <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
         </div>
+        <div class="header-title">usemee</div>
+        <div style="width: 40px;"></div>
       </div>
 
-      <div class="input-row">
-        <input type="text" id="user-input" placeholder="Type your message...">
-        <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
-        <button class="send-btn" onclick="sendMessage()">Send</button>
+      <div class="nav-buttons">
+        <button onclick="goToPage('index.html')">Home</button>
+        <button onclick="goToPage('about.html')">About</button>
+        <button onclick="goToPage('settings.html')">Settings</button>
+      </div>
+
+      <div class="chat-box" id="chat-box"></div>
+
+      <div class="chat-input-area">
+        <div id="suggestWrapper">
+          <button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">💡 Suggestions</button>
+          <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Reports</button>
+          <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📅 Planner</button>
+          <button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">🧮 Calculator</button>
+          <div id="suggestBox">
+            <button id="closeBtn">✖</button>
+            <p class="suggestion">what is business</p>
+            <p class="suggestion">how to start a business</p>
+            <p class="suggestion">create swot analysis</p>
+            <p class="suggestion">financial planning</p>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <input type="text" id="user-input" placeholder="Type your message...">
+          <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
+          <button class="send-btn" onclick="sendMessage()">Send</button>
+        </div>
       </div>
     </div>
   </div>
@@ -955,38 +842,17 @@ body.dark .ai-insights li {
   </div>
 </div>
 
-<!-- STOCK MODAL -->
-<div id="stockModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeStockModal()">&times;</span>
-    <div id="stockContent"></div>
-  </div>
-</div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 // ==================== SIDEBAR FUNCTIONS ====================
 function toggleSidebar() {
-  document.querySelector('.sidebar').classList.toggle('active');
-  document.querySelector('.sidebar-overlay').classList.toggle('active');
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('collapsed');
 }
 
-function closeSidebar() {
-  document.querySelector('.sidebar').classList.remove('active');
-  document.querySelector('.sidebar-overlay').classList.remove('active');
-}
-
-document.querySelector('.sidebar-overlay').addEventListener('click', closeSidebar);
-
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') {
-    closeSidebar();
-  }
-});
-
-// ==================== DARK MODE (READ-ONLY) ====================
+// ==================== DARK MODE ====================
 if (localStorage.getItem('darkMode') === 'enabled') {
   document.body.classList.add('dark');
 }
@@ -1006,14 +872,6 @@ let planData = {
   type: '',
   months: [],
   totalProjection: 0
-};
-
-let swotData = {
-  business: "",
-  strengths: [],
-  weaknesses: [],
-  opportunities: [],
-  threats: []
 };
 
 let reportData = {
@@ -1038,6 +896,48 @@ const intents = [
   {tag:"profit",patterns:["what is profit","profit meaning"],responses:["Profit is the money left after subtracting costs from revenue."]},
   {tag:"start_business",patterns:["how to start a business","create a business"],responses:["Here are key steps: idea, market research, business plan, legal structure, register, finance, branding, product, marketing, launch."]},
 ];
+
+// ==================== INITIAL MESSAGE ====================
+function showInitialMessage() {
+  const initialMessage = "Hello! 👋 I am a business chatbot. I'm here to help you with business planning, financial calculations, reports, and more. How can I assist you today?";
+  typeMessage(initialMessage, 'bot');
+}
+
+// ==================== TYPING ANIMATION ====================
+function typeMessage(message, sender) {
+  const chatBox = document.getElementById('chat-box');
+  const messageEl = document.createElement('div');
+  messageEl.className = `message ${sender}`;
+  
+  if (sender === 'bot') {
+    // Create typing indicator first
+    const typingEl = document.createElement('div');
+    typingEl.className = 'typing-indicator';
+    typingEl.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+    chatBox.appendChild(typingEl);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    
+    // Type out message
+    let index = 0;
+    messageEl.textContent = '';
+    const typeInterval = setInterval(() => {
+      if (index < message.length) {
+        messageEl.textContent += message.charAt(index);
+        index++;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } else {
+        clearInterval(typeInterval);
+        typingEl.remove();
+        chatBox.appendChild(messageEl);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }
+    }, 30); // Adjust speed here (lower = faster)
+  } else {
+    messageEl.textContent = message;
+    chatBox.appendChild(messageEl);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+}
 
 // ==================== MODAL FUNCTIONS ====================
 function showReportsModal() {
@@ -1206,29 +1106,16 @@ function createPlan() {
   document.getElementById('planOutput').innerHTML = planHTML;
 }
 
-function closeStockModal() {
-  document.getElementById('stockModal').style.display = 'none';
-}
-
 // ==================== SEND MESSAGE ====================
 function sendMessage() {
   const userInput = document.getElementById('user-input').value.trim();
   if (!userInput) return;
 
-  displayMessage(userInput, 'user');
+  typeMessage(userInput, 'user');
   document.getElementById('user-input').value = '';
 
   const response = getBotResponse(userInput);
-  setTimeout(() => displayMessage(response, 'bot'), 500);
-}
-
-function displayMessage(message, sender) {
-  const chatBox = document.getElementById('chat-box');
-  const messageEl = document.createElement('div');
-  messageEl.className = `message ${sender}`;
-  messageEl.textContent = message;
-  chatBox.appendChild(messageEl);
-  chatBox.scrollTop = chatBox.scrollHeight;
+  setTimeout(() => typeMessage(response, 'bot'), 800);
 }
 
 function getBotResponse(userInput) {
@@ -1272,18 +1159,18 @@ function startVoice() {
 // ==================== SUGGESTIONS ====================
 document.getElementById('suggestBtn')?.addEventListener('click', function() {
   const box = document.getElementById('suggestBox');
-  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  box.classList.toggle('show');
 });
 
 document.getElementById('closeBtn')?.addEventListener('click', function() {
-  document.getElementById('suggestBox').style.display = 'none';
+  document.getElementById('suggestBox').classList.remove('show');
 });
 
 document.querySelectorAll('.suggestion').forEach(item => {
   item.addEventListener('click', function() {
     document.getElementById('user-input').value = this.textContent;
     sendMessage();
-    document.getElementById('suggestBox').style.display = 'none';
+    document.getElementById('suggestBox').classList.remove('show');
   });
 });
 
@@ -1303,6 +1190,11 @@ window.addEventListener('click', function(event) {
   if (event.target === reportsModal) reportsModal.style.display = 'none';
   if (event.target === plannerModal) plannerModal.style.display = 'none';
   if (event.target === calculatorModal) calculatorModal.style.display = 'none';
+});
+
+// ==================== INITIALIZE ON LOAD ====================
+window.addEventListener('load', function() {
+  showInitialMessage();
 });
 </script>
 
