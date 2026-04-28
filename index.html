@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,64 +7,83 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body { 
-    font-family: Arial, sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    background-color: #f4f4f4; 
+/* HAMBURGER MENU STYLES */
+.hamburger-menu {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #007bff;
+    border: none;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    border-radius: 5px;
     display: flex;
-    transition: background-color 0.3s;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    z-index: 999;
+    transition: all 0.3s ease;
 }
 
-body.dark { 
-    background-color: #1a1a2e; 
+.hamburger-menu:hover {
+    background: #0056b3;
+    transform: scale(1.05);
 }
 
-/* ==================== SIDEBAR STYLES ==================== */
-.sidebar {
-    width: 250px;
+.hamburger-line {
+    width: 30px;
+    height: 3px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* SIDEBAR STYLES */
+.sidebar-menu {
+    position: fixed;
+    left: -300px;
+    top: 0;
+    width: 300px;
+    height: 100vh;
     background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
     color: white;
     padding: 20px 0;
-    transition: all 0.3s ease;
+    transition: left 0.3s ease;
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
     overflow-y: auto;
-    position: relative;
-    height: 100vh;
-    flex-shrink: 0;
+    z-index: 998;
 }
 
-/* When sidebar is closed */
-.sidebar.closed {
-    width: 80px;
+.sidebar-menu.open {
+    left: 0;
 }
 
-.sidebar.closed .menu-text {
-    display: none;
+.close-sidebar-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #e74c3c;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.sidebar.closed .menu-icon {
-    margin-right: 0;
-}
-
-/* Sidebar header with brand */
 .sidebar-header {
     padding: 0 20px 30px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     gap: 10px;
-}
-
-.sidebar.closed .sidebar-header {
-    padding: 0 15px 30px;
-    justify-content: center;
+    margin-top: 50px;
 }
 
 .sidebar-logo {
@@ -84,41 +103,16 @@ body.dark {
     font-weight: 600;
 }
 
-/* Toggle button */
-.toggle-btn {
-    position: absolute;
-    top: 20px;
-    right: -40px;
-    width: 40px;
-    height: 40px;
-    background: #3498db;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 0 5px 5px 0;
-    font-size: 20px;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.toggle-btn:hover {
-    background: #2980b9;
-    right: -42px;
-}
-
-/* Menu items */
-.menu {
+.sidebar-menu ul {
     list-style: none;
     padding: 10px 0;
 }
 
-.menu-item {
+.sidebar-menu li {
     padding: 0;
 }
 
-.menu-link {
+.sidebar-menu a {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -130,873 +124,614 @@ body.dark {
     border-left: 4px solid transparent;
 }
 
-.sidebar.closed .menu-link {
-    justify-content: center;
-    padding: 15px;
-    gap: 0;
-}
-
-.menu-link:hover {
+.sidebar-menu a:hover {
     background: rgba(52, 152, 219, 0.2);
     border-left-color: #3498db;
     padding-left: 25px;
 }
 
-.sidebar.closed .menu-link:hover {
-    padding-left: 15px;
-}
-
-.menu-icon {
+.sidebar-icon {
     font-size: 20px;
     min-width: 25px;
-    text-align: center;
-    margin-right: 10px;
-    transition: all 0.3s ease;
 }
 
-.sidebar.closed .menu-icon {
-    margin-right: 0;
-}
-
-.menu-text {
-    font-size: 14px;
-    font-weight: 500;
-}
-
-/* Active menu item */
-.menu-link.active {
-    background: #3498db;
-    border-left-color: #2980b9;
-    color: white;
-}
-
-/* Main container */
-.main-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.chat-container { 
-    background-color: #fff; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-    display: flex; 
-    flex-direction: column; 
-    height: 100%; 
-    overflow: hidden;
-    transition: background-color 0.3s;
-}
-
-body.dark .chat-container { 
-    background-color: #16213e; 
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5); 
-}
-
-.chat-header { 
-    background-color: #007bff; 
-    color: white; 
-    padding: 15px; 
-    text-align: center; 
-    font-size: 1.2em; 
-    font-weight: 600; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-}
-
-body.dark .chat-header { 
-    background-color: #0f3460; 
-}
-
-.header-title { 
-    flex: 1; 
-    text-align: center; 
-}
-
-.nav-buttons { 
-    display: flex; 
-    justify-content: center; 
-    gap: 5px; 
-    padding: 10px; 
-    background-color: #f0f0f0; 
-    border-bottom: 1px solid #ccc; 
-    flex-wrap: wrap; 
-}
-
-body.dark .nav-buttons { 
-    background-color: #0f3460; 
-    border-bottom: 1px solid #1a1a2e; 
-}
-
-.nav-buttons button { 
-    background-color: #007bff; 
-    color: white; 
-    border: none; 
-    padding: 6px 12px; 
-    border-radius: 15px; 
-    cursor: pointer; 
-    font-size: 0.8em; 
-    font-weight: 600; 
-    transition: all 0.3s; 
-}
-
-.nav-buttons button:hover { 
-    background-color: #0056b3; 
-    transform: translateY(-1px); 
-}
-
-.chat-box { 
-    flex-grow: 1; 
-    padding: 15px; 
-    overflow-y: auto; 
-    border-bottom: 1px solid #eee; 
-}
-
-body.dark .chat-box { 
-    border-bottom: 1px solid #0f3460; 
-}
-
-.message { 
-    margin-bottom: 10px; 
-    clear: both; 
-    overflow-wrap: break-word; 
-}
-
-.message.user { 
-    background-color: #e6f7ff; 
-    color: #000; 
-    padding: 8px 12px; 
-    border-radius: 15px; 
-    float: right; 
-    max-width: 70%; 
-    margin-left: auto; 
-    text-align: right; 
-}
-
-body.dark .message.user { 
-    background-color: #1e4d7b; 
-    color: #e0e0e0; 
-}
-
-.message.bot { 
-    background-color: #f0f0f0; 
-    color: #000; 
-    padding: 8px 12px; 
-    border-radius: 15px; 
-    float: left; 
-    max-width: 70%; 
-    margin-right: auto; 
-    text-align: left; 
-}
-
-body.dark .message.bot { 
-    background-color: #2a2a4a; 
-    color: #e0e0e0; 
-}
-
-.chat-input-area { 
-    display: flex; 
-    flex-direction: column; 
-    padding: 15px; 
-    border-top: 1px solid #eee; 
-    background-color: #fff; 
-}
-
-body.dark .chat-input-area { 
-    background-color: #16213e; 
-    border-top: 1px solid #0f3460; 
-}
-
-#suggestWrapper { 
-    display: flex; 
-    gap: 5px; 
-    flex-wrap: wrap; 
-    margin-bottom: 10px; 
-}
-
+body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s; }
+body.dark { background-color: #1a1a2e; }
+.chat-container { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; display: flex; flex-direction: column; height: 600px; overflow: hidden; transition: background-color 0.3s; }
+body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+body.dark .chat-header { background-color: #0f3460; }
+.header-title { flex: 1; text-align: center; }
+.nav-buttons { display: flex; justify-content: center; gap: 5px; padding: 10px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; flex-wrap: wrap; }
+body.dark .nav-buttons { background-color: #0f3460; border-bottom: 1px solid #1a1a2e; }
+.nav-buttons button { background-color: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 0.8em; font-weight: 600; transition: all 0.3s; }
+.nav-buttons button:hover { background-color: #0056b3; transform: translateY(-1px); }
+.chat-box { flex-grow: 1; padding: 15px; overflow-y: auto; border-bottom: 1px solid #eee; }
+body.dark .chat-box { border-bottom: 1px solid #0f3460; }
+.message { margin-bottom: 10px; clear: both; overflow-wrap: break-word; }
+.message.user { background-color: #e6f7ff; color: #000; padding: 8px 12px; border-radius: 15px; float: right; max-width: 70%; margin-left: auto; text-align: right; }
+body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
+.message.bot { background-color: #f0f0f0; color: #000; padding: 8px 12px; border-radius: 15px; float: left; max-width: 70%; margin-right: auto; text-align: left; }
+body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
+.chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; }
+body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
+#suggestWrapper { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
 #suggestBtn, #reportsBtn, #plannerBtn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    flex: 0;
+background-color: #007bff;
+color: white;
+border: none;
+padding: 6px 10px;
+border-radius: 12px;
+font-size: 11px;
+font-weight: 500;
+cursor: pointer;
+transition: all 0.2s ease;
+flex: 0;
 }
-
-#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover { 
-    background-color: #0056b3; 
-    transform: translateY(-1px); 
-}
-
-#suggestBox { 
-    position: absolute; 
-    bottom: 35px; 
-    left: 0; 
-    background: #222; 
-    color: white; 
-    padding: 10px; 
-    border-radius: 8px; 
-    width: 100%; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3); 
-    display: none; 
-    max-height: 150px; 
-    overflow-y: auto; 
-}
-
-#closeBtn { 
-    float: right; 
-    background: red; 
-    border: none; 
-    color: white; 
-    cursor: pointer; 
-    font-weight: bold; 
-    padding: 2px 6px; 
-    border-radius: 3px; 
-    font-size: 0.9em; 
-}
-
-.suggestion { 
-    cursor: pointer; 
-    padding: 5px; 
-    border-radius: 3px; 
-}
-
-.suggestion:hover { 
-    background: #444; 
-}
-
-.input-row { 
-    display: flex; 
-    gap: 8px; 
-    align-items: flex-end; 
-}
-
-.chat-input-area input { 
-    flex-grow: 1; 
-    padding: 10px; 
-    border: 1px solid #ccc; 
-    border-radius: 20px; 
-    background-color: #fff; 
-    color: #000; 
-    font-family: Arial, sans-serif; 
-    min-height: 36px; 
-}
-
-body.dark .chat-input-area input { 
-    background-color: #0f3460; 
-    color: #e0e0e0; 
-    border: 1px solid #444; 
-}
-
-.chat-input-area .send-btn { 
-    background-color: #28a745; 
-    border: none; 
-    padding: 8px 14px; 
-    border-radius: 20px; 
-    color: white; 
-    cursor: pointer; 
-    font-weight: 600; 
-    font-size: 0.85em; 
-    transition: all 0.3s;
-}
-
-.chat-input-area .send-btn:hover { 
-    background-color: #218838; 
-    transform: translateY(-1px); 
-}
-
+#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
+#suggestBox { position: absolute; bottom: 35px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 150px; overflow-y: auto; }
+#closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; font-weight: bold; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+.suggestion { cursor: pointer; padding: 5px; border-radius: 3px; }
+.suggestion:hover { background: #444; }
+.input-row { display: flex; gap: 8px; align-items: flex-end; }
+.chat-input-area input { flex-grow: 1; padding: 10px; border: 1px solid #ccc; border-radius: 20px; background-color: #fff; color: #000; font-family: Arial, sans-serif; min-height: 36px; }
+body.dark .chat-input-area input { background-color: #0f3460; color: #e0e0e0; border: 1px solid #444; }
+.chat-input-area .send-btn { background-color: #28a745; border: none; padding: 8px 14px; border-radius: 20px; color: white; cursor: pointer; font-weight: 600; font-size: 0.85em; transition: all 0.3s; }
+.chat-input-area .send-btn:hover { background-color: #218838; transform: translateY(-1px); }
 #voice-btn {
-    border: none;
-    background-color: #eee;
-    padding: 8px 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.2s;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+border: none;
+background-color: #eee;
+padding: 8px 10px;
+border-radius: 50%;
+cursor: pointer;
+font-size: 14px;
+transition: 0.2s;
+width: 36px;
+height: 36px;
+display: flex;
+align-items: center;
+justify-content: center;
 }
-
-#voice-btn:hover { 
-    background-color: #ddd; 
-}
-
+#voice-btn:hover { background-color: #ddd; }
 #voice-btn.listening {
-    background-color: #ff4d4d;
-    color: white;
-    animation: pulse 1s infinite;
+background-color: #ff4d4d;
+color: white;
+animation: pulse 1s infinite;
 }
-
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+0% { transform: scale(1); }
+50% { transform: scale(1.1); }
+100% { transform: scale(1); }
 }
-
 body.dark #voice-btn {
-    background-color: #0f3460;
-    color: #e0e0e0;
+background-color: #0f3460;
+color: #e0e0e0;
 }
-
 body.dark #voice-btn:hover {
-    background-color: #1a1a2e;
+background-color: #1a1a2e;
 }
 
 /* MODAL */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    overflow-y: auto;
+display: none;
+position: fixed;
+z-index: 1000;
+left: 0;
+top: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0,0,0,0.5);
+overflow-y: auto;
 }
 
 .modal-content {
-    background-color: white;
-    margin: 5% auto;
-    padding: 30px;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 900px;
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+background-color: white;
+margin: 5% auto;
+padding: 30px;
+border-radius: 15px;
+width: 90%;
+max-width: 900px;
+max-height: 85vh;
+overflow-y: auto;
+box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
 body.dark .modal-content {
-    background-color: #16213e;
-    color: #e0e0e0;
+background-color: #16213e;
+color: #e0e0e0;
 }
 
 .close-modal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+color: #aaa;
+float: right;
+font-size: 28px;
+font-weight: bold;
+cursor: pointer;
 }
 
 .close-modal:hover {
-    color: #000;
+color: #000;
 }
 
 body.dark .close-modal:hover {
-    color: #fff;
+color: #fff;
 }
 
 /* INPUT STYLES */
 .input-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+display: flex;
+flex-direction: column;
+margin-bottom: 15px;
 }
 
 .input-group label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #555;
-    font-size: 0.95em;
+font-weight: 600;
+margin-bottom: 8px;
+color: #555;
+font-size: 0.95em;
 }
 
 body.dark .input-group label {
-    color: #bbb;
+color: #bbb;
 }
 
 .input-group input,
 .input-group select,
 .input-group textarea {
-    padding: 12px;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 1em;
-    transition: all 0.3s;
-    font-family: Arial, sans-serif;
+padding: 12px;
+border: 2px solid #e5e7eb;
+border-radius: 8px;
+font-size: 1em;
+transition: all 0.3s;
+font-family: Arial, sans-serif;
 }
 
 body.dark .input-group input,
 body.dark .input-group select,
 body.dark .input-group textarea {
-    background-color: #0f3460;
-    color: #e0e0e0;
-    border: 2px solid #444;
+background-color: #0f3460;
+color: #e0e0e0;
+border: 2px solid #444;
 }
 
 .input-group input:focus,
 .input-group select:focus,
 .input-group textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+outline: none;
+border-color: #007bff;
+box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
 /* BUTTONS */
 .button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
+display: flex;
+gap: 10px;
+margin-top: 20px;
+flex-wrap: wrap;
 }
 
 .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    flex: 1;
-    min-width: 100px;
+padding: 10px 20px;
+border: none;
+border-radius: 8px;
+font-size: 0.95em;
+font-weight: 600;
+cursor: pointer;
+transition: all 0.3s;
+flex: 1;
+min-width: 100px;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+color: white;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
 }
 
 .btn-secondary {
-    background: #f3f4f6;
-    color: #333;
-    border: 2px solid #e5e7eb;
+background: #f3f4f6;
+color: #333;
+border: 2px solid #e5e7eb;
 }
 
 body.dark .btn-secondary {
-    background: #16213e;
-    color: #e0e0e0;
-    border: 2px solid #444;
+background: #16213e;
+color: #e0e0e0;
+border: 2px solid #444;
 }
 
 .btn-secondary:hover {
-    background: #e5e7eb;
+background: #e5e7eb;
+}
+
+.btn-ai {
+background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+color: white;
+}
+
+.btn-ai:hover {
+transform: translateY(-2px);
+box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
 }
 
 /* METRICS */
 .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin: 20px 0;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+gap: 12px;
+margin: 20px 0;
 }
 
 .metric-card {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+color: white;
+padding: 15px;
+border-radius: 10px;
+text-align: center;
+box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 .metric-icon {
-    font-size: 1.8em;
-    margin-bottom: 8px;
+font-size: 1.8em;
+margin-bottom: 8px;
 }
 
 .metric-value {
-    font-size: 1.4em;
-    font-weight: bold;
-    margin-bottom: 4px;
+font-size: 1.4em;
+font-weight: bold;
+margin-bottom: 4px;
 }
 
 .metric-label {
-    font-size: 0.8em;
-    opacity: 0.9;
+font-size: 0.8em;
+opacity: 0.9;
 }
 
 /* CHARTS */
 .charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 15px;
-    margin: 20px 0;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+gap: 15px;
+margin: 20px 0;
 }
 
 .chart-box {
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+background: white;
+border-radius: 10px;
+padding: 15px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 body.dark .chart-box {
-    background: #16213e;
+background: #16213e;
 }
 
 .chart-title {
-    font-size: 1em;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: #333;
+font-size: 1em;
+font-weight: 600;
+margin-bottom: 12px;
+color: #333;
 }
 
 body.dark .chart-title {
-    color: #e0e0e0;
+color: #e0e0e0;
 }
 
 .chart-container {
-    position: relative;
-    height: 220px;
+position: relative;
+height: 220px;
 }
 
 /* TABLE */
 .data-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    background: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    font-size: 0.9em;
+width: 100%;
+border-collapse: collapse;
+margin: 20px 0;
+background: white;
+border-radius: 8px;
+overflow: hidden;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+font-size: 0.9em;
 }
 
 body.dark .data-table {
-    background: #16213e;
+background: #16213e;
 }
 
 .data-table thead {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+color: white;
 }
 
 .data-table th,
 .data-table td {
-    padding: 10px 12px;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+padding: 10px 12px;
+text-align: left;
+border-bottom: 1px solid #e5e7eb;
 }
 
 body.dark .data-table td {
-    border-bottom: 1px solid #444;
-    color: #e0e0e0;
+border-bottom: 1px solid #444;
+color: #e0e0e0;
 }
 
 .data-table tbody tr:hover {
-    background: #f9fafb;
+background: #f9fafb;
 }
 
 body.dark .data-table tbody tr:hover {
-    background: #0f3460;
+background: #0f3460;
 }
 
 /* REPORT SECTION */
 .report-section {
-    background: #f1f1f1;
-    color: #333;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 15px 0;
-    border-left: 4px solid #007bff;
-    font-size: 0.95em;
+background: #f1f1f1;
+color: #333;
+padding: 15px;
+border-radius: 8px;
+margin: 15px 0;
+border-left: 4px solid #007bff;
+font-size: 0.95em;
 }
 
 body.dark .report-section {
-    background: #16213e;
-    color: #e0e0e0;
-    border-left: 4px solid #0056b3;
+background: #16213e;
+color: #e0e0e0;
+border-left: 4px solid #0056b3;
 }
 
 .report-header {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-    border-bottom: 3px solid #007bff;
-    padding-bottom: 12px;
+font-size: 1.4em;
+font-weight: bold;
+color: #333;
+margin-bottom: 20px;
+border-bottom: 3px solid #007bff;
+padding-bottom: 12px;
 }
 
 body.dark .report-header {
-    color: #e0e0e0;
+color: #e0e0e0;
 }
 
 /* SWOT GRID */
 .swot-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin: 20px 0;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+gap: 12px;
+margin: 20px 0;
 }
 
 .swot-card {
-    padding: 15px;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.9em;
+padding: 15px;
+border-radius: 8px;
+color: white;
+font-size: 0.9em;
 }
 
 .swot-strengths {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+background: linear-gradient(135deg, #10b981 0%, #059669 100%);
 }
 
 .swot-weaknesses {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
 }
 
 .swot-opportunities {
-    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 }
 
 .swot-threats {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
 }
 
 .swot-title {
-    font-weight: 600;
-    margin-bottom: 10px;
-    font-size: 1em;
+font-weight: 600;
+margin-bottom: 10px;
+font-size: 1em;
 }
 
 .swot-item {
-    background: rgba(255,255,255,0.2);
-    padding: 6px 10px;
-    border-radius: 5px;
-    margin: 4px 0;
-    font-size: 0.85em;
+background: rgba(255,255,255,0.2);
+padding: 6px 10px;
+border-radius: 5px;
+margin: 4px 0;
+font-size: 0.85em;
 }
 
 /* AI INSIGHTS */
 .ai-insights {
-    background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
-    border-left: 4px solid #f5576c;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px 0;
-    font-size: 0.95em;
+background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
+border-left: 4px solid #f5576c;
+padding: 15px;
+border-radius: 8px;
+margin: 20px 0;
+font-size: 0.95em;
 }
 
 .ai-header {
-    font-weight: 600;
-    color: #f5576c;
-    margin-bottom: 10px;
-    font-size: 1em;
+font-weight: 600;
+color: #f5576c;
+margin-bottom: 10px;
+font-size: 1em;
 }
 
 .ai-insights p {
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 6px;
+color: #555;
+line-height: 1.5;
+margin-bottom: 6px;
 }
 
 body.dark .ai-insights p {
-    color: #bbb;
+color: #bbb;
 }
 
 .ai-insights ul {
-    list-style: none;
-    padding: 0;
-    margin: 8px 0;
+list-style: none;
+padding: 0;
+margin: 8px 0;
 }
 
 .ai-insights li {
-    color: #555;
-    margin: 6px 0;
-    padding-left: 18px;
-    position: relative;
-    font-size: 0.9em;
+color: #555;
+margin: 6px 0;
+padding-left: 18px;
+position: relative;
+font-size: 0.9em;
 }
 
 body.dark .ai-insights li {
-    color: #bbb;
+color: #bbb;
 }
 
 .ai-insights li:before {
-    content: '→';
-    position: absolute;
-    left: 0;
-    color: #f5576c;
-    font-weight: bold;
+content: '→';
+position: absolute;
+left: 0;
+color: #f5576c;
+font-weight: bold;
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-    body {
-        flex-direction: column;
-    }
+.chat-container {
+max-width: 100%;
+height: 80vh;
+}
 
-    .sidebar {
-        width: 100%;
-        height: auto;
-        max-height: 60px;
-        flex-direction: row;
-    }
+.charts-grid {
+grid-template-columns: 1fr;
+}
 
-    .sidebar.closed {
-        width: 100%;
-    }
+.button-group {
+flex-direction: column;
+}
 
-    .menu {
-        display: flex;
-        overflow-x: auto;
-    }
+.btn {
+min-width: auto;
+}
 
-    .chat-container {
-        max-width: 100%;
-        height: calc(100vh - 60px);
-    }
+#suggestWrapper {
+flex-direction: row;
+}
 
-    .charts-grid {
-        grid-template-columns: 1fr;
-    }
+#suggestBtn, #reportsBtn, #plannerBtn {
+min-width: auto;
+flex: 0;
+}
 
-    .button-group {
-        flex-direction: column;
-    }
-
-    .btn {
-        min-width: auto;
-    }
-
-    #suggestWrapper {
-        flex-direction: row;
-    }
-
-    #suggestBtn, #reportsBtn, #plannerBtn {
-        min-width: auto;
-        flex: 0;
-    }
-
-    .nav-buttons button {
-        font-size: 0.75em;
-        padding: 5px 10px;
-    }
+.nav-buttons button {
+font-size: 0.75em;
+padding: 5px 10px;
+}
 }
 
 .planner-input-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 12px;
-    margin-bottom: 15px;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+gap: 12px;
+margin-bottom: 15px;
 }
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
-    <button class="toggle-btn" id="toggleBtn">☰</button>
+<!-- HAMBURGER MENU BUTTON (Three Lines) -->
+<button class="hamburger-menu" id="hamburgerBtn" onclick="toggleSidebar()">
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+    <div class="hamburger-line"></div>
+</button>
+
+<!-- SIDEBAR MENU -->
+<div class="sidebar-menu" id="sidebarMenu">
+    <button class="close-sidebar-btn" onclick="closeSidebar()">×</button>
     
     <div class="sidebar-header">
         <div class="sidebar-logo">📊</div>
         <div class="sidebar-title">Menu</div>
     </div>
 
-    <ul class="menu">
-        <li class="menu-item">
-            <a class="menu-link active" data-section="chat">
-                <span class="menu-icon">💬</span>
-                <span class="menu-text">Chat</span>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a class="menu-link" onclick="showReportsModal()">
-                <span class="menu-icon">📈</span>
-                <span class="menu-text">Reports</span>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a class="menu-link" onclick="showCalculatorModal()">
-                <span class="menu-icon">🧮</span>
-                <span class="menu-text">Calculator</span>
-            </a>
-        </li>
-        <li class="menu-item">
-            <a class="menu-link" onclick="showPlannerModal()">
-                <span class="menu-icon">📋</span>
-                <span class="menu-text">Planner</span>
-            </a>
-        </li>
+    <ul>
+        <li><a href="javascript:void(0)" onclick="closeSidebar()"><span class="sidebar-icon">💬</span>Chat</a></li>
+        <li><a href="javascript:void(0)" onclick="showReportsModal(); closeSidebar();"><span class="sidebar-icon">📈</span>Reports</a></li>
+        <li><a href="javascript:void(0)" onclick="showCalculatorModal(); closeSidebar();"><span class="sidebar-icon">🧮</span>Calculator</a></li>
+        <li><a href="javascript:void(0)" onclick="showPlannerModal(); closeSidebar();"><span class="sidebar-icon">📋</span>Planner</a></li>
     </ul>
-</aside>
+</div>
 
-<!-- MAIN WRAPPER -->
-<div class="main-wrapper">
-    <div class="chat-container">
-        <div class="chat-header">
-            <span></span>
-            <div class="header-title">usemee</div>
-            <span></span>
-        </div>
+<div class="chat-container">
+<div class="chat-header">
+<span></span>
+<div class="header-title">usemee</div>
+<span></span>
+</div>
 
-        <div class="nav-buttons">
-            <button onclick="goToPage('index.html')">Home</button>
-            <button onclick="goToPage('about.html')">About</button>
-            <button onclick="goToPage('settings.html')">Settings</button>
-        </div>
+<div class="nav-buttons">
+<button onclick="goToPage('index.html')">Home</button>
+<button onclick="goToPage('about.html')">About</button>
+<button onclick="goToPage('settings.html')">Settings</button>
+</div>
 
-        <div class="chat-box" id="chat-box"></div>
+<div class="chat-box" id="chat-box"></div>
 
-        <div class="chat-input-area">
-            <div id="suggestWrapper">
-                <button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">💡 Suggestions</button>
-                <button id="reportsBtn" onclick="showReportsModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Reports</button>
-                <button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Planner</button>
-                <button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">🧮 Calculator</button>
-                <div id="suggestBox">
-                    <button id="closeBtn">✖</button>
-                    <p class="suggestion">what is business</p>
-                    <p class="suggestion">how to start a business</p>
-                    <p class="suggestion">create swot analysis</p>
-                    <p class="suggestion">financial planning</p>
-                </div>
-            </div>
+<div class="chat-input-area">
+<div id="suggestWrapper">
+<button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">💡 Suggestions</button>
+<button id="reportsBtn" onclick="showReportsModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Reports</button>
+<button id="plannerBtn" onclick="showPlannerModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">📊 Planner</button>
+<button id="calcBtn" onclick="showCalculatorModal()" style="flex: 0; background-color: #007bff; color: white; border: none;">🧮 Calculator</button>
+<div id="suggestBox">
+<button id="closeBtn">✖</button>
+<p class="suggestion">what is business</p>
+<p class="suggestion">how to start a business</p>
+<p class="suggestion">create swot analysis</p>
+<p class="suggestion">financial planning</p>
+</div>
+</div>
 
-            <div class="input-row">
-                <input type="text" id="user-input" placeholder="Type your message...">
-                <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
-                <button class="send-btn" onclick="sendMessage()">Send</button>
-            </div>
-        </div>
-    </div>
+<div class="input-row">
+<input type="text" id="user-input" placeholder="Type your message...">
+<button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
+<button class="send-btn" onclick="sendMessage()">Send</button>
+</div>
+</div>
+</div>
 </div>
 
 <!-- PLANNER MODAL -->
 <div id="plannerModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closePlannerModal()">&times;</span>
-        <div id="plannerContent"></div>
-    </div>
+<div class="modal-content">
+<span class="close-modal" onclick="closePlannerModal()">&times;</span>
+<div id="plannerContent"></div>
+</div>
 </div>
 
 <!-- REPORTS MODAL -->
 <div id="reportsModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeReportsModal()">&times;</span>
-        <div id="reportsContent"></div>
-    </div>
+<div class="modal-content">
+<span class="close-modal" onclick="closeReportsModal()">&times;</span>
+<div id="reportsContent"></div>
+</div>
 </div>
 
 <!-- CALCULATOR MODAL -->
 <div id="calculatorModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeCalculatorModal()">&times;</span>
-        <div id="calculatorContent"></div>
-    </div>
+<div class="modal-content">
+<span class="close-modal" onclick="closeCalculatorModal()">&times;</span>
+<div id="calculatorContent"></div>
+</div>
 </div>
 
 <!-- STOCK MODAL -->
 <div id="stockModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal" onclick="closeStockModal()">&times;</span>
-        <div id="stockContent"></div>
-    </div>
+<div class="modal-content">
+<span class="close-modal" onclick="closeStockModal()">&times;</span>
+<div id="stockContent"></div>
+</div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1004,37 +739,28 @@ body.dark .ai-insights li {
 
 <script>
 // ==================== DARK MODE (READ-ONLY) ====================
-// Apply saved dark mode on load - only controlled by settings.html
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
 
-// ==================== SIDEBAR TOGGLE FUNCTIONALITY ==================== 
-const toggleBtn = document.getElementById('toggleBtn');
-const sidebar = document.getElementById('sidebar');
+// ==================== HAMBURGER MENU FUNCTIONS ====================
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebarMenu');
+    sidebar.classList.toggle('open');
+}
 
-toggleBtn.addEventListener('click', function() {
-    sidebar.classList.toggle('closed');
-    toggleBtn.textContent = sidebar.classList.contains('closed') ? '☰' : '☰';
-});
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebarMenu');
+    sidebar.classList.remove('open');
+}
 
-// ==================== MENU NAVIGATION ====================
-const menuLinks = document.querySelectorAll('.menu-link');
-
-menuLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-        // Remove active class from all links
-        menuLinks.forEach(l => l.classList.remove('active'));
-        
-        // Add active class to clicked link
-        this.classList.add('active');
-    });
-});
-
-// Close/open sidebar with ESC key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        sidebar.classList.toggle('closed');
+// Close sidebar when clicking outside
+document.addEventListener('click', function(event) {
+    const sidebar = document.getElementById('sidebarMenu');
+    const hamburger = document.getElementById('hamburgerBtn');
+    
+    if (!sidebar.contains(event.target) && !hamburger.contains(event.target)) {
+        closeSidebar();
     }
 });
 
@@ -1045,46 +771,88 @@ function goToPage(page) {
 
 // ==================== GLOBAL STATE ====================
 let planData = {
-    name: '',
-    startDate: '',
-    endDate: '',
-    initialBudget: 0,
-    growthRate: 0,
-    type: '',
-    months: [],
-    totalProjection: 0
+name: '',
+startDate: '',
+endDate: '',
+initialBudget: 0,
+growthRate: 0,
+type: '',
+months: [],
+totalProjection: 0
 };
 
 let swotData = {
-    business: "",
-    strengths: [],
-    weaknesses: [],
-    opportunities: [],
-    threats: []
+business: "",
+strengths: [],
+weaknesses: [],
+opportunities: [],
+threats: []
 };
 
 let reportData = {
-    businessName: "",
-    industry: "",
-    revenue: 0,
-    expenses: 0,
-    employees: 0,
-    founded: "",
-    description: ""
+businessName: "",
+industry: "",
+revenue: 0,
+expenses: 0,
+employees: 0,
+founded: "",
+description: ""
 };
 
 let chartInstances = {};
 
 const intents = [
-    // GREETINGS
-    {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
-    {tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
-    {tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},
-    {tag:"okays",patterns:["okay","ok"],responses:["👍 Got it. What do you want to work on next?"]},
-    // ... (keep all your existing intents here) ...
+// GREETINGS
+{tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
+{tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
+{tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},
+{tag:"okays",patterns:["okay","ok"],responses:["👍 Got it. What do you want to work on next?"]},
+{tag:"market cap",patterns:["what is market cap","market cap"],responses:["Market cap is the total dollar value of a company's outstanding shares of stock."]},
+// BUSINESS BASICS
+{tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers."]},
+{tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
+{tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
 ];
 
-// ==================== CALCULATOR FUNCTIONALITY ==================== 
+// ==================== MODAL FUNCTIONS ====================
+function showCalculatorModal() {
+    const modal = document.getElementById('calculatorModal');
+    const content = document.getElementById('calculatorContent');
+    content.innerHTML = `
+        <h2>🧮 Calculator</h2>
+        <div style="max-width: 400px; background: #ecf0f1; padding: 20px; border-radius: 10px; margin: 20px 0;">
+            <input type="text" id="calcDisplay" placeholder="0" readonly style="width: 100%; padding: 15px; font-size: 16px; border: none; border-radius: 5px; margin-bottom: 10px; text-align: right; background: white;">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('7')">7</button>
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('8')">8</button>
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('9')">9</button>
+                <button style="padding: 15px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendOperator('/')">/</button>
+                
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('4')">4</button>
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('5')">5</button>
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('6')">6</button>
+                <button style="padding: 15px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendOperator('*')">*</button>
+                
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('1')">1</button>
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('2')">2</button>
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('3')">3</button>
+                <button style="padding: 15px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendOperator('-')">-</button>
+                
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('0')">0</button>
+                <button style="padding: 15px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendNumber('.')">.</button>
+                <button style="padding: 15px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; grid-column: span 2;" onclick="calculate()">=</button>
+                <button style="padding: 15px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="appendOperator('+')">+</button>
+            </div>
+            <button style="width: 100%; padding: 12px; margin-top: 10px; background: #95a5a6; border: none; border-radius: 5px; color: white; cursor: pointer;" onclick="clearCalc()">Clear</button>
+        </div>
+    `;
+    modal.style.display = 'block';
+}
+
+function closeCalculatorModal() {
+    document.getElementById('calculatorModal').style.display = 'none';
+}
+
 let calcDisplay = '';
 
 function appendNumber(num) {
@@ -1114,7 +882,27 @@ function clearCalc() {
     document.getElementById('calcDisplay').value = '0';
 }
 
-// ==================== PLANNER FUNCTIONALITY ==================== 
+function showPlannerModal() {
+    const modal = document.getElementById('plannerModal');
+    const content = document.getElementById('plannerContent');
+    content.innerHTML = `
+        <h2>📋 Planner - Organize Your Tasks</h2>
+        <div style="max-width: 600px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <input type="text" id="taskInput" placeholder="Add a new task..." style="flex: 1; padding: 12px; border: 2px solid #bdc3c7; border-radius: 5px;">
+                <button style="padding: 12px 20px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="addTask()">Add</button>
+            </div>
+            <ul id="taskList" style="list-style: none; padding: 0;"></ul>
+        </div>
+    `;
+    renderTasks();
+    modal.style.display = 'block';
+}
+
+function closePlannerModal() {
+    document.getElementById('plannerModal').style.display = 'none';
+}
+
 let tasks = [];
 
 function addTask() {
@@ -1149,78 +937,14 @@ function toggleTask(id) {
 
 function renderTasks() {
     const taskList = document.getElementById('taskList');
+    if (!taskList) return;
+    
     taskList.innerHTML = tasks.map(task => `
-        <li class="task-item ${task.completed ? 'completed' : ''}">
-            <span class="task-text" onclick="toggleTask(${task.id})">${task.text}</span>
-            <button class="delete-task" onclick="deleteTask(${task.id})">Delete</button>
+        <li style="background: ${task.completed ? '#ecf0f1' : '#f9f9f9'}; padding: 15px; margin-bottom: 10px; border-left: 4px solid #3498db; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; ${task.completed ? 'opacity: 0.6;' : ''}">
+            <span style="cursor: pointer; ${task.completed ? 'text-decoration: line-through; color: #999;' : ''}" onclick="toggleTask(${task.id})">${task.text}</span>
+            <button style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;" onclick="deleteTask(${task.id})">Delete</button>
         </li>
     `).join('');
-}
-
-// ==================== MODAL FUNCTIONS ==================== 
-function showCalculatorModal() {
-    const modal = document.getElementById('calculatorModal');
-    const content = document.getElementById('calculatorContent');
-    content.innerHTML = `
-        <h2>🧮 Calculator</h2>
-        <p>Use the calculator below for quick calculations.</p>
-        <div style="max-width: 400px; background: #ecf0f1; padding: 20px; border-radius: 10px; margin: 20px 0;">
-            <input type="text" id="calcDisplay" placeholder="0" readonly style="width: 100%; padding: 15px; font-size: 16px; border: none; border-radius: 5px; margin-bottom: 10px; text-align: right; background: white;">
-            
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('7')">7</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('8')">8</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('9')">9</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #e74c3c; color: white; font-weight: 600;" onclick="appendOperator('/')">/</button>
-                
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('4')">4</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('5')">5</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('6')">6</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #e74c3c; color: white; font-weight: 600;" onclick="appendOperator('*')">*</button>
-                
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('1')">1</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('2')">2</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('3')">3</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #e74c3c; color: white; font-weight: 600;" onclick="appendOperator('-')">-</button>
-                
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('0')">0</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #3498db; color: white; font-weight: 600;" onclick="appendNumber('.')">.</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #27ae60; color: white; font-weight: 600; grid-column: span 2;" onclick="calculate()">=</button>
-                <button style="padding: 15px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background: #e74c3c; color: white; font-weight: 600;" onclick="appendOperator('+')">+</button>
-            </div>
-            
-            <button style="width: 100%; padding: 12px; margin-top: 10px; background: #95a5a6; border: none; border-radius: 5px; color: white; cursor: pointer; font-weight: 600;" onclick="clearCalc()">Clear</button>
-        </div>
-    `;
-    modal.style.display = 'block';
-}
-
-function closeCalculatorModal() {
-    document.getElementById('calculatorModal').style.display = 'none';
-}
-
-function showPlannerModal() {
-    const modal = document.getElementById('plannerModal');
-    const content = document.getElementById('plannerContent');
-    content.innerHTML = `
-        <h2>📋 Planner - Organize Your Tasks</h2>
-        <p>Add and manage your tasks here. Click on a task to mark it as complete.</p>
-        
-        <div style="max-width: 600px;">
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <input type="text" id="taskInput" placeholder="Add a new task..." style="flex: 1; padding: 12px; border: 2px solid #bdc3c7; border-radius: 5px; font-size: 14px;">
-                <button style="padding: 12px 20px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600;" onclick="addTask()">Add</button>
-            </div>
-            
-            <ul id="taskList" style="list-style: none;"></ul>
-        </div>
-    `;
-    renderTasks();
-    modal.style.display = 'block';
-}
-
-function closePlannerModal() {
-    document.getElementById('plannerModal').style.display = 'none';
 }
 
 function showReportsModal() {
@@ -1228,8 +952,6 @@ function showReportsModal() {
     const content = document.getElementById('reportsContent');
     content.innerHTML = `
         <h2>📈 Reports & Analytics</h2>
-        <p>View your business statistics and insights.</p>
-        
         <div class="metrics-grid">
             <div class="metric-card">
                 <div class="metric-icon">📊</div>
@@ -1252,7 +974,6 @@ function showReportsModal() {
                 <div class="metric-label">Success Rate</div>
             </div>
         </div>
-        
         <div class="report-section">
             <h3>Recent Activity</h3>
             <p>Last updated: 2 hours ago</p>
@@ -1286,7 +1007,6 @@ function sendMessage() {
     if (message === '') return;
     addMessage(message, 'user');
     userInput.value = '';
-    // Add your bot response logic here
     addMessage('Thanks for your message! How else can I help?', 'bot');
 }
 
@@ -1294,12 +1014,10 @@ document.getElementById('user-input').addEventListener('keypress', function(even
     if (event.key === 'Enter') sendMessage();
 });
 
-// ==================== VOICE INPUT ====================
 function startVoice() {
     const voiceBtn = document.getElementById('voice-btn');
     voiceBtn.classList.toggle('listening');
     if (voiceBtn.classList.contains('listening')) {
-        // Voice recognition logic
         setTimeout(() => {
             voiceBtn.classList.remove('listening');
         }, 3000);
