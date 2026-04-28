@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,11 +7,36 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; transition: background-color 0.3s; }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.3s;
+}
 body.dark { background-color: #1a1a2e; }
 
-.chat-container { background-color: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; display: flex; flex-direction: column; height: 600px; overflow: hidden; transition: background-color 0.3s; position: relative; }
-body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.chat-container {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    overflow: hidden;
+    transition: background-color 0.3s;
+    position: relative;
+}
+body.dark .chat-container {
+    background-color: #16213e;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
 
 /* HAMBURGER MENU INSIDE CONTAINER */
 .hamburger-menu {
@@ -147,31 +172,97 @@ body.dark .chat-container { background-color: #16213e; box-shadow: 0 2px 10px rg
     pointer-events: auto;
 }
 
-.chat-header { background-color: #007bff; color: white; padding: 15px; text-align: center; font-size: 1.2em; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+.chat-header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 body.dark .chat-header { background-color: #0f3460; }
 
 .header-title { flex: 1; text-align: center; }
 
-.nav-buttons { display: flex; justify-content: center; gap: 5px; padding: 10px; background-color: #f0f0f0; border-bottom: 1px solid #ccc; flex-wrap: wrap; }
+.nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+    flex-wrap: wrap;
+}
 body.dark .nav-buttons { background-color: #0f3460; border-bottom: 1px solid #1a1a2e; }
 
-.nav-buttons button { background-color: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 0.8em; font-weight: 600; transition: all 0.3s; }
+.nav-buttons button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.8em;
+    font-weight: 600;
+    transition: all 0.3s;
+}
 .nav-buttons button:hover { background-color: #0056b3; transform: translateY(-1px); }
 
-.chat-box { flex-grow: 1; padding: 15px; overflow-y: auto; border-bottom: 1px solid #eee; }
+.chat-box {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    border-bottom: 1px solid #eee;
+}
 body.dark .chat-box { border-bottom: 1px solid #0f3460; }
 
-.message { margin-bottom: 10px; clear: both; overflow-wrap: break-word; }
-.message.user { background-color: #e6f7ff; color: #000; padding: 8px 12px; border-radius: 15px; float: right; max-width: 70%; margin-left: auto; text-align: right; }
+.message {
+    margin-bottom: 10px;
+    clear: both;
+    overflow-wrap: break-word;
+}
+.message.user {
+    background-color: #e6f7ff;
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 15px;
+    float: right;
+    max-width: 70%;
+    margin-left: auto;
+    text-align: right;
+}
 body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
 
-.message.bot { background-color: #f0f0f0; color: #000; padding: 8px 12px; border-radius: 15px; float: left; max-width: 70%; margin-right: auto; text-align: left; }
+.message.bot {
+    background-color: #f0f0f0;
+    color: #000;
+    padding: 8px 12px;
+    border-radius: 15px;
+    float: left;
+    max-width: 70%;
+    margin-right: auto;
+    text-align: left;
+}
 body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
 
-.chat-input-area { display: flex; flex-direction: column; padding: 15px; border-top: 1px solid #eee; background-color: #fff; gap: 10px; }
+.chat-input-area {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    border-top: 1px solid #eee;
+    background-color: #fff;
+    gap: 10px;
+}
 body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
 
-#suggestWrapper { display: flex; gap: 5px; flex-wrap: wrap; }
+#suggestWrapper {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
 
 #suggestBtn, #reportsBtn, #plannerBtn, #calcBtn {
 background-color: #007bff;
@@ -186,49 +277,79 @@ transition: all 0.2s ease;
 flex: 0;
 }
 
-#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover, #calcBtn:hover { background-color: #0056b3; transform: translateY(-1px); }
+#suggestBtn:hover, #reportsBtn:hover, #plannerBtn:hover, #calcBtn:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
 
-#suggestBox { position: absolute; bottom: 35px; left: 0; background: #222; color: white; padding: 10px; border-radius: 8px; width: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.3); display: none; max-height: 150px; overflow-y: auto; }
+#suggestBox {
+    position: absolute;
+    bottom: 35px;
+    left: 0;
+    background: #222;
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    display: none;
+    max-height: 150px;
+    overflow-y: auto;
+}
 
-#closeBtn { float: right; background: red; border: none; color: white; cursor: pointer; font-weight: bold; padding: 2px 6px; border-radius: 3px; font-size: 0.9em; }
+#closeBtn {
+    float: right;
+    background: red;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
 
-.suggestion { cursor: pointer; padding: 5px; border-radius: 3px; }
+.suggestion {
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+}
 .suggestion:hover { background: #444; }
 
-.input-row { 
-    display: flex; 
-    gap: 8px; 
+.input-row {
+    display: flex;
+    gap: 8px;
     align-items: center;
     width: 100%;
 }
 
-.chat-input-area input { 
+.chat-input-area input {
     flex: 1;
-    padding: 10px 14px; 
-    border: 1px solid #ccc; 
-    border-radius: 20px; 
-    background-color: #fff; 
-    color: #000; 
-    font-family: Arial, sans-serif; 
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: #fff;
+    color: #000;
+    font-family: Arial, sans-serif;
     min-height: 38px;
     font-size: 14px;
 }
 
-body.dark .chat-input-area input { 
-    background-color: #0f3460; 
-    color: #e0e0e0; 
-    border: 1px solid #444; 
+body.dark .chat-input-area input {
+    background-color: #0f3460;
+    color: #e0e0e0;
+    border: 1px solid #444;
 }
 
-.chat-input-area .send-btn { 
-    background-color: #28a745; 
-    border: none; 
-    padding: 10px 16px; 
-    border-radius: 20px; 
-    color: white; 
-    cursor: pointer; 
-    font-weight: 600; 
-    font-size: 0.9em; 
+.chat-input-area .send-btn {
+    background-color: #28a745;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 20px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9em;
     transition: all 0.3s;
     white-space: nowrap;
     flex-shrink: 0;
@@ -238,9 +359,9 @@ body.dark .chat-input-area input {
     justify-content: center;
 }
 
-.chat-input-area .send-btn:hover { 
-    background-color: #218838; 
-    transform: translateY(-1px); 
+.chat-input-area .send-btn:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
 }
 
 #voice-btn {
@@ -259,8 +380,8 @@ body.dark .chat-input-area input {
     flex-shrink: 0;
 }
 
-#voice-btn:hover { 
-    background-color: #ddd; 
+#voice-btn:hover {
+    background-color: #ddd;
 }
 
 #voice-btn.listening {
@@ -375,36 +496,6 @@ body.dark .input-group textarea {
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
 }
 
-/* BUTTONS */
-.button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-.btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    flex: 1;
-    min-width: 100px;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-}
-
 /* METRICS */
 .metrics-grid {
     display: grid;
@@ -438,20 +529,80 @@ body.dark .input-group textarea {
     opacity: 0.9;
 }
 
-.report-section {
-    background: #f1f1f1;
-    color: #333;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 15px 0;
-    border-left: 4px solid #007bff;
-    font-size: 0.95em;
+/* CHARTS */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
 }
 
-body.dark .report-section {
+.chart-box {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+body.dark .chart-box {
     background: #16213e;
+}
+
+.chart-title {
+    font-size: 1em;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+body.dark .chart-title {
     color: #e0e0e0;
-    border-left: 4px solid #0056b3;
+}
+
+.chart-container {
+    position: relative;
+    height: 220px;
+}
+
+/* TABLE */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 0.9em;
+}
+
+body.dark .data-table {
+    background: #16213e;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.data-table th,
+.data-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+body.dark .data-table td {
+    border-bottom: 1px solid #444;
+    color: #e0e0e0;
+}
+
+.data-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+body.dark .data-table tbody tr:hover {
+    background: #0f3460;
 }
 
 /* RESPONSIVE */
@@ -461,12 +612,8 @@ body.dark .report-section {
         height: 80vh;
     }
 
-    .button-group {
-        flex-direction: column;
-    }
-
-    .btn {
-        min-width: auto;
+    .charts-grid {
+        grid-template-columns: 1fr;
     }
 
     #suggestWrapper {
@@ -577,7 +724,7 @@ body.dark .report-section {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-// ==================== DARK MODE (READ-ONLY) ====================
+// ==================== DARK MODE ====================
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
@@ -606,7 +753,7 @@ function goToPage(page) {
 let tasks = [];
 let calcDisplay = '';
 
-// ==================== MODAL FUNCTIONS ====================
+// ==================== CALCULATOR MODAL ====================
 function showCalculatorModal() {
     const modal = document.getElementById('calculatorModal');
     const content = document.getElementById('calculatorContent');
@@ -672,6 +819,7 @@ function clearCalc() {
     document.getElementById('calcDisplay').value = '0';
 }
 
+// ==================== PLANNER MODAL ====================
 function showPlannerModal() {
     const modal = document.getElementById('plannerModal');
     const content = document.getElementById('plannerContent');
@@ -680,7 +828,7 @@ function showPlannerModal() {
         <div style="max-width: 600px;">
             <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                 <input type="text" id="taskInput" placeholder="Add a new task..." style="flex: 1; padding: 12px; border: 2px solid #bdc3c7; border-radius: 5px;">
-                <button style="padding: 12px 20px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer;" onclick="addTask()">Add</button>
+                <button style="padding: 12px 20px; background: #27ae60; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 600;" onclick="addTask()">Add</button>
             </div>
             <ul id="taskList" style="list-style: none; padding: 0;"></ul>
         </div>
@@ -703,7 +851,8 @@ function addTask() {
     tasks.push({
         id: Date.now(),
         text: taskInput.value.trim(),
-        completed: false
+        completed: false,
+        dueDate: ''
     });
 
     taskInput.value = '';
@@ -727,53 +876,206 @@ function renderTasks() {
     const taskList = document.getElementById('taskList');
     if (!taskList) return;
     
+    if (tasks.length === 0) {
+        taskList.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">No tasks yet. Add one to get started!</p>';
+        return;
+    }
+    
     taskList.innerHTML = tasks.map(task => `
         <li style="background: ${task.completed ? '#ecf0f1' : '#f9f9f9'}; padding: 15px; margin-bottom: 10px; border-left: 4px solid #3498db; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; ${task.completed ? 'opacity: 0.6;' : ''}">
             <span style="cursor: pointer; ${task.completed ? 'text-decoration: line-through; color: #999;' : ''}" onclick="toggleTask(${task.id})">${task.text}</span>
-            <button style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;" onclick="deleteTask(${task.id})">Delete</button>
+            <button style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-weight: 600;" onclick="deleteTask(${task.id})">Delete</button>
         </li>
     `).join('');
 }
 
+// ==================== REPORTS MODAL ====================
 function showReportsModal() {
     const modal = document.getElementById('reportsModal');
     const content = document.getElementById('reportsContent');
+    
+    // Create revenue and expenses chart
+    const revenueCtx = document.createElement('canvas');
+    const expensesCtx = document.createElement('canvas');
+    
     content.innerHTML = `
-        <h2>📈 Reports & Analytics</h2>
+        <h2>📈 Reports & Analytics Dashboard</h2>
+        
         <div class="metrics-grid">
             <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-value">$45,230</div>
+                <div class="metric-label">Total Revenue</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-icon">💸</div>
+                <div class="metric-value">$18,450</div>
+                <div class="metric-label">Total Expenses</div>
+            </div>
+            <div class="metric-card">
                 <div class="metric-icon">📊</div>
-                <div class="metric-value">2,543</div>
-                <div class="metric-label">Total Tasks</div>
+                <div class="metric-value">$26,780</div>
+                <div class="metric-label">Net Profit</div>
             </div>
             <div class="metric-card">
-                <div class="metric-icon">✅</div>
-                <div class="metric-value">1,847</div>
-                <div class="metric-label">Completed</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">⏳</div>
-                <div class="metric-value">696</div>
-                <div class="metric-label">Pending</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-icon">🎯</div>
-                <div class="metric-value">73%</div>
-                <div class="metric-label">Success Rate</div>
+                <div class="metric-icon">📈</div>
+                <div class="metric-value">59.2%</div>
+                <div class="metric-label">Profit Margin</div>
             </div>
         </div>
-        <div class="report-section">
-            <h3>Recent Activity</h3>
-            <p>Last updated: 2 hours ago</p>
-            <p>Track your progress and insights from here!</p>
+        
+        <div class="charts-grid">
+            <div class="chart-box">
+                <div class="chart-title">Monthly Revenue vs Expenses</div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">Business Growth Trend</div>
+                <div class="chart-container">
+                    <canvas id="growthChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3 style="color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px;">Recent Transactions</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2026-04-28</td>
+                        <td>Revenue</td>
+                        <td>Product Sales</td>
+                        <td style="color: #27ae60; font-weight: 600;">+$5,240</td>
+                    </tr>
+                    <tr>
+                        <td>2026-04-27</td>
+                        <td>Expense</td>
+                        <td>Marketing Campaign</td>
+                        <td style="color: #e74c3c; font-weight: 600;">-$1,200</td>
+                    </tr>
+                    <tr>
+                        <td>2026-04-26</td>
+                        <td>Revenue</td>
+                        <td>Service Income</td>
+                        <td style="color: #27ae60; font-weight: 600;">+$3,800</td>
+                    </tr>
+                    <tr>
+                        <td>2026-04-25</td>
+                        <td>Expense</td>
+                        <td>Operational Cost</td>
+                        <td style="color: #e74c3c; font-weight: 600;">-$890</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     `;
+    
     modal.style.display = 'block';
+    
+    // Render charts after modal is shown
+    setTimeout(() => {
+        renderRevenueChart();
+        renderGrowthChart();
+    }, 100);
+}
+
+function renderRevenueChart() {
+    const ctx = document.getElementById('revenueChart');
+    if (!ctx || chartInstances.revenue) return;
+    
+    chartInstances.revenue = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [
+                {
+                    label: 'Revenue',
+                    data: [12000, 15000, 18000, 22000, 25000, 28000],
+                    backgroundColor: '#27ae60',
+                    borderRadius: 5
+                },
+                {
+                    label: 'Expenses',
+                    data: [4000, 5000, 6000, 7000, 8000, 9000],
+                    backgroundColor: '#e74c3c',
+                    borderRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}
+
+function renderGrowthChart() {
+    const ctx = document.getElementById('growthChart');
+    if (!ctx || chartInstances.growth) return;
+    
+    chartInstances.growth = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6'],
+            datasets: [
+                {
+                    label: 'Growth %',
+                    data: [5, 8, 12, 15, 18, 22],
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#007bff',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 }
 
 function closeReportsModal() {
     document.getElementById('reportsModal').style.display = 'none';
 }
+
+let chartInstances = {};
 
 // ==================== CHAT FUNCTIONALITY ====================
 function addMessage(text, sender) {
