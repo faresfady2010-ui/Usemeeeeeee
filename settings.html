@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Settings</title>
+<title data-i18n="settings">Settings</title>
+<script src="translations.js"></script>
 <style>
 body {
     font-family: Arial, sans-serif;
@@ -72,34 +73,38 @@ body.dark select {
 <body>
 <div class="container">
     <div class="nav-buttons">
-        <button onclick="openPage('index.html')">Home</button>
-        <button onclick="openPage('about.html')">About</button>
-        <button onclick="openPage('settings.html')">Settings</button>
+        <button onclick="goToPage('index.html')" data-i18n="home">Home</button>
+        <button onclick="goToPage('about.html')" data-i18n="about">About</button>
+        <button onclick="goToPage('settings.html')" data-i18n="settings">Settings</button>
     </div>
 
-    <h1>Settings</h1>
+    <h1 data-i18n="settingsTitle">Settings</h1>
 
-    <label for="appearance">Appearance:</label>
+    <label for="appearance" data-i18n="appearance">Appearance:</label>
     <select id="appearance" onchange="applyAppearance(this.value)">
-        <option value="light">Light Mode</option>
-        <option value="dark">Dark Mode</option>
+        <option value="light" data-i18n="lightMode">Light Mode</option>
+        <option value="dark" data-i18n="darkMode">Dark Mode</option>
     </select>
 
-    <label for="language">Language:</label>
-    <select id="language">
+    <label for="language" data-i18n="language">Language:</label>
+    <select id="language" onchange="changeLanguage(this.value)">
         <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+        <option value="ar">العربية</option>
     </select>
 
     <label for="notifications">
-        <input type="checkbox" id="notifications"> Enable Notifications
+        <input type="checkbox" id="notifications"> <span data-i18n="notifications">Enable Notifications</span>
     </label>
 
     <br>
-    <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+    <button class="save-btn" onclick="saveSettings()" data-i18n="saveBtn">Save Settings</button>
 </div>
 
 <script>
-function openPage(page) { window.location.href = page; }
+function goToPage(page) { window.location.href = page; }
 
 function applyAppearance(value) {
     const isDark = value === 'dark';
@@ -107,18 +112,35 @@ function applyAppearance(value) {
     localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
 }
 
+function changeLanguage(lang) {
+    setLanguage(lang);
+    updatePageTranslations();
+    // Also update the main index.html if it's open
+    broadcastLanguageChange(lang);
+}
+
 function saveSettings() {
     const notifications = document.getElementById("notifications").checked;
     const isDark = document.body.classList.contains('dark');
-    alert(`Settings saved!\nAppearance: ${isDark ? 'Dark' : 'Light'} Mode\nNotifications: ${notifications}\nLanguage: English`);
+    const currentLang = getCurrentLanguage();
+    
+    alert(`${t('settingsSaved')}\n${t('appearance')}: ${isDark ? t('darkMode') : t('lightMode')}\n${t('notifications')}: ${notifications}\n${t('language')}: ${currentLang.toUpperCase()}`);
 }
 
 window.onload = function() {
+    // Apply dark mode
     const isDark = localStorage.getItem('darkMode') === 'enabled';
     if (isDark) {
         document.body.classList.add('dark');
         document.getElementById('appearance').value = 'dark';
     }
+    
+    // Set current language
+    const currentLang = getCurrentLanguage();
+    document.getElementById('language').value = currentLang;
+    
+    // Update all text translations
+    updatePageTranslations();
 };
 </script>
 </body>
