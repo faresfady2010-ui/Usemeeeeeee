@@ -673,20 +673,23 @@ body.dark .data-table tbody tr:hover {
 
     <div class="chat-box" id="chat-box"></div>
 
-    <div class="chat-input-area">
-        <div id="suggestWrapper">
-            <button id="suggestBtn">💡 Suggestions</button>
-            <button id="reportsBtn" onclick="showReportsModal()">📊 Reports</button>
-            <button id="plannerBtn" onclick="showPlannerModal()">📋 Planner</button>
-            <button id="calcBtn" onclick="showCalculatorModal()">🧮 Calc</button>
-            <div id="suggestBox">
-                <button id="closeBtn">✖</button>
-                <p class="suggestion">what is business</p>
-                <p class="suggestion">how to start a business</p>
-                <p class="suggestion">create swot analysis</p>
-                <p class="suggestion">financial planning</p>
-            </div>
-        </div>
+<div class="chat-input-area">
+  <div id="suggestWrapper">
+    
+    <!-- Keep only Suggestions button -->
+    <button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">
+      💡 Suggestions
+    </button>
+
+    <div id="suggestBox">
+      <button id="closeBtn">✖</button>
+      <p class="suggestion">what is business</p>
+      <p class="suggestion">how to start a business</p>
+      <p class="suggestion">create swot analysis</p>
+      <p class="suggestion">financial planning</p>
+    </div>
+
+  </div>
 
         <div class="input-row">
             <input type="text" id="user-input" placeholder="Type your message...">
