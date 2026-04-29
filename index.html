@@ -731,6 +731,12 @@ body.dark .data-table tbody tr:hover {
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
+window.addEventListener('load', function() {
+    updatePageTranslations();
+    addMessage(t('welcomeMessage'), 'bot');
+});
+
+// Listen for language changes from settings
 window.addEventListener('storage', function(e) {
     if (e.key === 'languageChanged') {
         updatePageTranslations();
