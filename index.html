@@ -3084,7 +3084,15 @@ if (e.target === document.getElementById("reportsModal")) {
 closeReportsModal();
 }
 });
-
+window.addEventListener('storage', function(e) {
+    if (e.key === 'languageChanged' || e.key === 'appearanceChanged') {
+        location.reload();
+    } else if (e.key === 'darkMode') {
+        const isDark = e.newValue === 'enabled';
+        document.body.classList.toggle('dark', isDark);
+        document.getElementById('appearance').value = isDark ? 'dark' : 'light';
+    }
+});
 window.onload = () => {
 addMessage("Hello! 👋 Ask me anything about business.", 'bot');
 };
