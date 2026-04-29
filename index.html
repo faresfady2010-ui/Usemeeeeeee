@@ -731,7 +731,11 @@ body.dark .data-table tbody tr:hover {
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
-
+window.addEventListener('storage', function(e) {
+    if (e.key === 'languageChanged') {
+        updatePageTranslations();
+    }
+});
 // ==================== HAMBURGER MENU FUNCTIONS ====================
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebarMenu');
