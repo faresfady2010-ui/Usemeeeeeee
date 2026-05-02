@@ -1340,7 +1340,186 @@ const intents = [
     {tag:"term_procurement",patterns:["procurement","sourcing"],responses:["Procurement: Process of acquiring goods/services from suppliers. Manages vendor relationships. 🤝"]},
     {tag:"term_inventory_management",patterns:["inventory management","stock control"],responses:["Inventory Management: Balancing supply and demand. Too much = high costs, Too little = stockouts. ⚖️"]},
     {tag:"term_backorder",patterns:["backorder","out of stock"],responses:["Backorder: Customer order for out-of-stock item. Fulfilled when inventory available again. 📋"]},
+    // PROJECT FINANCE
+{tag:"project_finance_definition",patterns:[
+"what is project finance","what does project finance mean","explain project finance"
+],responses:[
+"Project finance is funding a project based on its future cash flows rather than the company's balance sheet."
+]},
 
+{tag:"npv",patterns:[
+"what is net present value","what is npv","how to calculate npv"
+],responses:[
+"NPV (Net Present Value) measures the profitability of an investment by comparing present value of cash inflows vs outflows."
+]},
+
+{tag:"irr",patterns:[
+"what is internal rate of return","what is irr","how does irr work"
+],responses:[
+"IRR is the discount rate that makes NPV equal to zero. It shows expected return of a project."
+]},
+
+{tag:"payback_period",patterns:[
+"what is payback period","how long to recover investment","calculate payback period"
+],responses:[
+"Payback period is the time it takes to recover the initial investment from cash flows."
+]},
+
+{tag:"discount_rate",patterns:[
+"what is discount rate","how to choose discount rate","discount rate meaning"
+],responses:[
+"Discount rate reflects risk and time value of money. Higher risk = higher discount rate."
+]},
+
+{tag:"capex",patterns:[
+"what is capex","capital expenditure meaning","capex definition"
+],responses:[
+"CapEx is money spent on long-term assets like equipment, buildings, or infrastructure."
+]},
+
+{tag:"opex",patterns:[
+"what is opex","operating expenses meaning","opex definition"
+],responses:[
+"OpEx are daily operating costs like salaries, rent, and utilities."
+]},
+
+// FORECASTING
+{tag:"revenue_forecast",patterns:[
+"what is revenue forecast","how to forecast revenue","revenue forecasting method"
+],responses:[
+"Revenue forecasting estimates future sales based on past data, trends, and market conditions."
+]},
+
+{tag:"expense_forecast",patterns:[
+"what is expense forecast","how to forecast expenses","predict business costs"
+],responses:[
+"Expense forecasting estimates future costs based on fixed and variable expenses."
+]},
+
+{tag:"cash_flow_forecast",patterns:[
+"what is cash flow forecast","how to forecast cash flow","predict cash flow"
+],responses:[
+"Cash flow forecasting predicts money coming in and out to avoid liquidity problems."
+]},
+
+{tag:"financial_projection",patterns:[
+"what are financial projections","how to make financial projections","project future financials"
+],responses:[
+"Financial projections estimate future revenue, costs, and profit using assumptions and data."
+]},
+
+// VALUATION
+{tag:"company_valuation",patterns:[
+"how to value a company","what is company valuation","methods of valuation"
+],responses:[
+"Companies are valued using methods like DCF, comparables, and asset-based valuation."
+]},
+
+{tag:"dcf",patterns:[
+"what is discounted cash flow","what is dcf","how does dcf work"
+],responses:[
+"DCF values a business by discounting future cash flows to present value."
+]},
+
+// RISK ANALYSIS
+{tag:"risk_analysis",patterns:[
+"what is risk analysis","how to analyze risk","business risk evaluation"
+],responses:[
+"Risk analysis identifies potential losses and evaluates their likelihood and impact."
+]},
+
+{tag:"sensitivity_analysis",patterns:[
+"what is sensitivity analysis","how does sensitivity analysis work"
+],responses:[
+"Sensitivity analysis tests how changes in variables affect outcomes like profit or NPV."
+]},
+
+{tag:"break_even_analysis",patterns:[
+"what is break even analysis","how to calculate break even","break even point meaning"
+],responses:[
+"Break-even is when total revenue equals total costs, meaning no profit or loss."
+]},
+
+// FUNDING
+{tag:"capital_structure",patterns:[
+"what is capital structure","debt vs equity financing","capital structure meaning"
+],responses:[
+"Capital structure is the mix of debt and equity used to finance a business."
+]},
+
+{tag:"cost_of_capital",patterns:[
+"what is cost of capital","how to calculate cost of capital","wacc meaning"
+],responses:[
+"Cost of capital is the required return investors expect. WACC combines cost of debt and equity."
+]},
+
+{tag:"wacc",patterns:[
+"what is wacc","weighted average cost of capital","how to calculate wacc"
+],responses:[
+"WACC is the average cost of financing from debt and equity, weighted by their proportions."
+]},
+
+// PERFORMANCE METRICS
+{tag:"gross_profit",patterns:[
+"what is gross profit","gross profit meaning","how to calculate gross profit"
+],responses:[
+"Gross profit = Revenue - Cost of Goods Sold. Shows production profitability."
+]},
+
+{tag:"net_profit",patterns:[
+"what is net profit","net income meaning","calculate net profit"
+],responses:[
+"Net profit is the final profit after all expenses, taxes, and costs."
+]},
+
+{tag:"ebit",patterns:[
+"what is ebit","earnings before interest and tax","ebit meaning"
+],responses:[
+"EBIT measures operating profit before interest and taxes."
+]},
+
+// ADVANCED BUSINESS QUESTIONS
+{tag:"unit_economics",patterns:[
+"what are unit economics","unit economics meaning","how to analyze unit economics"
+],responses:[
+"Unit economics analyze profit per unit/customer to determine business viability."
+]},
+
+{tag:"economies_of_scale",patterns:[
+"what are economies of scale","economies of scale meaning"
+],responses:[
+"Economies of scale reduce cost per unit as production increases."
+]},
+
+{tag:"market_opportunity",patterns:[
+"how to evaluate market opportunity","market opportunity analysis"
+],responses:[
+"Evaluate market size, demand, competition, and growth potential before entering."
+]},
+
+{tag:"business_model_validation",patterns:[
+"how to validate a business model","test business idea","validate startup idea"
+],responses:[
+"Validate by testing demand, getting customer feedback, and analyzing real data."
+]},
+
+{tag:"pricing_optimization",patterns:[
+"how to optimize pricing","best pricing strategy","price optimization"
+],responses:[
+"Optimize pricing by testing demand, competitor pricing, and customer willingness to pay."
+]},
+
+{tag:"customer_lifetime_value",patterns:[
+"what is customer lifetime value","what is ltv","how to calculate ltv"
+],responses:[
+"LTV is total revenue expected from a customer over their relationship with your business."
+]},
+
+{tag:"cac_vs_ltv",patterns:[
+"what is cac vs ltv","relationship between cac and ltv"
+],responses:[
+"A healthy business has LTV higher than CAC (ideally 3x or more)."
+]},
     // MARKET TERMS
     {tag:"term_monopoly",patterns:["monopoly","market monopoly"],responses:["Monopoly: Single seller dominates market. High prices, limited customer choice. Regulated by antitrust laws. 🏛️"]},
     {tag:"term_oligopoly",patterns:["oligopoly","few competitors"],responses:["Oligopoly: Few companies dominate market. Can coordinate (tacitly) on pricing. 🤐"]},
