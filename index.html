@@ -690,6 +690,9 @@ body.dark .data-table tbody tr:hover {
 
     <div id="suggestBox">
       <button id="closeBtn">✖</button>
+      <p class="suggestion">help me create a business</p>
+      <p class="suggestion">what does a CEO do</p>
+      <p class="suggestion">give me personalized advice</p>
       <p class="suggestion">what is business</p>
       <p class="suggestion">how to start a business</p>
     </div>
@@ -768,17 +771,145 @@ function goToPage(page) {
     window.location.href = page;
 }
 
-// ==================== GLOBAL STATE ====================
-let planData = {
-name: '',
-startDate: '',
-endDate: '',
-initialBudget: 0,
-growthRate: 0,
-type: '',
-months: [],
-totalProjection: 0
+// ==================== BUSINESS CREATION CONVERSATION FLOW ====================
+let businessCreationState = {
+  active: false,
+  step: 0,
+  data: {
+    businessName: '',
+    industry: '',
+    targetMarket: '',
+    problem: '',
+    solution: '',
+    revenueModel: '',
+    budget: 0,
+    team: [],
+    goals: ''
+  }
 };
+
+const businessCreationSteps = [
+  {
+    question: "What's the name of your business idea?",
+    field: 'businessName',
+    advice: "A good business name should be memorable, easy to spell, and reflect what you do."
+  },
+  {
+    question: "What industry is your business in? (e.g., tech, retail, healthcare, food)",
+    field: 'industry',
+    advice: "Choose an industry you're passionate about and where you see growth opportunities."
+  },
+  {
+    question: "Who is your target customer? (age, location, interests, needs)",
+    field: 'targetMarket',
+    advice: "Understanding your customers helps you create products they'll love and pay for."
+  },
+  {
+    question: "What problem does your business solve for customers?",
+    field: 'problem',
+    advice: "The best businesses solve real problems that people care about solving."
+  },
+  {
+    question: "How does your business solve this problem? (product/service description)",
+    field: 'solution',
+    advice: "Your solution should be unique, valuable, and better than existing alternatives."
+  },
+  {
+    question: "How will you make money? (subscription, one-time sale, ads, etc.)",
+    field: 'revenueModel',
+    advice: "Choose a revenue model that matches your business type and customer preferences."
+  },
+  {
+    question: "What's your starting budget? (how much money do you have to invest?)",
+    field: 'budget',
+    advice: "Start small and validate your idea before investing too much capital."
+  },
+  {
+    question: "What are your 3-month goals for this business?",
+    field: 'goals',
+    advice: "Set specific, measurable goals to track your progress and stay motivated."
+  }
+];
+
+function startBusinessCreation() {
+  businessCreationState.active = true;
+  businessCreationState.step = 0;
+  businessCreationState.data = {
+    businessName: '',
+    industry: '',
+    targetMarket: '',
+    problem: '',
+    solution: '',
+    revenueModel: '',
+    budget: 0,
+    team: [],
+    goals: ''
+  };
+  askNextBusinessQuestion();
+}
+
+function askNextBusinessQuestion() {
+  if (businessCreationState.step < businessCreationSteps.length) {
+    const step = businessCreationSteps[businessCreationState.step];
+    const question = `${step.question}\n\n💡 ${step.advice}`;
+    addMessage(question, 'bot');
+  } else {
+    generateBusinessPlan();
+  }
+}
+
+function processBusinessCreationAnswer(answer) {
+  if (!businessCreationState.active) return false;
+  
+  const step = businessCreationSteps[businessCreationState.step];
+  businessCreationState.data[step.field] = answer;
+  businessCreationState.step++;
+  
+  if (businessCreationState.step < businessCreationSteps.length) {
+    setTimeout(() => askNextBusinessQuestion(), 1000);
+  } else {
+    setTimeout(() => generateBusinessPlan(), 1000);
+  }
+  return true;
+}
+
+function generateBusinessPlan() {
+  const data = businessCreationState.data;
+  
+  let plan = `🎉 **Business Plan Created for ${data.businessName}!**\n\n`;
+  plan += `📊 **Business Overview:**\n`;
+  plan += `• Industry: ${data.industry}\n`;
+  plan += `• Target Market: ${data.targetMarket}\n`;
+  plan += `• Problem Solved: ${data.problem}\n`;
+  plan += `• Solution: ${data.solution}\n`;
+  plan += `• Revenue Model: ${data.revenueModel}\n`;
+  plan += `• Starting Budget: $${data.budget.toLocaleString()}\n`;
+  plan += `• 3-Month Goals: ${data.goals}\n\n`;
+  
+  plan += `🚀 **Next Steps:**\n`;
+  plan += `1. Validate your idea by talking to 10 potential customers\n`;
+  plan += `2. Create a simple website or landing page\n`;
+  plan += `3. Build your first version (MVP)\n`;
+  plan += `4. Launch and get feedback\n`;
+  plan += `5. Iterate based on what customers say\n\n`;
+  
+  plan += `💡 **Personalized Advice:**\n`;
+  if (data.industry.toLowerCase().includes('tech')) {
+    plan += `• Focus on building a strong tech team and protecting your IP\n`;
+    plan += `• Consider SaaS model for recurring revenue\n`;
+  } else if (data.industry.toLowerCase().includes('food')) {
+    plan += `• Food safety and regulations are critical\n`;
+    plan += `• Location and customer traffic are key success factors\n`;
+  } else if (data.industry.toLowerCase().includes('retail')) {
+    plan += `• Online presence is essential in 2026\n`;
+    plan += `• Inventory management will be your biggest challenge\n`;
+  }
+  
+  plan += `\nWould you like me to create a detailed financial plan or marketing strategy for ${data.businessName}?`;
+  
+  addMessage(plan, 'bot');
+  businessCreationState.active = false;
+}
 
 let swotData = {
 business: "",
@@ -994,8 +1125,32 @@ const intents = [
 {tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
 {tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
 
-// BUSINESS CREATION
-{tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
+// BUSINESS ROLES & LEADERSHIP
+{tag:"ceo_role",patterns:["what does a ceo do","ceo responsibilities","ceo job","ceo duties","what is ceo"],responses:["A CEO leads the company vision and strategy. They make high-level decisions, manage executives, and ensure the business achieves its goals. Key responsibilities include setting direction, building culture, and driving growth."]},
+{tag:"ceo_qualities",patterns:["ceo qualities","what makes a good ceo","ceo skills","ceo traits"],responses:["Great CEOs have vision, leadership, strategic thinking, and communication skills. They inspire teams, make tough decisions, and adapt to change. Experience in the industry and emotional intelligence are also crucial."]},
+{tag:"ceo_vs_cfo",patterns:["ceo vs cfo","difference between ceo and cfo","ceo and cfo roles"],responses:["CEO focuses on overall business strategy and vision, while CFO manages financial planning, risk, and capital. CEO sets direction, CFO ensures financial health to execute that vision."]},
+{tag:"ceo_vs_cto",patterns:["ceo vs cto","difference between ceo and cto","ceo and cto roles"],responses:["CEO leads business strategy, CTO leads technology strategy. CEO focuses on market and growth, CTO focuses on product development, innovation, and technical infrastructure."]},
+{tag:"ceo_vs_cmo",patterns:["ceo vs cmo","difference between ceo and cmo","ceo and cmo roles"],responses:["CEO drives overall business strategy, CMO drives marketing strategy. CEO focuses on company vision, CMO focuses on brand, customer acquisition, and market positioning."]},
+{tag:"ceo_salary",patterns:["ceo salary","how much does ceo make","ceo compensation","ceo pay"],responses:["CEO salaries vary widely. In large companies, CEOs can earn $10M+ including stock. In startups, it might be $200K-$500K plus equity. Factors include company size, industry, and performance."]},
+{tag:"ceo_challenges",patterns:["ceo challenges","hardest part of being ceo","ceo problems"],responses:["CEO challenges include managing uncertainty, making tough decisions, balancing stakeholders, maintaining work-life balance, and staying innovative while managing day-to-day operations."]},
+
+// OTHER BUSINESS ROLES
+{tag:"cfo_role",patterns:["what does a cfo do","cfo responsibilities","cfo job","cfo duties"],responses:["A CFO manages financial strategy, planning, and risk. They oversee accounting, budgeting, investments, and ensure financial stability. Key duties include financial reporting, cash management, and strategic financial decisions."]},
+{tag:"cto_role",patterns:["what does a cto do","cto responsibilities","cto job","cto duties"],responses:["A CTO leads technology strategy and innovation. They oversee product development, technical architecture, and R&D. Key responsibilities include technology roadmap, team leadership, and ensuring tech supports business goals."]},
+{tag:"cmo_role",patterns:["what does a cmo do","cmo responsibilities","cmo job","cmo duties"],responses:["A CMO leads marketing strategy and brand management. They oversee customer acquisition, brand positioning, and marketing campaigns. Key duties include market research, digital strategy, and measuring marketing ROI."]},
+{tag:"coo_role",patterns:["what does a coo do","coo responsibilities","coo job","coo duties"],responses:["A COO manages daily operations and execution. They oversee operations, logistics, and process optimization. Key responsibilities include operational efficiency, team management, and implementing CEO's strategic vision."]},
+{tag:"cpo_role",patterns:["what does a cpo do","cpo responsibilities","cpo job","cpo duties"],responses:["A CPO leads product development and management. They oversee product strategy, roadmap, and user experience. Key duties include market research, feature prioritization, and ensuring products meet customer needs."]},
+{tag:"chro_role",patterns:["what does a chro do","chro responsibilities","chro job","chro duties"],responses:["A CHRO leads human resources and talent strategy. They oversee recruitment, employee development, and company culture. Key responsibilities include workforce planning, diversity initiatives, and employee engagement."]},
+{tag:"founder_vs_ceo",patterns:["founder vs ceo","difference between founder and ceo","founder and ceo roles"],responses:["Founders start the company and have the original vision. CEOs may be hired later to scale and manage the business. Founders often stay involved as CEOs or board members, bringing passion and original insight."]},
+
+// PERSONALIZED BUSINESS ADVICE
+{tag:"personalized_advice",patterns:["give me personalized advice","personal advice","advice for me","tailored advice","custom advice"],responses:["I'd love to give you personalized advice! Tell me about your business situation, goals, or challenges, and I'll provide specific recommendations."]},
+{tag:"business_advice_startups",patterns:["advice for startups","startup advice","new business advice"],responses:["For startups: Focus on product-market fit first, then scale. Build a strong team, validate ideas with customers, and manage cash flow carefully. Bootstrap as long as possible before seeking funding."]},
+{tag:"business_advice_small_business",patterns:["small business advice","advice for small business","local business tips"],responses:["For small businesses: Know your local market deeply, provide exceptional customer service, and focus on one thing you do better than anyone else. Build personal relationships with customers."]},
+{tag:"business_advice_entrepreneurs",patterns:["advice for entrepreneurs","entrepreneur tips","being an entrepreneur"],responses:["For entrepreneurs: Stay adaptable, learn continuously, network actively, and focus on solving real problems. Success comes from persistence, learning from failures, and building genuine value."]},
+
+// BUSINESS CREATION HELP
+{tag:"help_create_business",patterns:["help me create a business","help me start a business","create a business with me","start a business","help me build a business","business creation help"],responses:["I'd be happy to help you create your business! Let's go through this step by step. I'll ask you some questions to build a personalized business plan."]},
 `Here are the key steps to create a business:
 
 1️⃣ Idea Generation
@@ -2138,6 +2293,175 @@ const intents = [
     {tag:"term_bear_market",patterns:["bear market","what is bear market"],responses:["Bear Market: Market with falling prices and investor pessimism. Risk for buyers. 📉"]},
 // BUSINESS COMPARISON
 {tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
+
+// BANKS AND BANKING
+{tag:"what_is_bank",patterns:["what is a bank","what are banks","bank definition","explain banks"],responses:["A bank is a financial institution that accepts deposits, provides loans, and offers various financial services. Banks act as intermediaries between savers and borrowers, facilitating economic activity."]},
+{tag:"types_of_banks",patterns:["types of banks","different banks","kinds of banks","bank types"],responses:["Main types of banks: 1️⃣ Commercial banks (retail banking) 2️⃣ Investment banks (corporate finance) 3️⃣ Central banks (monetary policy) 4️⃣ Credit unions (member-owned) 5️⃣ Online banks (digital-only)."]},
+{tag:"commercial_bank",patterns:["what is commercial bank","commercial banking","retail bank"],responses:["Commercial banks provide services to individuals and businesses: checking/savings accounts, loans, mortgages, credit cards, and business banking services. They earn from interest spreads and fees."]},
+{tag:"investment_bank",patterns:["what is investment bank","investment banking","IB"],responses:["Investment banks help companies raise capital through IPOs, bonds, and stocks. They provide M&A advisory, trading, and research. They serve corporations and institutional investors."]},
+{tag:"central_bank",patterns:["what is central bank","central banking","federal reserve"],responses:["Central banks (like the Federal Reserve) control monetary policy, regulate banks, manage currency, and maintain financial stability. They set interest rates and influence economic growth."]},
+{tag:"credit_union",patterns:["what is credit union","credit unions","cooperative bank"],responses:["Credit unions are member-owned financial cooperatives. They're not-for-profit, offer competitive rates, and focus on serving their community members rather than maximizing profits."]},
+{tag:"online_bank",patterns:["what is online bank","digital bank","internet bank"],responses:["Online banks operate entirely online without physical branches. They offer higher interest rates, lower fees, and 24/7 access through apps and websites. Examples: Ally, Marcus by Goldman Sachs."]},
+{tag:"bank_services",patterns:["bank services","banking services","what do banks offer"],responses:["Bank services include: 💰 Deposits (checking/savings) 🏠 Loans & mortgages 💳 Credit cards 💸 Wire transfers 📊 Investment services 🔒 Safety deposit boxes 🏢 Business banking"]},
+{tag:"checking_account",patterns:["what is checking account","checking","check account"],responses:["A checking account allows you to deposit/withdraw money easily. Used for daily transactions, bill payments, and ATM access. May have fees or earn minimal interest."]},
+{tag:"savings_account",patterns:["what is savings account","savings","deposit account"],responses:["A savings account earns interest on deposited money. Less accessible than checking accounts but safer for long-term savings. FDIC-insured up to $250,000."]},
+{tag:"bank_loans",patterns:["bank loans","types of loans","loan types"],responses:["Bank loans include: 🏠 Mortgages (home loans) 🚗 Auto loans 💼 Personal loans 🏢 Business loans 📚 Student loans. Loans are repaid with interest over time."]},
+{tag:"mortgage",patterns:["what is mortgage","mortgage loan","home loan"],responses:["A mortgage is a loan secured by real estate property. Homebuyers borrow money to purchase homes and repay over 15-30 years. Interest rates vary based on credit and market conditions."]},
+{tag:"credit_card",patterns:["what is credit card","credit cards","how credit cards work"],responses:["Credit cards allow borrowing money up to a limit for purchases. You repay monthly with interest if not paid in full. Build credit history but can lead to debt if mismanaged."]},
+{tag:"interest_rate",patterns:["what is interest rate","interest rates","how interest works"],responses:["Interest rate is the cost of borrowing money, expressed as a percentage. Banks pay interest on deposits and charge interest on loans. Higher rates = more expensive borrowing."]},
+{tag:"APR",patterns:["what is APR","annual percentage rate","APR meaning"],responses:["APR is the total cost of borrowing, including interest and fees, expressed annually. It helps compare loan costs. Credit cards often have high APRs (15-25%)."]},
+{tag:"FDIC",patterns:["what is FDIC","FDIC insurance","bank insurance"],responses:["FDIC (Federal Deposit Insurance Corporation) insures deposits up to $250,000 per depositor, per bank. Protects your money if a bank fails. All US banks are FDIC members."]},
+{tag:"bank_profit",patterns:["how do banks make money","bank profits","banks earn money"],responses:["Banks profit from: 1️⃣ Net interest income (lending at higher rates than they pay depositors) 2️⃣ Fees (ATM, overdraft, account maintenance) 3️⃣ Investment banking services 4️⃣ Trading profits"]},
+{tag:"bank_regulation",patterns:["bank regulation","banking regulations","who regulates banks"],responses:["Banks are regulated by: 🏛️ Central banks (Federal Reserve) 📋 Government agencies (FDIC, OCC) 📊 Financial regulators. Ensures stability, prevents fraud, and protects consumers."]},
+{tag:"ATM",patterns:["what is ATM","ATM machine","automated teller"],responses:["ATM (Automated Teller Machine) allows 24/7 cash withdrawals, deposits, and banking transactions. Banks charge fees for non-network ATMs."]},
+{tag:"wire_transfer",patterns:["wire transfer","bank transfer","electronic transfer"],responses:["Wire transfer sends money electronically between banks. Fast but expensive. Used for large amounts or international transfers. Domestic wires take 1-2 days."]},
+{tag:"overdraft",patterns:["overdraft","overdraft protection","negative balance"],responses:["Overdraft occurs when you spend more than your account balance. Banks may cover it for a fee or return the transaction. Avoid by monitoring balance carefully."]},
+{tag:"bank_statement",patterns:["bank statement","account statement","monthly statement"],responses:["Bank statement shows all account activity for a period. Includes deposits, withdrawals, fees, and interest. Review monthly to catch errors and track spending."]},
+
+// COMPANIES AND CORPORATIONS
+{tag:"what_is_company",patterns:["what is a company","company definition","explain company"],responses:["A company is a legal entity formed by individuals to conduct business. It can own assets, incur debts, and enter contracts. Companies provide limited liability protection to owners."]},
+{tag:"types_of_companies",patterns:["types of companies","company structures","business structures"],responses:["Company types: 🏢 Corporation (C-Corp/S-Corp) 🤝 Partnership (General/Limited) 🏠 LLC (Limited Liability Company) 👤 Sole Proprietorship 🏛️ Nonprofit. Each has different tax, liability, and management implications."]},
+{tag:"corporation",patterns:["what is corporation","corporate structure","C corporation"],responses:["A corporation is a legal entity separate from its owners. Shareholders own stock, board of directors governs, officers manage operations. Offers strong liability protection but complex regulations."]},
+{tag:"LLC",patterns:["what is LLC","limited liability company","LLC meaning"],responses:["LLC combines corporation liability protection with partnership tax flexibility. Owners (members) have limited personal liability. Popular for small businesses and professional services."]},
+{tag:"partnership",patterns:["what is partnership","business partnership","partnership types"],responses:["Partnership is business owned by 2+ people sharing profits/losses. General partnerships have unlimited liability; limited partnerships protect some partners. Simple but risky structure."]},
+{tag:"sole_proprietorship",patterns:["sole proprietorship","sole proprietor","single owner business"],responses:["Simplest business structure - single owner with unlimited personal liability. No formal registration required. Owner keeps all profits but bears all risks. Common for freelancers."]},
+{tag:"nonprofit",patterns:["nonprofit organization","nonprofit company","charity"],responses:["Nonprofit organizations serve public benefit rather than profit. Tax-exempt, rely on donations/grants. Governed by board, cannot distribute profits to individuals."]},
+{tag:"board_of_directors",patterns:["board of directors","board","corporate board"],responses:["Board of directors oversees company strategy and management. Elected by shareholders, hires/fires CEO, approves major decisions. Provides governance and strategic guidance."]},
+{tag:"shareholders",patterns:["shareholders","stockholders","company owners"],responses:["Shareholders own company stock and have voting rights. Receive dividends and share in company success/failure. Public companies have thousands of shareholders."]},
+{tag:"CEO_vs_board",patterns:["CEO vs board of directors","CEO board relationship","corporate governance"],responses:["CEO manages daily operations and executes strategy. Board provides oversight, strategic direction, and hires/fires CEO. Board represents shareholder interests."]},
+{tag:"company_valuation",patterns:["company valuation","business valuation","how to value company"],responses:["Company valuation methods: 💰 Asset-based (book value) 📈 Income-based (earnings multiples) 🔮 Market-based (comparable sales) 💹 DCF (discounted cash flow). Used for M&A, IPO, and sales."]},
+{tag:"market_cap",patterns:["market capitalization","market cap","company size"],responses:["Market cap = stock price × shares outstanding. Measures company size: Large-cap (>$10B), Mid-cap ($2-10B), Small-cap (<$2B). Affects investor interest and stock volatility."]},
+{tag:"IPO",patterns:["what is IPO","initial public offering","going public"],responses:["IPO is when private company sells stock to public investors. Raises capital, increases visibility, but adds regulatory requirements and shareholder scrutiny. Requires SEC approval."]},
+{tag:"stock_exchange",patterns:["stock exchange","stock market","NYSE","NASDAQ"],responses:["Stock exchanges (NYSE, NASDAQ) are marketplaces for buying/selling company stocks. Provide liquidity, price discovery, and regulatory oversight. Companies list to access public capital."]},
+{tag:"dividends",patterns:["dividends","stock dividends","company dividends"],responses:["Dividends are cash payments to shareholders from company profits. Not guaranteed, paid quarterly. Some companies reinvest profits instead. Attractive to income-focused investors."]},
+{tag:"stock_split",patterns:["stock split","split stock","company split"],responses:["Stock split increases shares by dividing each share (2-for-1 split doubles shares, halves price). Makes stock more accessible but doesn't change company value. Often done to boost trading."]},
+{tag:"merger",patterns:["merger","company merger","business merger"],responses:["Merger combines two companies into one entity. Can be friendly (mutual agreement) or hostile (unwanted takeover). Aims to create value through synergies, expanded market reach, or cost savings."]},
+{tag:"acquisition",patterns:["acquisition","company acquisition","buyout"],responses:["Acquisition is one company purchasing another. Buyer gains control, assets, and market position. Can be cash/stock deal. Due diligence critical to avoid overpaying."]},
+{tag:"M&A",patterns:["M&A","mergers and acquisitions","corporate M&A"],responses:["M&A involves companies combining or one acquiring another. Strategic tool for growth, market expansion, and competitive advantage. Requires legal, financial, and cultural integration."]},
+{tag:"corporate_governance",patterns:["corporate governance","company governance","board governance"],responses:["Corporate governance ensures companies are managed transparently and accountably. Involves board oversight, executive compensation, risk management, and shareholder rights."]},
+{tag:"ESG",patterns:["ESG","environmental social governance","sustainable investing"],responses:["ESG evaluates companies on Environmental impact, Social responsibility, and Governance practices. Investors increasingly consider ESG factors for long-term sustainability and ethical investing."]},
+{tag:"stakeholders",patterns:["stakeholders","company stakeholders","business stakeholders"],responses:["Stakeholders include shareholders, employees, customers, suppliers, communities, and regulators. All affected by company decisions. Successful companies balance stakeholder interests."]},
+{tag:"corporate_culture",patterns:["corporate culture","company culture","workplace culture"],responses:["Corporate culture is shared values, beliefs, and behaviors within a company. Strong culture attracts talent, drives performance, and differentiates from competitors."]},
+{tag:"company_mission",patterns:["company mission","mission statement","corporate mission"],responses:["Mission statement defines company's purpose and core business. Guides strategy, motivates employees, and communicates value to customers. Should be clear, inspiring, and actionable."]},
+{tag:"company_vision",patterns:["company vision","vision statement","corporate vision"],responses:["Vision statement describes desired future state. More aspirational than mission, sets long-term direction. Example: 'To be the world's most customer-centric company' (Amazon)."]},
+{tag:"SWOT_company",patterns:["company SWOT","corporate SWOT","business SWOT"],responses:["Company SWOT analyzes internal Strengths/Weaknesses and external Opportunities/Threats. Strategic planning tool to identify competitive advantages and areas for improvement."]},
+{tag:"competitive_advantage",patterns:["competitive advantage","company advantage","business edge"],responses:["Competitive advantage is what makes a company better than rivals. Can be cost leadership (Walmart), differentiation (Apple), or niche focus. Sustainable advantages drive long-term success."]},
+{tag:"blue_chip_company",patterns:["blue chip company","blue chip stocks","reliable company"],responses:["Blue-chip companies are large, stable, financially sound corporations with long histories of reliable performance. Examples: Coca-Cola, Johnson & Johnson, Procter & Gamble."]},
+{tag:"unicorn_company",patterns:["unicorn company","unicorn startup","billion dollar startup"],responses:["Unicorn companies are private startups valued at $1B+. Rare and high-risk, often in tech. Examples: Uber, Airbnb, SpaceX. Many fail to become profitable."]},
+{tag:"Fortune_500",patterns:["Fortune 500","top companies","largest companies"],responses:["Fortune 500 ranks largest US companies by revenue. Includes Walmart (#1), Amazon (#2), Apple (#3). Represents economic powerhouses and market leaders."]},
+{tag:"company_lifecycle",patterns:["company lifecycle","business lifecycle","corporate lifecycle"],responses:["Company lifecycle: 1️⃣ Startup (growth focus) 2️⃣ Growth (expansion) 3️⃣ Maturity (optimization) 4️⃣ Decline (turnaround or exit). Each stage requires different strategies."]},
+{tag:"spin_off",patterns:["spin off","company spin off","corporate spin off"],responses:["Spin-off creates independent company from parent corporation. Allows focus on specific business, unlocks value, and attracts specialized investors. Example: PayPal spun off from eBay."]},
+{tag:"joint_venture",patterns:["joint venture","strategic alliance","business partnership"],responses:["Joint venture is formal agreement where companies share resources for specific project/goal. Shares risks/rewards. Common in international expansion or new technology development."]},
+{tag:"franchise_business",patterns:["franchise","franchising","franchise model"],responses:["Franchise allows business expansion through licensed operators. Franchisees pay fees/royalties, follow standards. Benefits: rapid growth, local expertise. Examples: McDonald's, Subway."]},
+{tag:"holding_company",patterns:["holding company","corporate holding","parent company"],responses:["Holding company owns controlling interest in other companies without direct operations. Manages portfolio, provides oversight. Examples: Berkshire Hathaway, Alphabet (Google's parent)."]},
+
+// FINANCIAL INSTITUTIONS AND SERVICES
+{tag:"investment_bank_services",patterns:["investment bank services","IB services","what do investment banks do"],responses:["Investment banks provide: 💼 IPO/underwriting 📊 M&A advisory 🔍 Research & analysis 📈 Trading 💰 Private equity 🌍 International finance. Serve corporations and institutional investors."]},
+{tag:"private_banking",patterns:["private banking","wealth management","private banker"],responses:["Private banking serves high-net-worth individuals with personalized wealth management, investment advice, tax planning, and exclusive services. Requires minimum $1M+ investable assets."]},
+{tag:"retail_banking",patterns:["retail banking","consumer banking","personal banking"],responses:["Retail banking serves individual customers with checking/savings accounts, loans, mortgages, and basic financial services. Focuses on accessibility and customer service."]},
+{tag:"corporate_banking",patterns:["corporate banking","business banking","commercial banking"],responses:["Corporate banking serves businesses with loans, cash management, trade finance, treasury services, and investment banking. Handles large transactions and complex financial needs."]},
+{tag:"Islamic_banking",patterns:["Islamic banking","sharia banking","Islamic finance"],responses:["Islamic banking follows Sharia principles: no interest (riba), profit-sharing, ethical investments. Uses Islamic contracts like murabaha, mudaraba, and musharaka."]},
+{tag:"microfinance",patterns:["microfinance","microcredit","small loans"],responses:["Microfinance provides small loans and financial services to low-income individuals/entrepreneurs. Pioneered by Muhammad Yunus, helps lift people out of poverty through entrepreneurship."]},
+{tag:"crowdfunding",patterns:["crowdfunding","crowd funding","kickstarter"],responses:["Crowdfunding raises small amounts from many people via online platforms. Types: reward-based (Kickstarter), equity-based (AngelList), debt-based (lending). Democratizes funding."]},
+{tag:"venture_capital",patterns:["venture capital","VC","venture funding"],responses:["VC firms invest in high-growth startups for equity. Provide capital, mentorship, and networks. High-risk, high-reward. Stages: seed, Series A, B, C funding rounds."]},
+{tag:"private_equity",patterns:["private equity","PE","private equity firms"],responses:["PE firms buy private companies, improve operations, and sell for profit. Focus on mature businesses. Use leverage (debt) to amplify returns. Examples: Blackstone, KKR."]},
+{tag:"hedge_fund",patterns:["hedge fund","hedge funds","alternative investments"],responses:["Hedge funds use sophisticated strategies (short selling, leverage, derivatives) to generate returns. High minimum investments ($1M+), high fees, available to accredited investors only."]},
+{tag:"mutual_fund",patterns:["mutual fund","mutual funds","investment fund"],responses:["Mutual funds pool investor money to buy diversified portfolios. Professionally managed, liquid, and regulated. Types: stock funds, bond funds, index funds, target-date funds."]},
+{tag:"ETF",patterns:["ETF","exchange traded fund","index fund"],responses:["ETFs trade like stocks but represent baskets of securities. Low-cost, tax-efficient, and provide instant diversification. Examples: SPY (tracks S&P 500), VTI (total stock market)."]},
+{tag:"pension_fund",patterns:["pension fund","retirement fund","pension plan"],responses:["Pension funds manage retirement savings for employees. Employer-sponsored, defined benefit plans guarantee payments. Invest in diversified portfolios for long-term growth."]},
+{tag:"sovereign_wealth_fund",patterns:["sovereign wealth fund","SWF","government investment fund"],responses:["SWFs are state-owned investment funds from commodity exports or trade surpluses. Examples: Norway's $1.4T fund, Abu Dhabi Investment Authority. Invest globally for future generations."]},
+{tag:"financial_regulation",patterns:["financial regulation","banking regulation","Dodd Frank"],responses:["Financial regulation ensures market stability, prevents fraud, and protects consumers. Key laws: Glass-Steagall (separated commercial/investment banking), Dodd-Frank (post-2008 reforms), Basel Accords."]},
+{tag:"central_bank_tools",patterns:["central bank tools","monetary policy tools","Fed tools"],responses:["Central bank tools: 📊 Interest rates (federal funds rate) 🏦 Reserve requirements 💵 Open market operations 🗣️ Forward guidance 💱 Currency interventions. Influence economic growth and inflation."]},
+{tag:"quantitative_easing",patterns:["quantitative easing","QE","QE meaning"],responses:["QE is central bank buying government bonds to inject money into economy. Lowers interest rates, stimulates lending, and boosts asset prices. Used during crises (2008, 2020)."]},
+{tag:"bank_run",patterns:["bank run","bank panic","run on bank"],responses:["Bank run occurs when many depositors withdraw funds simultaneously due to fear of bank failure. Can cause bank collapse even if solvent. Prevented by deposit insurance and lender of last resort."]},
+{tag:"too_big_to_fail",patterns:["too big to fail","TBTF","systemically important"],responses:["TBTF describes banks whose failure would harm economy. Government may bail them out. Post-2008 reforms aimed to reduce this through higher capital requirements and resolution planning."]},
+{tag:"financial_crisis",patterns:["financial crisis","economic crisis","banking crisis"],responses:["Financial crises involve bank failures, market crashes, and economic downturns. Causes: excessive leverage, asset bubbles, poor regulation. Examples: 1929 Crash, 2008 Crisis, 2020 COVID impact."]},
+{tag:"credit_rating",patterns:["credit rating","credit score","bond rating"],responses:["Credit ratings assess borrower reliability. Agencies (S&P, Moody's, Fitch) assign AAA (best) to D (worst) ratings. Affects borrowing costs and investment decisions."]},
+{tag:"credit_default_swap",patterns:["credit default swap","CDS","credit derivative"],responses:["CDS is insurance contract against bond default. Buyer pays premium, seller compensates if default occurs. Played role in 2008 crisis through complex derivatives."]},
+{tag:"securitization",patterns:["securitization","asset backed securities","ABS"],responses:["Securitization bundles loans (mortgages, credit cards) into tradable securities. Increases liquidity but contributed to 2008 crisis when underlying loans defaulted."]},
+{tag:"shadow_banking",patterns:["shadow banking","shadow banks","non bank lending"],responses:["Shadow banking provides credit outside traditional banks. Includes hedge funds, private equity, money market funds. Less regulated, grew rapidly before 2008 crisis."]},
+{tag:"financial_innovation",patterns:["financial innovation","fintech","financial technology"],responses:["Financial innovation creates new products/services. Examples: mobile payments (Venmo), peer-to-peer lending (Lending Club), robo-advisors, blockchain/cryptocurrency."]},
+{tag:"fintech",patterns:["fintech","financial technology","fintech companies"],responses:["Fintech uses technology to improve financial services. Includes payments (Stripe), lending (SoFi), investing (Robinhood), insurance (Lemonade). Disrupts traditional banking."]},
+{tag:"cryptocurrency",patterns:["cryptocurrency","crypto","bitcoin"],responses:["Cryptocurrency is digital money using blockchain technology. Decentralized, secure, and transparent. Bitcoin pioneered, thousands exist. Volatile but transformative for finance."]},
+{tag:"blockchain",patterns:["blockchain","blockchain technology","distributed ledger"],responses:["Blockchain is decentralized database recording transactions across networks. Secure, transparent, immutable. Beyond crypto: supply chain, voting, healthcare applications."]},
+{tag:"digital_currency",patterns:["digital currency","central bank digital currency","CBDC"],responses:["CBDC is digital form of fiat currency issued by central banks. China leads with digital yuan pilot. Could improve payments, monetary policy, and financial inclusion."]},
+{tag:"financial_inclusion",patterns:["financial inclusion","banking the unbanked","financial access"],responses:["Financial inclusion provides banking services to underserved populations. Mobile money (M-Pesa in Kenya) and fintech apps help billions access financial services."]},
+{tag:"sustainable_finance",patterns:["sustainable finance","green finance","impact investing"],responses:["Sustainable finance considers environmental/social impact. Includes green bonds, ESG investing, impact funds. Grows as investors prioritize sustainability."]},
+{tag:"impact_investing",patterns:["impact investing","social impact investing","mission investing"],responses:["Impact investing generates financial returns while creating positive social/environmental impact. Funds support affordable housing, clean energy, education, healthcare."]},
+
+// COMPANY ANALYSIS AND METRICS
+{tag:"company_analysis",patterns:["company analysis","business analysis","analyze company"],responses:["Company analysis includes: 📊 Financial statements 📈 Growth metrics 🏆 Competitive position 👥 Management quality 🌍 Industry trends. Use ratios, trends, and comparisons."]},
+{tag:"financial_ratios",patterns:["financial ratios","accounting ratios","key ratios"],responses:["Key financial ratios: 💰 Profitability (ROE, ROA, margins) 💸 Liquidity (current ratio, quick ratio) 🏦 Leverage (debt-to-equity) 📈 Efficiency (asset turnover, inventory turnover)."]},
+{tag:"PE_ratio",patterns:["PE ratio","price to earnings","P/E ratio"],responses:["P/E ratio = stock price ÷ earnings per share. Shows valuation relative to earnings. High P/E suggests growth expectations; low P/E suggests value or concerns."]},
+{tag:"ROE",patterns:["ROE","return on equity","ROE meaning"],responses:["ROE = net income ÷ shareholder equity × 100%. Measures profit efficiency from shareholder investments. Higher ROE generally better, but compare within industry."]},
+{tag:"ROA",patterns:["ROA","return on assets","ROA meaning"],responses:["ROA = net income ÷ total assets × 100%. Shows how efficiently assets generate profits. Useful for comparing companies of different sizes in same industry."]},
+{tag:"EBITDA",patterns:["EBITDA","earnings before interest taxes","EBITDA meaning"],responses:["EBITDA = earnings before interest, taxes, depreciation, amortization. Measures operational profitability. Used in valuations and comparing companies with different capital structures."]},
+{tag:"gross_margin",patterns:["gross margin","gross profit margin","margin analysis"],responses:["Gross margin = (revenue - COGS) ÷ revenue × 100%. Shows pricing power and production efficiency. Higher margins indicate stronger competitive position."]},
+{tag:"operating_margin",patterns:["operating margin","operating profit margin","EBIT margin"],responses:["Operating margin = operating income ÷ revenue × 100%. Shows core business profitability before financing costs. Key metric for operational efficiency."]},
+{tag:"net_margin",patterns:["net margin","net profit margin","bottom line"],responses:["Net margin = net income ÷ revenue × 100%. Shows overall profitability after all expenses. Varies by industry: software (20%+), retail (2-5%)."]},
+{tag:"current_ratio",patterns:["current ratio","liquidity ratio","working capital ratio"],responses:["Current ratio = current assets ÷ current liabilities. Measures short-term liquidity. Ratio >1 means company can pay bills; >2 is very liquid but may indicate inefficient asset use."]},
+{tag:"debt_to_equity",patterns:["debt to equity","D/E ratio","leverage ratio"],responses:["D/E ratio = total debt ÷ shareholder equity. Shows financial leverage. Higher ratio means more debt financing. Riskier but can boost returns in good times."]},
+{tag:"price_to_book",patterns:["price to book","P/B ratio","book value ratio"],responses:["P/B ratio = market price per share ÷ book value per share. Compares market valuation to accounting value. <1 suggests undervaluation; >1 suggests premium valuation."]},
+{tag:"EV_EBITDA",patterns:["EV/EBITDA","enterprise value to EBITDA","valuation multiple"],responses:["EV/EBITDA = enterprise value ÷ EBITDA. Measures valuation relative to cash earnings. Useful for comparing companies with different capital structures. Average varies by industry."]},
+{tag:"revenue_growth",patterns:["revenue growth","sales growth","top line growth"],responses:["Revenue growth measures period-over-period sales increase. Important for assessing market expansion, new customers, and pricing power. Sustainable growth key for valuation."]},
+{tag:"earnings_growth",patterns:["earnings growth","EPS growth","bottom line growth"],responses:["Earnings growth shows increasing profitability. More important than revenue growth for long-term value creation. Look for consistent earnings growth over multiple years."]},
+{tag:"same_store_sales",patterns:["same store sales","comparable sales","SSS"],responses:["Same-store sales measure revenue growth from existing stores/locations. Removes new store impact. Key metric for retail/restaurant chains to assess organic growth."]},
+{tag:"customer_acquisition_cost",patterns:["customer acquisition cost","CAC","customer acquisition"],responses:["CAC = total marketing/sales costs ÷ new customers acquired. Measures efficiency of customer acquisition. Compare to customer lifetime value for sustainability."]},
+{tag:"customer_lifetime_value",patterns:["customer lifetime value","CLV","LTV"],responses:["CLV = average revenue per customer × average customer lifespan. Measures customer value. Business sustainable when CLV > CAC. Focus on retention to increase CLV."]},
+{tag:"churn_rate",patterns:["churn rate","customer churn","attrition rate"],responses:["Churn rate = customers lost ÷ total customers × 100%. Measures customer retention. High churn indicates dissatisfaction. SaaS companies track monthly churn closely."]},
+{tag:"monthly_recurring_revenue",patterns:["monthly recurring revenue","MRR","recurring revenue"],responses:["MRR = predictable monthly revenue from subscriptions. Key SaaS metric. Focus on MRR growth, expansion MRR (upgrades), and churned MRR (cancellations)."]},
+{tag:"annual_recurring_revenue",patterns:["annual recurring revenue","ARR","annual subscriptions"],responses:["ARR = MRR × 12. Measures annual subscription revenue. Important for valuing SaaS companies. Look for net new ARR (expansions minus churn)."]},
+{tag:"burn_rate",patterns:["burn rate","cash burn","monthly burn"],responses:["Burn rate = monthly cash outflow. Critical for startups. Gross burn (total outflow) vs net burn (after revenue). Runway = cash ÷ burn rate (months until depletion)."]},
+{tag:"runway",patterns:["runway","cash runway","startup runway"],responses:["Runway = current cash ÷ monthly burn rate. Months until cash depletion. Startups aim for 12-18 months runway. Extend through fundraising or profitability."]},
+{tag:"unit_economics",patterns:["unit economics","unit econ","contribution margin"],responses:["Unit economics analyze profitability per unit (customer/product). Key metrics: revenue per user, cost per acquisition, contribution margin. Must be positive for scalability."]},
+{tag:"contribution_margin",patterns:["contribution margin","gross margin","variable margin"],responses:["Contribution margin = (revenue - variable costs) ÷ revenue × 100%. Shows profitability after covering variable costs. Higher margin means more cash for fixed costs and profit."]},
+{tag:"break_even_analysis",patterns:["break even analysis","break even point","BEP"],responses:["Break-even point = fixed costs ÷ contribution margin per unit. Sales volume needed to cover all costs. Lower BEP means easier profitability."]},
+{tag:"payback_period",patterns:["payback period","investment payback","ROI timeline"],responses:["Payback period = initial investment ÷ annual cash flow. Time to recover investment. Shorter periods preferred, but consider total ROI over full investment life."]},
+{tag:"NPV",patterns:["NPV","net present value","discounted cash flow"],responses:["NPV = sum of discounted future cash flows - initial investment. Positive NPV means profitable investment. Accounts for time value of money and risk."]},
+{tag:"IRR",patterns:["IRR","internal rate of return","project IRR"],responses:["IRR = discount rate where NPV = 0. Expected return rate of investment. Compare to required rate of return. Higher IRR better, but consider risk and scale."]},
+{tag:"WACC",patterns:["WACC","weighted average cost of capital","cost of capital"],responses:["WACC = (equity value ÷ total value) × cost of equity + (debt value ÷ total value) × cost of debt × (1-tax rate). Minimum return required by investors."]},
+{tag:"beta",patterns:["beta","stock beta","market beta"],responses:["Beta measures stock volatility vs market. Beta = 1 (matches market), >1 (more volatile), <1 (less volatile). Used in CAPM for required return calculation."]},
+{tag:"alpha",patterns:["alpha","investment alpha","excess return"],responses:["Alpha = actual return - expected return (based on beta). Positive alpha means outperforming market after risk adjustment. Goal of active portfolio management."]},
+{tag:"sharpe_ratio",patterns:["sharpe ratio","risk adjusted return","sharpe"],responses:["Sharpe ratio = (portfolio return - risk-free rate) ÷ portfolio volatility. Measures risk-adjusted returns. Higher ratio better. Compare across similar investments."]},
+{tag:"sortino_ratio",patterns:["sortino ratio","downside risk","sortino"],responses:["Sortino ratio = (portfolio return - risk-free rate) ÷ downside deviation. Similar to Sharpe but only penalizes downside volatility. Better for asymmetric risk preferences."]},
+{tag:"maximum_drawdown",patterns:["maximum drawdown","MDD","peak to trough"],responses:["MDD = (peak value - trough value) ÷ peak value × 100%. Maximum loss from peak to bottom. Measures downside risk and recovery time. Lower MDD preferred."]},
+{tag:"volatility",patterns:["volatility","price volatility","market volatility"],responses:["Volatility measures price fluctuation magnitude. Standard deviation of returns. Higher volatility means higher risk but potentially higher returns. Measured by VIX index."]},
+{tag:"correlation",patterns:["correlation","asset correlation","portfolio correlation"],responses:["Correlation measures how assets move together (-1 to +1). Low/negative correlation improves diversification. Modern portfolio theory uses correlation for optimal portfolios."]},
+{tag:"diversification",patterns:["diversification","portfolio diversification","asset allocation"],responses:["Diversification spreads investments across assets to reduce risk. Don't put all eggs in one basket. Effective diversification requires low-correlation assets."]},
+{tag:"efficient_frontier",patterns:["efficient frontier","portfolio optimization","markowitz"],responses:["Efficient frontier shows optimal portfolios maximizing return for given risk. Modern portfolio theory concept. Investors choose based on risk tolerance."]},
+{tag:"asset_allocation",patterns:["asset allocation","portfolio allocation","investment allocation"],responses:["Asset allocation divides investments across stocks, bonds, cash, alternatives. Based on risk tolerance, time horizon, goals. Most important investment decision."]},
+{tag:"rebalancing",patterns:["rebalancing","portfolio rebalancing","rebalance portfolio"],responses:["Rebalancing restores target asset allocation by selling overperforming assets and buying underperforming ones. Reduces risk, enforces discipline. Do annually or when deviated significantly."]},
+{tag:"dollar_cost_averaging",patterns:["dollar cost averaging","DCA","regular investing"],responses:["DCA invests fixed amount regularly regardless of price. Reduces timing risk, lowers average cost. Effective for long-term investors avoiding market timing."]},
+{tag:"buy_and_hold",patterns:["buy and hold","long term investing","passive investing"],responses:["Buy and hold strategy buys securities and holds long-term. Avoids transaction costs and timing mistakes. Historically outperforms active trading for most investors."]},
+{tag:"value_investing",patterns:["value investing","value stocks","benjamin graham"],responses:["Value investing buys undervalued companies trading below intrinsic value. Focus on fundamentals, margin of safety. Pioneered by Graham, popularized by Buffett."]},
+{tag:"growth_investing",patterns:["growth investing","growth stocks","growth companies"],responses:["Growth investing buys high-growth companies with strong earnings potential. Pay premium valuations for future growth. Examples: Amazon, Netflix during growth phases."]},
+{tag:"momentum_investing",patterns:["momentum investing","trend following","momentum strategy"],responses:["Momentum investing buys assets with recent strong performance, sells weak performers. Assumes trends continue. Works in bull markets but risky in reversals."]},
+{tag:"contrarian_investing",patterns:["contrarian investing","contrarian strategy","against the crowd"],responses:["Contrarian investing buys when others sell (fear) and sells when others buy (greed). Goes against market sentiment. Requires strong conviction and patience."]},
+{tag:"technical_analysis",patterns:["technical analysis","chart analysis","TA"],responses:["Technical analysis studies price patterns, volume, indicators to predict future prices. Assumes history repeats. Popular tools: moving averages, RSI, MACD, support/resistance."]},
+{tag:"fundamental_analysis",patterns:["fundamental analysis","fundamentals","FA"],responses:["Fundamental analysis evaluates company financials, management, industry, economy. Determines intrinsic value. Used by long-term investors and value managers."]},
+{tag:"quantitative_analysis",patterns:["quantitative analysis","quant","quantitative investing"],responses:["Quantitative analysis uses mathematical models, statistics, algorithms for investment decisions. Removes emotion, processes large data. Used by hedge funds and robo-advisors."]},
+{tag:"behavioral_finance",patterns:["behavioral finance","investor psychology","behavioral economics"],responses:["Behavioral finance studies psychological influences on financial decisions. Explains market anomalies like bubbles, irrational exuberance, loss aversion."]},
+{tag:"market_anomalies",patterns:["market anomalies","market inefficiencies","pricing anomalies"],responses:["Market anomalies are patterns contradicting efficient market hypothesis. Examples: value premium, momentum effect, January effect. Opportunities for active managers."]},
+{tag:"efficient_market_hypothesis",patterns:["efficient market hypothesis","EMH","market efficiency"],responses:["EMH states all known information reflected in prices, making it impossible to consistently beat market. Three forms: weak, semi-strong, strong. Controversial but influential."]},
+{tag:"random_walk",patterns:["random walk","random walk theory","market randomness"],responses:["Random walk theory suggests price changes are random, unpredictable. Supports EMH. Implies market timing futile, buy-and-hold optimal for most investors."]},
+{tag:"black_swan",patterns:["black swan","black swan event","tail risk"],responses:["Black swan events are rare, unpredictable, high-impact occurrences. Examples: 9/11, 2008 crisis, COVID-19. Cause massive market disruption, hard to prepare for."]},
+{tag:"tail_risk",patterns:["tail risk","fat tails","extreme events"],responses:["Tail risk is probability of extreme negative events. Traditional models underestimate due to normal distribution assumption. Important for risk management and portfolio protection."]},
+{tag:"stress_testing",patterns:["stress testing","scenario analysis","risk testing"],responses:["Stress testing simulates extreme market conditions to assess portfolio resilience. Banks and funds required to stress test. Helps prepare for black swan events."]},
+{tag:"risk_parity",patterns:["risk parity","risk parity investing","equal risk"],responses:["Risk parity allocates capital so each asset contributes equal risk to portfolio. Balances stocks/bonds by volatility. Popular with institutional investors seeking diversification."]},
+{tag:"factor_investing",patterns:["factor investing","smart beta","factor strategies"],responses:["Factor investing targets specific drivers of return: value, size, momentum, quality, volatility. Systematic approach outperforming market-cap weighting in some periods."]},
+{tag:"ESG_investing",patterns:["ESG investing","sustainable investing","responsible investing"],responses:["ESG investing considers environmental, social, governance factors. Growing rapidly as investors prioritize sustainability. Can provide alpha and risk reduction."]},
+{tag:"impact_investing",patterns:["impact investing","social impact","mission related investing"],responses:["Impact investing generates financial returns while creating positive social/environmental impact. Targets specific outcomes like clean energy, education, healthcare."]},
+{tag:"thematic_investing",patterns:["thematic investing","theme investing","sector investing"],responses:["Thematic investing focuses on long-term trends: AI, renewable energy, aging population. Requires conviction in trend persistence and company selection."]},
+{tag:"alternative_investments",patterns:["alternative investments","alternatives","non traditional"],responses:["Alternative investments: private equity, hedge funds, real estate, commodities, infrastructure. Lower correlation with stocks/bonds, higher fees, less liquidity."]},
+{tag:"real_estate_investment",patterns:["real estate investment","REIT","property investment"],responses:["Real estate provides income (rent) and appreciation. REITs allow stock-like investing in property portfolios. Diversifies stock-heavy portfolios, provides inflation hedge."]},
+{tag:"commodities_investing",patterns:["commodities investing","commodity trading","raw materials"],responses:["Commodities (gold, oil, agriculture) hedge inflation, diversify portfolios. Volatile, influenced by supply/demand, weather, geopolitics. Use futures or ETFs."]},
+{tag:"cryptocurrency_investing",patterns:["cryptocurrency investing","crypto investing","bitcoin investing"],responses:["Crypto offers high returns but extreme volatility and regulatory risk. Consider as small portfolio allocation. Focus on established projects with real utility."]},
+{tag:"tax_advantaged_accounts",patterns:["tax advantaged accounts","retirement accounts","tax deferred"],responses:["Tax-advantaged accounts: 401(k), IRA, Roth IRA, 529 plans. Reduce taxes, encourage saving. Choose based on income, time horizon, goals."]},
+{tag:"retirement_planning",patterns:["retirement planning","retirement strategy","retirement savings"],responses:["Retirement planning: calculate needs, maximize tax-advantaged accounts, diversify investments, plan withdrawals. Start early for compound growth benefit."]},
+{tag:"estate_planning",patterns:["estate planning","wealth transfer","inheritance planning"],responses:["Estate planning ensures wealth transfer to heirs, minimizes taxes, provides for dependents. Includes wills, trusts, powers of attorney, beneficiary designations."]},
+{tag:"tax_efficient_investing",patterns:["tax efficient investing","tax optimization","tax loss harvesting"],responses:["Tax-efficient strategies: hold investments long-term for capital gains tax rates, use tax-advantaged accounts, harvest losses, choose tax-efficient funds."]},
+{tag:"financial_planning",patterns:["financial planning","personal finance","wealth management"],responses:["Financial planning integrates goals, budgeting, saving, investing, insurance, taxes. Comprehensive approach ensures financial security and goal achievement."]},
+
 ];
 
 // ==================== BUSINESS COMPARISON DATABASE ====================
@@ -3963,6 +4287,19 @@ function getPptRequestTopic(input) {
 
 function getBotReply(input) {
 let userInput = input.toLowerCase();
+
+// Check if we're in business creation mode
+if (businessCreationState.active) {
+  const processed = processBusinessCreationAnswer(input);
+  if (processed) return; // Don't continue with normal processing
+}
+
+// Check for business creation trigger
+if (userInput.includes('help me create') || userInput.includes('help me start') || 
+    userInput.includes('create a business') || userInput.includes('start a business')) {
+  startBusinessCreation();
+  return; // Return early to avoid other responses
+}
 
 const predictionTrigger = /(predict|estimate|forecast|calculate|profit or loss|profit forecast|loss forecast|will i make a profit|will i have a loss)/;
 const prediction = predictProfitLoss(userInput);
