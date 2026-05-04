@@ -799,7 +799,59 @@ description: ""
 };
 
 let chartInstances = {};
+// 🧠 USER MEMORY
+let userProfile = {
+  interest: "",
+  level: "",
+  goal: ""
+};
 
+// 🧠 SMART LOGIC FUNCTION
+function handleUserInput(input) {
+  input = input.toLowerCase();
+
+  // Detect interest
+  if (input.includes("tech")) userProfile.interest = "tech";
+  if (input.includes("creativity")) userProfile.interest = "creativity";
+  if (input.includes("numbers")) userProfile.interest = "numbers";
+  if (input.includes("leading")) userProfile.interest = "leadership";
+
+  // Detect level
+  if (input.includes("beginner")) userProfile.level = "beginner";
+  if (input.includes("intermediate")) userProfile.level = "intermediate";
+  if (input.includes("advanced")) userProfile.level = "advanced";
+
+  // Detect goal
+  if (input.includes("money")) userProfile.goal = "money";
+  if (input.includes("business")) userProfile.goal = "business";
+  if (input.includes("learn")) userProfile.goal = "learning";
+
+  // 🎯 PERSONALIZED RESPONSE
+  if (userProfile.interest && userProfile.goal) {
+
+    if (userProfile.interest === "tech" && userProfile.goal === "money") {
+      return "💡 You should learn programming (JavaScript or Python) and start freelancing or building apps.";
+    }
+
+    if (userProfile.interest === "tech" && userProfile.goal === "business") {
+      return "💡 Build a tech startup like an app or AI tool that solves a real problem.";
+    }
+
+    if (userProfile.interest === "creativity" && userProfile.goal === "money") {
+      return "💡 Start graphic design, content creation, or social media branding.";
+    }
+
+    if (userProfile.interest === "numbers" && userProfile.goal === "money") {
+      return "💡 Explore finance, investing, or accounting.";
+    }
+
+    if (userProfile.interest === "leadership" && userProfile.goal === "business") {
+      return "💡 Start leading small projects and grow into managing your own business.";
+    }
+  }
+
+  return null;
+}
 const intents = [
 // GREETINGS
 {tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
@@ -817,13 +869,98 @@ const intents = [
 ],responses:[
 "Use a mix of strategies: 1️⃣ Social media content 2️⃣ Paid ads 3️⃣ Influencer partnerships 4️⃣ Strong branding. Start with where your audience spends time."
 ]},
+// CEO KNOWLEDGE & ADVICE
+{tag:"ceo_definition",patterns:["what is a ceo","define ceo","ceo meaning","who is a ceo"],responses:["A CEO (Chief Executive Officer) is the highest-ranking person in a company, responsible for making major decisions and managing overall operations."]},
 
+{tag:"ceo_role",patterns:["what does a ceo do","ceo responsibilities","role of a ceo"],responses:["A CEO leads the company, sets goals, makes major decisions, manages resources, and represents the business to investors and the public."]},
+
+{tag:"ceo_skills",patterns:["skills of a ceo","what skills does a ceo need","important ceo skills"],responses:["Key CEO skills include leadership, decision-making, communication, problem-solving, strategic thinking, and adaptability."]},
+
+{tag:"ceo_vs_manager",patterns:["difference between ceo and manager","ceo vs manager"],responses:["A CEO focuses on the overall vision and long-term strategy, while managers handle daily operations and team management."]},
+
+{tag:"become_ceo",patterns:["how to become a ceo","steps to be a ceo","how to be ceo"],responses:["To become a CEO: 1️⃣ Gain education or skills 2️⃣ Build experience 3️⃣ Develop leadership skills 4️⃣ Take risks 5️⃣ Start or grow into leadership roles."]},
+
+{tag:"ceo_decision_making",patterns:["how ceos make decisions","decision making ceo"],responses:["CEOs make decisions by analyzing data, considering risks, consulting experts, and aligning choices with long-term goals."]},
+
+{tag:"ceo_mindset",patterns:["ceo mindset","how ceos think","thinking like a ceo"],responses:["A CEO mindset focuses on big-picture thinking, long-term growth, problem-solving, and taking responsibility for outcomes."]},
+
+{tag:"ceo_leadership",patterns:["ceo leadership style","how ceos lead","leadership of ceo"],responses:["CEOs lead by setting vision, inspiring teams, making clear decisions, and creating a strong company culture."]},
+
+{tag:"ceo_challenges",patterns:["challenges of a ceo","problems ceos face"],responses:["Common CEO challenges include competition, financial pressure, decision risks, managing teams, and adapting to market changes."]},
+
+{tag:"ceo_startup",patterns:["ceo of startup","what does a startup ceo do"],responses:["A startup CEO handles everything from strategy to hiring, fundraising, product direction, and growth. They often wear many hats."]},
+
+{tag:"ceo_vs_founder",patterns:["ceo vs founder","difference founder and ceo"],responses:["A founder starts the company, while a CEO runs it. Sometimes the founder is also the CEO, especially in early stages."]},
+
+{tag:"ceo_success",patterns:["how ceos succeed","what makes a ceo successful"],responses:["Successful CEOs focus on vision, execution, strong teams, continuous learning, and adapting to change."]},
+
+{tag:"ceo_time_management",patterns:["how ceos manage time","ceo time management"],responses:["CEOs manage time by prioritizing high-impact tasks, delegating work, and focusing on strategy rather than small details."]},
+
+{tag:"ceo_advice",patterns:["ceo advice","business advice from ceo","give me ceo tips"],responses:["Think long-term, solve real problems, build a strong team, stay consistent, and never stop learning."]}
 {tag:"social_media_growth",patterns:[
 "grow on instagram","social media marketing","get followers","increase engagement","tiktok growth"
 ],responses:[
 "Post consistently, follow trends, use short videos, and engage with your audience. Content + consistency = growth."
 ]},
+// BUSINESS ROLES & JOBS
+{tag:"cfo_definition",patterns:["what is a cfo","define cfo","cfo meaning"],responses:["A CFO (Chief Financial Officer) is responsible for managing a company's finances, including budgeting, forecasting, and financial planning."]},
 
+{tag:"cto_definition",patterns:["what is a cto","define cto","cto meaning"],responses:["A CTO (Chief Technology Officer) oversees the company's technology strategy and ensures tech supports business goals."]},
+
+{tag:"coo_definition",patterns:["what is a coo","define coo","coo meaning"],responses:["A COO (Chief Operating Officer) manages the daily operations of a company and ensures everything runs smoothly."]},
+
+{tag:"cmo_definition",patterns:["what is a cmo","define cmo","cmo meaning"],responses:["A CMO (Chief Marketing Officer) is responsible for marketing strategies, branding, and attracting customers."]},
+// PERSONALIZED BUSINESS & CAREER ADVICE
+{tag:"personal_business_advice",patterns:["give me business advice","what should i do in business","help me with my business"],responses:["Start by solving a real problem. Focus on one idea, test it quickly, listen to feedback, and improve step by step."]},
+
+{tag:"personal_career_advice",patterns:["what career should i choose","help me choose a career","career advice"],responses:["Think about what you enjoy and what you're good at. If you like numbers go for finance, creativity go for marketing, leadership go for management, and tech go for development."]},
+
+{tag:"personal_startup_advice",patterns:["i want to start a startup","how do i start my own company"],responses:["Start small: 1️⃣ Find a problem 2️⃣ Build a simple solution 3️⃣ Test it with real users 4️⃣ Improve based on feedback."]},
+
+{tag:"personal_money_advice",patterns:["how to manage money","money advice","how to save money"],responses:["Follow this rule: spend less than you earn, save consistently, and invest in things that grow your money over time."]},
+
+{tag:"personal_growth_advice",patterns:["how to improve myself","self improvement tips","how to grow"],responses:["Focus on daily habits: learn something new, stay consistent, set goals, and track your progress. Small steps lead to big results."]},
+
+{tag:"personal_productivity_advice",patterns:["how to be productive","productivity tips","how to focus"],responses:["Focus on 1-3 important tasks daily, avoid distractions, take breaks, and finish what you start."]},
+
+{tag:"personal_leadership_advice",patterns:["how to be a leader","leadership advice","how to lead people"],responses:["Listen to your team, communicate clearly, take responsibility, and lead by example."]},
+
+{tag:"personal_marketing_advice",patterns:["how to market my idea","how to get customers","marketing help"],responses:["Know your audience, create valuable content, use social media, and be consistent with your message."]},
+
+{tag:"personal_study_advice",patterns:["how to study better","study tips","how to learn faster"],responses:["Use active learning: summarize, practice, teach others, and revise regularly instead of memorizing only."]},
+
+{tag:"personal_failure_advice",patterns:["i failed what should i do","how to deal with failure","failure advice"],responses:["Failure is part of success. Learn what went wrong, improve, and try again smarter."]},
+
+{tag:"personal_confidence_advice",patterns:["how to be confident","confidence tips"],responses:["Build confidence by taking small actions, improving skills, and stepping out of your comfort zone regularly."]},
+
+{tag:"personal_time_management",patterns:["how to manage my time","time management tips"],responses:["Plan your day, set priorities, avoid wasting time, and focus on what matters most."]},
+
+{tag:"personal_investment_advice",patterns:["how to invest","investment advice for beginners"],responses:["Start simple: learn basics, invest small amounts, diversify, and think long-term instead of quick profit."]},
+
+{tag:"personal_motivation",patterns:["motivate me","i feel lazy","how to stay motivated"],responses:["Start even if you don’t feel ready. Action creates motivation, not the other way around."]},
+
+{tag:"personal_goal_setting",patterns:["how to set goals","goal setting tips"],responses:["Set clear and realistic goals, break them into small steps, and track your progress regularly."]}
+{tag:"entrepreneur_definition",patterns:["what is an entrepreneur","define entrepreneur"],responses:["An entrepreneur is someone who starts and runs their own business, taking financial risks to make a profit."]},
+
+{tag:"manager_definition",patterns:["what is a manager","define manager"],responses:["A manager is responsible for overseeing a team, organizing tasks, and ensuring work is completed efficiently."]},
+
+{tag:"team_leader",patterns:["what is a team leader","team leader role"],responses:["A team leader guides a group of employees, supports them, and ensures team goals are achieved."]},
+
+{tag:"hr_role",patterns:["what is hr","human resources role","hr job"],responses:["Human Resources (HR) manages hiring, employee relations, training, and workplace policies."]},
+
+{tag:"sales_role",patterns:["what is a sales job","sales role","what do salespeople do"],responses:["Sales professionals focus on selling products or services and building relationships with customers."]},
+
+{tag:"marketing_role",patterns:["what is marketing job","marketing role"],responses:["Marketing involves promoting products or services to attract customers and increase sales."]},
+
+{tag:"product_manager",patterns:["what is a product manager","product manager role"],responses:["A product manager plans, develops, and improves products based on customer needs and business goals."]},
+
+{tag:"business_analyst",patterns:["what is a business analyst","business analyst role"],responses:["A business analyst studies data and processes to help companies make better decisions."]},
+
+{tag:"startup_roles",patterns:["jobs in startup","startup roles","roles in a startup"],responses:["Startup roles include CEO, CTO, marketer, developer, and operations manager. People often handle multiple roles."]},
+
+{tag:"highest_paying_jobs_business",patterns:["highest paying business jobs","top business careers"],responses:["Top business jobs include CEO, CFO, investment banker, consultant, and entrepreneur."]},
+
+{tag:"choose_business_career",patterns:["how to choose business career","which business job is right for me"],responses:["Choose a business career based on your strengths: numbers (finance), creativity (marketing), leadership (management), or tech (CTO)."]}
 {tag:"branding_strategy",patterns:[
 "build a brand","branding strategy","make my brand strong","brand identity"
 ],responses:[
@@ -962,12 +1099,40 @@ const intents = [
 {tag:"operations",patterns:["operations"],responses:["Operations manage daily business activities."]},
 {tag:"production",patterns:["production"],responses:["Production is creating goods or services."]},
 {tag:"quality",patterns:["quality"],responses:["Quality means how good a product or service is."]},
+// PERSONALIZATION QUESTIONS
+{tag:"ask_interest",patterns:["help me choose career","i need advice","what should i do"],responses:["Sure! First, what do you enjoy more: 💻 tech, 🎨 creativity, 📊 numbers, or 🧑‍🤝‍🧑 leading people?"]},
 
+{tag:"ask_skill_level",patterns:["i like tech","i like creativity","i like numbers","i like leading"],responses:["Nice! Are you a beginner, intermediate, or advanced in this area?"]},
+
+{tag:"ask_goal",patterns:["beginner","intermediate","advanced"],responses:["Got it 👍 What is your goal: 💰 making money, 🚀 starting a business, or 📚 learning skills?"]},
 // SALES
 {tag:"sales",patterns:["sales"],responses:["Sales involve selling products to customers."]},
 {tag:"pricing",patterns:["pricing"],responses:["Pricing is setting the value of a product."]},
 {tag:"discount",patterns:["discount"],responses:["A discount reduces the price of a product."]},
+// USER INTERESTS
+{tag:"interest_tech",patterns:["tech","technology","programming"],responses:["Great choice!"]},
 
+{tag:"interest_creativity",patterns:["creativity","design","art"],responses:["Awesome!"]},
+
+{tag:"interest_numbers",patterns:["numbers","finance","math"],responses:["Nice!"]},
+
+{tag:"interest_leadership",patterns:["leading","management","leader"],responses:["Strong path!"]},
+// PERSONALIZED RESULTS
+{tag:"tech_money_advice",patterns:["tech beginner money","tech intermediate money"],responses:["You should learn programming (like JavaScript or Python) and start freelancing or building small apps to earn money."]},
+
+{tag:"tech_business_advice",patterns:["tech business"],responses:["Build a tech startup like an app or website that solves a real problem. Start simple and grow it."]},
+
+{tag:"creativity_money_advice",patterns:["creativity money"],responses:["You can earn by graphic design, content creation, or social media branding. Start posting your work online."]},
+
+{tag:"numbers_money_advice",patterns:["numbers money"],responses:["Go into finance, trading, or accounting. You can also learn investing and grow your money."]},
+
+{tag:"leadership_business_advice",patterns:["leading business"],responses:["You should focus on management and start leading small teams or projects. This can grow into running a business."]},
+// USER GOALS
+{tag:"goal_money",patterns:["money","earn money"],responses:["💰 Good goal!"]},
+
+{tag:"goal_business",patterns:["business","startup"],responses:["🚀 Exciting!"]},
+
+{tag:"goal_learning",patterns:["learn","skills"],responses:["📚 Smart choice!"]},
 // HR
 {tag:"human_resources",patterns:["human resources","hr"],responses:["HR manages employees in a business."]},
 {tag:"recruitment",patterns:["recruitment"],responses:["Recruitment is hiring employees."]},
@@ -4017,6 +4182,13 @@ return "I can help with business concepts! Try the Planner and Reports buttons. 
 }
 
 function addMessage(text, sender) {
+// 🧠 CHECK SMART RESPONSE FIRST
+const smartReply = handleUserInput(userText);
+
+if (smartReply) {
+  addMessage(smartReply, "bot");
+  return; // stop normal intent matching
+}
 const chatBox = document.getElementById('chat-box');
 const msgDiv = document.createElement('div');
 msgDiv.classList.add('message', sender);
