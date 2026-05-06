@@ -202,7 +202,11 @@ body.dark .success-message {
     <div class="settings-group">
         <label for="language" data-i18n="language">Language:</label>
         <select id="language" onchange="changeLanguage(this.value)">
-            <option value="en">English</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="ar">🇸🇦 العربية</option>
         </select>
     </div>
 
@@ -233,8 +237,8 @@ function applyAppearance(value) {
 function changeLanguage(lang) {
     setLanguage(lang);
     updatePageTranslations();
-    
-    // Broadcast language change to other tabs/windows
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
     broadcastLanguageChange(lang);
 }
 
