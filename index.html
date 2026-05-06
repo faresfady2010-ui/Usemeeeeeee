@@ -653,13 +653,13 @@ body.dark .data-table tbody tr:hover {
     <div class="sidebar-menu" id="sidebarMenu">
         <div class="sidebar-header">
             <div class="sidebar-logo">📊</div>
-            <div class="sidebar-title">Menu</div>
+            <div class="sidebar-title" data-i18n="menu">Menu</div>
         </div>
         <ul>
-            <li><a href="javascript:void(0)" onclick="closeSidebar()"><span class="sidebar-icon">💬</span>Chat</a></li>
-            <li><a href="javascript:void(0)" onclick="showReportsModal(); closeSidebar();"><span class="sidebar-icon">📈</span>Reports</a></li>
-            <li><a href="javascript:void(0)" onclick="showCalculatorModal(); closeSidebar();"><span class="sidebar-icon">🧮</span>Calculator</a></li>
-            <li><a href="javascript:void(0)" onclick="showPlannerModal(); closeSidebar();"><span class="sidebar-icon">📋</span>Planner</a></li>
+            <li><a href="javascript:void(0)" onclick="closeSidebar()"><span class="sidebar-icon">💬</span><span data-i18n="chat">Chat</span></a></li>
+            <li><a href="javascript:void(0)" onclick="showReportsModal(); closeSidebar();"><span class="sidebar-icon">📈</span><span data-i18n="reports">Reports</span></a></li>
+            <li><a href="javascript:void(0)" onclick="showCalculatorModal(); closeSidebar();"><span class="sidebar-icon">🧮</span><span data-i18n="calculator">Calculator</span></a></li>
+            <li><a href="javascript:void(0)" onclick="showPlannerModal(); closeSidebar();"><span class="sidebar-icon">📋</span><span data-i18n="planner">Planner</span></a></li>
         </ul>
     </div>
 
@@ -673,9 +673,9 @@ body.dark .data-table tbody tr:hover {
     </div>
 
     <div class="nav-buttons">
-        <button onclick="goToPage('index.html')">Home</button>
-        <button onclick="goToPage('about.html')">About</button>
-        <button onclick="goToPage('settings.html')">Settings</button>
+        <button onclick="goToPage('index.html')" data-i18n="home">Home</button>
+        <button onclick="goToPage('about.html')" data-i18n="about">About</button>
+        <button onclick="goToPage('settings.html')" data-i18n="settings">Settings</button>
     </div>
 
     <div class="chat-box" id="chat-box"></div>
@@ -685,7 +685,7 @@ body.dark .data-table tbody tr:hover {
     
     <!-- Keep only Suggestions button -->
     <button id="suggestBtn" style="flex: 0; background-color: #007bff; color: white; border: none;">
-      💡 Suggestions
+      💡 <span data-i18n="suggestions">Suggestions</span>
     </button>
 
     <div id="suggestBox">
@@ -697,9 +697,9 @@ body.dark .data-table tbody tr:hover {
   </div>
 
         <div class="input-row">
-            <input type="text" id="user-input" placeholder="Type your message...">
+            <input type="text" id="user-input" data-i18n-placeholder="chatPlaceholder" placeholder="Type your message...">
             <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
-            <button class="send-btn" onclick="sendMessage()">Send</button>
+            <button class="send-btn" onclick="sendMessage()" data-i18n="sendBtn">Send</button>
         </div>
     </div>
 </div>
@@ -730,22 +730,31 @@ body.dark .data-table tbody tr:hover {
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pptxgenjs/3.11.0/pptxgen.min.js"></script>
+<script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="translations.js"></script>
 
 <script>
 // ==================== DARK MODE ====================
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
+function applyLangDirection(lang) {
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang || 'en';
+}
+
 window.addEventListener('load', function() {
-    updatePageTranslations();
-    addMessage(t('welcomeMessage'), 'bot');
+    if (typeof updatePageTranslations === 'function') updatePageTranslations();
+    const lang = localStorage.getItem('language') || 'en';
+    applyLangDirection(lang);
 });
 
 // Listen for language changes from settings
 window.addEventListener('storage', function(e) {
     if (e.key === 'languageChanged') {
         updatePageTranslations();
+        const lang = localStorage.getItem('language') || 'en';
+        applyLangDirection(lang);
     }
 });
 // ==================== HAMBURGER MENU FUNCTIONS ====================
@@ -802,18 +811,19 @@ let chartInstances = {};
 
 const intents = [
 // GREETINGS
-{tag:"greeting",patterns:["hi","hello","hey","good morning"],responses:["Hello! Ask me anything about business."]},
+{tag:"greeting",patterns:["hi","hello","hey","good morning","hola","bonjour","hallo","مرحبا","مرحباً","salut","buenas","ciao"],responses:["Hello! Ask me anything about business."]},
 {tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
 {tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},
 {tag:"okays",patterns:["okay","ok"],responses:["👍 Got it. What do you want to work on next?"]},
 {tag:"market cap",patterns:["what is market cap","market cap"],responses:["Market cap is the total dollar value of a company's outstanding shares of stock. For example, if a company has 1 million shares of outstanding stock and the stock currently trades at $50 per share, then its current market cap is $50 million."]},
 {tag:"important aspect",patterns:["what is most important aspect of buisness"],responses:["The main aspect of a business is creating value. If you provide something that people find useful, they will be willing to pay for it."]},
 // BUSINESS BASICS
-{tag:"business_definition",patterns:["what is business","define business","business meaning","explain business"],responses:["A business is an organization that provides goods or services to customers in exchange for money."]},
-{tag:"business_purpose",patterns:["purpose of business","why do businesses exist","goal of business"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
+{tag:"what_is_business",patterns:["what is business","define business","business meaning","explain business","que es un negocio","qu'est-ce qu'une entreprise","was ist ein unternehmen","ما هو العمل التجاري","ما هي الأعمال"],responses:["A business is an organization that provides goods or services to customers in exchange for money. Its core goal is to create value, generate profit, and grow sustainably. 🏢"]},
+{tag:"what_is_the_purpose_of_business",patterns:["purpose of business","why do businesses exist","goal of business","proposito del negocio","but d'une entreprise","Zweck eines Unternehmens","الغرض من الأعمال"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
 {tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
 {tag:"marketing_strategy",patterns:[
-"how to market my business","marketing strategy","how to promote my business","how to advertise","how to get customers"
+"how to market my business","marketing strategy","how to promote my business","how to advertise","how to get customers",
+"estrategia de marketing","como hacer marketing","mercadeo","التسويق","استراتيجية تسويق","stratégie marketing","comment faire du marketing","Marketing-Strategie","wie vermarkte ich"
 ],responses:[
 "Use a mix of strategies: 1️⃣ Social media content 2️⃣ Paid ads 3️⃣ Influencer partnerships 4️⃣ Strong branding. Start with where your audience spends time."
 ]},
@@ -1015,7 +1025,7 @@ const intents = [
 {tag:"profit_prediction",patterns:["predict profit","estimate profit","profit forecast","profit or loss","profit prediction","will i make a profit","will i have a loss","calculate profit","calculate loss","estimate loss","forecast profit"],responses:["Share your revenue and expense numbers and I can estimate whether that means profit or loss."]},
 // STRATEGY & ANALYSIS
 {tag:"swot_analysis",patterns:["what is swot","swot analysis","internal and external analysis"],responses:["SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. It is a framework used to evaluate a company's competitive position. 💡 Want me to help you create a SWOT for your business?"]},
-{tag:"business_plan",patterns:["what is a business plan","importance of business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them."]},
+{tag:"business_plan",patterns:["what is a business plan","importance of business plan","plan de negocios","plan d'affaires","Businessplan","خطة العمل","create a business plan","how to write a business plan"],responses:["A business plan is a formal document outlining a business's goals and how it plans to achieve them. It covers market analysis, financial projections, and growth strategy. 📋"]},
 {tag:"unique_selling_proposition",patterns:["what is usp","unique selling point","value proposition"],responses:["A USP is the specific factor that makes your business better than a competitor. it defines the unique benefit you provide."]},
 {tag:"scalability",patterns:["what is scalability","scaling a business"],responses:["Scalability is the ability of a business to grow and handle increased demand without being held back by its structure or resources."]},
 {tag:"niche_market",patterns:["what is a niche","niche market meaning"],responses:["A niche market is a small, specialized section of the population that a business targets."]},
@@ -2138,7 +2148,45 @@ const intents = [
     {tag:"term_bear_market",patterns:["bear market","what is bear market"],responses:["Bear Market: Market with falling prices and investor pessimism. Risk for buyers. 📉"]},
 // BUSINESS COMPARISON
 {tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
+
+// DETAILED STARTUP & FUNDING
+{tag:"startup_funding_guide",patterns:["how to get funding","where to get funding","find investors","get investment","startup funding guide","how to raise money","obtener financiamiento","obtener inversión","financement startup","التمويل","تمويل الشركات الناشئة","Startup finanzieren"],responses:["To fund your startup: 1️⃣ Bootstrap (self-fund) 2️⃣ Friends & family round 3️⃣ Angel investors ($25K–$500K) 4️⃣ Accelerators (Y Combinator, Techstars) 5️⃣ Venture Capital (Series A+). Start with the least dilutive option and only raise what you truly need. 💰"]},
+{tag:"ecommerce_start",patterns:["how to start ecommerce","start online shop","create online store","sell online","online business steps","start selling online","tienda en línea","cómo vender online","boutique en ligne","التجارة الإلكترونية","متجر إلكتروني","Online-Shop erstellen"],responses:["To start an ecommerce business: 1️⃣ Pick a niche product 2️⃣ Source or create your product 3️⃣ Choose a platform (Shopify, WooCommerce) 4️⃣ Set up payments (Stripe, PayPal) 5️⃣ Market via social media & SEO 6️⃣ Fulfill orders. Start small, test demand, then scale! 🛒"]},
+{tag:"break_even_explained",patterns:["how to calculate break even","break even formula","break even analysis","break even point calculation","calculate break even"],responses:["Break-even formula: Fixed Costs ÷ (Price per Unit − Variable Cost per Unit). Example: $10,000 fixed costs ÷ ($20 price − $8 variable cost) = 833 units to break even. Use the Calculator in the sidebar for a full analysis! 📊"]},
+{tag:"business_registration",patterns:["how to register a business","register company","form a company","incorporate business","business registration steps","how to legally start"],responses:["To register a business: 1️⃣ Choose structure (LLC, Corporation, Sole Proprietorship) 2️⃣ Pick a business name 3️⃣ Register with government authority 4️⃣ Get Tax ID (EIN) 5️⃣ Open a business bank account 6️⃣ Obtain required licenses. An LLC typically costs $50–$500 to form. 📝"]},
+{tag:"hiring_first_employee",patterns:["how to hire first employee","hire employees","when to hire","hiring tips","how to hire","recruit employees"],responses:["Hiring your first employee: 1️⃣ Define the role clearly with a job description 2️⃣ Set a competitive salary based on market rates 3️⃣ Post on LinkedIn, Indeed, or Glassdoor 4️⃣ Screen resumes and conduct structured interviews 5️⃣ Check references 6️⃣ Onboard with a clear training plan. Always hire for culture fit AND skills! 👥"]},
+{tag:"business_insurance",patterns:["business insurance","what insurance do i need","liability insurance","insure my business","do i need insurance"],responses:["Key business insurance types: 🛡️ General Liability (accidents/property damage), 🛡️ Professional Liability (errors & omissions), 🛡️ Business Property, 🛡️ Workers' Comp (required if you have staff), 🛡️ Cyber Insurance. Start with General Liability — often under $500/year for small businesses."]},
+{tag:"intellectual_property_protection",patterns:["protect my idea","protect intellectual property","trademark my brand","patent my invention","copyright my work","protect business idea"],responses:["Protect your intellectual property: 1️⃣ Trademark your brand name/logo (register with USPTO — ~$350) 2️⃣ Patent inventions (2–3 years, $5K–$15K) 3️⃣ Copyright creative work (automatic upon creation, register for enforcement) 4️⃣ Use NDAs with employees and partners. Act early — IP protection is an investment! ©️"]},
+{tag:"profit_margin_improve",patterns:["how to improve profit margin","increase profit margin","better margins","why is my margin low","improve margins"],responses:["Improve profit margins by: 1️⃣ Raise prices if market allows (most impactful lever) 2️⃣ Reduce COGS via better supplier negotiation 3️⃣ Cut unnecessary overhead 4️⃣ Focus on high-margin products/services 5️⃣ Automate repetitive tasks 6️⃣ Upsell existing customers. Even a 2% margin improvement compounds significantly! 📈"]},
+{tag:"customer_lifetime_value_calc",patterns:["what is customer lifetime value","how to calculate ltv","increase customer lifetime value","customer ltv","lifetime value calculation"],responses:["Customer LTV = Average Purchase Value × Purchase Frequency × Average Customer Lifespan. To increase LTV: build loyalty programs, improve retention, upsell/cross-sell, and deliver exceptional service. A healthy business has LTV that is 3x+ the Customer Acquisition Cost (CAC). 💎"]},
+{tag:"product_pricing_guide",patterns:["how to price my product","pricing methods","what price to charge","set product price","how to choose a price","cómo poner precio","تسعير المنتج","comment fixer un prix","Produktpreis festlegen"],responses:["Pricing approaches: 1️⃣ Cost-plus: cost + markup % 2️⃣ Value-based: what the customer will pay 3️⃣ Competitive: match/beat rivals 4️⃣ Penetration: low price to gain share 5️⃣ Premium: high price for exclusivity. Best approach for most: value-based pricing maximises profit. Research what your target customer pays for alternatives! 💵"]},
+{tag:"business_automation",patterns:["automate my business","business automation tools","save time automation","workflow automation","tools to automate","automate tasks"],responses:["Top business automation tools: 🤖 Zapier/Make (connect apps automatically) 📊 HubSpot (CRM & marketing) 💰 QuickBooks/Xero (accounting) 📧 Mailchimp (email marketing) 📅 Buffer/Hootsuite (social media scheduling) 🎧 Zendesk (customer support). Start by automating your single most repetitive task this week!"]},
+{tag:"franchise_guide",patterns:["how to start a franchise","buy a franchise","franchise investment","franchise business","become a franchisee","open a franchise"],responses:["Starting a franchise: 1️⃣ Research franchise options (McDonald's, Subway, UPS Store, etc.) 2️⃣ Review the Franchise Disclosure Document (FDD) carefully 3️⃣ Secure financing ($50K–$500K+ typically required) 4️⃣ Sign the franchise agreement 5️⃣ Complete franchisor training 6️⃣ Launch with ongoing support. Franchises have a ~90% 5-year survival rate vs ~50% for independent startups. 🏪"]},
+{tag:"business_exit_planning",patterns:["how to exit a business","sell my business","business exit plan","exit strategy planning","sell my company","how much is my business worth"],responses:["Business exit options: 1️⃣ Sell to strategic buyer (usually highest price) 2️⃣ Sell to private equity 3️⃣ Management buyout (MBO) 4️⃣ IPO (for large companies) 5️⃣ Pass to family. Most small businesses sell for 2–5× annual EBITDA. Plan your exit 2–3 years in advance to maximise valuation! 🚪"]},
+{tag:"partnership_agreement",patterns:["business partnership agreement","partner contract","co-founder agreement","partner with someone","co-founder equity"],responses:["A solid partnership/co-founder agreement should cover: ownership percentages, roles & responsibilities, profit/loss sharing, decision-making authority, vesting schedule (to prevent early departures), and what happens if a partner leaves. Always put it in writing — even with friends or family! 🤝"]},
+{tag:"market_research_steps",patterns:["how to do market research","market research steps","research my market","validate my business idea","customer discovery"],responses:["Market research in 6 steps: 1️⃣ Define your key questions 2️⃣ Identify your target audience 3️⃣ Run surveys (Google Forms, Typeform) 4️⃣ Interview 10–20 potential customers 5️⃣ Analyse competitor offerings 6️⃣ Study industry reports. Aim for at least 50 survey responses for reliable data. Talk to real customers — it will save you enormous time and money! 🔍"]},
+{tag:"seo_basics",patterns:["how to do seo","seo for beginners","improve google ranking","get found on google","search engine optimization tips","seo para principiantes","تحسين محركات البحث","référencement naturel","SEO Grundlagen"],responses:["SEO basics: 1️⃣ Keyword research (Google Keyword Planner, Ubersuggest) 2️⃣ Optimise page titles & meta descriptions 3️⃣ Create quality, helpful content 4️⃣ Earn backlinks from reputable sites 5️⃣ Improve page speed 6️⃣ Mobile-optimise. SEO takes 3–6 months but delivers free, compounding organic traffic. It's one of the best long-term investments! 🔍"]},
+{tag:"social_media_strategy",patterns:["social media strategy","how to use social media for business","instagram for business","facebook for business","tiktok for business","grow social media","redes sociales","وسائل التواصل الاجتماعي","réseaux sociaux","Social Media Strategie"],responses:["Social media strategy: 1️⃣ Focus on 1–2 platforms where your customers actually spend time 2️⃣ Post consistently (3–5×/week minimum) 3️⃣ Follow the 80/20 rule: 80% value, 20% promotion 4️⃣ Engage with every comment 5️⃣ Use video content (gets 3× more reach) 6️⃣ Track analytics monthly. Consistency always beats perfection! 📱"]},
+{tag:"email_marketing_guide",patterns:["how to do email marketing","email list building","email newsletter","email campaign tips","build email list","marketing por correo","التسويق بالبريد الإلكتروني","marketing par email","E-Mail-Marketing"],responses:["Email marketing guide: 1️⃣ Build your list with lead magnets (free guides, discounts, tools) 2️⃣ Use Mailchimp, ConvertKit, or Klaviyo 3️⃣ Segment your audience by interest/behaviour 4️⃣ Personalise subject lines 5️⃣ Provide real value in every email 6️⃣ Track open rates (20%+ is good) and click rates (2%+ is good). Email delivers $42 ROI for every $1 spent — highest of any channel! 📧"]},
+{tag:"business_failure_prevention",patterns:["how to avoid business failure","prevent business failure","why businesses fail and how to avoid","protect my business from failing"],responses:["Prevent failure by: 1️⃣ Validating customer demand BEFORE heavy investment 2️⃣ Managing cash flow week-by-week 3️⃣ Starting lean and testing everything 4️⃣ Listening relentlessly to customer feedback 5️⃣ Keeping 6+ months of operating expenses in reserve 6️⃣ Adapting quickly when things aren't working. Most failures are preventable with proper planning and early customer feedback! 🛡️"]},
+{tag:"online_vs_offline",patterns:["online vs offline business","digital vs physical store","should i go online or offline","ecommerce vs physical store"],responses:["Online vs Offline: Online = lower startup cost, global reach, 24/7 sales, harder to build trust initially. Offline = higher cost, local reach, easier trust-building, better for experiences and services. The most successful modern businesses use BOTH channels. Start where your target customers already are and expand from there! 🌐"]},
+{tag:"b2b_sales_guide",patterns:["b2b sales","selling to businesses","corporate sales","enterprise sales","how to sell to companies"],responses:["B2B sales tips: 1️⃣ Identify the real decision-maker (not just the contact) 2️⃣ Understand their specific pain points deeply 3️⃣ Lead with ROI and business value 4️⃣ Build relationships over time — B2B is long-term 5️⃣ Use LinkedIn for prospecting 6️⃣ Provide case studies & social proof. B2B sales cycles are longer but deal sizes are much larger than B2C! 🤝"]},
+{tag:"what_is_cashier",patterns:["what is a cashier","cashier role","cashier job description","what does a cashier do"],responses:["A cashier handles customer transactions at a point of sale. Key responsibilities: scanning/entering items, processing payments (cash, card, digital), giving correct change, issuing receipts, maintaining a balanced cash drawer, and providing friendly customer service. It is typically an entry-level retail or hospitality role. 💳"]},
+{tag:"handle_cash",patterns:["how to handle cash","cash handling procedure","counting money","cash register tips","how to count change"],responses:["Cash handling best practices: 1️⃣ Count bills carefully before accepting 2️⃣ Verify the amount out loud with the customer 3️⃣ Place the note on top of the drawer until change is given 4️⃣ Count change back to the customer 5️⃣ Keep the cash drawer organised by denomination 6️⃣ Reconcile the drawer at shift end. Accuracy builds trust and prevents discrepancies! 💵"]},
+{tag:"manage_cashier",patterns:["how to manage cashier","manage cashiers","supervise cashier","cashier management tips"],responses:["Managing cashiers effectively: 1️⃣ Provide thorough training before they work solo 2️⃣ Establish clear cash-handling procedures 3️⃣ Conduct regular till reconciliations 4️⃣ Review discrepancies without blame — focus on process 5️⃣ Use CCTV and dual-control for large amounts 6️⃣ Recognise accuracy and good customer service. Trust but verify! 🔍"]},
+{tag:"train_employees",patterns:["how to train employees","employee training","onboard new staff","train new staff","train new employee","training program"],responses:["Training new employees effectively: 1️⃣ Provide a clear written job description and expectations 2️⃣ Use a structured onboarding checklist 3️⃣ Pair them with an experienced buddy 4️⃣ Demonstrate tasks step-by-step, then observe them do it 5️⃣ Give regular constructive feedback 6️⃣ Schedule a 30/60/90-day review. The first 90 days determine long-term success! 👩‍💼"]},
+{tag:"business_online_presence",patterns:["build online presence","website for business","do i need a website","create business website","online presence tips"],responses:["Building an online presence: 1️⃣ Professional website (even a simple one-pager) 2️⃣ Google Business Profile (free, essential for local) 3️⃣ LinkedIn company page 4️⃣ 1–2 social media accounts relevant to your audience 5️⃣ Consistent branding across all channels 6️⃣ Collect and display customer reviews. Start with Google Business Profile — it's free and powerful! 🌐"]},
+{tag:"business_risks_management",patterns:["what are some risks of making a business","what are the risks of starting a business","business risks","risk management","manage business risks"],responses:["Starting a business carries key risks: 💸 Financial risk (losing your capital) 📉 Market risk (no demand) ⚔️ Competitive risk (stronger rivals) 🔧 Operational risk (systems breaking down) ⚖️ Legal/compliance risk. Manage them by: thorough planning, testing before committing fully, maintaining reserves, and getting appropriate insurance. Every entrepreneur faces risk — the goal is to manage it, not avoid it! 🛡️"]},
+{tag:"business_failures",patterns:["why do some businesses fail","how does businesses fall","why businesses fail","reasons for business failure","why startups fail"],responses:["Top reasons businesses fail: 1️⃣ Poor cash flow management (not enough to pay bills) 2️⃣ No real market demand for the product/service 3️⃣ Ineffective marketing 4️⃣ Bad management decisions 5️⃣ Failing to adapt to market changes 6️⃣ Scaling too fast before the model is proven. Most failures are avoidable with proper planning, customer validation, and financial discipline. 📉"]},
+{tag:"tax_planning",patterns:["business taxes","how to handle taxes","tax strategy","save on taxes","tax deductions business","business tax planning"],responses:["Business tax essentials: 1️⃣ Keep all business receipts and records 2️⃣ Separate personal and business finances with a dedicated bank account 3️⃣ Understand deductible expenses (rent, equipment, software, travel) 4️⃣ Pay quarterly estimated taxes to avoid penalties 5️⃣ Work with a CPA — their fee is tax deductible! 6️⃣ Research applicable credits (R&D, hiring, etc.). Good tax planning can save 10–30% of your tax bill! 💰"]},
+{tag:"what_is_business",patterns:["what is business","define business","business meaning","explain business","what does business mean","what is a business"],responses:["A business is an organisation that produces goods or provides services to customers in exchange for payment. Its primary purposes are: creating value for customers, generating profit for owners, providing employment, and contributing to the economy. Businesses can be tiny (sole trader) or enormous (multinational corporation). At the core, every successful business solves a real problem for real people. 🏢"]},
+{tag:"what_is_the_purpose_of_business",patterns:["what is the purpose of business","purpose of a business","why do businesses exist","goal of a business","why start a business"],responses:["The purpose of a business is multi-layered: 1️⃣ Primary: Create value for customers by solving a problem or meeting a need 2️⃣ Financial: Generate enough revenue to cover costs and produce profit 3️⃣ Social: Provide employment and contribute to the economy 4️⃣ Personal: Fulfil the entrepreneur's goals. Peter Drucker said: 'The purpose of business is to create a customer.' Everything else follows from that. 🎯"]},
+{tag:"digital_marketing_guide",patterns:["digital marketing guide","how to do digital marketing","learn digital marketing","digital marketing basics","online marketing guide"],responses:["Digital marketing fundamentals: 📱 Social Media (organic + paid), 🔍 SEO (search visibility), 📧 Email Marketing (highest ROI), 💰 PPC/Google Ads (paid search), 🎥 Content Marketing (blogs, videos), 🤝 Influencer Marketing. Start with 1–2 channels, master them, then expand. Track everything with Google Analytics — data-driven decisions beat guesswork every time! 📊"]},
+{tag:"startup_idea_validation",patterns:["how to validate a startup idea","test my business idea","is my idea good","idea validation","validate product idea"],responses:["Validate your startup idea in 5 steps: 1️⃣ Talk to 20–50 potential customers (don't sell, just listen) 2️⃣ Check if people are currently paying for solutions 3️⃣ Build a landing page and measure sign-ups 4️⃣ Create a basic MVP and test with real users 5️⃣ Look for early customers willing to pre-pay. The biggest mistake: building before validating. Customer conversations are free — product rebuilds are expensive! 🔬"]},
+{tag:"financial_statements",patterns:["what are financial statements","income statement","balance sheet explained","cash flow statement explained","financial reporting","estados financieros","القوائم المالية","états financiers","Finanzberichte"],responses:["The 3 core financial statements: 📊 Income Statement (P&L): Revenue − Expenses = Net Income (shows profitability over a period). 📋 Balance Sheet: Assets = Liabilities + Equity (snapshot of what you own and owe). 💵 Cash Flow Statement: Tracks actual cash in/out. Profit ≠ Cash Flow — a business can be profitable but run out of cash. All three together tell the full financial story! 📈"]},
+{tag:"working_from_home_business",patterns:["start business from home","home based business","work from home business ideas","home business tips"],responses:["Great home-based businesses: 💻 Freelancing (writing, design, coding), 📦 Dropshipping, 🎓 Online tutoring/coaching, 📱 Social media management, 🛍️ Handmade goods (Etsy), 📸 Photography/videography. Keys to success: dedicated workspace, clear schedule, professional communication, and strong online presence. Low overhead is your biggest advantage! 🏠"]},
 ];
+
 
 // ==================== BUSINESS COMPARISON DATABASE ====================
 const businessDatabase = [
@@ -3668,239 +3716,556 @@ function extractPptTopic(text) {
 function getTopicDetails(topic) {
   const lower = topic.toLowerCase();
   const defaultDetails = {
-    overview: `This deck covers the main ideas, benefits, challenges, and action steps for ${topic}.`,
+    overview: `This presentation covers the essential concepts, proven strategies, and practical action steps for ${topic}. Whether you are building from scratch or looking to sharpen an existing approach, this deck gives you a structured roadmap — from understanding the core principles and key data through to implementation, challenge mitigation, and measurable outcomes you can track over time.`,
+    stats: [
+      `Companies that invest strategically in ${topic} outperform peers by 20–35% on key growth metrics`,
+      `Over 70% of high-growth businesses cite ${topic} as a top-three strategic priority`,
+      `Organisations with a clear ${topic} framework are 2× more likely to exceed annual targets`,
+      `Effective execution of ${topic} typically delivers ROI within the first 6–12 months`
+    ],
     why: [
-      `Why ${topic} matters today`,
-      `Key benefits and expected outcomes`,
-      `Typical business or customer impact`,
-      `Main risks and how to mitigate them`
+      `${topic} creates measurable, sustainable competitive advantage`,
+      `Directly improves profitability, efficiency, and customer value`,
+      `Reduces operational and strategic risk for the business`,
+      `Builds lasting trust with customers, teams, and stakeholders`,
+      `Positions the business for long-term scalability and growth`
     ],
     bullets: [
-      `Definition and core concept of ${topic}`,
-      `Primary benefits and use cases`,
-      `Common challenges and how to address them`,
-      `Real-world examples or scenarios`
+      `Core definition, scope, and strategic purpose of ${topic}`,
+      `Primary business benefits and expected outcomes when done well`,
+      `Most common mistakes organisations make — and how to avoid them`,
+      `Industry best practices and what top performers do differently`,
+      `Key tools, frameworks, and resources that accelerate results`,
+      `Real-world examples, case studies, and lessons learned`
+    ],
+    challenges: [
+      `Challenge: Limited budget or resources → Start lean, pilot first, then scale with evidence`,
+      `Challenge: Team alignment and buy-in → Involve stakeholders early, share a clear vision`,
+      `Challenge: Measuring results accurately → Define KPIs and baselines before you start`,
+      `Challenge: Resistance to change → Communicate the 'why', celebrate early wins`,
+      `Challenge: Maintaining momentum → Build accountability checkpoints into the plan`
     ],
     implementation: [
-      'Define clear goals and success criteria',
-      'Assign resources and establish roles',
-      'Create a phased execution plan',
-      'Monitor progress and adjust based on results'
+      `Step 1 — Diagnose & Plan: Audit the current state and define clear SMART goals`,
+      `Step 2 — Design: Build a phased 90-day roadmap with owners for each workstream`,
+      `Step 3 — Resource: Assign budget, tools, and team capacity before you start`,
+      `Step 4 — Execute Phase 1: Launch the first pilot, gather data and user feedback`,
+      `Step 5 — Review & Optimise: Analyse results, double down on what works, cut what doesn't`
     ],
     metrics: [
-      'How progress will be measured',
-      'Top performance indicators to track',
-      'Timeline for the first review',
-      'Next steps for continuous improvement'
+      `Revenue impact: track incremental growth quarter-over-quarter`,
+      `Efficiency gain: measure time saved and cost per unit reduced`,
+      `Customer satisfaction: NPS, CSAT, or retention rate improvements`,
+      `Team performance: output vs target, quality scores, and engagement`,
+      `Overall ROI: total value generated ÷ total cost invested × 100`
     ]
   };
 
   const topics = [
     {
-      regex: /business plan|business planning|plan/, overview: `A strong business plan shows how ${topic} will create value, reach customers, and stay financially sustainable.`, why: [
-        'Clarifies the market opportunity',
-        'Defines the product or service offer',
-        'Sets financial and growth targets',
-        'Helps secure funding or stakeholder support'
-      ], bullets: [
-        'Executive summary and mission',
-        'Market research and target customers',
-        'Business model and revenue streams',
-        'Operations and financial projections'
-      ], implementation: [
-        'Gather market and customer insights',
-        'Draft the mission, vision, and strategy',
-        'Build financial forecasts and budgets',
-        'Review with advisors and refine'
-      ], metrics: [
-        'Projected revenue and profit milestones',
-        'Customer acquisition cost',
-        'Break-even timeline',
-        'Cash runway and funding needs'
+      regex: /business plan|business planning/,
+      overview: `A well-crafted business plan is the foundation of every successful company. It transforms a vision into a structured strategy by defining the market opportunity, the value proposition, the revenue model, and the financial roadmap. Investors, lenders, and partners all expect to see a credible, data-backed plan before committing resources. Internally, it keeps teams aligned on priorities and helps leaders make faster, better-informed decisions.`,
+      stats: [
+        `Businesses with a formal plan grow 30% faster than those without one`,
+        `Startups with a plan are 2× more likely to secure funding`,
+        `Companies that update their plan regularly are 63% more likely to hit targets`,
+        `A written plan reduces the risk of running out of cash by up to 36%`
+      ],
+      why: [
+        `Clarifies the market opportunity and validates there is real demand`,
+        `Defines the product or service offer and unique value proposition`,
+        `Sets clear financial goals, budgets, and growth milestones`,
+        `Helps secure funding, loans, or strategic partner support`,
+        `Aligns the leadership team on strategy, priorities, and execution`
+      ],
+      bullets: [
+        `Executive summary: mission, vision, and what the business does`,
+        `Market research: target customers, market size, and competitive landscape`,
+        `Business model: how the company generates and captures revenue`,
+        `Operations plan: team, processes, technology, and infrastructure`,
+        `Financial projections: P&L, cash flow, break-even, and funding needs`,
+        `Risk register: key risks identified with mitigation strategies`
+      ],
+      challenges: [
+        `Challenge: Overestimating revenue projections → Use conservative and base-case scenarios`,
+        `Challenge: Plan becomes outdated quickly → Schedule quarterly reviews and updates`,
+        `Challenge: Too long and complex → Keep it concise — investors read executive summaries first`,
+        `Challenge: Ignoring competitors → Always include a thorough competitive analysis section`,
+        `Challenge: Vague action steps → Every section should end with specific, dated next steps`
+      ],
+      implementation: [
+        `Step 1 — Research: Conduct customer interviews and analyse the competitive landscape`,
+        `Step 2 — Draft: Write the executive summary, market analysis, and business model sections`,
+        `Step 3 — Financials: Build a 3-year P&L, cash flow, and break-even model`,
+        `Step 4 — Review: Share with advisors, mentors, or trusted industry contacts for feedback`,
+        `Step 5 — Finalise & Present: Produce a clean final version and prepare your pitch narrative`
+      ],
+      metrics: [
+        `Projected revenue milestones at 6, 12, and 24 months`,
+        `Customer acquisition cost (CAC) vs lifetime value (LTV) ratio`,
+        `Break-even timeline: when total revenue covers total costs`,
+        `Cash runway: months of operating cash available`,
+        `Funding goal achieved vs target amount raised`
       ]
     },
     {
-      regex: /marketing strategy|marketing|digital marketing|social media|seo/, overview: `This presentation explains how ${topic} will help attract customers, build awareness, and grow sales.`, why: [
-        'Improves brand visibility',
-        'Targets the right audience',
-        'Supports lead generation and conversion',
-        'Builds long-term customer loyalty'
-      ], bullets: [
-        'Target audience and positioning',
-        'Priority marketing channels',
-        'Content and campaign concepts',
-        'Measurement and optimization plan'
-      ], implementation: [
-        'Set marketing goals and budget',
-        'Choose the top-performing channels',
-        'Create a content or campaign calendar',
-        'Review KPIs and refine campaigns'
-      ], metrics: [
-        'Lead volume and conversion rate',
-        'Cost per acquisition',
-        'Engagement and reach',
-        'Return on marketing investment'
+      regex: /marketing strategy|marketing|digital marketing|social media|seo/,
+      overview: `Marketing is the engine that connects great products to the right customers at the right time. A strong marketing strategy defines exactly who the ideal customer is, where they spend their time, what messages resonate, and which channels deliver the best return. In today's competitive landscape, businesses that combine data-driven digital tactics with authentic brand storytelling consistently outperform those relying on guesswork or one-size-fits-all campaigns.`,
+      stats: [
+        `Companies with a documented marketing strategy are 538% more likely to succeed`,
+        `Content marketing generates 3× more leads than outbound at 62% lower cost`,
+        `Email marketing delivers an average ROI of $42 for every $1 spent`,
+        `Businesses using data-driven marketing are 6× more likely to be profitable year-on-year`
+      ],
+      why: [
+        `Builds brand awareness and visibility with the right audience`,
+        `Drives qualified leads, conversions, and sustainable sales growth`,
+        `Supports customer retention and long-term loyalty programmes`,
+        `Provides measurable ROI across all marketing spend`,
+        `Differentiates the business from competitors in a crowded market`
+      ],
+      bullets: [
+        `Ideal Customer Profile (ICP): demographics, behaviours, pain points, and goals`,
+        `Value proposition and positioning: why choose you over alternatives`,
+        `Channel mix: SEO, social media, email, paid ads, content, partnerships`,
+        `Content strategy: topics, formats, frequency, and tone of voice`,
+        `Campaign planning: themes, timing, budgets, and creative direction`,
+        `Analytics setup: Google Analytics, UTM tracking, and conversion attribution`
+      ],
+      challenges: [
+        `Challenge: Too many channels → Focus on 2–3 where your audience actually spends time`,
+        `Challenge: No clear messaging → Define a single, compelling value proposition first`,
+        `Challenge: Poor attribution → Set up proper tracking before spending on ads`,
+        `Challenge: Inconsistent output → Build a content calendar and batch-create content`,
+        `Challenge: Low conversion rates → A/B test landing pages, CTAs, and subject lines`
+      ],
+      implementation: [
+        `Step 1 — Audience: Build detailed customer personas from real data and interviews`,
+        `Step 2 — Goals: Set SMART targets (leads, conversions, CAC, ROAS) by channel`,
+        `Step 3 — Channels: Select and set up 2–3 priority marketing channels`,
+        `Step 4 — Create: Produce a 90-day content and campaign calendar`,
+        `Step 5 — Optimise: Review analytics monthly, cut underperformers, scale what works`
+      ],
+      metrics: [
+        `Monthly lead volume and quality (MQL → SQL conversion rate)`,
+        `Customer Acquisition Cost (CAC) by channel`,
+        `Return on Ad Spend (ROAS) for paid campaigns`,
+        `Email open rate (target 20%+) and click-through rate (target 2%+)`,
+        `Organic traffic growth month-over-month from SEO efforts`
       ]
     },
     {
-      regex: /funding|raise capital|investor|pitch/, overview: `This deck outlines the funding story for ${topic}, including the need, use of capital, and investor benefits.`, why: [
-        'Explains why funding is needed',
-        'Shows how funds will be used',
-        'Demonstrates potential returns',
-        'Builds investor confidence'
-      ], bullets: [
-        'Funding requirements and timing',
-        'Business model and revenue path',
-        'Competitive advantage and market size',
-        'Use of proceeds and growth plan'
-      ], implementation: [
-        'Prepare financial projections and pitch deck',
-        'Identify target investors or partners',
-        'Practice the investor presentation',
-        'Follow up with clear milestones'
-      ], metrics: [
-        'Funding amount sought',
-        'Projected runway',
-        'Revenue milestones',
-        'Investor engagement and follow-up rate'
+      regex: /funding|raise capital|investor|pitch/,
+      overview: `Raising capital is one of the most critical and demanding milestones for any growing business. Investors are not just providing money — they are backing your team, your market thesis, and your ability to execute. A compelling funding pitch tells a clear story: the problem is real and large, your solution is differentiated, your team can win, and the financial returns justify the risk. Preparation, credibility, and clarity are everything in this process.`,
+      stats: [
+        `The average startup contacts 50+ investors before closing a funding round`,
+        `Only 1% of startups that apply to top accelerators like Y Combinator are accepted`,
+        `Seed rounds average $1.5M–$3M; Series A rounds average $10M–$15M globally`,
+        `Startups that reach profitability before raising are valued 40% higher on average`
+      ],
+      why: [
+        `Capital accelerates product development and go-to-market timelines`,
+        `Extends cash runway to reach key proof points and growth milestones`,
+        `Provides strategic value through investor networks and expertise`,
+        `Validates the business model and market opportunity externally`,
+        `Enables hiring talent that the business could not otherwise afford`
+      ],
+      bullets: [
+        `Problem & solution: a crisp, compelling narrative investors can repeat`,
+        `Market size: TAM, SAM, SOM clearly quantified with credible sources`,
+        `Traction: revenue, users, growth rate — show the upward trend`,
+        `Business model: how the company makes money and unit economics`,
+        `Team: why your team is uniquely qualified to win this market`,
+        `Use of funds: specific allocation with expected milestones unlocked`
+      ],
+      challenges: [
+        `Challenge: No warm introduction to investors → Use LinkedIn, accelerators, and demo days`,
+        `Challenge: Valuation disagreement → Anchor to comparable recent deals in your sector`,
+        `Challenge: Lack of traction → Show a small, fast-growing cohort rather than raw numbers`,
+        `Challenge: Due diligence readiness → Maintain a clean data room from day one`,
+        `Challenge: Long fundraising process → Run a tight 60–90 day process with multiple investors`
+      ],
+      implementation: [
+        `Step 1 — Prepare: Build a 10-slide deck, a financial model, and a clean data room`,
+        `Step 2 — Research: Identify 30–50 investors who have funded similar companies`,
+        `Step 3 — Outreach: Get warm introductions wherever possible; personalise cold outreach`,
+        `Step 4 — Pitch: Run multiple meetings in parallel to create momentum and competition`,
+        `Step 5 — Close: Negotiate terms thoughtfully, complete due diligence, and sign the deal`
+      ],
+      metrics: [
+        `Number of investor meetings secured from outreach`,
+        `Pitch-to-term-sheet conversion rate`,
+        `Total capital raised vs funding target`,
+        `Post-money valuation vs target range`,
+        `Runway extended (months) after close`
       ]
     },
     {
-      regex: /product launch|launch|go to market/, overview: `This presentation covers how to launch ${topic} successfully with a clear market entry plan and timing.`, why: [
-        'Defines the target launch audience',
-        'Aligns product readiness with promotion',
-        'Reduces launch risk',
-        'Increases early adoption potential'
-      ], bullets: [
-        'Launch timeline and milestones',
-        'Product positioning and benefits',
-        'Launch marketing and sales channels',
-        'Customer onboarding and feedback loop'
-      ], implementation: [
-        'Complete launch readiness checklist',
-        'Coordinate teams across product, marketing, and sales',
-        'Prepare launch assets and communication',
-        'Track performance during the first weeks'
-      ], metrics: [
-        'Initial customer signups or sales',
-        'Adoption and engagement',
-        'Launch campaign reach',
-        'Feedback and iteration speed'
+      regex: /product launch|launch|go.to.market/,
+      overview: `A product launch is the most visible and high-stakes moment in a product's lifecycle. Done well, it creates immediate market awareness, drives early adoption, and establishes competitive positioning. Done poorly, it wastes months of development effort. Successful launches are built on thorough preparation — aligning product, marketing, sales, and support teams around a single plan, with clear messaging, timed assets, and real customer feedback loops in place from day one.`,
+      stats: [
+        `95% of new products fail due to poor launch strategy and market misfit`,
+        `Companies that run structured launch plans are 3× more likely to hit first-year targets`,
+        `The first 90 days post-launch determine 60% of long-term product adoption`,
+        `Pre-launch waitlists increase Day-1 conversion by an average of 45%`
+      ],
+      why: [
+        `Creates immediate awareness and demand with the target audience`,
+        `Aligns all internal teams around a single set of launch milestones`,
+        `Reduces risk by identifying issues before broad market release`,
+        `Establishes clear product positioning in the minds of early customers`,
+        `Generates social proof, reviews, and word-of-mouth from day one`
+      ],
+      bullets: [
+        `Pre-launch: beta testing, waitlist building, and PR/media preparation`,
+        `Messaging: clear positioning, tagline, and key benefits for each segment`,
+        `Channel activation: website, email, social, PR, and partner channels`,
+        `Sales enablement: pricing, demos, FAQs, and objection-handling guides`,
+        `Customer onboarding: welcome flows, tutorials, and support documentation`,
+        `Post-launch: feedback collection, rapid iteration, and retention campaigns`
+      ],
+      challenges: [
+        `Challenge: Scope creep delaying launch → Set a hard launch date and ship a lean v1`,
+        `Challenge: Weak messaging → Test 3–5 messaging variants on a landing page before launch`,
+        `Challenge: No early adopters → Run a beta programme to build an engaged founding community`,
+        `Challenge: Support overwhelmed at launch → Prepare an FAQ, chatbot, and tiered support`,
+        `Challenge: Loss of momentum after week 1 → Plan a 30-day post-launch content drip`
+      ],
+      implementation: [
+        `Step 1 — T-90 days: Freeze product scope, finalise messaging, begin PR outreach`,
+        `Step 2 — T-60 days: Build waitlist, create all launch assets, train the sales team`,
+        `Step 3 — T-30 days: Run a closed beta, gather testimonials, brief press and partners`,
+        `Step 4 — Launch day: Coordinate all channels simultaneously for maximum impact`,
+        `Step 5 — Post-launch: Monitor metrics daily for 30 days, iterate based on feedback`
+      ],
+      metrics: [
+        `Day-1 and Week-1 signups or sales vs target`,
+        `Website traffic and conversion rate on launch day`,
+        `Press and social media coverage volume and reach`,
+        `Net Promoter Score (NPS) from first-wave customers`,
+        `Retention rate at Day 7, Day 30, and Day 90`
       ]
     },
     {
-      regex: /financial forecast|forecast|revenue|cash flow|profit/, overview: `This deck explains the financial outlook for ${topic}, helping stakeholders understand revenue and expense expectations.`, why: [
-        'Improves budgeting accuracy',
-        'Supports decision-making',
-        'Highlights cash flow needs',
-        'Aligns growth plans with finances'
-      ], bullets: [
-        'Revenue projections and assumptions',
-        'Expense categories and drivers',
-        'Profitability and break-even',
-        'Cash flow outlook and risks'
-      ], implementation: [
-        'Build a revenue model',
-        'Estimate costs and variable expenses',
-        'Validate assumptions with market data',
-        'Update forecast as conditions change'
-      ], metrics: [
-        'Monthly revenue growth',
-        'Gross margin',
-        'Operating cash flow',
-        'Break-even date'
+      regex: /financial forecast|forecast|revenue|cash flow|profit/,
+      overview: `Financial forecasting is the discipline of modelling future revenue, expenses, and cash flow to support smarter decision-making. A well-built forecast does not predict the future perfectly — it gives leaders a structured framework for setting targets, allocating resources, identifying risks, and communicating confidently with investors and board members. The best forecasts are updated regularly, built on real assumptions, and stress-tested against best-case and worst-case scenarios.`,
+      stats: [
+        `82% of business failures are caused by poor cash flow management, not lack of profitability`,
+        `Companies that forecast monthly are 2× more likely to stay within their annual budget`,
+        `Businesses with 12-month rolling forecasts grow revenue 15% faster on average`,
+        `Investors value financial rigour highly — weak models kill 30% of deals in due diligence`
+      ],
+      why: [
+        `Improves budgeting accuracy and resource allocation across all departments`,
+        `Gives leadership early warning of cash shortfalls before they become crises`,
+        `Supports confident communication with investors, banks, and the board`,
+        `Enables scenario planning — what if revenue drops 20% next quarter?`,
+        `Aligns growth ambitions with the financial reality of the business`
+      ],
+      bullets: [
+        `Revenue model: assumptions, pricing tiers, volume forecasts, and growth drivers`,
+        `Cost of Goods Sold (COGS): direct costs per unit or per customer`,
+        `Operating expenses: payroll, rent, software, marketing, and admin`,
+        `Gross and net margin: profitability at different revenue levels`,
+        `Cash flow statement: timing of inflows and outflows, not just P&L profit`,
+        `Scenario modelling: base case, best case, and worst case for key variables`
+      ],
+      challenges: [
+        `Challenge: Overoptimistic revenue projections → Always build a conservative base case first`,
+        `Challenge: Ignoring timing of cash flows → Profit ≠ cash; model payment terms carefully`,
+        `Challenge: Static annual forecasts → Update monthly with actuals vs forecast variance`,
+        `Challenge: Too many line items → Consolidate into 8–12 key drivers that actually move the needle`,
+        `Challenge: No accountability → Assign owners to each budget line and review quarterly`
+      ],
+      implementation: [
+        `Step 1 — Revenue model: define pricing, volume, and growth rate assumptions`,
+        `Step 2 — Cost model: map fixed vs variable costs and build a headcount plan`,
+        `Step 3 — Cash flow: layer in payment terms, capex, and working capital movements`,
+        `Step 4 — Scenarios: stress-test with ±20% revenue and cost variations`,
+        `Step 5 — Cadence: review actuals vs forecast monthly; update forward-looking model`
+      ],
+      metrics: [
+        `Monthly Revenue Growth Rate (MoM and YoY)`,
+        `Gross Margin % and trend over time`,
+        `Operating Cash Flow (OCF) — ideally positive within 12–18 months`,
+        `Forecast Accuracy Rate: actual vs predicted within ±10%`,
+        `Break-even date: the month total revenue first exceeds total costs`
       ]
     },
     {
-      regex: /customer service|service quality|support/, overview: `This presentation covers how ${topic} improves customer satisfaction and loyalty.`, why: [
-        'Boosts customer retention',
-        'Reduces churn',
-        'Strengthens brand reputation',
-        'Improves operational efficiency'
-      ], bullets: [
-        'Customer support channels',
-        'Service standards and training',
-        'Feedback collection process',
-        'Continuous improvement actions'
-      ], implementation: [
-        'Define service goals and KPIs',
-        'Equip staff with training and tools',
-        'Monitor customer feedback',
-        'Refine processes regularly'
-      ], metrics: [
-        'Customer satisfaction score',
-        'Response time',
-        'Issue resolution rate',
-        'Churn and retention trends'
+      regex: /customer service|service quality|support/,
+      overview: `Exceptional customer service is one of the strongest and most defensible competitive advantages a business can build. In an era where customers share experiences instantly on social media, every interaction becomes a public statement about your brand. Businesses that invest in service training, fast response systems, and genuine customer empathy consistently achieve higher retention, lower churn, and stronger word-of-mouth growth than those that treat support as an afterthought.`,
+      stats: [
+        `Acquiring a new customer costs 5–7× more than retaining an existing one`,
+        `89% of customers switch to a competitor after a poor service experience`,
+        `Companies with superior customer experience grow revenue 4–8% above their market`,
+        `A 5% increase in customer retention can increase profits by 25–95%`
+      ],
+      why: [
+        `Retaining existing customers is far cheaper than acquiring new ones`,
+        `Happy customers become brand advocates, driving free word-of-mouth growth`,
+        `Fast, empathetic service directly reduces churn and increases lifetime value`,
+        `Strong service culture improves team morale and reduces staff turnover`,
+        `Differentiates the business in markets where product features are commoditised`
+      ],
+      bullets: [
+        `Omnichannel support: phone, email, live chat, social media, and self-service`,
+        `Response time standards: set and communicate clear SLAs for each channel`,
+        `Service training: empathy, active listening, product knowledge, and escalation`,
+        `Knowledge base: FAQs, tutorials, and self-service resources to reduce tickets`,
+        `Feedback loops: NPS surveys, CSAT scores, and review monitoring systems`,
+        `Recovery process: how to handle complaints and turn detractors into promoters`
+      ],
+      challenges: [
+        `Challenge: High ticket volume → Invest in self-service FAQs and AI chatbots for Tier 1`,
+        `Challenge: Slow response times → Set up routing, auto-acknowledgements, and SLA alerts`,
+        `Challenge: Inconsistent quality → Build scripted frameworks while allowing personalisation`,
+        `Challenge: Measuring satisfaction → Implement NPS and CSAT surveys at key touchpoints`,
+        `Challenge: Burned-out support team → Monitor workload, rotate tasks, and celebrate wins`
+      ],
+      implementation: [
+        `Step 1 — Audit: Map every customer touchpoint and identify the 3 biggest pain points`,
+        `Step 2 — Standards: Define response time SLAs and quality benchmarks per channel`,
+        `Step 3 — Tools: Implement a help desk system (Zendesk, Freshdesk, or HubSpot)`,
+        `Step 4 — Train: Run structured onboarding and quarterly refresher training for all agents`,
+        `Step 5 — Measure: Track NPS, CSAT, and First-Contact Resolution (FCR) weekly`
+      ],
+      metrics: [
+        `Customer Satisfaction Score (CSAT): target 85%+ positive ratings`,
+        `Net Promoter Score (NPS): benchmark against industry average`,
+        `First Response Time: target under 2 hours for email, under 1 min for live chat`,
+        `First Contact Resolution (FCR) rate: target 70–75%`,
+        `Customer Churn Rate: measure month-over-month and by segment`
       ]
     },
     {
-      regex: /remote work|remote team|distributed team/, overview: `This deck explains how ${topic} supports productivity, flexibility, and team collaboration.`, why: [
-        'Enables flexibility and talent access',
-        'Reduces office costs',
-        'Requires strong communication practices',
-        'Needs clear remote culture and tools'
-      ], bullets: [
-        'Remote collaboration tools',
-        'Roles and responsibilities',
-        'Performance expectations',
-        'Culture and engagement strategies'
-      ], implementation: [
-        'Set remote work policies',
-        'Choose communication platforms',
-        'Build regular team rituals',
-        'Measure output and wellbeing'
-      ], metrics: [
-        'Team productivity',
-        'Employee satisfaction',
-        'Turnover rate',
-        'Project delivery on time'
+      regex: /remote work|remote team|distributed team/,
+      overview: `Remote and distributed work has permanently shifted from a temporary measure to a mainstream operating model. Companies that build strong remote cultures achieve access to global talent, reduced overhead, and — when done right — higher employee satisfaction and productivity. The key challenge is not the technology; it is building the intentional communication rhythms, trust frameworks, and performance systems that replace the organic collaboration of an office environment.`,
+      stats: [
+        `77% of remote workers say they are more productive at home than in an office`,
+        `Companies offering remote work see 25% lower employee turnover`,
+        `Remote workers save an average of 72 minutes per day on commuting`,
+        `Businesses can save over $11,000 per remote worker per year in office costs`
+      ],
+      why: [
+        `Access to global talent pool — hire the best, regardless of location`,
+        `Significant reduction in office, real estate, and facilities overhead`,
+        `Higher employee satisfaction and work-life balance → lower turnover`,
+        `Business continuity — resilience against local disruptions and crises`,
+        `Environmental benefit: reduced commuting and office energy consumption`
+      ],
+      bullets: [
+        `Communication stack: Slack/Teams for async, Zoom/Meet for synchronous collaboration`,
+        `Documentation culture: decisions, processes, and knowledge written down and searchable`,
+        `Clear role definitions: every person knows their goals, deadlines, and dependencies`,
+        `Meeting hygiene: fewer, shorter, better-prepared meetings with clear agendas`,
+        `Social connection: virtual team rituals, coffee chats, and celebration of wins`,
+        `Mental health and wellbeing: flexible hours, respect for boundaries, manager check-ins`
+      ],
+      challenges: [
+        `Challenge: Isolation and loneliness → Schedule regular 1:1s and virtual social events`,
+        `Challenge: Communication gaps → Default to over-communication and document everything`,
+        `Challenge: Tracking performance → Manage by output and outcomes, not hours logged`,
+        `Challenge: Timezone misalignment → Establish core overlap hours and async-first defaults`,
+        `Challenge: Onboarding new hires remotely → Build a detailed 30-60-90 day onboarding plan`
+      ],
+      implementation: [
+        `Step 1 — Policy: Define remote work guidelines, hours expectations, and equipment policy`,
+        `Step 2 — Tools: Deploy and train the team on your communication and project stack`,
+        `Step 3 — Rituals: Establish daily standups, weekly team syncs, and monthly all-hands`,
+        `Step 4 — Performance: Shift to OKR-based or output-based performance management`,
+        `Step 5 — Culture: Run a quarterly remote team health survey and act on feedback`
+      ],
+      metrics: [
+        `Employee Satisfaction Score (eNPS): measure quarterly`,
+        `Team productivity index: output vs target across key workstreams`,
+        `Meeting efficiency: average meeting duration and % with defined outcomes`,
+        `Staff retention rate: compare remote vs office benchmark`,
+        `Onboarding time-to-productivity for new remote hires`
       ]
     },
     {
-      regex: /ecommerce|online store|online selling/, overview: `This presentation explains how ${topic} can reach customers online and grow digital sales.`, why: [
-        'Captures online shoppers',
-        'Supports scalable sales',
-        'Requires good customer experience',
-        'Depends on strong logistics and payments'
-      ], bullets: [
-        'Platform and storefront strategy',
-        'Product catalog and pricing',
-        'Customer journey and checkout experience',
-        'Fulfillment and shipping plan'
-      ], implementation: [
-        'Choose the right ecommerce platform',
-        'Optimize product listings',
-        'Set up payment and shipping',
-        'Track conversion and abandonment'
-      ], metrics: [
-        'Conversion rate',
-        'Average order value',
-        'Cart abandonment',
-        'Fulfillment efficiency'
+      regex: /ecommerce|online store|online selling/,
+      overview: `E-commerce is one of the fastest-growing business models in the world, but success requires far more than just putting products online. A thriving online store is built on deep customer understanding, a seamless user experience, competitive pricing, reliable fulfilment, and a relentless focus on conversion optimisation. Businesses that master these fundamentals — from the first ad click through to the post-purchase experience — build loyal customer bases that drive compounding growth.`,
+      stats: [
+        `Global e-commerce sales exceeded $5.8 trillion in 2023 and are growing 10%+ annually`,
+        `The average e-commerce conversion rate is 1–3%; top performers achieve 5–8%`,
+        `Cart abandonment rates average 70% — recovering even 10% adds significant revenue`,
+        `Returning customers spend 67% more per order than first-time buyers`
+      ],
+      why: [
+        `24/7 global sales — revenue generation without physical store constraints`,
+        `Lower overhead than brick-and-mortar with ability to scale inventory rapidly`,
+        `Rich customer data enabling highly personalised marketing and offers`,
+        `Multiple revenue streams: direct, marketplace, subscription, and wholesale`,
+        `Global reach — sell to customers in any market without physical presence`
+      ],
+      bullets: [
+        `Platform selection: Shopify, WooCommerce, BigCommerce — choose for your scale`,
+        `Product listings: high-quality images, detailed descriptions, and clear pricing`,
+        `UX and mobile optimisation: 60%+ of traffic is mobile — design mobile-first`,
+        `Payment and checkout: offer multiple payment methods and a 1–2 step checkout`,
+        `Logistics and fulfilment: delivery speed, packaging quality, and returns policy`,
+        `Post-purchase experience: order confirmation, tracking, and re-engagement emails`
+      ],
+      challenges: [
+        `Challenge: High cart abandonment → Add exit-intent popups, retargeting ads, and cart emails`,
+        `Challenge: Low organic traffic → Invest in product SEO and a content marketing strategy`,
+        `Challenge: Poor conversion rate → Run A/B tests on product pages and checkout flow`,
+        `Challenge: Returns and disputes → Write clear policies and automate the returns process`,
+        `Challenge: Scaling fulfilment → Use 3PL partners once volume exceeds in-house capacity`
+      ],
+      implementation: [
+        `Step 1 — Platform: Choose and set up your ecommerce platform with payment processing`,
+        `Step 2 — Catalogue: Upload products with optimised titles, descriptions, and images`,
+        `Step 3 — Traffic: Launch SEO, email, and 1–2 paid channels to drive initial traffic`,
+        `Step 4 — Optimise: Use heatmaps, session recordings, and A/B tests to lift conversion`,
+        `Step 5 — Retain: Build post-purchase email sequences to drive repeat purchases`
+      ],
+      metrics: [
+        `Conversion Rate: visitors who complete a purchase (target 2–5%)`,
+        `Average Order Value (AOV): and trend after upsell/cross-sell campaigns`,
+        `Cart Abandonment Rate: and recovery rate from retargeting/email campaigns`,
+        `Customer Acquisition Cost (CAC) vs Customer Lifetime Value (CLV)`,
+        `Return Rate and Net Revenue after returns`
       ]
     },
     {
-      regex: /sustainability|green|esg|environmental/, overview: `This deck shows how ${topic} creates positive environmental and social impact while supporting business goals.`, why: [
-        'Improves brand trust',
-        'Reduces waste and costs',
-        'Meets customer expectations',
-        'Supports long-term resilience'
-      ], bullets: [
-        'Sustainability goals and vision',
-        'Operational changes and initiatives',
-        'Stakeholder benefits',
-        'Metrics for progress'
-      ], implementation: [
-        'Set measurable sustainability targets',
-        'Identify priority actions',
-        'Track progress and report regularly',
-        'Engage employees and partners'
-      ], metrics: [
-        'Energy / resource savings',
-        'Waste reduction',
-        'Customer perception',
-        'Sustainability milestones'
+      regex: /sustainability|green|esg|environmental/,
+      overview: `Sustainability has moved from a 'nice to have' to a core business imperative. Consumers, investors, employees, and regulators are all demanding that companies reduce their environmental impact, operate ethically, and contribute positively to society. Businesses that embed ESG (Environmental, Social, and Governance) thinking into their strategy — not just their communications — are building more resilient, trusted, and ultimately more profitable enterprises for the long term.`,
+      stats: [
+        `73% of global consumers say they would change consumption habits to reduce environmental impact`,
+        `ESG-focused companies saw 25% lower cost of capital compared to peers over 5 years`,
+        `Employees are 38% more likely to stay at a company with strong sustainability values`,
+        `S&P 500 ESG Index outperformed the standard S&P 500 by 1.4% annually over 10 years`
+      ],
+      why: [
+        `Builds deep brand trust and loyalty with environmentally conscious customers`,
+        `Reduces operating costs through energy efficiency and waste reduction`,
+        `Attracts top talent who want to work for purpose-driven organisations`,
+        `Meets growing regulatory requirements — carbon reporting is becoming mandatory`,
+        `Creates resilience against supply chain and climate-related disruptions`
+      ],
+      bullets: [
+        `Carbon footprint assessment: Scope 1, 2, and 3 emissions measurement`,
+        `Energy strategy: renewable sourcing, efficiency upgrades, and usage monitoring`,
+        `Supply chain sustainability: supplier audits and responsible sourcing standards`,
+        `Social impact: fair wages, D&I initiatives, community programmes, and ethics policy`,
+        `Governance: transparent reporting, board-level ESG accountability, and anti-corruption`,
+        `Circular economy: reduce, reuse, recycle principles built into product design`
+      ],
+      challenges: [
+        `Challenge: Greenwashing risk → Back every claim with measurable, verified data`,
+        `Challenge: High upfront investment → Start with efficiency gains that also cut costs`,
+        `Challenge: Complex supply chain auditing → Phase in supplier assessments by tier`,
+        `Challenge: Lack of internal expertise → Appoint a sustainability lead or ESG advisor`,
+        `Challenge: Balancing profit and purpose → Frame sustainability as risk management, not charity`
+      ],
+      implementation: [
+        `Step 1 — Baseline: Measure your current carbon footprint and key ESG metrics`,
+        `Step 2 — Commitments: Set science-based targets (SBTi) for emissions reductions`,
+        `Step 3 — Quick wins: Launch energy efficiency, waste reduction, and packaging initiatives`,
+        `Step 4 — Supply chain: Audit top 10 suppliers on sustainability criteria`,
+        `Step 5 — Report: Publish an annual ESG report aligned to GRI or CDP frameworks`
+      ],
+      metrics: [
+        `Carbon emissions (tCO₂e): Scope 1, 2, and 3 total and year-on-year reduction`,
+        `Renewable energy share: % of energy from renewable sources`,
+        `Waste diversion rate: % of waste recycled or composted vs landfilled`,
+        `Employee satisfaction with sustainability initiatives (internal survey)`,
+        `ESG rating score from agencies such as MSCI, Sustainalytics, or EcoVadis`
+      ]
+    },
+    {
+      regex: /sales strategy|sales|selling|revenue growth/,
+      overview: `Sales is the lifeblood of every business — without revenue, there is no company. A modern sales strategy goes far beyond cold calling; it combines deep customer understanding, a well-defined sales process, the right team structure, and data-driven pipeline management. Whether you are building a B2B enterprise sales team or a high-volume B2C inside sales function, the principles are the same: know your customer, solve their problem, and make it easy for them to say yes.`,
+      stats: [
+        `Top-performing sales teams are 2.8× more likely to have a formalised sales process`,
+        `It takes an average of 8 touch-points to convert a B2B prospect into a customer`,
+        `Sales reps spend only 34% of their time actually selling — automation can reclaim hours daily`,
+        `Companies that align sales and marketing grow 20% faster and are 15% more profitable`
+      ],
+      why: [
+        `A clear sales process reduces deal cycles and improves close rates`,
+        `Enables predictable revenue forecasting and business planning`,
+        `Differentiates the business through a consultative, value-led approach`,
+        `Builds long-term customer relationships that generate upsell and referral revenue`,
+        `Empowers the sales team with confidence, scripts, and tools to perform consistently`
+      ],
+      bullets: [
+        `Ideal Customer Profile (ICP): the exact type of customer most likely to buy and stay`,
+        `Sales funnel stages: Awareness → Interest → Consideration → Decision → Close`,
+        `Prospecting methods: inbound (content, SEO), outbound (cold email, LinkedIn), and referrals`,
+        `Discovery and qualification: BANT or MEDDIC frameworks to assess fit and readiness`,
+        `Proposal and objection handling: tailored solutions with pre-built objection scripts`,
+        `CRM hygiene: every interaction logged, pipeline accurate, and forecasts data-driven`
+      ],
+      challenges: [
+        `Challenge: Long deal cycles → Add urgency with time-limited offers and clear next steps`,
+        `Challenge: Poor lead quality → Tighten ICP criteria and score leads before routing to sales`,
+        `Challenge: High churn after close → Align sales promises with what the product actually delivers`,
+        `Challenge: Sales team underperformance → Introduce coaching, call reviews, and deal clinics`,
+        `Challenge: No referral programme → Ask happy customers for referrals — timing and ease are key`
+      ],
+      implementation: [
+        `Step 1 — Define ICP: Analyse your best customers to define the ideal prospect profile`,
+        `Step 2 — Build process: Map a repeatable 5–7 stage sales funnel with clear exit criteria`,
+        `Step 3 — Tooling: Deploy and configure a CRM (HubSpot, Salesforce, or Pipedrive)`,
+        `Step 4 — Enable: Create playbooks, email templates, demo scripts, and objection guides`,
+        `Step 5 — Coach: Run weekly pipeline reviews and monthly deal clinics to raise performance`
+      ],
+      metrics: [
+        `Win rate: % of qualified opportunities that close (benchmark: 20–30% for B2B)`,
+        `Average Sales Cycle length: days from first contact to signed deal`,
+        `Pipeline Coverage Ratio: target 3–4× your quarterly revenue goal in pipeline`,
+        `Sales Velocity: (Opportunities × Win Rate × Deal Value) ÷ Sales Cycle Length`,
+        `Revenue per Sales Rep and quota attainment rate by individual`
+      ]
+    },
+    {
+      regex: /leadership|management|team leadership/,
+      overview: `Leadership is not a title — it is a set of behaviours and disciplines that inspire people to perform at their best, even in the face of uncertainty and change. Great leaders combine strategic clarity with genuine human empathy. They make hard decisions with confidence, communicate vision with conviction, build diverse teams that challenge each other, and create a culture where accountability and continuous learning are the norm. Leadership development is one of the highest-ROI investments any organisation can make.`,
+      stats: [
+        `Companies with strong leadership development are 1.5× more likely to be in the top 25% of financial performance`,
+        `67% of employees cite their manager as the #1 factor in their job satisfaction`,
+        `Organisations with engaged leaders see 21% higher profitability than peers`,
+        `Poor management costs the global economy an estimated $8.8 trillion in lost productivity`
+      ],
+      why: [
+        `Effective leadership directly drives team performance, engagement, and retention`,
+        `Clear vision and communication reduce ambiguity and accelerate execution`,
+        `Strong leaders build culture — the shared values that guide daily decisions`,
+        `Leadership development creates a pipeline of future managers and executives`,
+        `Empathetic leaders build psychological safety, unlocking creativity and innovation`
+      ],
+      bullets: [
+        `Vision and strategy: articulating where the organisation is going and why`,
+        `Communication: clear, frequent, honest — both top-down and listening up`,
+        `Decision making: combining data, experience, and diverse team perspectives`,
+        `Delegation: matching tasks to strengths, setting clear expectations, and trusting the team`,
+        `Coaching and feedback: regular 1:1s, constructive challenge, and recognition of growth`,
+        `Change management: guiding teams through uncertainty with clarity and confidence`
+      ],
+      challenges: [
+        `Challenge: Micromanagement → Shift from task control to outcome ownership`,
+        `Challenge: Poor feedback culture → Train leaders on Situation-Behaviour-Impact (SBI) model`,
+        `Challenge: Burnout in the team → Model healthy boundaries and proactively manage workload`,
+        `Challenge: Resistant to change → Involve teams in the 'why' before announcing the 'what'`,
+        `Challenge: Talent retention → People leave managers, not companies — invest in leadership quality`
+      ],
+      implementation: [
+        `Step 1 — Self-assess: Use 360-degree feedback to identify leadership strengths and gaps`,
+        `Step 2 — Develop: Create a personal leadership development plan with quarterly goals`,
+        `Step 3 — Communicate: Establish a consistent rhythm of 1:1s, team meetings, and skip-levels`,
+        `Step 4 — Delegate: Identify 3 tasks to delegate this month, with clear success criteria`,
+        `Step 5 — Culture: Define 3–5 team values and make them visible in every decision`
+      ],
+      metrics: [
+        `Employee NPS (eNPS): how likely team members are to recommend you as a leader`,
+        `Team retention rate: % of team retained over rolling 12 months`,
+        `360-degree feedback score: improvement from baseline to 6-month review`,
+        `Goals achieved: % of team OKRs or targets met each quarter`,
+        `Promotion rate: % of direct reports promoted or growing in scope`
       ]
     }
   ];
@@ -3916,34 +4281,238 @@ function getTopicDetails(topic) {
 
 async function generatePptForTopic(topic) {
   if (!topic) return false;
+  if (typeof PptxGenJS === 'undefined') {
+    addMessage('❌ PPT library not loaded. Please refresh the page and try again.', 'bot');
+    return false;
+  }
   const safeName = topic.replace(/[^a-z0-9\- ]/gi, '').replace(/\s+/g, '_').slice(0, 50) || 'presentation';
+
+  // ── 5 Random Themes ────────────────────────────────────────────
+  const themes = [
+    { // 0 — Navy & Sky Blue (corporate, professional)
+      name: 'navy',
+      primary: '1B2A4A', accent: '3B9FE8', highlight: 'F0B429',
+      tint: '04A89B', bg1: 'FFFFFF', bg2: 'EAF3FD',
+      dark: '1C2833', muted: '8899BB', panelDark: '162238'
+    },
+    { // 1 — Forest Green (growth, sustainability)
+      name: 'forest',
+      primary: '1A3D2B', accent: '27AE60', highlight: 'F4D03F',
+      tint: '1ABC9C', bg1: 'FFFFFF', bg2: 'EAFAF1',
+      dark: '1C2A22', muted: '7D9A7A', panelDark: '112B1D'
+    },
+    { // 2 — Crimson & Gold (bold, finance, leadership)
+      name: 'crimson',
+      primary: '6E1010', accent: 'E74C3C', highlight: 'F39C12',
+      tint: 'E67E22', bg1: 'FFFFFF', bg2: 'FEF5E7',
+      dark: '2C1810', muted: 'A07060', panelDark: '500C0C'
+    },
+    { // 3 — Royal Purple (creative, tech, innovation)
+      name: 'purple',
+      primary: '2C0F5C', accent: '9B59B6', highlight: 'E91E63',
+      tint: '3498DB', bg1: 'FFFFFF', bg2: 'F5EEF8',
+      dark: '1A0833', muted: '9B8BB0', panelDark: '1F0A45'
+    },
+    { // 4 — Slate & Orange (modern, startup, energy)
+      name: 'slate',
+      primary: '1C2833', accent: 'E67E22', highlight: 'F1C40F',
+      tint: 'E74C3C', bg1: 'FFFFFF', bg2: 'FDF2E9',
+      dark: '17202A', muted: '7F8C8D', panelDark: '141E26'
+    }
+  ];
+
+  // Pick a random theme AND a random title layout each time
+  const T = themes[Math.floor(Math.random() * themes.length)];
+  const titleLayout = Math.floor(Math.random() * 3); // 0, 1, or 2
+
+  // ── Helpers ────────────────────────────────────────────────────
+  function hdr(slide, title) {
+    slide.addShape('rect', { x: 0, y: 0, w: 10, h: 1.05, fill: { color: T.primary }, line: { color: T.primary } });
+    slide.addShape('rect', { x: 0, y: 1.05, w: 10, h: 0.07, fill: { color: T.accent }, line: { color: T.accent } });
+    slide.addText(title, { x: 0.4, y: 0.1, w: 9.2, h: 0.85, fontSize: 26, bold: true, color: 'FFFFFF', valign: 'middle' });
+    slide.addShape('rect', { x: 0, y: 7.3, w: 10, h: 0.2, fill: { color: T.primary }, line: { color: T.primary } });
+    slide.addText('usemee', { x: 8.5, y: 7.3, w: 1.4, h: 0.2, fontSize: 9, color: T.muted, align: 'right', valign: 'middle' });
+  }
+
+  function sidebar(slide) {
+    slide.addShape('rect', { x: 0.38, y: 1.26, w: 0.07, h: 5.8, fill: { color: T.accent }, line: { color: T.accent } });
+  }
+
+  function bodyText(slide, items, opts = {}) {
+    const defaults = { x: 0.58, y: 1.22, w: 9.0, h: 5.9, valign: 'top', align: 'left', wrap: true };
+    slide.addText(items, Object.assign(defaults, opts));
+  }
+
   try {
     let pptx = new PptxGenJS();
-    const details = getTopicDetails(topic);
+    pptx.layout = 'LAYOUT_WIDE';
+    const d = getTopicDetails(topic);
+    const title = topic.charAt(0).toUpperCase() + topic.slice(1);
 
-    let titleSlide = pptx.addSlide();
-    titleSlide.addText(topic, { x: 0.5, y: 1.4, w: 9, h: 1.2, fontSize: 42, bold: true, color: '363636' });
-    titleSlide.addText('Generated by Usemee', { x: 0.5, y: 3.0, w: 9, h: 0.6, fontSize: 18, color: '606060' });
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 1 — TITLE  (3 layout variants, randomised)
+    // ══════════════════════════════════════════════════════════════
+    let s1 = pptx.addSlide();
 
-    let overviewSlide = pptx.addSlide();
-    overviewSlide.addText('Overview', { x: 0.5, y: 0.4, w: 9, h: 0.8, fontSize: 32, bold: true, color: '2e4057' });
-    overviewSlide.addText(details.overview, { x: 0.5, y: 1.4, w: 9, h: 2.5, fontSize: 18, color: '333333', align: 'left' });
+    if (titleLayout === 0) {
+      // Layout A: Right panel split
+      s1.background = { color: T.primary };
+      s1.addShape('rect', { x: 6.5, y: 0, w: 3.5, h: 7.5, fill: { color: T.panelDark }, line: { color: T.panelDark } });
+      s1.addShape('rect', { x: 6.5, y: 0, w: 0.07, h: 7.5, fill: { color: T.accent }, line: { color: T.accent } });
+      s1.addShape('rect', { x: 0, y: 0, w: 10, h: 0.16, fill: { color: T.accent }, line: { color: T.accent } });
+      s1.addShape('rect', { x: 0, y: 7.34, w: 10, h: 0.16, fill: { color: T.tint }, line: { color: T.tint } });
+      s1.addShape('rect', { x: 0.4, y: 2.65, w: 0.6, h: 0.13, fill: { color: T.highlight }, line: { color: T.highlight } });
+      s1.addText(title, { x: 0.4, y: 1.4, w: 5.9, h: 1.7, fontSize: 42, bold: true, color: 'FFFFFF', valign: 'bottom', wrap: true });
+      s1.addText('Business Presentation', { x: 0.4, y: 2.95, w: 5.9, h: 0.55, fontSize: 18, color: T.accent, italic: true });
+      s1.addText('Generated by Usemee', { x: 0.4, y: 6.8, w: 5.9, h: 0.4, fontSize: 11, color: T.muted });
 
-    let whySlide = pptx.addSlide();
-    whySlide.addText('Why It Matters', { x: 0.5, y: 0.4, w: 9, h: 0.8, fontSize: 32, bold: true, color: '2e4057' });
-    whySlide.addText(details.why.map(item => ({ text: item, options: { bullet: true, fontSize: 18, color: '333333' } })), { x: 0.5, y: 1.4, w: 9, h: 4 });
+    } else if (titleLayout === 1) {
+      // Layout B: Bold centre with horizontal bands
+      s1.background = { color: T.primary };
+      s1.addShape('rect', { x: 0, y: 2.7, w: 10, h: 2.3, fill: { color: T.panelDark }, line: { color: T.panelDark } });
+      s1.addShape('rect', { x: 0, y: 2.7, w: 10, h: 0.1, fill: { color: T.accent }, line: { color: T.accent } });
+      s1.addShape('rect', { x: 0, y: 4.9, w: 10, h: 0.1, fill: { color: T.tint }, line: { color: T.tint } });
+      s1.addShape('rect', { x: 0, y: 0, w: 10, h: 0.14, fill: { color: T.highlight }, line: { color: T.highlight } });
+      s1.addShape('rect', { x: 0, y: 7.36, w: 10, h: 0.14, fill: { color: T.highlight }, line: { color: T.highlight } });
+      s1.addText(title, { x: 0.5, y: 2.75, w: 9, h: 2.1, fontSize: 46, bold: true, color: 'FFFFFF', align: 'center', valign: 'middle', wrap: true });
+      s1.addText('Business Presentation', { x: 0, y: 1.3, w: 10, h: 0.7, fontSize: 18, color: T.accent, align: 'center', italic: true });
+      s1.addText('Generated by Usemee', { x: 0, y: 5.3, w: 10, h: 0.5, fontSize: 13, color: T.muted, align: 'center' });
 
-    let keyPointsSlide = pptx.addSlide();
-    keyPointsSlide.addText('Key Points', { x: 0.5, y: 0.4, w: 9, h: 0.8, fontSize: 32, bold: true, color: '2e4057' });
-    keyPointsSlide.addText(details.bullets.map(item => ({ text: item, options: { bullet: true, fontSize: 18, color: '333333' } })), { x: 0.5, y: 1.4, w: 9, h: 4 });
+    } else {
+      // Layout C: Left colour panel
+      s1.background = { color: 'FFFFFF' };
+      s1.addShape('rect', { x: 0, y: 0, w: 4.0, h: 7.5, fill: { color: T.primary }, line: { color: T.primary } });
+      s1.addShape('rect', { x: 4.0, y: 0, w: 0.08, h: 7.5, fill: { color: T.accent }, line: { color: T.accent } });
+      s1.addShape('rect', { x: 0, y: 0, w: 4.0, h: 0.18, fill: { color: T.tint }, line: { color: T.tint } });
+      s1.addShape('rect', { x: 0, y: 7.32, w: 4.0, h: 0.18, fill: { color: T.accent }, line: { color: T.accent } });
+      s1.addShape('rect', { x: 4.5, y: 3.4, w: 5.1, h: 0.1, fill: { color: T.highlight }, line: { color: T.highlight } });
+      s1.addText('BUSINESS\nPRESENTATION', { x: 0.15, y: 1.2, w: 3.7, h: 1.4, fontSize: 14, bold: true, color: T.accent, align: 'center', valign: 'middle' });
+      s1.addText('Generated\nby Usemee', { x: 0.15, y: 5.5, w: 3.7, h: 0.9, fontSize: 12, color: T.muted, align: 'center' });
+      s1.addText(title, { x: 4.5, y: 2.0, w: 5.1, h: 1.6, fontSize: 38, bold: true, color: T.primary, valign: 'bottom', wrap: true });
+      s1.addText('A strategic overview', { x: 4.5, y: 3.65, w: 5.1, h: 0.55, fontSize: 17, color: T.accent, italic: true });
+    }
 
-    let actionSlide = pptx.addSlide();
-    actionSlide.addText('Implementation Plan', { x: 0.5, y: 0.4, w: 9, h: 0.8, fontSize: 32, bold: true, color: '2e4057' });
-    actionSlide.addText(details.implementation.map(item => ({ text: item, options: { bullet: true, fontSize: 18, color: '333333' } })), { x: 0.5, y: 1.4, w: 9, h: 4 });
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 2 — OVERVIEW
+    // ══════════════════════════════════════════════════════════════
+    let s2 = pptx.addSlide();
+    s2.background = { color: T.bg1 };
+    hdr(s2, 'Overview');
+    sidebar(s2);
+    bodyText(s2, d.overview, { fontSize: 16, color: T.dark, lineSpacingMultiple: 1.5 });
 
-    let metricsSlide = pptx.addSlide();
-    metricsSlide.addText('Metrics & Next Steps', { x: 0.5, y: 0.4, w: 9, h: 0.8, fontSize: 32, bold: true, color: '2e4057' });
-    metricsSlide.addText(details.metrics.map(item => ({ text: item, options: { bullet: true, fontSize: 18, color: '333333' } })), { x: 0.5, y: 1.4, w: 9, h: 4 });
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 3 — KEY STATISTICS
+    // ══════════════════════════════════════════════════════════════
+    let s3 = pptx.addSlide();
+    s3.background = { color: T.bg2 };
+    hdr(s3, 'Key Statistics & Data');
+    // 4 stat boxes arranged in a 2×2 grid
+    const stats = (d.stats && d.stats.length) ? d.stats : [
+      'Stat 1', 'Stat 2', 'Stat 3', 'Stat 4'
+    ];
+    const boxPositions = [
+      { x: 0.35, y: 1.3 }, { x: 5.2, y: 1.3 },
+      { x: 0.35, y: 4.2 }, { x: 5.2, y: 4.2 }
+    ];
+    stats.slice(0, 4).forEach((stat, i) => {
+      const p = boxPositions[i];
+      s3.addShape('rect', { x: p.x, y: p.y, w: 4.6, h: 2.5, fill: { color: 'FFFFFF' }, line: { color: T.accent, pt: 2 }, shadow: { type: 'outer', blur: 6, offset: 3, angle: 45, color: '888888', opacity: 0.18 } });
+      s3.addShape('rect', { x: p.x, y: p.y, w: 4.6, h: 0.22, fill: { color: T.primary }, line: { color: T.primary } });
+      s3.addText(`Insight ${i + 1}`, { x: p.x + 0.12, y: p.y + 0.02, w: 4.35, h: 0.2, fontSize: 9, bold: true, color: 'FFFFFF', valign: 'middle' });
+      s3.addText(stat, { x: p.x + 0.15, y: p.y + 0.28, w: 4.3, h: 2.1, fontSize: 14, color: T.dark, valign: 'middle', wrap: true, lineSpacingMultiple: 1.3 });
+    });
+
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 4 — WHY IT MATTERS
+    // ══════════════════════════════════════════════════════════════
+    let s4 = pptx.addSlide();
+    s4.background = { color: T.bg1 };
+    hdr(s4, 'Why It Matters');
+    sidebar(s4);
+    bodyText(s4,
+      d.why.map((item, i) => ({ text: `${i + 1}.  ${item}\n`, options: { fontSize: 16, color: T.dark, paraSpaceAfter: 10, bold: false } }))
+    );
+
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 5 — KEY POINTS
+    // ══════════════════════════════════════════════════════════════
+    let s5 = pptx.addSlide();
+    s5.background = { color: T.bg2 };
+    hdr(s5, 'Key Points');
+    sidebar(s5);
+    bodyText(s5,
+      d.bullets.map(item => ({ text: item + '\n', options: { bullet: { color: T.accent }, fontSize: 15, color: T.dark, paraSpaceAfter: 9 } }))
+    );
+
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 6 — CHALLENGES & SOLUTIONS
+    // ══════════════════════════════════════════════════════════════
+    let s6 = pptx.addSlide();
+    s6.background = { color: T.bg1 };
+    hdr(s6, 'Challenges & Solutions');
+    const challenges = d.challenges || ['No major challenges identified'];
+    challenges.forEach((item, i) => {
+      const yPos = 1.22 + i * 1.18;
+      if (yPos > 6.9) return;
+      const parts = item.split('→');
+      const isChallenge = parts[0] || item;
+      const isSolution = parts[1] || '';
+      s6.addShape('rect', { x: 0.35, y: yPos, w: 9.3, h: 1.05, fill: { color: 'FFFFFF' }, line: { color: T.accent, pt: 1.5 } });
+      s6.addShape('rect', { x: 0.35, y: yPos, w: 0.22, h: 1.05, fill: { color: T.primary }, line: { color: T.primary } });
+      s6.addText(isChallenge.trim(), { x: 0.65, y: yPos + 0.04, w: 4.0, h: 0.48, fontSize: 13, bold: true, color: T.primary, valign: 'middle', wrap: true });
+      if (isSolution) {
+        s6.addShape('rect', { x: 4.7, y: yPos + 0.15, w: 0.05, h: 0.75, fill: { color: T.accent }, line: { color: T.accent } });
+        s6.addText(isSolution.trim(), { x: 4.85, y: yPos + 0.04, w: 4.65, h: 0.97, fontSize: 13, color: T.dark, valign: 'middle', wrap: true });
+      }
+    });
+    s6.addShape('rect', { x: 0, y: 7.3, w: 10, h: 0.2, fill: { color: T.primary }, line: { color: T.primary } });
+    s6.addText('usemee', { x: 8.5, y: 7.3, w: 1.4, h: 0.2, fontSize: 9, color: T.muted, align: 'right', valign: 'middle' });
+
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 7 — IMPLEMENTATION PLAN
+    // ══════════════════════════════════════════════════════════════
+    let s7 = pptx.addSlide();
+    s7.background = { color: T.bg2 };
+    hdr(s7, 'Implementation Plan');
+    d.implementation.forEach((step, i) => {
+      const yPos = 1.2 + i * 1.18;
+      if (yPos > 6.9) return;
+      s7.addShape('rect', { x: 0.35, y: yPos, w: 0.65, h: 0.65, fill: { color: T.accent }, line: { color: T.accent } });
+      s7.addText(`${i + 1}`, { x: 0.35, y: yPos, w: 0.65, h: 0.65, fontSize: 22, bold: true, color: 'FFFFFF', align: 'center', valign: 'middle' });
+      s7.addText(step, { x: 1.15, y: yPos, w: 8.5, h: 0.9, fontSize: 14, color: T.dark, valign: 'middle', wrap: true });
+      if (i < d.implementation.length - 1 && yPos + 1.18 <= 6.9) {
+        s7.addShape('rect', { x: 0.61, y: yPos + 0.65, w: 0.04, h: 0.5, fill: { color: T.tint }, line: { color: T.tint } });
+      }
+    });
+    s7.addShape('rect', { x: 0, y: 7.3, w: 10, h: 0.2, fill: { color: T.primary }, line: { color: T.primary } });
+    s7.addText('usemee', { x: 8.5, y: 7.3, w: 1.4, h: 0.2, fontSize: 9, color: T.muted, align: 'right', valign: 'middle' });
+
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 8 — METRICS & KPIs
+    // ══════════════════════════════════════════════════════════════
+    let s8 = pptx.addSlide();
+    s8.background = { color: T.bg1 };
+    hdr(s8, 'Metrics & KPIs');
+    sidebar(s8);
+    bodyText(s8,
+      d.metrics.map(item => ({ text: item + '\n', options: { bullet: { color: T.tint }, fontSize: 16, color: T.dark, paraSpaceAfter: 12 } }))
+    );
+
+    // ══════════════════════════════════════════════════════════════
+    // SLIDE 9 — THANK YOU
+    // ══════════════════════════════════════════════════════════════
+    let s9 = pptx.addSlide();
+    s9.background = { color: T.primary };
+    s9.addShape('rect', { x: 0, y: 0, w: 10, h: 0.16, fill: { color: T.tint }, line: { color: T.tint } });
+    s9.addShape('rect', { x: 0, y: 7.34, w: 10, h: 0.16, fill: { color: T.accent }, line: { color: T.accent } });
+    s9.addShape('rect', { x: 3.2, y: 3.55, w: 3.6, h: 0.08, fill: { color: T.highlight }, line: { color: T.highlight } });
+    s9.addShape('rect', { x: 0, y: 2.5, w: 10, h: 2.4, fill: { color: T.panelDark }, line: { color: T.panelDark } });
+    s9.addShape('rect', { x: 0, y: 2.5, w: 10, h: 0.1, fill: { color: T.accent }, line: { color: T.accent } });
+    s9.addShape('rect', { x: 0, y: 4.8, w: 10, h: 0.1, fill: { color: T.tint }, line: { color: T.tint } });
+    s9.addText('Thank You', { x: 0, y: 2.55, w: 10, h: 2.25, fontSize: 52, bold: true, color: 'FFFFFF', align: 'center', valign: 'middle' });
+    s9.addText(`Topic: ${title}`, { x: 0, y: 1.4, w: 10, h: 0.6, fontSize: 17, color: T.accent, align: 'center' });
+    s9.addText('Generated by Usemee — Your Business AI Assistant', { x: 0, y: 5.1, w: 10, h: 0.55, fontSize: 13, color: T.muted, align: 'center', italic: true });
 
     await pptx.writeFile({ fileName: `${safeName}.pptx` });
     return true;
@@ -3961,59 +4530,112 @@ function getPptRequestTopic(input) {
   return topic;
 }
 
-function getBotReply(input) {
-let userInput = input.toLowerCase();
+function getLocalizedResponse(intent) {
+  if (!intent) return null;
+  const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'en';
+  if (lang !== 'en' && typeof translations !== 'undefined' &&
+      translations[lang] && translations[lang].botResponses && translations[lang].botResponses[intent.tag]) {
+    return translations[lang].botResponses[intent.tag];
+  }
+  return intent.responses[Math.floor(Math.random() * intent.responses.length)];
+}
 
+function getFallbackMsg() {
+  const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'en';
+  const msgs = {
+    en: "I can help with business questions! Try asking about marketing, finance, startups, pricing, or strategy. 💡",
+    es: "¡Puedo ayudarte con preguntas de negocios! Prueba preguntar sobre marketing, finanzas, startups, precios o estrategia. 💡",
+    fr: "Je peux vous aider avec des questions d'affaires ! Essayez de demander sur le marketing, la finance, les startups, les prix ou la stratégie. 💡",
+    de: "Ich kann bei Geschäftsfragen helfen! Fragen Sie nach Marketing, Finanzen, Startups, Preisgestaltung oder Strategie. 💡",
+    ar: "يمكنني مساعدتك في أسئلة الأعمال! جرب السؤال عن التسويق أو التمويل أو الشركات الناشئة أو التسعير أو الاستراتيجية. 💡"
+  };
+  return msgs[lang] || msgs.en;
+}
+
+function getBotReply(input) {
+let userInput = input.toLowerCase().trim();
+
+// Profit prediction
 const predictionTrigger = /(predict|estimate|forecast|calculate|profit or loss|profit forecast|loss forecast|will i make a profit|will i have a loss)/;
 const prediction = predictProfitLoss(userInput);
 if (prediction && (predictionTrigger.test(userInput) || /\d/.test(userInput))) {
   return prediction;
 }
 
-// Check for business comparison first
+// Business comparison
 if (userInput.includes('compare') && (userInput.includes('business') || userInput.includes('company') || userInput.includes('companies'))) {
   showBusinessComparison(userInput);
   return "🔍 Analyzing businesses for comparison...";
 }
 
-
-
-let bestIntent = null;
-let bestScore = 0;
-
+// ---- PASS 1: Exact match ----
 for (const intent of intents) {
-for (const pattern of intent.patterns) {
-const score = similarity(userInput, pattern);
-if (score > bestScore) {
-bestScore = score;
-bestIntent = intent;
-}
-}
-}
-
-if (bestScore > 0.55 && bestIntent) {
-  if (bestIntent.tag === 'idea_generator') {
-    return generateIdeaReply();
-  }
-  if (bestIntent.tag === 'stock_lookup') {
-    // Extract stock symbol from input (e.g., "AAPL stock" -> "AAPL")
-    const symbolMatch = userInput.match(/\b[A-Z]{1,5}\b/);
-    if (symbolMatch) {
-      setTimeout(() => {
-        showStockModal();
-        document.getElementById('stockSymbol').value = symbolMatch[0];
-        getStockData();
-      }, 1000);
-      return `Fetching stock data for ${symbolMatch[0]}...`;
-    } else {
-      setTimeout(() => showStockModal(), 1000);
-      return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
+  for (const pattern of intent.patterns) {
+    if (userInput === pattern.toLowerCase()) {
+      if (intent.tag === 'idea_generator') return generateIdeaReply();
+      if (intent.tag === 'stock_lookup') { setTimeout(() => showStockModal(), 800); return intent.responses[0]; }
+      return getLocalizedResponse(intent);
     }
   }
-  return bestIntent.responses[Math.floor(Math.random() * bestIntent.responses.length)];
 }
 
-return "I can help with business concepts! Try the Planner and Reports buttons. 💡";
+// ---- PASS 2: Pattern is contained in user input ----
+for (const intent of intents) {
+  for (const pattern of intent.patterns) {
+    if (userInput.includes(pattern.toLowerCase())) {
+      if (intent.tag === 'idea_generator') return generateIdeaReply();
+      if (intent.tag === 'stock_lookup') { setTimeout(() => showStockModal(), 800); return intent.responses[0]; }
+      return getLocalizedResponse(intent);
+    }
+  }
+}
+
+// ---- PASS 3: User input is contained in pattern ----
+for (const intent of intents) {
+  for (const pattern of intent.patterns) {
+    if (pattern.toLowerCase().includes(userInput) && userInput.length > 4) {
+      if (intent.tag === 'idea_generator') return generateIdeaReply();
+      return getLocalizedResponse(intent);
+    }
+  }
+}
+
+// ---- PASS 4: Word-level overlap ----
+const userWords = userInput.split(/\s+/).filter(w => w.length > 3);
+let bestWordIntent = null;
+let bestWordScore = 0;
+
+for (const intent of intents) {
+  for (const pattern of intent.patterns) {
+    const patternWords = pattern.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+    if (patternWords.length === 0) continue;
+    const matches = userWords.filter(w => patternWords.includes(w)).length;
+    const score = matches / Math.max(patternWords.length, userWords.length, 1);
+    if (score > bestWordScore) { bestWordScore = score; bestWordIntent = intent; }
+  }
+}
+
+if (bestWordScore >= 0.4 && bestWordIntent) {
+  if (bestWordIntent.tag === 'idea_generator') return generateIdeaReply();
+  return getLocalizedResponse(bestWordIntent);
+}
+
+// ---- PASS 5: Levenshtein similarity fallback ----
+let bestIntent = null;
+let bestScore = 0;
+for (const intent of intents) {
+  for (const pattern of intent.patterns) {
+    const score = similarity(userInput, pattern);
+    if (score > bestScore) { bestScore = score; bestIntent = intent; }
+  }
+}
+
+if (bestScore > 0.5 && bestIntent) {
+  if (bestIntent.tag === 'idea_generator') return generateIdeaReply();
+  return getLocalizedResponse(bestIntent);
+}
+
+return getFallbackMsg();
 }
 
 function addMessage(text, sender) {
@@ -4134,7 +4756,13 @@ closeReportsModal();
 });
 
 window.onload = () => {
-addMessage("Hello! 👋 Ask me anything about business.", 'bot');
+const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'en';
+const dir = lang === 'ar' ? 'rtl' : 'ltr';
+document.documentElement.dir = dir;
+document.documentElement.lang = lang;
+if (typeof updatePageTranslations === 'function') updatePageTranslations();
+const welcomeMsg = (typeof t === 'function') ? t('welcomeMessage') : "Hello! 👋 Ask me anything about business.";
+addMessage(welcomeMsg, 'bot');
 };
 </script>
 
