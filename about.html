@@ -3,73 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About</title>
+<title>About — Usemee</title>
+<script src="translations.js"></script>
 <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
-    color: #000;
-    margin: 0;
-    padding: 20px;
+    color: #222;
+    padding: 24px 16px;
     display: flex;
     justify-content: center;
     transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
 }
 body.dark { background-color: #1a1a2e; color: #e0e0e0; }
 
 .container {
-    max-width: 600px;
+    max-width: 620px;
     width: 100%;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: #fff;
+    padding: 28px 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
     transition: background-color 0.3s, color 0.3s;
 }
-body.dark .container {
-    background-color: #16213e;
-    color: #e0e0e0;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-}
+body.dark .container { background-color: #16213e; box-shadow: 0 2px 16px rgba(0,0,0,0.5); }
 
-h1 { text-align: center; color: #007bff; }
-p { line-height: 1.6; margin-bottom: 15px; }
-
-.button-row {
+.nav-buttons {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 20px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
 }
-.button-row button {
-    background-color: #007bff;
+.nav-buttons button {
+    background: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 18px;
     border-radius: 20px;
     cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s, transform 0.1s;
 }
-.button-row button:hover { background-color: #0056b3; }
+.nav-buttons button:hover { background: #0056b3; transform: translateY(-1px); }
+
+.logo-area { text-align: center; margin-bottom: 20px; }
+.logo-icon { font-size: 48px; display: block; margin-bottom: 8px; }
+
+h1 {
+    text-align: center;
+    color: #007bff;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+body.dark h1 { color: #3b9fe8; }
+
+.about-section {
+    background: #f8f9ff;
+    border-left: 4px solid #007bff;
+    border-radius: 0 8px 8px 0;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    line-height: 1.7;
+    font-size: 15px;
+}
+body.dark .about-section { background: #0f2040; border-left-color: #3b9fe8; }
+
+.about-section.creator { border-left-color: #28a745; }
+body.dark .about-section.creator { border-left-color: #27ae60; }
+
+.about-section.features {
+    border-left-color: #fd7e14;
+    font-size: 14px;
+    color: #555;
+}
+body.dark .about-section.features { color: #aaa; border-left-color: #e67e22; }
+
+.features-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+.features-list li {
+    background: #007bff15;
+    color: #007bff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+body.dark .features-list li { background: #3b9fe820; color: #3b9fe8; }
 </style>
 </head>
 <body>
 <div class="container">
-    <h1>About This Website</h1>
-    <p>This website was created by Fares.</p>
-    <p>The purpose of this website is to answer business questions and help people make informed decisions.</p>
-    <div class="button-row">
-        <button onclick="openPage('index.html')">Back to Home</button>
-        <button onclick="openPage('settings.html')">Settings</button>
+    <div class="nav-buttons">
+        <button onclick="window.location.href='index.html'" data-i18n="home">Home</button>
+        <button onclick="window.location.href='settings.html'" data-i18n="settings">Settings</button>
+    </div>
+
+    <div class="logo-area">
+        <span class="logo-icon">🤖</span>
+    </div>
+
+    <h1 data-i18n="aboutTitle">About Usemee</h1>
+
+    <div class="about-section creator">
+        <span data-i18n="aboutCreator">Created by Fares — a passionate entrepreneur and developer.</span>
+    </div>
+
+    <div class="about-section">
+        <span data-i18n="aboutPurpose">Usemee is an AI-powered business assistant that helps you answer business questions, create reports, generate presentations, calculate financials, and plan your business — all in one place.</span>
+    </div>
+
+    <div class="about-section features">
+        <ul class="features-list">
+            <li>💬 Business Q&A</li>
+            <li>📊 PPT Export</li>
+            <li>🧮 Calculator</li>
+            <li>📋 Planner</li>
+            <li>📈 Reports</li>
+            <li>🌍 Multi-language</li>
+            <li>🌙 Dark Mode</li>
+        </ul>
     </div>
 </div>
 
 <script>
-// Apply dark mode from localStorage immediately
 if (localStorage.getItem('darkMode') === 'enabled') {
     document.body.classList.add('dark');
 }
-
-function openPage(page) { window.location.href = page; }
+window.addEventListener('load', function() {
+    const lang = localStorage.getItem('language') || 'en';
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+    if (typeof updatePageTranslations === 'function') updatePageTranslations();
+});
+window.addEventListener('storage', function(e) {
+    if (e.key === 'languageChanged') {
+        const lang = localStorage.getItem('language') || 'en';
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        document.documentElement.lang = lang;
+        if (typeof updatePageTranslations === 'function') updatePageTranslations();
+    }
+    if (e.key === 'darkMode') {
+        document.body.classList.toggle('dark', e.newValue === 'enabled');
+    }
+});
 </script>
 </body>
 </html>
