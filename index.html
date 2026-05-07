@@ -809,6 +809,97 @@ description: ""
 
 let chartInstances = {};
 
+let conversationContext = {
+  lastSubject: '',
+  lastTag: '',
+};
+
+function updateConversationContext(intent) {
+  conversationContext.lastTag = intent.tag;
+  const stopWords = new Set(['what','that','this','with','from','have','will','does','when','where','which','them','they','about','into','your','more','some','than','also','very']);
+  const firstPattern = intent.patterns[0] || '';
+  const words = firstPattern.toLowerCase().split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
+  conversationContext.lastSubject = words.length > 0 ? words[words.length - 1] : intent.tag.replace(/_/g, ' ');
+}
+
+function resolvePronouns(input) {
+  if (!conversationContext.lastSubject) return input;
+  const pronounPattern = /\b(it|its|that concept|this topic|they|them|their|theirs)\b/gi;
+  if (pronounPattern.test(input)) {
+    return input.replace(pronounPattern, conversationContext.lastSubject);
+  }
+  return input;
+}
+
+// ==================== GUIDED BUSINESS CREATION FLOW ====================
+let businessCreationFlow = {
+  active: false,
+  step: 0,
+  answers: {}
+};
+
+const bcfQuestions = [
+  "Great! Let's build your business together step by step. 🚀\n\nStep 1 of 6 — What type of business do you want to create?\n(e.g., online store, service, restaurant, app, consulting, freelancing)",
+  "Step 2 of 6 — Who are your target customers? Describe who will buy from you — their age, location, or interests.",
+  "Step 3 of 6 — What problem does your business solve? What pain point or need does it address for those customers?",
+  "Step 4 of 6 — What is your rough starting budget?\n(e.g., under $1,000 / $1K–$10K / $10K–$50K / $50K+)",
+  "Step 5 of 6 — Do you have any skills or experience related to this business? (Totally fine if not!)",
+  "Step 6 of 6 — Will you run this alone, or do you have a co-founder or team in mind?"
+];
+
+const bcfKeys = ['businessType', 'targetCustomers', 'problem', 'budget', 'experience', 'team'];
+
+function startBusinessCreationFlow() {
+  businessCreationFlow.active = true;
+  businessCreationFlow.step = 0;
+  businessCreationFlow.answers = {};
+  return bcfQuestions[0];
+}
+
+function handleBusinessCreationStep(input) {
+  const flow = businessCreationFlow;
+  flow.answers[bcfKeys[flow.step]] = input;
+  flow.step++;
+
+  if (flow.step < bcfQuestions.length) {
+    return bcfQuestions[flow.step];
+  }
+
+  flow.active = false;
+  return generatePersonalizedBusinessPlan(flow.answers);
+}
+
+function generatePersonalizedBusinessPlan(a) {
+  const isLowBudget = /under|less|\$1k|1,000|1000|small|little|no budget/i.test(a.budget || '');
+  const isSolo = /alone|solo|myself|just me|by myself/i.test(a.team || '');
+
+  const budgetTip = isLowBudget
+    ? "💡 Budget tip: Start lean. Validate before spending — use free tools (Canva, Google Sites, social media). Your first goal is proof of demand, not a perfect product."
+    : "💡 Budget tip: You have runway to invest wisely. Prioritise: 1) Building the product/service, 2) Marketing to get customers, 3) Operations. Avoid fancy offices or tools until you have revenue.";
+
+  const teamTip = isSolo
+    ? "🤝 Solo founder tip: Use freelancers for tasks outside your strengths (design, code, finance). Join a founder community for accountability and support."
+    : "🤝 Team tip: Define roles, responsibilities, and equity splits in writing from day one — even with friends. A co-founder agreement prevents future conflicts.";
+
+  return `🎉 Here's your personalised business roadmap!\n\n` +
+    `━━━━━━━━━━━━━━━━━━━━━\n` +
+    `📌 Business: ${a.businessType}\n` +
+    `👥 Customers: ${a.targetCustomers}\n` +
+    `💡 Problem Solved: ${a.problem}\n` +
+    `💰 Budget: ${a.budget}\n` +
+    `━━━━━━━━━━━━━━━━━━━━━\n\n` +
+    `🗺️ Your 6 Next Steps:\n\n` +
+    `1️⃣ Validate — talk to 10 real potential customers this week before building anything\n` +
+    `2️⃣ Build a simple MVP or test offer to prove people will pay\n` +
+    `3️⃣ Make your first sale — even at a discount — to confirm demand\n` +
+    `4️⃣ Register your business legally and open a dedicated bank account\n` +
+    `5️⃣ Build a basic online presence: one page website + one social media account\n` +
+    `6️⃣ Set a 90-day goal with a specific revenue target and work backwards\n\n` +
+    `${budgetTip}\n\n` +
+    `${teamTip}\n\n` +
+    `You have everything you need to start. The only move that matters now is the first one. 💪\n\nAsk me anything about any of these steps!`;
+}
+
 const intents = [
 // GREETINGS
 {tag:"greeting",patterns:["hi","hello","hey","good morning","hola","bonjour","hallo","مرحبا","مرحباً","salut","buenas","ciao"],responses:["Hello! Ask me anything about business."]},
@@ -2185,6 +2276,44 @@ const intents = [
 {tag:"startup_idea_validation",patterns:["how to validate a startup idea","test my business idea","is my idea good","idea validation","validate product idea"],responses:["Validate your startup idea in 5 steps: 1️⃣ Talk to 20–50 potential customers (don't sell, just listen) 2️⃣ Check if people are currently paying for solutions 3️⃣ Build a landing page and measure sign-ups 4️⃣ Create a basic MVP and test with real users 5️⃣ Look for early customers willing to pre-pay. The biggest mistake: building before validating. Customer conversations are free — product rebuilds are expensive! 🔬"]},
 {tag:"financial_statements",patterns:["what are financial statements","income statement","balance sheet explained","cash flow statement explained","financial reporting","estados financieros","القوائم المالية","états financiers","Finanzberichte"],responses:["The 3 core financial statements: 📊 Income Statement (P&L): Revenue − Expenses = Net Income (shows profitability over a period). 📋 Balance Sheet: Assets = Liabilities + Equity (snapshot of what you own and owe). 💵 Cash Flow Statement: Tracks actual cash in/out. Profit ≠ Cash Flow — a business can be profitable but run out of cash. All three together tell the full financial story! 📈"]},
 {tag:"working_from_home_business",patterns:["start business from home","home based business","work from home business ideas","home business tips"],responses:["Great home-based businesses: 💻 Freelancing (writing, design, coding), 📦 Dropshipping, 🎓 Online tutoring/coaching, 📱 Social media management, 🛍️ Handmade goods (Etsy), 📸 Photography/videography. Keys to success: dedicated workspace, clear schedule, professional communication, and strong online presence. Low overhead is your biggest advantage! 🏠"]},
+
+// ==================== NEW INTENTS ====================
+// PERSONAL FINANCE & MONEY MANAGEMENT
+{tag:"personal_budget",patterns:["how to budget","personal budget","manage my money","budget tips","how to save money","budgeting advice"],responses:["Build a budget using the 50/30/20 rule: 50% needs, 30% wants, 20% savings. Track every expense for 30 days to see where your money really goes. Apps like YNAB or Mint make this easy. 💰"]},
+{tag:"emergency_fund",patterns:["emergency fund","how much savings","financial safety net","rainy day fund","save for emergency"],responses:["An emergency fund should cover 3–6 months of living expenses. Keep it in a high-yield savings account, separate from your spending account. Start with a $1,000 mini emergency fund as your first milestone. 🛡️"]},
+{tag:"passive_income",patterns:["passive income","earn money while sleeping","income streams","make money passively","side income ideas"],responses:["Top passive income streams: 1️⃣ Dividend stocks 2️⃣ Rental property 3️⃣ Digital products (ebooks, courses) 4️⃣ Affiliate marketing 5️⃣ YouTube/content monetization 6️⃣ Peer-to-peer lending. Most require upfront effort or capital — nothing is truly 'zero work', but they compound over time! 💸"]},
+
+// MINDSET & PRODUCTIVITY
+{tag:"growth_mindset",patterns:["growth mindset","how to think like entrepreneur","entrepreneurial mindset","business mindset","success mindset"],responses:["A growth mindset means believing skills can be developed through effort. In business: embrace failures as learning, seek feedback, stay curious, and be persistent. The most successful entrepreneurs treat every setback as data, not defeat. 🧠"]},
+{tag:"work_life_balance",patterns:["work life balance","avoid burnout entrepreneur","healthy work habits","overworking","too much work"],responses:["Work-life balance as an entrepreneur: set clear working hours, take real breaks, delegate ruthlessly, and schedule personal time like a business meeting. Burnout is not a badge of honour — it destroys productivity and creativity. 🌿"]},
+{tag:"procrastination",patterns:["how to stop procrastinating","beat procrastination","why do i procrastinate","overcome procrastination","productivity tips"],responses:["Beat procrastination: 1️⃣ Use the 2-minute rule (if it takes <2 min, do it now) 2️⃣ Time-block your calendar 3️⃣ Break big tasks into tiny steps 4️⃣ Remove distractions during work blocks 5️⃣ Start with the hardest task first (eat the frog). Perfection is procrastination in disguise — progress beats perfect every time. ⏱️"]},
+{tag:"goal_setting",patterns:["how to set goals","goal setting","smart goals","setting business goals","achieve goals"],responses:["Set SMART goals: Specific, Measurable, Achievable, Relevant, Time-bound. Write them down — research shows you're 42% more likely to achieve written goals. Review weekly, adjust monthly. Break annual goals into 90-day sprints for momentum. 🎯"]},
+
+// COMMUNICATION & NEGOTIATION
+{tag:"public_speaking",patterns:["public speaking","how to present","presentation skills","fear of speaking","speak confidently"],responses:["Improve public speaking: 1️⃣ Prepare and know your material 2️⃣ Practice out loud, not just in your head 3️⃣ Start with a strong hook 4️⃣ Slow down — nervous speakers rush 5️⃣ Make eye contact with individuals, not the crowd. The more you do it, the less scary it becomes. 🎤"]},
+{tag:"persuasion",patterns:["how to persuade","persuasion techniques","influence people","convince customers","sales persuasion"],responses:["Persuasion principles (Cialdini): Reciprocity (give first), Commitment (small yes leads to big yes), Social proof (show others doing it), Authority (be the expert), Liking (people buy from those they like), Scarcity (limited availability). Use ethically — people can sense manipulation. 🤝"]},
+{tag:"conflict_resolution",patterns:["resolve conflict","handle disagreements","conflict at work","team conflict","how to deal with difficult people"],responses:["Resolve conflicts by: 1️⃣ Listen without interrupting 2️⃣ Acknowledge the other person's perspective 3️⃣ Focus on the issue, not the person 4️⃣ Find common ground 5️⃣ Agree on next steps. Most conflicts are communication problems — not personality clashes. ⚖️"]},
+
+// INDUSTRY-SPECIFIC
+{tag:"restaurant_business",patterns:["open a restaurant","start restaurant","restaurant business","food business tips","how to run a restaurant"],responses:["Starting a restaurant: 1️⃣ Develop your concept and menu 2️⃣ Research location (foot traffic is everything) 3️⃣ Calculate startup costs (typically $150K–$500K) 4️⃣ Get licenses: food service, liquor, health permits 5️⃣ Hire and train kitchen + front-of-house staff 6️⃣ Market locally. The industry is tough — focus on consistency, quality, and cost control (food cost target: 28–32% of revenue). 🍽️"]},
+{tag:"retail_business",patterns:["start a retail store","retail business","open a shop","retail tips","physical store"],responses:["Starting a retail business: choose a niche, research your location, manage inventory carefully, and invest in customer experience. Key metrics to track: foot traffic conversion rate, average transaction value, and inventory turnover. Combine physical and online presence for maximum reach. 🛍️"]},
+{tag:"consulting_business",patterns:["start consulting","consulting business","become a consultant","business consulting","freelance consulting"],responses:["Start consulting in 5 steps: 1️⃣ Define your niche (be specific) 2️⃣ Set your pricing (hourly: $75–$300+, project-based is often better) 3️⃣ Build a simple portfolio/case studies 4️⃣ Network relentlessly — most consulting comes from referrals 5️⃣ Deliver exceptional results and ask for testimonials. The best consultants become experts in solving one specific, painful problem. 💼"]},
+{tag:"tech_startup",patterns:["tech startup","how to build a startup","software startup","build an app","create a tech company"],responses:["Building a tech startup: 1️⃣ Identify a painful, specific problem 2️⃣ Talk to 50+ potential users before writing code 3️⃣ Build an MVP (minimum viable product) 4️⃣ Get 10 paying customers before raising funding 5️⃣ Iterate based on real user feedback. The graveyard is full of well-built products nobody wanted — validate first, build second. 💻"]},
+
+// ADDITIONAL BUSINESS TERMS
+{tag:"term_ltv_cac",patterns:["ltv to cac ratio","ltv cac","lifetime value to acquisition cost"],responses:["LTV:CAC ratio measures business health. 3:1 is considered healthy (earn $3 for every $1 spent acquiring a customer). Below 1:1 means you're losing money on every customer. Above 5:1 may mean you're under-investing in growth. 📊"]},
+{tag:"term_arpu",patterns:["arpu","average revenue per user","revenue per user"],responses:["ARPU = Total Revenue ÷ Number of Users. Key metric for subscription and SaaS businesses. Increasing ARPU through upselling is often more efficient than acquiring new customers. 💰"]},
+{tag:"term_dau_mau",patterns:["dau","mau","daily active users","monthly active users","user engagement metric"],responses:["DAU (Daily Active Users) and MAU (Monthly Active Users) measure engagement. DAU/MAU ratio (stickiness) above 20% is good; above 50% is excellent (WhatsApp level). Track these to understand true product value to users. 📱"]},
+{tag:"term_npv",patterns:["npv","net present value","what is npv"],responses:["NPV (Net Present Value) calculates the current value of future cash flows, adjusted for time. Positive NPV = invest. Negative NPV = don't invest. It accounts for the fact that money today is worth more than money tomorrow. 💹"]},
+{tag:"term_irr",patterns:["irr","internal rate of return","what is irr"],responses:["IRR is the discount rate that makes an investment's NPV equal to zero — essentially its expected return rate. If IRR > your required return, the investment is attractive. Used to compare multiple investment opportunities. 📈"]},
+
+// WELLBEING & SUSTAINABILITY
+{tag:"mental_health_entrepreneur",patterns:["entrepreneur mental health","stress of running a business","anxiety as entrepreneur","founder mental health"],responses:["Entrepreneurship is a mental health marathon. Common struggles: isolation, anxiety about failure, and imposter syndrome. Strategies that help: regular exercise, a trusted peer group (mastermind), therapy, and separating your identity from the business. You are not your business results. 💙"]},
+{tag:"business_community",patterns:["find business community","entrepreneur group","mastermind group","business network","join startup community"],responses:["Finding your entrepreneurial tribe: 1️⃣ Local Chambers of Commerce 2️⃣ Industry-specific associations 3️⃣ Startup incubators and accelerators 4️⃣ Online communities (LinkedIn groups, Slack communities, Reddit) 5️⃣ Co-working spaces. A strong network multiplies your opportunities and keeps you accountable. 🤝"]},
+{tag:"giving_back",patterns:["csr strategy","give back to community","corporate social responsibility","business and community","social enterprise"],responses:["Businesses that give back build deeper customer loyalty and attract better talent. Start small: donate 1% of revenue, volunteer team days, or source locally. Authenticity matters — causes should connect genuinely to your brand values, not just be a PR exercise. 🌍"]},
+
+// GUIDED BUSINESS CREATION TRIGGER
+{tag:"guided_business_creation",patterns:["help me create a business","help me start a business","help me build a business","help me launch a business","guide me to create a business","walk me through starting a business","i want to create a business","i want to start a business help","create a business with me","help me open a business","i need help starting a business","show me how to build a business","take me through starting a business","help me make a business"],responses:["Let's get started!"]},
 ];
 
 
@@ -3699,9 +3828,9 @@ function predictProfitLoss(text) {
 
 function extractPptTopic(text) {
   const patterns = [
-    /\b(?:ppt|presentation|powerpoint|slides|slide deck)\b(?:\s*(?:about|on|for|about the topic of)\s*)(.+)$/i,
+    /\b(?:ppt|presentation|slides|slide deck)\b(?:\s*(?:about|on|for|about the topic of)\s*)(.+)$/i,
     /\b(?:create|generate|make|build|prepare|compose|draft)\b.*\b(?:ppt|presentation|slides|slide deck)\b.*\b(?:about|on|for)\s*(.+)$/i,
-    /\b(?:presentation|powerpoint|slides|ppt|slide deck)\b.*\b(?:about|on|for|on the topic of)\b\s*(.+)$/i,
+    /\b(?:presentation|slides|ppt|slide deck)\b.*\b(?:about|on|for|on the topic of)\b\s*(.+)$/i,
     /\b(?:create|generate|make|build|prepare|compose|draft)\b.*\b(?:presentation|slides|slide deck)\b\b.*$/i
   ];
   for (const pattern of patterns) {
@@ -4552,8 +4681,17 @@ function getFallbackMsg() {
   return msgs[lang] || msgs.en;
 }
 
+function respondWithIntent(intent, userInput) {
+  updateConversationContext(intent);
+  if (intent.tag === 'idea_generator') return generateIdeaReply();
+  if (intent.tag === 'stock_lookup') { setTimeout(() => showStockModal(), 800); return intent.responses[0]; }
+  if (intent.tag === 'guided_business_creation') return startBusinessCreationFlow();
+  return getLocalizedResponse(intent);
+}
+
 function getBotReply(input) {
-let userInput = input.toLowerCase().trim();
+let rawInput = input.toLowerCase().trim();
+let userInput = resolvePronouns(rawInput);
 
 // Profit prediction
 const predictionTrigger = /(predict|estimate|forecast|calculate|profit or loss|profit forecast|loss forecast|will i make a profit|will i have a loss)/;
@@ -4572,9 +4710,7 @@ if (userInput.includes('compare') && (userInput.includes('business') || userInpu
 for (const intent of intents) {
   for (const pattern of intent.patterns) {
     if (userInput === pattern.toLowerCase()) {
-      if (intent.tag === 'idea_generator') return generateIdeaReply();
-      if (intent.tag === 'stock_lookup') { setTimeout(() => showStockModal(), 800); return intent.responses[0]; }
-      return getLocalizedResponse(intent);
+      return respondWithIntent(intent, userInput);
     }
   }
 }
@@ -4583,9 +4719,7 @@ for (const intent of intents) {
 for (const intent of intents) {
   for (const pattern of intent.patterns) {
     if (userInput.includes(pattern.toLowerCase())) {
-      if (intent.tag === 'idea_generator') return generateIdeaReply();
-      if (intent.tag === 'stock_lookup') { setTimeout(() => showStockModal(), 800); return intent.responses[0]; }
-      return getLocalizedResponse(intent);
+      return respondWithIntent(intent, userInput);
     }
   }
 }
@@ -4594,8 +4728,7 @@ for (const intent of intents) {
 for (const intent of intents) {
   for (const pattern of intent.patterns) {
     if (pattern.toLowerCase().includes(userInput) && userInput.length > 4) {
-      if (intent.tag === 'idea_generator') return generateIdeaReply();
-      return getLocalizedResponse(intent);
+      return respondWithIntent(intent, userInput);
     }
   }
 }
@@ -4616,8 +4749,7 @@ for (const intent of intents) {
 }
 
 if (bestWordScore >= 0.4 && bestWordIntent) {
-  if (bestWordIntent.tag === 'idea_generator') return generateIdeaReply();
-  return getLocalizedResponse(bestWordIntent);
+  return respondWithIntent(bestWordIntent, userInput);
 }
 
 // ---- PASS 5: Levenshtein similarity fallback ----
@@ -4631,8 +4763,7 @@ for (const intent of intents) {
 }
 
 if (bestScore > 0.5 && bestIntent) {
-  if (bestIntent.tag === 'idea_generator') return generateIdeaReply();
-  return getLocalizedResponse(bestIntent);
+  return respondWithIntent(bestIntent, userInput);
 }
 
 return getFallbackMsg();
@@ -4674,19 +4805,18 @@ function typeNextCharacter() {
 typeNextCharacter();
 }
 
-async function sendMessage() {
-  const userInput = document.getElementById('user-input');
-  const message = userInput.value.trim();
-  if (message === '') return;
-  addMessage(message, 'user');
-  userInput.value = '';
+async function processQuestion(msg) {
+  if (businessCreationFlow.active) {
+    const reply = handleBusinessCreationStep(msg);
+    addMessage(reply, 'bot');
+    return;
+  }
 
-  const pptTopic = getPptRequestTopic(message);
+  const pptTopic = getPptRequestTopic(msg);
   if (pptTopic === 'needTopic') {
     addMessage('Please specify the topic for the presentation, for example: "Create a presentation about marketing strategy".', 'bot');
     return;
   }
-
   if (pptTopic) {
     addMessage(`✅ Generating your presentation about "${pptTopic}". Download should start shortly.`, 'bot');
     const success = await generatePptForTopic(pptTopic);
@@ -4695,9 +4825,25 @@ async function sendMessage() {
     }
     return;
   }
-
-  const reply = getBotReply(message);
+  const reply = getBotReply(msg);
   addMessage(reply, 'bot');
+}
+
+async function sendMessage() {
+  const userInputEl = document.getElementById('user-input');
+  const message = userInputEl.value.trim();
+  if (message === '') return;
+  addMessage(message, 'user');
+  userInputEl.value = '';
+
+  const questions = message.split('?').map(q => q.trim()).filter(q => q.length > 1);
+  if (questions.length > 1) {
+    for (const q of questions) {
+      await processQuestion(q + '?');
+    }
+  } else {
+    await processQuestion(message);
+  }
 }
 
 $("#user-input").on('keypress', function(e) {
