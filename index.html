@@ -4418,37 +4418,110 @@ async function generatePptForTopic(topic) {
 
   // ── 5 Random Themes ────────────────────────────────────────────
   const themes = [
-    { // 0 — Navy & Sky Blue (corporate, professional)
-      name: 'navy',
-      primary: '1B2A4A', accent: '3B9FE8', highlight: 'F0B429',
-      tint: '04A89B', bg1: 'FFFFFF', bg2: 'EAF3FD',
-      dark: '1C2833', muted: '8899BB', panelDark: '162238'
-    },
-    { // 1 — Forest Green (growth, sustainability)
-      name: 'forest',
-      primary: '1A3D2B', accent: '27AE60', highlight: 'F4D03F',
-      tint: '1ABC9C', bg1: 'FFFFFF', bg2: 'EAFAF1',
-      dark: '1C2A22', muted: '7D9A7A', panelDark: '112B1D'
-    },
-    { // 2 — Crimson & Gold (bold, finance, leadership)
-      name: 'crimson',
-      primary: '6E1010', accent: 'E74C3C', highlight: 'F39C12',
-      tint: 'E67E22', bg1: 'FFFFFF', bg2: 'FEF5E7',
-      dark: '2C1810', muted: 'A07060', panelDark: '500C0C'
-    },
-    { // 3 — Royal Purple (creative, tech, innovation)
-      name: 'purple',
-      primary: '2C0F5C', accent: '9B59B6', highlight: 'E91E63',
-      tint: '3498DB', bg1: 'FFFFFF', bg2: 'F5EEF8',
-      dark: '1A0833', muted: '9B8BB0', panelDark: '1F0A45'
-    },
-    { // 4 — Slate & Orange (modern, startup, energy)
-      name: 'slate',
-      primary: '1C2833', accent: 'E67E22', highlight: 'F1C40F',
-      tint: 'E74C3C', bg1: 'FFFFFF', bg2: 'FDF2E9',
-      dark: '17202A', muted: '7F8C8D', panelDark: '141E26'
-    }
-  ];
+  // Existing Themes
+  {
+    name: 'navy',
+    primary: '1B2A4A', accent: '3B9FE8', highlight: 'F0B429',
+    tint: '04A89B', bg1: 'FFFFFF', bg2: 'EAF3FD',
+    dark: '1C2833', muted: '8899BB', panelDark: '162238'
+  },
+  {
+    name: 'forest',
+    primary: '1A3D2B', accent: '27AE60', highlight: 'F4D03F',
+    tint: '1ABC9C', bg1: 'FFFFFF', bg2: 'EAFAF1',
+    dark: '1C2A22', muted: '7D9A7A', panelDark: '112B1D'
+  },
+  {
+    name: 'crimson',
+    primary: '6E1010', accent: 'E74C3C', highlight: 'F39C12',
+    tint: 'E67E22', bg1: 'FFFFFF', bg2: 'FEF5E7',
+    dark: '2C1810', muted: 'A07060', panelDark: '500C0C'
+  },
+  {
+    name: 'purple',
+    primary: '2C0F5C', accent: '9B59B6', highlight: 'E91E63',
+    tint: '3498DB', bg1: 'FFFFFF', bg2: 'F5EEF8',
+    dark: '1A0833', muted: '9B8BB0', panelDark: '1F0A45'
+  },
+  {
+    name: 'slate',
+    primary: '1C2833', accent: 'E67E22', highlight: 'F1C40F',
+    tint: 'E74C3C', bg1: 'FFFFFF', bg2: 'FDF2E9',
+    dark: '17202A', muted: '7F8C8D', panelDark: '141E26'
+  },
+
+  // NEW PREMIUM THEMES
+
+  { // 5 — Midnight Neon (modern futuristic)
+    name: 'midnight',
+    primary: '0F172A', accent: '38BDF8', highlight: 'A855F7',
+    tint: '06B6D4', bg1: 'F8FAFC', bg2: 'E0F2FE',
+    dark: '020617', muted: '64748B', panelDark: '111827'
+  },
+
+  { // 6 — Luxury Black & Gold
+    name: 'luxury',
+    primary: '111111', accent: 'D4AF37', highlight: 'F7DC6F',
+    tint: 'B9770E', bg1: 'FFFDF7', bg2: 'F8F1D4',
+    dark: '000000', muted: '8C7853', panelDark: '1A1A1A'
+  },
+
+  { // 7 — Ice Blue Minimal
+    name: 'ice',
+    primary: '1E3A5F', accent: '60A5FA', highlight: '93C5FD',
+    tint: '22D3EE', bg1: 'FFFFFF', bg2: 'EFF6FF',
+    dark: '0F172A', muted: '94A3B8', panelDark: '162033'
+  },
+
+  { // 8 — Sunset Gradient
+    name: 'sunset',
+    primary: '7C2D12', accent: 'F97316', highlight: 'FDBA74',
+    tint: 'EF4444', bg1: 'FFF7ED', bg2: 'FFE4E6',
+    dark: '431407', muted: 'C08457', panelDark: '5A1E0E'
+  },
+
+  { // 9 — Cyberpunk
+    name: 'cyberpunk',
+    primary: '140021', accent: 'FF00FF', highlight: '00F5FF',
+    tint: '7C3AED', bg1: 'FAF5FF', bg2: 'EDE9FE',
+    dark: '0B0014', muted: 'A78BFA', panelDark: '1A002B'
+  },
+
+  { // 10 — Emerald Glass
+    name: 'emerald',
+    primary: '064E3B', accent: '10B981', highlight: '6EE7B7',
+    tint: '14B8A6', bg1: 'F0FDF4', bg2: 'DCFCE7',
+    dark: '022C22', muted: '6B9E87', panelDark: '053B2D'
+  },
+
+  { // 11 — Rose Gold
+    name: 'rosegold',
+    primary: '5B2333', accent: 'D4A373', highlight: 'E9C46A',
+    tint: 'F28482', bg1: 'FFF8F5', bg2: 'FDEDEC',
+    dark: '2C1018', muted: 'B08968', panelDark: '47202C'
+  },
+
+  { // 12 — Arctic Dark
+    name: 'arctic',
+    primary: '0B132B', accent: '5BC0EB', highlight: '9BC53D',
+    tint: '6FFFE9', bg1: 'F8FAFC', bg2: 'E2E8F0',
+    dark: '020817', muted: '7B8794', panelDark: '111827'
+  },
+
+  { // 13 — Coffee Brown
+    name: 'coffee',
+    primary: '4B2E2B', accent: 'A47148', highlight: 'DDB892',
+    tint: 'CB997E', bg1: 'FFF9F5', bg2: 'F5EBE0',
+    dark: '2B1B18', muted: '8A6F63', panelDark: '3A241F'
+  },
+
+  { // 14 — Aqua Tech
+    name: 'aqua',
+    primary: '003B46', accent: '00B8A9', highlight: 'FFD166',
+    tint: '118AB2', bg1: 'F0FDFF', bg2: 'CCFBF1',
+    dark: '001F27', muted: '5E8C92', panelDark: '002B36'
+  }
+];
 
   // Pick a random theme AND a random title layout each time
   const T = themes[Math.floor(Math.random() * themes.length)];
