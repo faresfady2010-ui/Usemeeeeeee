@@ -248,6 +248,35 @@ body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
 }
 body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
 
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 16px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    float: left;
+    margin-right: auto;
+    margin-bottom: 8px;
+    width: fit-content;
+    clear: both;
+}
+body.dark .typing-indicator { background-color: #2a2a4a; }
+.typing-indicator span {
+    width: 9px; height: 9px;
+    background: #999;
+    border-radius: 50%;
+    display: inline-block;
+    animation: typingBounce 1.2s infinite ease-in-out;
+}
+body.dark .typing-indicator span { background: #888; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-9px); opacity: 1; }
+}
+
 .chat-input-area {
     display: flex;
     flex-direction: column;
@@ -5068,6 +5097,189 @@ function typeNextCharacter() {
 typeNextCharacter();
 }
 
+// ==================== STOCK PRICE LOOKUP ====================
+const STOCK_TICKERS = {
+  apple:'AAPL', microsoft:'MSFT', google:'GOOGL', alphabet:'GOOGL', amazon:'AMZN',
+  tesla:'TSLA', meta:'META', facebook:'META', netflix:'NFLX', nvidia:'NVDA',
+  samsung:'005930.KS', toyota:'TM', sony:'SONY', nike:'NKE', coca:'KO', 'coca-cola':'KO',
+  pepsi:'PEP', walmart:'WMT', disney:'DIS', paypal:'PYPL', twitter:'TWTR',
+  uber:'UBER', airbnb:'ABNB', spotify:'SPOT', shopify:'SHOP', salesforce:'CRM',
+  oracle:'ORCL', intel:'INTC', amd:'AMD', ibm:'IBM', adobe:'ADBE',
+  visa:'V', mastercard:'MA', jpmorgan:'JPM', 'bank of america':'BAC', goldman:'GS',
+  exxon:'XOM', shell:'SHEL', bp:'BP', boeing:'BA', ford:'F', gm:'GM',
+  pfizer:'PFE', johnson:'JNJ', 'johnson & johnson':'JNJ', moderna:'MRNA',
+  berkshire:'BRK-B', blackrock:'BLK', alibaba:'BABA', baidu:'BIDU', tencent:'TCEHY',
+};
+function extractStockQuery(msg) {
+  const t = msg.toLowerCase();
+  if (!/stock|share|price|ticker|market|trading|listed|equity/.test(t)) return null;
+  for (const [name, ticker] of Object.entries(STOCK_TICKERS)) {
+    if (t.includes(name)) return ticker;
+  }
+  const m = t.match(/\b([a-z]{1,5})\s+stock\b/);
+  if (m) return m[1].toUpperCase();
+  const m2 = t.match(/stock\s+(?:of|for|price of)?\s*([a-z]+)/);
+  if (m2 && STOCK_TICKERS[m2[1]]) return STOCK_TICKERS[m2[1]];
+  return null;
+}
+async function fetchStockPrice(symbol) {
+  try {
+    const url = `https://corsproxy.io/?https://query2.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=2d`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const meta = data.chart.result[0].meta;
+    const price = meta.regularMarketPrice;
+    const prev  = meta.chartPreviousClose || meta.previousClose;
+    const change = price - prev;
+    const pct    = ((change / prev) * 100).toFixed(2);
+    const arrow  = change >= 0 ? '▲' : '▼';
+    const sign   = change >= 0 ? '+' : '';
+    const name   = meta.longName || meta.shortName || symbol;
+    const cur    = meta.currency || 'USD';
+    const exch   = meta.exchangeName || '';
+    return `📈 Stock Price — ${name}\n\n` +
+           `Symbol: ${symbol}   Exchange: ${exch}\n` +
+           `Price:  ${cur} ${price.toFixed(2)}\n` +
+           `Change: ${arrow} ${sign}${change.toFixed(2)} (${sign}${pct}%)\n` +
+           `Prev Close: ${cur} ${prev.toFixed(2)}\n\n` +
+           `_Live data from Yahoo Finance_`;
+  } catch(e) {
+    return `Sorry, I couldn't fetch the stock price for "${symbol}". Please check the ticker symbol and try again.`;
+  }
+}
+
+// ==================== COUNTRY BUSINESS FACTS ====================
+const COUNTRY_DATA = {
+  usa:         { name:'United States', flag:'🇺🇸', capital:'Washington D.C.', currency:'USD', gdp:'$27.4 trillion', population:'335 million', corpTax:'21%', ease:'#55 (World Bank)', industries:'Technology, Finance, Healthcare, Defence, Retail', note:'Largest economy globally; strong IP laws, deep capital markets, highly entrepreneurial ecosystem.' },
+  uk:          { name:'United Kingdom', flag:'🇬🇧', capital:'London', currency:'GBP', gdp:'$3.1 trillion', population:'68 million', corpTax:'25%', ease:'#8 (World Bank)', industries:'Finance, Pharma, Aerospace, Creative Industries, Energy', note:'Major global financial hub; strong legal system; one of the easiest places to start a business.' },
+  germany:     { name:'Germany', flag:'🇩🇪', capital:'Berlin', currency:'EUR', gdp:'$4.5 trillion', population:'84 million', corpTax:'30%', ease:'#22 (World Bank)', industries:'Automotive, Engineering, Chemicals, Finance, Logistics', note:'Largest economy in Europe; renowned for manufacturing excellence and "Mittelstand" mid-sized companies.' },
+  france:      { name:'France', flag:'🇫🇷', capital:'Paris', currency:'EUR', gdp:'$3.0 trillion', population:'68 million', corpTax:'25%', ease:'#32 (World Bank)', industries:'Luxury Goods, Aerospace, Tourism, Energy, Agriculture', note:'Home to many global luxury brands; strong state involvement in strategic industries.' },
+  japan:       { name:'Japan', flag:'🇯🇵', capital:'Tokyo', currency:'JPY', gdp:'$4.2 trillion', population:'125 million', corpTax:'29.7%', ease:'#29 (World Bank)', industries:'Automotive, Electronics, Robotics, Finance, Retail', note:'Third-largest economy; world leader in advanced manufacturing and robotics technology.' },
+  china:       { name:'China', flag:'🇨🇳', capital:'Beijing', currency:'CNY', gdp:'$18.5 trillion', population:'1.4 billion', corpTax:'25%', ease:'#31 (World Bank)', industries:'Manufacturing, Technology, E-commerce, Energy, Finance', note:'Second-largest economy; factory of the world; rapidly growing tech and consumer sector.' },
+  india:       { name:'India', flag:'🇮🇳', capital:'New Delhi', currency:'INR', gdp:'$3.9 trillion', population:'1.44 billion', corpTax:'22%', ease:'#63 (World Bank)', industries:'IT Services, Pharma, Textiles, Agriculture, Finance', note:'Fastest-growing large economy; massive tech talent pool; strong startup and outsourcing ecosystem.' },
+  canada:      { name:'Canada', flag:'🇨🇦', capital:'Ottawa', currency:'CAD', gdp:'$2.1 trillion', population:'38 million', corpTax:'26.5%', ease:'#23 (World Bank)', industries:'Energy, Mining, Finance, Real Estate, Tech', note:'Business-friendly environment; strong trade links with the USA via USMCA agreement.' },
+  australia:   { name:'Australia', flag:'🇦🇺', capital:'Canberra', currency:'AUD', gdp:'$1.7 trillion', population:'26 million', corpTax:'30%', ease:'#14 (World Bank)', industries:'Mining, Agriculture, Finance, Tourism, Education', note:'Stable economy with strong resource exports; gateway to Asia-Pacific markets.' },
+  singapore:   { name:'Singapore', flag:'🇸🇬', capital:'Singapore', currency:'SGD', gdp:'$500 billion', population:'6 million', corpTax:'17%', ease:'#2 (World Bank)', industries:'Finance, Logistics, Tech, Biomedical, Trade', note:'Top-ranked business hub in Asia; very low tax, minimal red tape, strong rule of law.' },
+  uae:         { name:'United Arab Emirates', flag:'🇦🇪', capital:'Abu Dhabi', currency:'AED', gdp:'$509 billion', population:'10 million', corpTax:'9%', ease:'#16 (World Bank)', industries:'Oil & Gas, Tourism, Finance, Real Estate, Trade', note:'Major Middle East business hub; zero personal income tax; growing free-trade zones.' },
+  brazil:      { name:'Brazil', flag:'🇧🇷', capital:'Brasília', currency:'BRL', gdp:'$2.1 trillion', population:'215 million', corpTax:'34%', ease:'#124 (World Bank)', industries:'Agriculture, Mining, Manufacturing, Oil, Finance', note:'Largest economy in Latin America; massive agricultural exporter; complex regulatory environment.' },
+  southafrica: { name:'South Africa', flag:'🇿🇦', capital:'Pretoria', currency:'ZAR', gdp:'$405 billion', population:'60 million', corpTax:'27%', ease:'#84 (World Bank)', industries:'Mining, Finance, Agriculture, Tourism, Manufacturing', note:'Most industrialised economy in Africa; key gateway to Sub-Saharan markets.' },
+  nigeria:     { name:'Nigeria', flag:'🇳🇬', capital:'Abuja', currency:'NGN', gdp:'$477 billion', population:'220 million', corpTax:'30%', ease:'#131 (World Bank)', industries:'Oil & Gas, Agriculture, Telecom, Finance, Entertainment', note:'Largest economy in Africa by GDP; massive young population driving fintech and startup growth.' },
+  kenya:       { name:'Kenya', flag:'🇰🇪', capital:'Nairobi', currency:'KES', gdp:'$118 billion', population:'54 million', corpTax:'30%', ease:'#56 (World Bank)', industries:'Agriculture, Telecom, Finance, Tourism, Manufacturing', note:'East Africa business hub; global leader in mobile money (M-Pesa); growing tech scene.' },
+  mexico:      { name:'Mexico', flag:'🇲🇽', capital:'Mexico City', currency:'MXN', gdp:'$1.3 trillion', population:'130 million', corpTax:'30%', ease:'#60 (World Bank)', industries:'Manufacturing, Oil, Agriculture, Tourism, Finance', note:'Second-largest economy in Latin America; major US trade partner; growing nearshoring destination.' },
+  southkorea:  { name:'South Korea', flag:'🇰🇷', capital:'Seoul', currency:'KRW', gdp:'$1.7 trillion', population:'52 million', corpTax:'25%', ease:'#5 (World Bank)', industries:'Electronics, Automotive, Shipbuilding, Steel, K-Pop/Media', note:'Home of Samsung, Hyundai, LG; highly connected digital economy and export powerhouse.' },
+  switzerland: { name:'Switzerland', flag:'🇨🇭', capital:'Bern', currency:'CHF', gdp:'$869 billion', population:'8.8 million', corpTax:'19.7%', ease:'#36 (World Bank)', industries:'Finance, Pharma, Watches, Tourism, Food', note:'Global wealth management centre; home to many multinational HQs; highly innovative.' },
+  netherlands: { name:'Netherlands', flag:'🇳🇱', capital:'Amsterdam', currency:'EUR', gdp:'$1.1 trillion', population:'17.9 million', corpTax:'25.8%', ease:'#42 (World Bank)', industries:'Logistics, Agriculture, Finance, Tech, Energy', note:'Europe logistics hub; Rotterdam is EU largest port; attractive HQ location for multinationals.' },
+  sweden:      { name:'Sweden', flag:'🇸🇪', capital:'Stockholm', currency:'SEK', gdp:'$530 billion', population:'10.5 million', corpTax:'20.6%', ease:'#10 (World Bank)', industries:'Manufacturing, Tech, Pharma, Finance, Design', note:'Birthplace of Spotify, IKEA, H&M; strong innovation culture and highly educated workforce.' },
+  indonesia:   { name:'Indonesia', flag:'🇮🇩', capital:'Jakarta', currency:'IDR', gdp:'$1.4 trillion', population:'275 million', corpTax:'22%', ease:'#73 (World Bank)', industries:'Agriculture, Mining, Manufacturing, Tourism, Finance', note:'Largest economy in Southeast Asia; fourth most populous country; booming e-commerce sector.' },
+  saudi:       { name:'Saudi Arabia', flag:'🇸🇦', capital:'Riyadh', currency:'SAR', gdp:'$1.1 trillion', population:'35 million', corpTax:'20%', ease:'#62 (World Bank)', industries:'Oil & Gas, Finance, Construction, Tourism, Mining', note:'Largest oil exporter; Vision 2030 driving major economic diversification and reform.' },
+};
+const COUNTRY_ALIASES = {
+  'united states':'usa','us':'usa','america':'usa','american':'usa',
+  'united kingdom':'uk','britain':'uk','england':'uk','british':'uk',
+  'south africa':'southafrica','south korea':'southkorea','saudi arabia':'saudi',
+  'uae':'uae','dubai':'uae','emirates':'uae',
+};
+function extractCountryQuery(msg) {
+  const t = msg.toLowerCase();
+  if (!/countr|business|economy|gdp|market|invest|tax|trade|industry|industries|fact/.test(t)) return null;
+  for (const [alias, key] of Object.entries(COUNTRY_ALIASES)) {
+    if (t.includes(alias)) return key;
+  }
+  for (const key of Object.keys(COUNTRY_DATA)) {
+    if (t.includes(key)) return key;
+    if (t.includes(COUNTRY_DATA[key].name.toLowerCase())) return key;
+  }
+  return null;
+}
+function displayCountryCard(key) {
+  const d = COUNTRY_DATA[key];
+  if (!d) return;
+  const chat = document.getElementById('chat-box');
+  const wrap = document.createElement('div');
+  wrap.className = 'message bot';
+  wrap.style.cssText = 'max-width:96%;width:96%;padding:0;background:none;float:left;margin-right:auto;';
+  wrap.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);color:#e2e8f0;border-radius:14px;padding:18px 20px;font-family:sans-serif;box-shadow:0 4px 18px rgba(0,0,0,0.18);">
+      <div style="font-size:1.6em;margin-bottom:4px;">${d.flag} <strong>${d.name}</strong></div>
+      <div style="color:#94a3b8;font-size:0.85em;margin-bottom:14px;">Business Facts Overview</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;font-size:0.88em;margin-bottom:12px;">
+        <div><span style="color:#64748b;">Capital</span><br><strong>${d.capital}</strong></div>
+        <div><span style="color:#64748b;">Currency</span><br><strong>${d.currency}</strong></div>
+        <div><span style="color:#64748b;">GDP</span><br><strong>${d.gdp}</strong></div>
+        <div><span style="color:#64748b;">Population</span><br><strong>${d.population}</strong></div>
+        <div><span style="color:#64748b;">Corp. Tax Rate</span><br><strong>${d.corpTax}</strong></div>
+        <div><span style="color:#64748b;">Ease of Business</span><br><strong>${d.ease}</strong></div>
+      </div>
+      <div style="margin-bottom:8px;font-size:0.88em;"><span style="color:#64748b;">Key Industries</span><br><strong>${d.industries}</strong></div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:8px;padding:10px 12px;font-size:0.84em;color:#cbd5e1;margin-top:4px;">💡 ${d.note}</div>
+    </div>`;
+  chat.appendChild(wrap);
+  chat.scrollTop = chat.scrollHeight;
+}
+function displayStockCard(text) {
+  const chat = document.getElementById('chat-box');
+  const lines = text.split('\n').filter(l => l.trim());
+  const header = lines[0].replace('📈 Stock Price — ','');
+  const rows = lines.slice(2).filter(l => l.includes(':'));
+  const note = lines[lines.length-1];
+  const isUp = text.includes('▲');
+  const color = isUp ? '#10b981' : '#ef4444';
+  const wrap = document.createElement('div');
+  wrap.className = 'message bot';
+  wrap.style.cssText = 'max-width:96%;width:96%;padding:0;background:none;float:left;margin-right:auto;';
+  wrap.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#e2e8f0;border-radius:14px;padding:18px 20px;font-family:sans-serif;box-shadow:0 4px 18px rgba(0,0,0,0.18);">
+      <div style="font-size:1.1em;font-weight:700;margin-bottom:14px;">📈 ${header}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;font-size:0.88em;">
+        ${rows.map(r=>{const[k,...v]=r.split(':');return `<div><span style="color:#64748b;">${k.trim()}</span><br><strong style="${k.includes('Change')?'color:'+color+';':''}">${v.join(':').trim()}</strong></div>`;}).join('')}
+      </div>
+      <div style="margin-top:12px;font-size:0.78em;color:#475569;">${note}</div>
+    </div>`;
+  chat.appendChild(wrap);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// ==================== TYPING INDICATOR ====================
+function showTypingIndicator() {
+  removeTypingIndicator();
+  const chatBox = document.getElementById('chat-box');
+  const el = document.createElement('div');
+  el.id = 'typing-indicator';
+  el.className = 'typing-indicator';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  chatBox.appendChild(el);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+function removeTypingIndicator() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+// ==================== CURRENCY CONVERTER ====================
+function extractCurrencyQuery(msg) {
+  const t = msg.toLowerCase().trim();
+  const m = t.match(/(?:convert\s+)?(\d+(?:[.,]\d+)?)\s*([a-z]{3})\s+(?:to|in|into)\s+([a-z]{3})/);
+  if (m) return { amount: parseFloat(m[1].replace(',','.')), from: m[2].toUpperCase(), to: m[3].toUpperCase() };
+  const m2 = t.match(/(?:how much is\s+)?(\d+(?:[.,]\d+)?)\s*([a-z]{3})\s+(?:in|to|into)\s+([a-z]{3})/);
+  if (m2) return { amount: parseFloat(m2[1].replace(',','.')), from: m2[2].toUpperCase(), to: m2[3].toUpperCase() };
+  return null;
+}
+async function convertCurrency(amount, from, to) {
+  try {
+    const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+    const data = await res.json();
+    if (data.result === 'success' && data.rates && data.rates[to] !== undefined) {
+      const rate = data.rates[to];
+      const converted = (amount * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const rateStr = rate < 0.01 ? rate.toExponential(4) : rate.toFixed(4);
+      return `💱 Currency Conversion\n\n${amount.toLocaleString()} ${from}  =  ${converted} ${to}\n\nRate: 1 ${from} = ${rateStr} ${to}\nUpdated: live exchange rate`;
+    }
+    return `Sorry, I don't recognise the currency code "${to}". Please use standard 3-letter codes like USD, EUR, GBP, JPY, CAD, AUD, INR, CNY, CHF, SGD.`;
+  } catch(e) {
+    return `Sorry, I couldn't fetch the exchange rate right now. Please check your connection and try again.`;
+  }
+}
+
 // ==================== IMAGE GENERATOR (canvas-based, no API) ====================
 
 function _imgWrapText(ctx, text, x, y, maxWidth, lineHeight, align) {
@@ -5819,13 +6031,50 @@ function addImageToChat(topic, dataUrl) {
 
 async function processQuestion(msg) {
   if (businessCreationFlow.active) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 500));
+    removeTypingIndicator();
     const reply = handleBusinessCreationStep(msg);
     addMessage(reply, 'bot');
     return;
   }
 
+  const currencyQuery = extractCurrencyQuery(msg);
+  if (currencyQuery) {
+    showTypingIndicator();
+    const reply = await convertCurrency(currencyQuery.amount, currencyQuery.from, currencyQuery.to);
+    removeTypingIndicator();
+    addMessage(reply, 'bot');
+    return;
+  }
+
+  const stockSymbol = extractStockQuery(msg);
+  if (stockSymbol) {
+    showTypingIndicator();
+    const stockText = await fetchStockPrice(stockSymbol);
+    removeTypingIndicator();
+    if (stockText.startsWith('Sorry')) {
+      addMessage(stockText, 'bot');
+    } else {
+      displayStockCard(stockText);
+    }
+    return;
+  }
+
+  const countryKey = extractCountryQuery(msg);
+  if (countryKey) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 500));
+    removeTypingIndicator();
+    displayCountryCard(countryKey);
+    return;
+  }
+
   const imgTopic = extractImageTopic(msg);
   if (imgTopic) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 400));
+    removeTypingIndicator();
     addMessage(`Creating a visual image for "${imgTopic}"...`, 'bot');
     try {
       const dataUrl = generateImageForTopic(imgTopic);
@@ -5838,10 +6087,16 @@ async function processQuestion(msg) {
 
   const pptTopic = getPptRequestTopic(msg);
   if (pptTopic === 'needTopic') {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 500));
+    removeTypingIndicator();
     addMessage('Please specify the topic for the presentation, for example: "Create a presentation about marketing strategy".', 'bot');
     return;
   }
   if (pptTopic) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 600));
+    removeTypingIndicator();
     addMessage(`✅ Generating your presentation about "${pptTopic}". Download should start shortly.`, 'bot');
     const success = await generatePptForTopic(pptTopic);
     if (!success) {
@@ -5849,6 +6104,10 @@ async function processQuestion(msg) {
     }
     return;
   }
+
+  showTypingIndicator();
+  await new Promise(r => setTimeout(r, 700));
+  removeTypingIndicator();
   const reply = getBotReply(msg);
   addMessage(reply, 'bot');
 }
