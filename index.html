@@ -248,6 +248,62 @@ body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
 }
 body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
 
+.msg-actions {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+    float: left;
+    clear: both;
+}
+.msg-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 2px 5px;
+    font-size: 11px;
+    color: #999;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition: color 0.2s, background 0.2s;
+    line-height: 1;
+}
+.msg-action-btn:hover { color: #555; background: #e8e8e8; }
+body.dark .msg-action-btn { color: #666; }
+body.dark .msg-action-btn:hover { color: #aaa; background: #333; }
+.msg-action-btn svg { width: 11px; height: 11px; flex-shrink: 0; }
+.msg-action-btn.copied { color: #28a745; }
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 16px;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    float: left;
+    margin-right: auto;
+    margin-bottom: 8px;
+    width: fit-content;
+    clear: both;
+}
+body.dark .typing-indicator { background-color: #2a2a4a; }
+.typing-indicator span {
+    width: 9px; height: 9px;
+    background: #999;
+    border-radius: 50%;
+    display: inline-block;
+    animation: typingBounce 1.2s infinite ease-in-out;
+}
+body.dark .typing-indicator span { background: #888; }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-9px); opacity: 1; }
+}
+
 .chat-input-area {
     display: flex;
     flex-direction: column;
@@ -902,21 +958,72 @@ function generatePersonalizedBusinessPlan(a) {
 
 const intents = [
 // GREETINGS
-{tag:"greeting",patterns:["hi","hello","hey","good morning","hola","bonjour","hallo","مرحبا","مرحباً","salut","buenas","ciao"],responses:["Hello! Ask me anything about business."]},
-{tag:"farewell",patterns:["bye","goodbye","see you"],responses:["Goodbye!"]},
-{tag:"thanksgiving",patterns:["thank you"],responses:["You're very welcome! I'm happy I could help."]},
-{tag:"okays",patterns:["okay","ok"],responses:["👍 Got it. What do you want to work on next?"]},
-{tag:"market cap",patterns:["what is market cap","market cap"],responses:["Market cap is the total dollar value of a company's outstanding shares of stock. For example, if a company has 1 million shares of outstanding stock and the stock currently trades at $50 per share, then its current market cap is $50 million."]},
-{tag:"important aspect",patterns:["what is most important aspect of buisness"],responses:["The main aspect of a business is creating value. If you provide something that people find useful, they will be willing to pay for it."]},
+{tag:"greeting",patterns:["hi","hello","hey","good morning","hola","bonjour","hallo","مرحبا","مرحباً","salut","buenas","ciao"],responses:[
+  "Hello! 👋 Ask me anything about business — strategy, finance, marketing, stocks, and more.",
+  "Hey there! I'm usemee, your business assistant. What can I help you with today?",
+  "Hi! Ready to talk business. Ask me anything — from startup ideas to investment analysis.",
+  "Hello! Whether it's growing a business, understanding markets, or checking stock prices — I'm here. 🚀",
+  "Hey! Great to see you. I can help with business questions, country facts, currency conversions, and much more. What's on your mind?"
+]},
+{tag:"farewell",patterns:["bye","goodbye","see you","see ya","take care","later"],responses:[
+  "Goodbye! Best of luck with your business journey. 🚀",
+  "See you! Feel free to come back whenever you have questions.",
+  "Take care! Remember — every big business started with one small step.",
+  "Bye! Wishing you success in everything you build. 💼",
+  "See you soon! Don't hesitate to return when you need business insights."
+]},
+{tag:"thanksgiving",patterns:["thank you","thanks","thank you so much","thanks a lot","cheers","appreciate it"],responses:[
+  "You're very welcome! Happy to help anytime. 😊",
+  "Glad I could help! Feel free to ask anything else.",
+  "Of course — that's what I'm here for. Any other questions?",
+  "My pleasure! Good luck with whatever you're working on. 💪",
+  "Anytime! Come back whenever you need business advice."
+]},
+{tag:"okays",patterns:["okay","ok","got it","understood","alright","sounds good"],responses:[
+  "👍 Got it. What do you want to work on next?",
+  "Perfect! Let me know if there's anything else I can help with.",
+  "Great! Feel free to ask your next question.",
+  "Understood! I'm here whenever you're ready. 😊",
+  "All good! What's next on your business agenda?"
+]},
+{tag:"market cap",patterns:["what is market cap","market cap","market capitalisation"],responses:[
+  "Market cap is the total dollar value of a company's outstanding shares. Example: 1 million shares × $50 = $50 million market cap. It's used to classify companies as small-cap, mid-cap, or large-cap. 📊",
+  "Market capitalisation = Share price × Total shares outstanding. It tells you the market's total valuation of a company — not what the company is 'worth' in assets, but what investors believe it's worth. 💹",
+  "Market cap is simply what it would cost to buy the entire company at today's share price. Apple's market cap exceeds $3 trillion — the largest in history. Investors use it to compare company sizes across industries. 🏆"
+]},
+{tag:"important aspect",patterns:["what is most important aspect of buisness","most important thing in business","key to business success"],responses:[
+  "The single most important aspect of a business is creating real value for customers. If people genuinely need what you offer and are willing to pay for it, everything else becomes solvable. 💡",
+  "Execution beats everything. Ideas are common — the businesses that succeed are the ones that actually do the work, adapt quickly, and refuse to quit when things get hard. 🚀",
+  "Cash flow is arguably the most critical aspect operationally. Many profitable businesses have failed simply because they ran out of cash before revenue caught up. Always know your numbers. 💵",
+  "The most important aspect is understanding your customer deeply. Every other business decision — product, price, marketing — flows from knowing exactly who you're serving and what problem you're solving for them. 🎯"
+]},
 // BUSINESS BASICS
-{tag:"what_is_business",patterns:["what is business","define business","business meaning","explain business","que es un negocio","qu'est-ce qu'une entreprise","was ist ein unternehmen","ما هو العمل التجاري","ما هي الأعمال"],responses:["A business is an organization that provides goods or services to customers in exchange for money. Its core goal is to create value, generate profit, and grow sustainably. 🏢"]},
-{tag:"what_is_the_purpose_of_business",patterns:["purpose of business","why do businesses exist","goal of business","proposito del negocio","but d'une entreprise","Zweck eines Unternehmens","الغرض من الأعمال"],responses:["The purpose of a business is to satisfy customer needs and make profit."]},
-{tag:"business_activity",patterns:["business activities","what do businesses do"],responses:["Businesses produce goods or provide services to customers."]},
+{tag:"what_is_business",patterns:["what is business","define business","business meaning","explain business","que es un negocio","qu'est-ce qu'une entreprise","was ist ein unternehmen","ما هو العمل التجاري","ما هي الأعمال"],responses:[
+  "A business is an organisation that provides goods or services to customers in exchange for money. Its core goal is to create value, generate profit, and grow sustainably. 🏢",
+  "At its core, a business is a value exchange — you solve a problem for someone, and they pay you for it. The more people you help, and the better you help them, the more successful the business becomes.",
+  "A business is any activity organised to produce income by meeting a market need. It can be a solo freelancer or a multinational corporation — what matters is the exchange of value for money. 💼",
+  "Simply put: a business finds a problem, creates a solution, and sells that solution at a profit. The best businesses make customers' lives meaningfully better in some way. 🌟"
+]},
+{tag:"what_is_the_purpose_of_business",patterns:["purpose of business","why do businesses exist","goal of business","proposito del negocio","but d'une entreprise","Zweck eines Unternehmens","الغرض من الأعمال"],responses:[
+  "The purpose of a business is to create and keep customers. If you do that well, profit follows naturally. — Peter Drucker summarised it best. 🎯",
+  "Businesses exist to solve problems. Every successful company, from a local bakery to Google, is fundamentally in the business of making someone's life easier, better, or more enjoyable.",
+  "The primary goal is to create value — for customers, employees, and owners. Profit is the reward for doing that well consistently over time. 💡",
+  "Businesses exist to meet a need in the market that people are willing to pay for. Purpose, profit, and people all need to align for long-term success. 🌍"
+]},
+{tag:"business_activity",patterns:["business activities","what do businesses do"],responses:[
+  "Businesses produce goods, deliver services, manage finances, market their offerings, and serve customers — all at the same time. It's a continuous cycle of creating and delivering value. 🔄",
+  "Core business activities include: production or service delivery, marketing and sales, financial management, human resources, and customer service. Every department supports the core goal of creating value. 📋",
+  "Businesses do three things: create something valuable, communicate that value to the right people, and deliver it reliably. Everything else is in support of those three activities. 💼"
+]},
 {tag:"marketing_strategy",patterns:[
 "how to market my business","marketing strategy","how to promote my business","how to advertise","how to get customers",
 "estrategia de marketing","como hacer marketing","mercadeo","التسويق","استراتيجية تسويق","stratégie marketing","comment faire du marketing","Marketing-Strategie","wie vermarkte ich"
 ],responses:[
-"Use a mix of strategies: 1️⃣ Social media content 2️⃣ Paid ads 3️⃣ Influencer partnerships 4️⃣ Strong branding. Start with where your audience spends time."
+  "Use a mix of strategies: 1️⃣ Social media content 2️⃣ Paid ads 3️⃣ Influencer partnerships 4️⃣ Strong branding. Start with where your audience spends time. 🎯",
+  "The best marketing strategy starts with knowing your customer better than they know themselves. Identify their biggest pain point, speak directly to it, and show up consistently where they spend time. 📣",
+  "For most small businesses: 1️⃣ Master one free channel first (Instagram, LinkedIn, or TikTok) 2️⃣ Collect email addresses from day one 3️⃣ Ask every happy customer for a referral 4️⃣ Only add paid ads once your message is proven to work organically. 💡",
+  "Great marketing isn't about being everywhere — it's about being unmissable to the right people. Define your target customer precisely, then dominate the one or two channels they actually use. 🎯",
+  "Marketing strategy in 2026: content builds trust, SEO brings organic traffic, email converts, and social proof closes. Stack these together and you have a system, not just tactics. 🚀"
 ]},
 
 {tag:"social_media_growth",patterns:[
@@ -2314,8 +2421,519 @@ const intents = [
 
 // GUIDED BUSINESS CREATION TRIGGER
 {tag:"guided_business_creation",patterns:["help me create a business","help me start a business","help me build a business","help me launch a business","guide me to create a business","walk me through starting a business","i want to create a business","i want to start a business help","create a business with me","help me open a business","i need help starting a business","show me how to build a business","take me through starting a business","help me make a business"],responses:["Let's get started!"]},
+
+// NEGOTIATION
+{tag:"negotiation_tips",patterns:["how to negotiate","negotiation tips","negotiation skills","how to get a better deal","negotiate salary","negotiating with suppliers","win a negotiation"],responses:[
+  "Negotiation fundamentals: 1️⃣ Know your BATNA (Best Alternative To Negotiated Agreement) — your walk-away point 2️⃣ Anchor first with a strong opening position 3️⃣ Ask more questions than you answer 4️⃣ Use silence — it's more powerful than most words 5️⃣ Always negotiate on value, not just price. 🤝",
+  "The best negotiators prepare obsessively. Research the other party's constraints and motivations before you sit down. When you understand what they need to say yes to their boss, you can craft offers they can't refuse. 🎯",
+  "Negotiation secret: the side that cares less wins more. Be genuinely willing to walk away from bad deals. Desperation kills leverage — and the other side can smell it. 💼",
+  "In any negotiation, trade concessions — never give them away free. 'I can do X if you can do Y.' Every concession you make for nothing devalues your position and encourages them to push harder. ⚖️",
+  "Salary negotiation tip: let them make the first offer, then anchor high. The research is clear — people who negotiate their salary earn $1M+ more over their careers than those who don't. The worst they can say is no. 💰"
+]},
+
+// FREELANCING & SOLOPRENEURSHIP
+{tag:"freelancing",patterns:["how to freelance","start freelancing","freelance business","become freelancer","freelance tips","solopreneur","independent contractor"],responses:[
+  "Start freelancing in 5 steps: 1️⃣ Pick ONE skill to lead with 2️⃣ Build 3 portfolio pieces (create them if needed) 3️⃣ Set your rates (higher than you think — you're paying your own taxes and benefits) 4️⃣ Land 2-3 clients through your network 5️⃣ Collect testimonials. The first client is the hardest. 💻",
+  "Freelance pricing mistake: charging hourly. Charge by project or by outcome. A $10,000 result shouldn't cost less because you're fast at delivering it. Package your expertise, not your time. 💰",
+  "The freelancer's biggest challenge is feast-or-famine income cycles. Fix it by: always having 2-3 active prospects in your pipeline, building retainer relationships, and saving 3 months of income as a buffer. 📊",
+  "Freelancing is a business. Treat it like one: track income and expenses, set aside 25-30% for taxes, invest in your skills annually, and treat client communication as seriously as the work itself. 🏢"
+]},
+
+// CRYPTOCURRENCY & BLOCKCHAIN IN BUSINESS
+{tag:"crypto_business",patterns:["crypto for business","cryptocurrency business","accept bitcoin","blockchain business","crypto payment","web3 business","nft business"],responses:[
+  "Accepting crypto in your business: reduces payment processing fees (vs credit cards), enables borderless transactions, and appeals to a tech-forward customer base. Major processors like Stripe and PayPal now support crypto acceptance with instant fiat conversion. ₿",
+  "Blockchain in business use cases: supply chain transparency (tracking goods from factory to shelf), smart contracts (automating agreements without lawyers), digital ownership verification, and cross-border payments without banking fees. 🔗",
+  "Crypto as a business treasury asset: some companies (MicroStrategy, Tesla) hold Bitcoin as a reserve asset. It's high risk and highly volatile — this is a strategy for companies with strong cash positions who understand the volatility. Not recommended for most small businesses. ⚠️",
+  "NFTs for business: digital certificates of ownership that can be used for memberships, event tickets, product authenticity verification, or creator monetisation. The technology has real utility beyond the speculative hype. 🎨"
+]},
+
+// PERSONAL FINANCE FOR BUSINESS OWNERS
+{tag:"personal_finance_owner",patterns:["personal finance business owner","pay yourself","owner salary","separate business personal finance","how much to pay myself"],responses:[
+  "Pay yourself first — and consistently. Pick a salary you can sustain, transfer it on payday like clockwork, and treat business and personal money as completely separate. Mixing them is the #1 accounting headache for small businesses. 💵",
+  "How much to pay yourself: once profitable, aim to pay yourself a market-rate salary for your role. Many founders underpay themselves and create hidden subsidies. If you left, how much would a replacement cost? That's a good benchmark. 📊",
+  "Business owner financial basics: separate bank accounts, separate credit cards, track ALL business expenses (they're deductible), set aside 25-30% of profit for taxes, and build a personal emergency fund independent of the business. 🏦",
+  "The danger zone: using the business as a personal ATM. Random draws destroy your financial picture, make tax filing a nightmare, and make it impossible to know if the business is actually profitable. Pay yourself a salary and stick to it. ⚠️"
+]},
+
+// PROJECT MANAGEMENT
+{tag:"project_management",patterns:["project management","how to manage projects","project planning","how to run a project","pm tips","project timeline","project scope"],responses:[
+  "Great project management boils down to: 1️⃣ Clear scope (what's in and out) 2️⃣ Realistic timeline with buffer 3️⃣ Defined ownership (who does what) 4️⃣ Regular check-ins 5️⃣ A change management process. Scope creep kills more projects than complexity does. 📋",
+  "Project management frameworks: Agile (iterative, flexible — great for tech), Waterfall (sequential, structured — great for construction/manufacturing), Scrum (sprints and standups — great for teams), Kanban (visual flow — great for ongoing work). Pick the simplest one that fits your project. 🔄",
+  "The #1 project management failure: optimistic timelines. Add 20-30% buffer to every estimate. Skilled PMs plan for what will go wrong, not just what needs to go right. 🗓️",
+  "Three things that kill projects: unclear requirements, too many decision-makers, and no single accountable owner. Simplify governance — one person is ultimately responsible for the outcome. ⚡"
+]},
+
+// MENTAL HEALTH AT WORK
+{tag:"burnout",patterns:["burnout","work burnout","exhausted from work","overworked","too stressed to work","entrepreneurship burnout","mental health work"],responses:[
+  "Burnout is real and dangerous — and it builds slowly before it hits hard. Early signs: chronic exhaustion, cynicism about work you used to love, and declining output despite more hours. If you recognise these, the time to act is NOW, not later. 💙",
+  "Recovering from burnout: start by reducing workload ruthlessly (what can you cut, delegate, or delay?), then restore physical basics (sleep, movement, social connection). Productivity hacks won't fix burnout — rest and recovery will. 🌱",
+  "Preventing burnout as a founder: set non-negotiable personal boundaries (no phone after 9pm, one full day off per week), build a support system outside the business, and remember that you cannot pour from an empty cup. Your best business asset is you. 🧠",
+  "The hardest part about entrepreneur burnout: the identity fusion. When you ARE your business, taking a break feels like failure. It's not — it's maintenance. The most productive periods usually follow deliberate rest. ⚡"
+]},
+
+// AI IN BUSINESS
+{tag:"ai_business",patterns:["ai in business","artificial intelligence business","how to use ai","chatgpt for business","ai tools","automate with ai","machine learning business"],responses:[
+  "AI is transforming business operations in 2025: content creation (writing, images, video), customer service (chatbots), data analysis (pattern recognition in large datasets), software development (code generation), and marketing personalisation. The opportunity is massive. 🤖",
+  "Practical AI tools for small businesses: ChatGPT/Claude (writing, research, brainstorming), Midjourney/DALL-E (image creation), GitHub Copilot (coding), Notion AI (notes and docs), HubSpot AI (CRM and marketing). Start with one tool and master it before adding more. 🛠️",
+  "The AI advantage for small businesses: you can now do with a team of 3 what previously required a team of 30. AI handles the repetitive cognitive work, freeing humans to focus on relationships, creativity, and strategy. 🚀",
+  "AI won't replace your business — businesses using AI will replace businesses that don't. Start by identifying your most time-consuming repetitive tasks and finding an AI tool that handles them. The productivity gains compound quickly. ⚡"
+]},
+
+// PASSIVE INCOME
+{tag:"passive_income",patterns:["passive income","how to make passive income","earn while you sleep","income streams","side income","create passive income"],responses:[
+  "Passive income isn't truly passive — it requires upfront work. The most realistic models: digital products (courses, ebooks, templates), rental income (property or equipment), dividend investing, licensing, and affiliate marketing. Build the asset first. 💰",
+  "Digital passive income in 2025: online courses (Teachable, Gumroad), Kindle ebooks, stock photography/video, SaaS tools, newsletter subscriptions, or YouTube ad revenue. All require significant upfront effort but scale without your time once built. 📱",
+  "The truth about passive income: the 'passive' phase only comes after an active phase of creation and promotion. Most people give up during the active phase. The ones who succeed treat the upfront work like an investment with a future payoff. 🎯",
+  "Best passive income for business owners: productise your expertise. Turn what you know into a course, template pack, or book. You've already done the work building the knowledge — packaging it is the last step. 📚"
+]},
+
+// REMOTE WORK & DISTRIBUTED TEAMS
+{tag:"remote_team",patterns:["manage remote team","remote work","distributed team","work from home team","remote employees","virtual team","hybrid team"],responses:[
+  "Managing a remote team effectively: over-communicate expectations (not just outputs), use async-first communication to respect time zones, create rituals that build connection (weekly team call, virtual coffee), and trust people with outcomes, not hours. 🌍",
+  "Remote team tools that work: Slack/Teams (communication), Notion/Confluence (documentation), Loom (async video), Zoom (face-to-face), Linear/Asana (project tracking), Miro (collaboration). The tools matter less than the culture and clarity behind them. 🛠️",
+  "The remote team failure mode: defaulting to too many meetings to 'stay connected'. Write things down instead. A well-documented async culture is more productive and more inclusive across time zones than back-to-back video calls. 📝",
+  "Hiring for remote: prioritise self-direction, written communication, and proactivity over credentials. Remote workers who need constant supervision don't work. Those who thrive are self-starters who communicate clearly. 🎯"
+]},
+
+// E-COMMERCE
+{tag:"ecommerce_start",patterns:["start online store","how to sell online","ecommerce business","start ecommerce","sell products online","shopify store","amazon fba","dropshipping"],responses:[
+  "Start an online store in 6 steps: 1️⃣ Choose a niche (specific beats broad) 2️⃣ Source or create your product 3️⃣ Set up on Shopify, WooCommerce, or Amazon 4️⃣ Take professional product photos 5️⃣ Set up email capture from day one 6️⃣ Drive traffic with paid or organic content. Execution is everything. 🛍️",
+  "Dropshipping reality check: margins are tight (10-30%), competition is fierce, and you control nothing about shipping times or product quality. It can work, but the 'easy money' reputation is misleading. Own your product for better margins and brand control. 📦",
+  "The most important ecommerce metric: contribution margin per order (revenue minus product cost, shipping, and ad spend). If this is negative, you're paying to lose customers. Fix this before scaling any advertising. 💰",
+  "Amazon FBA overview: you send inventory to Amazon, they pick/pack/ship and handle customer service. Pros: massive traffic, Prime trust. Cons: fierce competition, Amazon owns the customer relationship, high fees. Great for proven products, risky for untested ones. 📊"
+]},
+
+// BRANDING DEEP DIVE
+{tag:"branding_deep",patterns:["build a brand","brand identity","brand strategy","create brand","brand values","how to brand","brand positioning","brand differentiation"],responses:[
+  "Building a brand means making a promise and keeping it consistently. Your brand is not your logo — it's the emotion people feel when they think of you, the expectation they carry, and the story they tell others about you. 🌟",
+  "Brand identity elements: name, logo, colour palette, typography, tone of voice, and core values. The visible elements matter less than the invisible ones — your values and voice should be immediately recognisable across every touchpoint. 🎨",
+  "Brand positioning is about owning a specific idea in your customer's mind. You can't be the fastest AND the cheapest AND the most premium. Pick your lane and dominate it. Patagonia owns 'ethical outdoor brand'. Volvo owns 'safety'. What do you want to own? 🎯",
+  "The shortcut to a strong brand: do remarkable work, document it obsessively, and let your customers tell your story. Case studies, testimonials, and word-of-mouth are more powerful than any paid brand campaign. 💬"
+]},
+
+// LEADERSHIP DEEP DIVE
+{tag:"leadership_deep",patterns:["how to be a better leader","good leadership","leadership skills","what makes a great leader","improve leadership","leadership style","team leadership"],responses:[
+  "Great leaders do five things consistently: 1️⃣ Set clear direction 2️⃣ Give autonomy in how the work gets done 3️⃣ Provide regular, honest feedback 4️⃣ Remove obstacles 5️⃣ Celebrate wins publicly and address failures privately. Simple — but rare. 🏆",
+  "Leadership styles: Autocratic (fast but disempowering), Democratic (inclusive but slow), Transformational (inspiring but requires charisma), Servant (empowering and sustainable — the most effective long-term). Most great leaders blend styles based on context. 💡",
+  "The leadership transition founders struggle with most: from doing to delegating. The skills that made you successful as an individual contributor can actually hold the team back when you're leading. Learning to let go is the hardest and most valuable leadership lesson. 🔄",
+  "Trust is the currency of leadership. You build it through consistency — doing what you say you'll do, being transparent about what you don't know, and treating people fairly even when it's hard. Lost trust is very expensive to rebuild. 🤝"
+]},
+
+// HIRING & TALENT
+{tag:"hiring_tips",patterns:["how to hire","hiring strategy","find good employees","recruit talent","first hire","who to hire first","build a team","interview tips"],responses:[
+  "Hiring tip #1: hire slowly, fire quickly. A bad hire costs 1.5-2x their annual salary in lost productivity, training, and rehiring. Take your time to get it right. 👥",
+  "Your first hire should eliminate your biggest bottleneck. What task, if taken off your plate, would double your productive output? Hire for that. Don't hire for what sounds important — hire for what actually limits growth. 🎯",
+  "Hiring process that works: 1️⃣ Write a detailed job spec (include what bad looks like, not just good) 2️⃣ Screen for culture and values, not just skills 3️⃣ Use a paid test project (2-4 hours) to see real work 4️⃣ Check references seriously — call them, don't just email. 📋",
+  "Interview advice: spend less time on hypothetical questions ('where do you see yourself in 5 years?') and more on specific past behaviour ('tell me about the hardest problem you've solved in your last role'). Past behaviour predicts future behaviour. 💼"
+]},
+
+// DIGITAL MARKETING DEEP
+{tag:"digital_marketing",patterns:["digital marketing strategy","online marketing","social media strategy","grow on instagram","tiktok for business","youtube marketing","email marketing","content strategy"],responses:[
+  "Digital marketing in 2025 priority order: 1️⃣ SEO (free, compounds over time) 2️⃣ Email list (you own it — social platforms can disappear) 3️⃣ Content marketing (builds authority) 4️⃣ Paid ads (fast but expensive). Build owned channels before relying on rented ones. 📣",
+  "The content marketing formula that works: post consistently, be genuinely useful (not just promotional), and optimise for the platform algorithm. On Instagram: Reels. On LinkedIn: long-form text posts. On YouTube: searchable how-to content. Platform-native content wins. 🎬",
+  "Email marketing ROI is $36-42 for every $1 spent — the highest of any digital channel. Grow your list from day one, segment it by behaviour, and send emails that people actually want to read. Avoid newsletters that are just thinly disguised ads. 📧",
+  "TikTok/Instagram Reels for business: authentic behind-the-scenes content outperforms polished ads. Show your process, your team, your failures. Relatability builds trust faster than perfection does. 📱"
+]},
+
+// FUNDING STARTUPS
+{tag:"startup_funding",patterns:["how to raise money","startup funding","find investors","angel investor","venture capital","seed funding","how to get funded","pitch investors","crowdfunding"],responses:[
+  "Startup funding stages: Pre-seed (friends/family/angels, $50K-$500K), Seed ($500K-$3M), Series A ($3M-$15M), Series B+ (scaling). Each stage requires you to de-risk the previous unknowns. Don't raise before you need to — dilution is expensive. 💰",
+  "Before approaching investors: have a clear answer to these questions — what problem do you solve? How big is the market? Why are you the right team? How will you spend the money? What traction do you have? Investors fund clarity, not just ideas. 📊",
+  "Crowdfunding options: Kickstarter (product pre-sales — prove demand before building), Indiegogo (more flexible), Republic/Wefunder (equity crowdfunding — sell small stakes to many), GoFundMe (not for startups). Crowdfunding is also a powerful marketing exercise. 🚀",
+  "Angel investors vs VC: Angels invest personal money, move faster, and are more flexible. VCs invest fund money, move slower, take board seats, and expect 10x+ returns. Start with angels for seed rounds — they'll also open doors to VCs later. 🤝"
+]},
+
+// SUPPLY CHAIN & MANUFACTURING
+{tag:"supply_chain_tips",patterns:["supply chain tips","find suppliers","manufacturing overseas","find manufacturer","china manufacturing","product sourcing","import products"],responses:[
+  "Finding suppliers: Alibaba (Asia manufacturing), Thomas Net (US manufacturers), Faire (wholesale products), local directories. Request samples before committing — quality in photos rarely matches quality in hand. 🏭",
+  "Supply chain resilience: don't rely on a single supplier. The pandemic showed what happens when supply chains break. Have backup suppliers ready, maintain strategic inventory buffers, and build relationships with multiple sources. 📦",
+  "Overseas manufacturing tradeoffs: lower cost per unit, but higher minimum orders, longer lead times (6-12 weeks from Asia), quality control challenges, and hidden costs (shipping, customs, duties). Work with a sourcing agent if you're new to international sourcing. 🌍",
+  "Product sourcing 101: define specifications precisely, get 3+ quotes, order samples from your top 2-3, negotiate payment terms (30% deposit, 70% on delivery is standard), and build in quality inspection before shipping. Never pay 100% upfront. ⚠️"
+]},
+
+// BUSINESS AUTOMATION
+{tag:"business_automation",patterns:["automate business","business automation","workflow automation","save time in business","reduce manual work","zapier","make automation"],responses:[
+  "Start automating what's repetitive and rule-based: email responses, invoice generation, social media scheduling, data entry between tools, and appointment booking. Tools: Zapier, Make (formerly Integromat), and built-in automations in your CRM. ⚙️",
+  "Automation ROI example: if a task takes 2 hours/week and you earn $100/hour, that's $10,400/year of your time. A $50/month automation tool that eliminates it pays back in 3 days. Map your time before deciding what to automate. 💰",
+  "Automation priority order: 1️⃣ Tasks you do most often 2️⃣ Tasks with highest error risk if done manually 3️⃣ Tasks that delay other people's work. Don't automate processes you haven't optimised yet — you'll just do the wrong thing faster. ⚡",
+  "Business automation stack for 2025: CRM (HubSpot/Salesforce), email marketing (Klaviyo/Mailchimp), scheduling (Calendly), invoicing (FreshBooks/QuickBooks), social scheduling (Buffer), and a workflow tool (Zapier) to connect them all. 🛠️"
+]},
+
+// COMPETITOR ANALYSIS
+{tag:"competitor_analysis",patterns:["competitor analysis","analyse competitors","research competitors","competitive intelligence","who are my competitors","competitive landscape"],responses:[
+  "Competitor analysis framework: 1️⃣ List all direct competitors 2️⃣ Visit their websites, read their reviews, sign up for their emails 3️⃣ Identify their positioning, pricing, and core message 4️⃣ Find where customers complain about them (reviews, Reddit, forums) — that's your opportunity. 🔍",
+  "Best free competitor research tools: SimilarWeb (website traffic), SEMrush/Ahrefs (SEO keywords they rank for), LinkedIn (team size and growth), G2/Trustpilot/Capterra (customer reviews), Google Alerts (news mentions). 🛠️",
+  "The best competitor research is talking to their customers. Find people who use competitors and ask: what do they love? What frustrates them? What would make them switch? This qualitative insight is worth more than any analytics tool. 💬",
+  "Don't obsess over competitors — obsess over customers. Companies that watch competitors too closely end up copying their mistakes. Understand the customer's unmet needs first; the competitive response follows naturally. 🎯"
+]},
+
+// PARTNERSHIPS & JOINT VENTURES
+{tag:"business_partnerships",patterns:["find business partner","joint venture","business partnership","how to partner","strategic alliance","collaboration business","partnership agreement"],responses:[
+  "Finding the right business partner: look for complementary skills (not identical ones), aligned values, and a proven track record. The most important question: 'How have they handled failure and conflict in the past?' 🤝",
+  "Partnership agreement essentials: equity split, decision-making authority, what happens if one partner wants to leave, IP ownership, and salary vs profit split. Get everything in writing before money is involved — even with close friends. 📜",
+  "Joint ventures work best when: both parties bring something the other lacks (distribution, technology, market access), the goals are aligned, and the JV has its own governance separate from each parent business. Define success metrics upfront. 🏗️",
+  "Strategic alliances without formal partnership: referral agreements, co-marketing campaigns, white-labelling, integration partnerships. These create value without the complexity of shared ownership. Start here before committing to a full JV. 🔗"
+]},
+
+// CUSTOMER ACQUISITION
+{tag:"customer_acquisition",patterns:["get first customers","acquire customers","customer acquisition","find customers","where to find customers","get more clients","lead generation"],responses:[
+  "Getting your first customers: 1️⃣ Start with your network (who do you already know who has this problem?) 2️⃣ Offer a free or discounted pilot to get testimonials 3️⃣ Ask each customer for 2 referrals 4️⃣ Show up where your customers are (events, forums, communities). The first 10 customers are always manual. 👥",
+  "Customer acquisition cost (CAC) benchmark: if you spend $1,000 on marketing and acquire 10 customers, your CAC is $100. This is sustainable only if your customer lifetime value (LTV) is at least 3x that — $300+ LTV minimum. Know your numbers. 📊",
+  "Inbound vs outbound acquisition: Inbound (content, SEO, referrals — customers come to you) compounds over time and is more efficient at scale. Outbound (cold email, calls, paid ads — you go to customers) generates results faster but doesn't compound. Build both. 🎯",
+  "The most underused customer acquisition channel: your existing customers. A referral programme with a meaningful incentive (cash, credit, upgrades) can make your customer base your best sales team. Average referred customers have 16% higher lifetime value. 💰"
+]},
+
+// FINANCIAL STATEMENTS
+{tag:"financial_statements",patterns:["understand financial statements","how to read financials","income statement","balance sheet explained","cash flow statement","profit and loss","p&l"],responses:[
+  "The three core financial statements: 1️⃣ Income Statement (P&L) — revenue, expenses, profit over a period 2️⃣ Balance Sheet — assets, liabilities, equity at a point in time 3️⃣ Cash Flow Statement — actual money in and out. Together they tell the complete financial story. 📊",
+  "Reading an income statement: Revenue - Cost of Goods Sold = Gross Profit → Gross Profit - Operating Expenses = Operating Profit (EBIT) → EBIT - Interest - Tax = Net Profit. Every line tells you something about business health. 💹",
+  "The balance sheet equation: Assets = Liabilities + Equity. Assets are what you own, liabilities are what you owe, equity is what's left for the owners. If liabilities exceed assets, the business is technically insolvent. 📋",
+  "Cash flow statement insight: a business can show accounting profit but have negative cash flow (if customers pay late, or inventory is piling up). Cash flow is reality; profit is an accounting opinion. Watch both, but never ignore cash. 💵"
+]},
+
+// TAXES FOR BUSINESS
+{tag:"business_taxes",patterns:["business taxes","how to reduce tax","tax for small business","tax deductions","business tax tips","corporation tax","self employed tax"],responses:[
+  "Key business tax deductions most owners miss: home office, vehicle usage, professional development, business meals (50%), health insurance premiums, retirement contributions, and software subscriptions. Track everything — what you don't track, you can't deduct. 🧾",
+  "Structure matters for taxes: Sole trader (income taxed as personal), Partnership (pass-through taxation), LLC/Ltd (flexibility), S-Corp (can reduce self-employment tax on owner salary), C-Corp (flat rate, but double taxation on dividends). Talk to an accountant before choosing. 📊",
+  "Reduce your tax bill legally: maximise deductible expenses, contribute to a business retirement account (Solo 401k or SEP-IRA), time income and expenses strategically, and use tax credits for R&D, hiring, or energy efficiency where applicable. 💰",
+  "The best tax advice: hire a good accountant who specialises in business owners. The cost ($1,000-$5,000/year) almost always pays for itself in legitimate savings. DIY tax for a growing business is one of the most expensive forms of frugality. 🤝"
+]},
+
+// PRODUCTIVITY
+{tag:"productivity_business",patterns:["productivity tips","be more productive","work smarter","time management","focus at work","stop procrastinating","deep work","get more done"],responses:[
+  "The #1 productivity rule for business owners: protect your first 2 hours. Do your most important, highest-leverage work before checking email or messages. Your attention is your most valuable resource — spend it on what only you can do. ⏰",
+  "Time management that actually works: 1️⃣ Time-block your calendar (scheduled = done) 2️⃣ Batch similar tasks (all calls in one block, all creative work in another) 3️⃣ Use the 2-minute rule (if it takes less than 2 minutes, do it now) 4️⃣ Weekly review every Friday. 📅",
+  "Productivity myth: being busy = being productive. Track output, not hours. The question isn't 'am I working?' — it's 'am I working on the right things?' One high-leverage hour beats eight hours of busyness. 🎯",
+  "Deep work technique: schedule 2-4 hour uninterrupted blocks for your most complex thinking. Silence your phone, close all tabs, and go single-task. Most creative and strategic breakthroughs happen in deep work, not during meetings or email. 🧠"
+]},
+
+// BUSINESS MISTAKES
+{tag:"business_mistakes",patterns:["common business mistakes","startup mistakes","mistakes to avoid","why businesses fail","mistakes entrepreneurs make","avoid failure"],responses:[
+  "The 5 most common business mistakes: 1️⃣ Building before validating demand 2️⃣ Running out of cash 3️⃣ Hiring too fast (or too slow) 4️⃣ Not knowing your unit economics 5️⃣ Trying to do too many things at once. Most failed businesses made multiple mistakes simultaneously. ⚠️",
+  "Mistake #1 entrepreneurs make: falling in love with their product instead of their customer. The market is always right. If people don't want what you're selling, the answer is to change what you're selling — not to market harder. 🎯",
+  "Cash is the ultimate business mistake preventer. Most business failures are cash failures. Maintain a 3-month cash buffer, collect payments faster than you spend, and treat cash flow forecasting as a non-negotiable weekly habit. 💵",
+  "The hiring mistake that kills growing businesses: hiring friends and family based on loyalty rather than merit. Be ruthless about skills and culture fit regardless of personal relationships. Bad hires in leadership positions compound into company-wide problems. 👥"
+]},
+
+// INNOVATION & DISRUPTION
+{tag:"innovation_strategy",patterns:["how to innovate","business innovation","disruptive innovation","innovation strategy","create new product","stay ahead of competition","blue ocean"],responses:[
+  "Innovation doesn't have to mean invention. Most successful innovations are recombinations — taking what works in one industry and applying it to another. Uber applied the smartphone app model to taxi dispatch. Netflix applied subscription to video rental. What can you recombine? 💡",
+  "Blue Ocean Strategy: instead of competing in crowded markets (red oceans), create new market space where competition is irrelevant. Ask: which factors your industry takes for granted can you eliminate or reduce? Which factors can you raise or create? 🌊",
+  "Disruptive innovation pattern: new product starts as 'good enough' for a segment nobody else is serving (usually the bottom of the market or a completely new use case), then improves until it displaces the incumbent. This is how Netflix killed Blockbuster. 📺",
+  "How to build an innovation culture: celebrate smart failures (experiments that didn't work but generated insight), dedicate protected time for exploration (Google's 20% time), and make it psychologically safe to challenge existing assumptions. 🚀"
+]},
+
+// SOCIAL MEDIA
+{tag:"social_media_growth",patterns:["grow social media","get more followers","social media tips","instagram growth","linkedin growth","tiktok growth","build audience"],responses:[
+  "Social media growth fundamentals: post consistently (frequency beats virality), focus on one platform first, and measure engagement rate (comments/shares) not just follower count. 1,000 engaged followers beat 100,000 passive ones every time. 📱",
+  "LinkedIn growth strategy for B2B: write long-form posts about lessons learned, share contrarian takes on industry trends, comment meaningfully on others' posts, and direct message prospects with personalised value — not copy-paste pitches. 💼",
+  "The content formula that works everywhere: be genuinely useful + be consistently present + be distinctly yourself. The combination of value, consistency, and authentic voice beats any algorithm hack over the long term. 🎯",
+  "Instagram/TikTok for business: hooks in the first 2 seconds (stop the scroll), educate or entertain (not both simultaneously), clear call to action, and post at least 3-5x per week. Reels/short video consistently outperform static posts for reach. 🎬"
+]},
+
+// PRESENTATIONS & PITCHING
+{tag:"pitch_business",patterns:["how to pitch","business pitch","investor pitch","pitch deck","present business idea","startup pitch","how to present to investors"],responses:[
+  "A winning pitch deck structure (12 slides): Problem → Solution → Market Size → Product → Traction → Business Model → Go-to-Market → Team → Financials → Ask. Tell a story — investors fund narratives backed by data, not data alone. 📊",
+  "Pitch tip: lead with the problem, not the solution. Before investors care about your product, they need to feel the pain of the customer. Make them live the problem for 60 seconds before you reveal the solution. 🎯",
+  "The most common pitch deck mistakes: too many slides, too much text, no clear ask (tell investors exactly how much you want and what you'll do with it), and a market size that isn't credible. Investors see hundreds of pitches — make yours scannable and memorable. ⚡",
+  "The best investor pitch preparation: practise your 3-minute verbal pitch until it's completely natural. Then prepare answers to the 10 hardest questions you'd least want to be asked. Confidence under pressure is what separates fundable founders. 💪"
+]},
+
+// GLOBAL TRADE
+{tag:"global_trade",patterns:["international trade","export business","import export","sell globally","global market","expand internationally","international expansion"],responses:[
+  "Expanding globally: start with one adjacent market (similar language, culture, or regulations) before going truly global. UK companies often start with Ireland, Australia, or Canada. US companies often start with Canada or UK. Learn from one before scaling to many. 🌍",
+  "Export business basics: research your target market's demand, local regulations, tariffs, and preferred payment methods. Use trade bodies and government export assistance programmes — they often offer grants, market research, and introductions to local partners. 📊",
+  "Common international expansion mistakes: not localising (translation isn't just language — it's cultural context), underestimating regulatory complexity, not having a local partner or team who understands the market, and running out of cash during the longer timeline. ⚠️",
+  "International trade tools: ExportX, World Bank's Doing Business rankings, government trade portals, and global freight brokers. Understanding Incoterms (FOB, CIF, DDP) is essential for any import/export agreement. 📦"
+]},
+
+// REAL ESTATE IN BUSINESS
+{tag:"commercial_real_estate",patterns:["commercial real estate","office space","rent or buy office","commercial property","business premises","lease office"],responses:[
+  "Rent vs buy commercial property: for most growing businesses, rent wins. Buying ties up capital, reduces flexibility, and adds operational complexity. Buy only when you're certain about long-term location needs and have surplus capital. 🏢",
+  "Office space tips: negotiate hard on lease terms — rent-free periods, fit-out contributions, and break clauses are all negotiable. In 2024-25, landlords are hungry for tenants. Get a commercial real estate broker (they're paid by the landlord, so it's free to you). 📋",
+  "The remote-first question: before signing a lease, ask whether you genuinely need physical space. Many businesses operate profitably with no office using coworking memberships for occasional team days. Don't pay for space driven by habit or ego. 💡",
+  "Co-working spaces are underused by SMEs. A WeWork or similar membership gives professional space on demand, great networking opportunities, and no long-term commitment. For businesses under 20 people, it's often better than a dedicated lease. ☕"
+]},
+
+// MINDSET
+{tag:"entrepreneurship_mindset",patterns:["entrepreneurship mindset","growth mindset","business mindset","think like entrepreneur","success mindset","mental game business"],responses:[
+  "The entrepreneurial mindset boils down to this: see problems as opportunities, embrace uncertainty as the price of upside, and measure progress by growth rather than perfection. Mindset isn't soft — it's the foundation everything else is built on. 🧠",
+  "Growth mindset applied to business: every failure is data. Every rejection is information. Every competitor's success is a case study. The business owners who learn fastest, not the ones who fail least, are the ones who build the biggest companies. 📚",
+  "The mental game of business: you will doubt yourself. You will have days when quitting seems rational. The difference between those who make it and those who don't is rarely talent — it's the ability to keep making decisions despite uncertainty and fear. 💪",
+  "Reframe your relationship with failure: the most successful entrepreneurs have more failures than the average person — because they attempt more. Failure is volume. Those who don't fail haven't tried enough times. 🚀"
+]},
+
+// HOW USEMEE WORKS
+{tag:"about_usemee",patterns:["what can you do","what are you","who are you","about usemee","what is usemee","how does this work","what do you know"],responses:[
+  "I'm usemee — your AI business assistant. I can answer questions about business strategy, finance, marketing, startups, investing, and more. I can also look up live stock prices, convert currencies, and share business facts about countries around the world. What would you like to explore? 🚀",
+  "I'm a business-focused AI assistant. Ask me about anything from starting a company to understanding financial statements, negotiating deals, growing a team, or finding investors. I'm here to give you real, practical answers — not generic advice. 💼",
+  "usemee is your business companion — covering entrepreneurship, strategy, marketing, finance, leadership, and more. I also support live stock lookups, currency conversions, and country business profiles. Try asking me anything! 🌍",
+  "Think of me as a knowledgeable business advisor available 24/7. I cover strategy, finance, marketing, sales, HR, startups, investing, and more. For even fresher data, I can check live stock prices and exchange rates in real time. What can I help you with? 📊"
+]},
 ];
 
+// ==================== INTENT MULTI-RESPONSE PATCH ====================
+// Upgrades existing single-response intents with varied answers so the bot
+// never gives the same reply twice in a row.
+(function patchIntents(){
+  const patches = {
+    "entrepreneur": [
+      "An entrepreneur is someone who identifies a problem, builds a solution, and takes the financial risk of turning that into a business. It's as much a mindset as a job title. 💡",
+      "Entrepreneurs are problem-solvers who bet on themselves. They spot opportunities others miss and act despite uncertainty — that tolerance for risk is what sets them apart. 🚀",
+      "An entrepreneur starts and manages a business, taking on risk in pursuit of profit and impact. The best ones obsess over customer problems, not just their own ideas. 🎯",
+      "Technically an entrepreneur is a business founder — but really it's anyone who creates value where none existed before, from a solo freelancer to a billion-dollar startup founder. 🌟"
+    ],
+    "entrepreneurship": [
+      "Entrepreneurship is the process of identifying an opportunity, gathering resources, and building a business — while managing the risk that comes with uncertainty. 🏗️",
+      "Entrepreneurship is more than starting businesses. It's a way of thinking — spotting problems, imagining solutions, and having the resilience to see them through. 💪",
+      "Entrepreneurship is the engine of economic growth. It creates jobs, drives innovation, and solves problems at scale. At its heart, it's about turning an idea into something real and valuable. 🌍",
+      "Simply put: entrepreneurship is creating a business from scratch. The hard part isn't the idea — it's surviving long enough to find what works. 📚"
+    ],
+    "startup": [
+      "A startup is a newly created business designed to grow fast by solving a scalable problem. Unlike small businesses, startups aim to capture large markets quickly — often through technology. 🚀",
+      "A startup is a young company still searching for product-market fit and a repeatable business model. The goal is to find what works, then scale it as fast as possible. 📈",
+      "Startups are experiments. They test whether a specific customer problem can be solved profitably at scale. Most pivot several times before finding their winning formula. 🔄",
+      "A startup is an early-stage company with high ambition and high risk — distinguishable from a small business by its growth potential and ambition to disrupt existing industries. ⚡"
+    ],
+    "increase_profit": [
+      "Increase profit by either raising revenue or cutting costs — ideally both. Start by auditing your biggest expense and your highest-margin product. 💰",
+      "Fastest path to profit: raise prices (most businesses undercharge), cut your lowest-margin offerings, and reduce operational waste. Pick the highest-impact move first. 📈",
+      "Boost profitability: 1️⃣ Upsell existing customers 2️⃣ Eliminate unprofitable products 3️⃣ Renegotiate supplier contracts 4️⃣ Automate repetitive tasks. Profit improvement is usually many small wins stacked. 🎯",
+      "Focus on gross margin first — if you're not making money on each sale, no volume will save you. Then tackle fixed costs one by one. 💡"
+    ],
+    "reduce_costs": [
+      "Reduce costs by auditing every expense — eliminate anything not directly driving revenue or customer value. Then negotiate better terms with your top suppliers. 💼",
+      "Cost reduction: 1️⃣ Automate repetitive tasks 2️⃣ Renegotiate vendor contracts annually 3️⃣ Cut unused subscriptions 4️⃣ Outsource non-core activities. Cut fat, not muscle. ✂️",
+      "The best cost cuts are structural, not one-time. Focus on permanent operational improvements rather than emergency cuts. Benchmark your cost ratios against industry averages. 📊",
+      "Don't just cut costs — redirect spending from low-ROI to high-ROI activities. Sometimes spending more in the right place is smarter than cutting across the board. 🔄"
+    ],
+    "pricing_strategy": [
+      "Price based on the value delivered, not just cost of production. If your product saves customers $10,000 per year, charging $1,000 is a bargain — and you're leaving money on the table at $200. 💰",
+      "Three pricing strategies: Cost-plus (simple, ignores value), Competitive (safe, commoditises you), Value-based (what the customer pays for the outcome — most profitable for strong products). 📊",
+      "Most businesses underprice. Test a 10-20% price increase on new customers. If churn doesn't spike, you've permanently improved your margins. Confident pricing signals quality. 🎯",
+      "Pricing is a marketing signal too. Premium prices attract premium customers who complain less and stay longer. Find the price your best customers consider fair. 💎"
+    ],
+    "profit_problem": [
+      "Low profit usually comes from one of three places: prices too low, costs too high, or volume too low. Identify which is your biggest driver before fixing everything at once. 🔍",
+      "If you're not profitable, check gross margin first. Are you making money on each sale? If yes, the problem is overhead. If no, fix pricing or costs before trying to grow. 📊",
+      "Common profit killers: underpricing, scope creep, high customer acquisition costs, poor cash collection, and overhead creep. An honest audit usually reveals the main culprit quickly. 💡",
+      "Not making profit often means you haven't yet found the right combination of price, cost, and volume. This is normal early on — but you need a clear path to profitability with a timeline. 🗓️"
+    ],
+    "revenue_growth": [
+      "Grow revenue: 1️⃣ Increase prices 2️⃣ Upsell/cross-sell to existing customers 3️⃣ Acquire new customers 4️⃣ Add new products/services. Upselling existing customers is usually fastest and cheapest. 📈",
+      "The fastest revenue growth comes from your existing customer base — they already trust you. Increase average order value and purchase frequency before spending heavily on new acquisition. 💰",
+      "Revenue growth framework: Fix retention first, improve conversion second, then acquire more. Most businesses skip to acquisition and wonder why growth is so expensive. 🎯",
+      "Three revenue multipliers: more customers, higher average order value, higher purchase frequency. A 10% improvement in each creates a 33% revenue increase overall. 📊"
+    ],
+    "cash_flow_problem": [
+      "Cash flow problems happen when money out moves faster than money in. Immediate actions: collect outstanding invoices now, delay non-critical expenses, and look for a short-term credit buffer. 💵",
+      "Cash crisis survival: 1️⃣ Offer a small discount for immediate payment from your best customers 2️⃣ Pause all non-essential spending 3️⃣ Talk to your bank before you're desperate. Speed matters. ⚡",
+      "Profitable businesses die from cash flow problems all the time — profit is accounting, cash is reality. Build a 3-month cash reserve as soon as you're profitable. 🏦",
+      "Root cause of most cash flow problems: too long between spending money and receiving payment. Shorten your cash cycle — collect upfront, or shorten payment terms. Net-30 terms can slowly kill small businesses. 📅"
+    ],
+    "business_growth_strategy": [
+      "Growth strategy: 1️⃣ Fix retention — stop losing customers you've already won 2️⃣ Improve the core product based on real feedback 3️⃣ Scale what's working in marketing 4️⃣ Expand to adjacent markets. Don't skip step 1. 📈",
+      "The fastest legitimate growth comes from referrals. Create a referral programme, ask every happy customer to recommend you, and deliver such a remarkable experience that word-of-mouth does the work. 🗣️",
+      "To grow fast: define your ideal customer precisely, find the 1-2 channels where they concentrate, and go deep on those channels instead of being mediocre everywhere. Narrow focus beats broad spray. 🎯",
+      "Growth requires two things in balance: winning new customers AND keeping existing ones. A 20% monthly churn makes growth nearly impossible no matter how good acquisition is. Fix the leaky bucket first. 🔄"
+    ],
+    "scaling_business": [
+      "Scaling requires systems. Document every process, identify your bottlenecks, and automate what's repeatable before you scale. Scaling a broken process just creates bigger problems, faster. ⚙️",
+      "Scaling checklist: 1️⃣ Proven product-market fit 2️⃣ Positive unit economics 3️⃣ Repeatable customer acquisition 4️⃣ Processes that don't require the founder for every decision. Missing any of these? Fix them first. 📋",
+      "Scaling means removing yourself as the bottleneck. Every time you're doing something someone else could do 80% as well, that's a scaling opportunity — hire, systematise, or automate. 🚀",
+      "Scale by stacking leverage: technology (automation), people (delegation), and capital (investing in what's proven). Most businesses try to scale with people alone — add the other two and growth accelerates dramatically. 💡"
+    ],
+    "increase_sales": [
+      "Increase sales: 1️⃣ Sharpen your offer (make it a no-brainer) 2️⃣ Add social proof (reviews, case studies) 3️⃣ Create urgency (limited availability, deadlines) 4️⃣ Follow up relentlessly — most sales are won after the 5th contact. 📞",
+      "The fastest sales boost comes from customers who already trust you. Upsell your existing base, ask for referrals, and make sure they know your full range of products. Upselling is 5× cheaper than new acquisition. 💰",
+      "Fix your conversion rate before buying more traffic. If 100 visitors become 1 customer, improving conversion to 2% doubles sales at zero extra ad spend. Fix the funnel, then pour more in. 🎯",
+      "Sales improvement: more leads → better conversion → higher average order value → repeat purchases. Measure each stage and fix the weakest link rather than trying to improve everything at once. 📊"
+    ],
+    "customer_retention_strategy": [
+      "Keep customers by delivering results, communicating proactively, and making them feel genuinely valued. The moment a customer thinks 'they only care about my money' — they start looking for alternatives. 💙",
+      "Retention tactics: 1️⃣ Loyalty rewards that feel genuinely valuable 2️⃣ Proactive check-ins 3️⃣ Surprise-and-delight moments 4️⃣ Easy, graceful offboarding that leaves them wanting to return. Happy customers are your best salespeople. 🌟",
+      "Improving retention by just 5% can increase profits by 25-95% (Harvard Business Review). Calculate your LTV — once you see how much a retained customer is worth, investing in retention becomes obvious. 📈",
+      "Best retention strategy: make your product so embedded in their workflow that leaving creates real pain. Network effects, integrations, and switching costs create natural loyalty without manipulative tactics. 🔒"
+    ],
+    "expansion": [
+      "Expand only after proving stability in your current market. Opening a second location while the first struggles rarely fixes the first and usually breaks the second too. 🏪",
+      "Before expanding: 1️⃣ Is your current model profitable and repeatable? 2️⃣ Do you have the management capacity? 3️⃣ Is there genuine demand in the new market? 4️⃣ Can you fund expansion without risking the core business? 📋",
+      "Expansion options: geographic, new customer segments, new products for existing customers, or franchising. New products for existing customers is usually the lowest-risk first expansion move. 🗺️",
+      "The biggest expansion mistake: moving too fast because things are going well. Rapid expansion stretches cash, management, and quality simultaneously. Grow deliberately — prove the model in each new context before adding the next. 🐢"
+    ],
+    "marketing": [
+      "Marketing is the process of creating awareness, interest, and desire for your product — and converting that into customers. Good marketing makes selling almost unnecessary. 📣",
+      "Marketing isn't just advertising. It's understanding your customer so deeply that your product and messaging resonate perfectly — and distributing that message through the right channels at the right moment. 🎯",
+      "The four Ps of marketing: Product (what you sell), Price (what you charge), Place (where you sell it), Promotion (how you tell people). All four must be aligned for marketing to work effectively. 📊",
+      "The best marketing in 2025 is authentic, useful, and consistent. Stop interrupting people with ads and start attracting them with content that genuinely helps. That's how brands are built that last. 🌟"
+    ],
+    "advertising": [
+      "Advertising is paid promotion — the art of placing your message in front of people who haven't found you yet. Done well it accelerates growth; done poorly it just burns money faster. 💸",
+      "Advertising channels: Search ads (Google/Bing — capture existing demand), Social ads (Meta/TikTok — create demand), Display (awareness), Influencer (borrowed trust), and traditional (radio, TV, print — for local/mass reach). Match the channel to the buying stage. 📱",
+      "Before you advertise, nail your message and know your unit economics. If your CAC is higher than your LTV, no advertising budget will save you — it'll just accelerate losses. 📊",
+      "The golden rule of advertising: test small, learn fast, scale what works. Never put all your budget into one channel or creative. Run experiments, kill losers, double down on winners. 🎯"
+    ],
+    "branding": [
+      "Branding is the consistent set of associations people have with your business — the emotion, the expectation, the story they tell others. Your logo is the surface; your brand is everything underneath it. 🌟",
+      "A strong brand is your most durable competitive advantage. Anyone can copy your product — no one can copy your reputation, your culture, or the trust you've built with customers over years. 💎",
+      "Build your brand by: 1️⃣ Defining your values clearly 2️⃣ Picking a unique positioning 3️⃣ Being consistent across every touchpoint 4️⃣ Delivering on your promise every single time. Inconsistency destroys brands faster than bad marketing. 🎨",
+      "Your brand is what people say about you when you're not in the room. The only way to control it is to be so reliably excellent that the story tells itself. 💬"
+    ],
+    "target_market": [
+      "Your target market is the specific group of people most likely to buy from you and benefit most from what you offer. The narrower and more precisely you define them, the more effectively you can reach and serve them. 🎯",
+      "Targeting too broadly is one of the most common small business mistakes. 'Everyone' is not a target market. Niching down feels scary but it dramatically improves your conversion rate and reduces customer acquisition costs. 💡",
+      "Define your target market by: demographics (age, income, location), psychographics (values, interests, lifestyle), and behaviour (what they buy, when, and why). The most powerful insight comes from real conversations with actual customers. 📊",
+      "The ideal target market is: large enough to sustain your business, specific enough to reach efficiently, and underserved enough that you can stand out. Find the intersection of these three and you've found your niche. 🔍"
+    ],
+    "leadership": [
+      "Leadership is the ability to create a compelling vision, align people behind it, and bring out their best work in pursuit of it. The tools are clarity, trust, and consistency. 🏆",
+      "Great leaders ask more than they tell. The best question a leader can develop is: 'What do you think we should do?' It builds ownership, surfaces ideas, and develops the team simultaneously. 💡",
+      "Leadership truth: people don't leave companies, they leave managers. The quality of leadership is the single biggest factor in employee retention, engagement, and performance. Invest in becoming a better leader constantly. 👥",
+      "Five core leadership skills: communication (especially listening), decision-making under uncertainty, giving hard feedback kindly, creating psychological safety, and building the next generation of leaders on your team. 🌟"
+    ],
+    "teamwork": [
+      "High-performing teams share three things: psychological safety (people can speak up without fear), clear roles and ownership, and a shared commitment to the mission. Build all three deliberately. 🤝",
+      "Teamwork breaks down when accountability is unclear. The best teams have a single owner for every outcome — not a committee, not 'we'. One person who is ultimately responsible makes everything cleaner and faster. 📋",
+      "Building team culture: hire for values first, skills second. Skills can be learned; values are deeply ingrained. A team with aligned values will solve problems you never anticipated better than a team with misaligned values and perfect skills. 🌟",
+      "Remote teams need more intentional connection than in-person teams. Invest in 1:1 check-ins, virtual team rituals, and in-person gatherings at least quarterly. Connection is the foundation teamwork is built on. 💙"
+    ],
+    "finance": [
+      "Business finance is the management of money — how you raise it, allocate it, and account for it. Financial literacy is the foundation of every good business decision. 💰",
+      "Three things every business owner must understand: their gross margin (are you making money on each sale?), their cash position (can you pay bills next month?), and their burn rate (how long can you survive without new revenue?). 📊",
+      "Finance isn't just for accountants. The founders who understand their numbers — revenue, costs, margins, cash flow — make better decisions, raise money more easily, and sleep better at night. 💡",
+      "The most important financial habit: monthly review of your P&L, balance sheet, and cash flow statement. If you only look at financials when something goes wrong, it's usually already too late to react without pain. 📋"
+    ],
+    "budget": [
+      "A budget is your business's financial plan — what you expect to earn, what you plan to spend, and the gap between the two. It's the difference between running a business and guessing at it. 📊",
+      "Budget process: 1️⃣ Forecast revenue (conservatively) 2️⃣ List fixed costs (rent, salaries, subscriptions) 3️⃣ Estimate variable costs 4️⃣ Set aside tax provisions 5️⃣ What's left is your profit target. Revisit monthly and update assumptions. 📅",
+      "Zero-based budgeting: start from zero every period and justify every expense from scratch rather than just adjusting last year's numbers. It's harder but eliminates the 'we've always done it this way' spending that silently bleeds profit. 🎯",
+      "The biggest budgeting mistake: building a budget and then ignoring it. A budget only adds value if you compare actuals to it monthly, understand the variances, and adjust decisions accordingly. 💡"
+    ],
+    "investment": [
+      "Investment is deploying capital today with the expectation of greater returns in the future. In business, every investment decision — hiring, marketing, equipment — should be evaluated on expected ROI. 💹",
+      "Business investment rule of thumb: invest in things that either grow revenue or reduce costs. Everything else is a cost. Before any significant spend, ask: 'What return am I expecting, and by when?' 🎯",
+      "Types of business investment: capital expenditure (equipment, property), working capital (inventory, receivables), and intangible investment (brand, technology, people). All three matter for long-term value creation. 📊",
+      "The best investment most small businesses can make: their best people. A great hire at $120K outperforms an average hire at $80K by multiples — the ROI on hiring well is extraordinary. 👥"
+    ],
+    "management": [
+      "Management is the process of planning, organising, leading, and controlling resources to achieve business goals. Great management is the invisible force that makes everything else work. 🏗️",
+      "The shift from doing to managing is the hardest transition in business. Your job as a manager is to get results through other people — which requires letting go of the belief that you can do it better yourself. 🔄",
+      "Management fundamentals: set clear expectations, provide regular feedback, remove obstacles, recognise good work, and address poor performance early. These five things, done consistently, create high-performing teams. 📋",
+      "The best managers ask these questions regularly: 'What's slowing you down?', 'What do you need from me?', 'What would you do differently if it were your decision?' Great management is mostly great listening. 💡"
+    ],
+    "sales": [
+      "Sales is the engine of every business — no revenue, no business. But great sales isn't about pressure; it's about deeply understanding a customer's problem and clearly showing how your solution solves it. 💼",
+      "The sales process: Prospect → Qualify (do they have the problem and budget?) → Present → Handle objections → Close → Follow up. Most salespeople skip qualifying and wonder why their close rate is poor. 🎯",
+      "Sales truth: people don't buy products, they buy better versions of themselves. Your pitch should answer 'what's in it for me?' from the customer's perspective before anything else. 💡",
+      "The fortune is in the follow-up. 80% of sales happen after the 5th contact. Most salespeople give up after 2. Persistent, helpful follow-up — not annoying pestering — is where most deals are won or lost. 📞"
+    ],
+    "human_resources": [
+      "HR manages the most valuable and most complex asset in any business: people. Done well, it's a strategic function that drives growth. Done poorly, it's just paperwork and compliance headaches. 👥",
+      "HR fundamentals: attract the right people (recruitment), develop their skills (training), keep them engaged (culture and compensation), and handle departures gracefully (offboarding). The whole lifecycle matters. 🔄",
+      "The biggest HR mistake small businesses make: treating HR as a reactive function (only dealing with problems) instead of a proactive one (building the team and culture before you need to). 💡",
+      "In a small business, culture IS your HR strategy. The values you demonstrate daily, the behaviours you reward, and the people you keep or let go — these shape culture more powerfully than any policy document. 🌟"
+    ],
+    "economy": [
+      "The economy is the system through which a society produces, distributes, and consumes goods and services. For business owners, understanding economic cycles helps you anticipate change and position ahead of it. 🌍",
+      "Key economic indicators for businesses: GDP growth (overall health), unemployment rate (labour market), inflation (your costs), consumer confidence (demand), and interest rates (cost of borrowing). Watch these to make smarter strategic decisions. 📊",
+      "Economic cycles: expansion (growth, low unemployment), peak (inflation risk), contraction (slowdown), trough (opportunity for those with cash). Businesses that survive recessions often emerge stronger by taking market share from those that don't. 🔄",
+      "Macro matters for micro: when interest rates rise, borrowing costs increase and consumer spending slows. When inflation rises, input costs rise and margins compress unless you raise prices. Understanding the macro environment makes you a better business strategist. 💡"
+    ],
+    "ecommerce": [
+      "Ecommerce is buying and selling products or services online. It's one of the fastest-growing sectors globally, with worldwide ecommerce sales exceeding $6 trillion annually and growing every year. 🛍️",
+      "Ecommerce business models: D2C (Direct to Consumer — sell your own brand), Marketplace (sell on Amazon/eBay), Dropshipping (sell without holding stock), Subscription boxes, and Digital products. Each has different margins, control, and scalability. 📦",
+      "Keys to ecommerce success: product photography (first impression is everything), fast shipping (customer expectation has shifted dramatically), easy returns (reduces purchase hesitation), and email marketing (your most profitable owned channel). 🎯",
+      "Ecommerce metrics to master: Conversion rate (visitors to buyers), Average Order Value (AOV), Customer Acquisition Cost (CAC), Lifetime Value (LTV), and Cart Abandonment Rate. Improving any of these improves profitability. 📊"
+    ],
+    "ethics": [
+      "Business ethics are the moral principles that guide how a company behaves — towards customers, employees, suppliers, and society. Ethical businesses build stronger reputations, attract better talent, and earn deeper customer loyalty. ⚖️",
+      "Ethical business isn't just the right thing to do — it's smart strategy. The Edelman Trust Barometer consistently shows that consumer trust drives purchase decisions, and that trust is built on perceived ethical behaviour. 💡",
+      "Common business ethics failures: false advertising, underpaying employees, exploitative supplier terms, environmental shortcuts, and data privacy violations. Each creates legal, reputational, and financial risk that far outweighs any short-term gain. ⚠️",
+      "Building an ethical business culture: define your values explicitly, hire people who embody them, make hard decisions that reflect them (even when costly), and be transparent when you fall short. Consistency is what makes ethics real. 🌟"
+    ],
+    "business_success": [
+      "Business success comes from the intersection of a real customer need, a compelling solution, strong execution, and enough persistence to survive the hard early years. Planning and marketing matter, but grit matters more. 🏆",
+      "The most successful businesses share this: they know their customer better than the customer knows themselves, and they deliver an experience so good that word-of-mouth becomes their biggest growth channel. 🌟",
+      "Success in business is rarely a straight line. It's iterations, pivots, setbacks, and comebacks. The entrepreneurs who make it aren't the ones who avoided failure — they're the ones who failed faster and learned better. 💡",
+      "What makes businesses fail vs succeed: failing businesses run out of cash, can't find product-market fit, or implode from team problems. Successful ones solve a real problem, build a culture of learning, and manage cash obsessively. 📊"
+    ],
+    "innovation": [
+      "Innovation doesn't always mean invention. Most successful innovations are recombinations — taking what works in one context and applying it to another. Uber applied apps to taxi dispatch. Netflix applied subscription to video. What can you recombine? 💡",
+      "Innovation is the profitable commercialisation of a new idea. The 'new idea' part gets all the attention — but the 'profitable commercialisation' part is where 99% of the hard work actually lives. 🎯",
+      "Innovation types: incremental (doing existing things better), disruptive (serving overlooked segments with 'good enough' solutions that improve until they displace incumbents), and radical (entirely new categories). Most businesses benefit most from incremental innovation. 🔄",
+      "Build an innovation culture by making it safe to experiment and fail. Celebrate smart experiments, not just successes. Dedicate protected time for exploration. The businesses that stop innovating start declining — often before they realise it. 🚀"
+    ],
+    "motivation_quote": [
+      "\"The way to get started is to quit talking and begin doing.\" — Walt Disney 🌟",
+      "\"It does not matter how slowly you go as long as you do not stop.\" — Confucius 💪",
+      "\"Success is not the absence of failure; it's the persistence through failure.\" — Aisha Tyler 🚀",
+      "\"Your most unhappy customers are your greatest source of learning.\" — Bill Gates 💡",
+      "\"Don't find customers for your products; find products for your customers.\" — Seth Godin 🎯",
+      "\"The secret of getting ahead is getting started.\" — Mark Twain ⚡"
+    ],
+    "business_joke": [
+      "Why did the doughnut maker retire? He was tired of the whole business! 🍩",
+      "Why did the entrepreneur bring a ladder to the meeting? Because they heard the stakes were high! 📈",
+      "I told my accountant a joke about cash flow. He didn't find it very liquid. 💧",
+      "Why did the CEO sleep on the office floor? To get a head start on the bottom line! 😄",
+      "A startup founder walks into a bar... and immediately pivots to a restaurant. 🍽️"
+    ],
+    "swot_analysis": [
+      "SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. Strengths and Weaknesses are internal (what you control); Opportunities and Threats are external (the environment). Use it to find where your strengths match available opportunities. 💡",
+      "Running a SWOT analysis: be brutally honest about weaknesses (most businesses sugarcoat them), be specific rather than vague, and prioritise the 2-3 items in each quadrant that actually matter. A SWOT with 20 items per quadrant helps nobody. 📋",
+      "After your SWOT, the real work: Strengths vs Opportunities (where to invest), Strengths vs Threats (how to defend), Weaknesses vs Opportunities (what to fix to unlock growth), Weaknesses vs Threats (where you're most vulnerable). 🎯",
+      "SWOT is a starting framework, not a final answer. Use it to structure a conversation and surface assumptions — then validate those assumptions with data and customer feedback before making strategic decisions. 🔍"
+    ],
+    "business_plan": [
+      "A business plan is a formal document outlining your goals and how you'll achieve them — covering market analysis, operational plan, financial projections, and growth strategy. It's as valuable for internal clarity as it is for external investors. 📋",
+      "Business plan essentials: Executive Summary, Problem/Opportunity, Solution, Market Size, Business Model, Marketing & Sales Strategy, Operations, Team, and Financial Projections. Investors read the summary first — make it exceptional. 💼",
+      "The best business plan is one you'll actually use. Keep it short enough to revisit monthly, specific enough to drive decisions, and honest about risks and assumptions. A 50-page document nobody reads is worthless. 💡",
+      "Writing a business plan forces clarity. The act of articulating your strategy on paper surfaces contradictions, gaps, and assumptions you didn't know you were making. Even if no investor ever reads it, the exercise is valuable. 🎯"
+    ],
+    "seo": [
+      "SEO (Search Engine Optimisation) is the process of improving your website so it ranks higher in search results, driving free organic traffic. It's one of the highest-ROI long-term marketing investments a business can make. 🔍",
+      "SEO basics: 1️⃣ Keyword research (what your customers search for) 2️⃣ On-page optimisation (titles, headings, content quality) 3️⃣ Technical SEO (site speed, mobile-friendly) 4️⃣ Link building (other sites linking to yours). All four pillars matter. 📊",
+      "SEO is a long game — results typically take 3-12 months to compound. But the traffic you earn is free and grows over time, unlike paid ads that stop the moment you stop paying. Invest in SEO early and let it compound. ⏳",
+      "The best SEO strategy in 2025: create genuinely useful, comprehensive content around topics your customers care about. Google's algorithms are increasingly good at identifying real value vs SEO tricks. Quality beats keyword-stuffing every time. ✅"
+    ],
+    "roi": [
+      "ROI (Return on Investment) = (Net Profit ÷ Cost of Investment) × 100. A $1,000 investment that generates $1,500 back has a 50% ROI. It's the universal language of business decision-making. 📊",
+      "Use ROI to compare investment options objectively. A 30% ROI on marketing vs 80% ROI on product development tells you where to allocate resources next — your highest-return activities deserve more capital. 💰",
+      "ROI calculation tip: account for all costs (time, overhead, opportunity cost) not just the direct spend. A marketing campaign that 'costs' $5,000 but took 100 hours of team time actually cost $15,000+ when you include labour. 🎯",
+      "Track ROI by channel, campaign, and product line. The business owners who know their ROI at a granular level always outcompete those who spend by gut feel. Data-driven allocation is a sustained competitive advantage. 💡"
+    ],
+    "supply_chain": [
+      "The supply chain is the end-to-end process of getting your product from raw materials to the customer's hands — covering suppliers, manufacturing, logistics, warehousing, and last-mile delivery. Every link in the chain affects your cost and speed. 🚚",
+      "Supply chain resilience lesson from COVID-19: single-supplier dependency is a catastrophic risk. Build redundancy — qualify backup suppliers, maintain strategic inventory buffers, and diversify sourcing across regions. 🌍",
+      "Supply chain optimisation: reduce lead times (speed to customer), minimise inventory holding costs (cash tied up in stock), and improve demand forecasting accuracy (order what you'll actually sell). Small improvements compound into major cost savings. 📦",
+      "The supply chain is increasingly a competitive advantage, not just a cost centre. Amazon's two-day delivery became an expectation for all ecommerce. The businesses that control their supply chain control their customer experience. ⚡"
+    ],
+    "customer_retention": [
+      "Customer retention is the art and science of keeping customers coming back. It's almost always more profitable than acquisition — retained customers buy more, complain less, and refer their friends. 💙",
+      "The economics of retention: acquiring a new customer costs 5-7× more than retaining an existing one. Increasing retention by 5% increases profits by 25-95% (Harvard Business Review). Know these numbers — they justify almost any investment in customer success. 📊",
+      "Retention drivers: product quality, customer service responsiveness, perceived value for money, emotional connection to the brand, and how gracefully you handle problems when they arise. All five matter — and problems handled brilliantly can actually increase retention. ⭐",
+      "Measure retention with these metrics: Churn Rate (% who leave per month), Net Promoter Score (would they recommend you?), and Customer Lifetime Value (total revenue per customer). These three tell you everything about your retention health. 🎯"
+    ],
+    "outsourcing": [
+      "Outsourcing is contracting specific work to external specialists rather than doing it in-house. Done well, it lets you access world-class skills without full-time headcount costs. Done poorly, it creates quality and communication nightmares. 🌍",
+      "What to outsource: non-core, repeatable tasks where specialists exist (bookkeeping, legal, IT, customer support, design). What NOT to outsource: your core product, your customer relationships, and your strategic decision-making. 🎯",
+      "Outsourcing destinations: Philippines (customer service, admin), India (tech development, data entry), Eastern Europe (software engineering, design), Latin America (bilingual support, marketing). Choose based on time zone overlap and skill requirements. 🗺️",
+      "Outsourcing success factors: write detailed briefs, start with small paid tests before large commitments, over-communicate expectations, and build in quality review checkpoints. The biggest outsourcing failures come from vague instructions and no oversight. 📋"
+    ],
+    "crm": [
+      "CRM (Customer Relationship Management) is software that manages all your interactions with prospects and customers — tracking conversations, deals, follow-ups, and customer history in one place. It's the system that stops things falling through the cracks. 🗂️",
+      "Top CRM tools by use case: HubSpot (SMBs, excellent free tier), Salesforce (enterprise, highly customisable), Pipedrive (sales-focused, simple), Zoho CRM (affordable all-rounder), Notion (lightweight startups). Start simple and add complexity as you grow. 🛠️",
+      "The biggest CRM mistake: buying expensive software and not adopting it. A CRM only works if the team actually uses it. Start with the simplest possible setup, enforce data entry discipline, and expand features only after adoption is proven. ⚠️",
+      "What a good CRM unlocks: every customer's complete history at your fingertips, no dropped follow-ups, accurate sales pipeline forecasting, and the ability to personalise at scale. It's the infrastructure of a professional sales and service operation. 💡"
+    ]
+  };
+
+  intents.forEach(function(intent){
+    if(patches[intent.tag]){
+      intent.responses = patches[intent.tag];
+    }
+  });
+})();
 
 // ==================== BUSINESS COMPARISON DATABASE ====================
 const businessDatabase = [
@@ -5040,13 +5658,45 @@ chatBox.appendChild(msgDiv);
 chatBox.scrollTop = chatBox.scrollHeight;
 
 if (sender === 'bot') {
-  typeMessage(msgDiv, text);
+  typeMessage(msgDiv, text, function() {
+    const actions = document.createElement('div');
+    actions.className = 'msg-actions';
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'msg-action-btn';
+    copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy';
+    copyBtn.title = 'Copy message';
+    copyBtn.onclick = function() {
+      navigator.clipboard.writeText(text).then(function() {
+        copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Copied!';
+        copyBtn.classList.add('copied');
+        setTimeout(function() {
+          copyBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy';
+          copyBtn.classList.remove('copied');
+        }, 2000);
+      });
+    };
+
+    const editBtn = document.createElement('button');
+    editBtn.className = 'msg-action-btn';
+    editBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit';
+    editBtn.title = 'Edit into input';
+    editBtn.onclick = function() {
+      const input = document.getElementById('user-input');
+      if (input) { input.value = text; input.focus(); }
+    };
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(editBtn);
+    chatBox.appendChild(actions);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  });
 } else {
   msgDiv.textContent = text;
 }
 }
 
-function typeMessage(element, text) {
+function typeMessage(element, text, onDone) {
 let charIndex = 0;
 let wordBuffer = '';
 const speed = 30;
@@ -5062,10 +5712,206 @@ function typeNextCharacter() {
     
     charIndex++;
     setTimeout(typeNextCharacter, speed);
+  } else {
+    if (typeof onDone === 'function') onDone();
   }
 }
 
 typeNextCharacter();
+}
+
+// ==================== STOCK PRICE LOOKUP ====================
+const STOCK_TICKERS = {
+  apple:'AAPL', microsoft:'MSFT', google:'GOOGL', alphabet:'GOOGL', amazon:'AMZN',
+  tesla:'TSLA', meta:'META', facebook:'META', netflix:'NFLX', nvidia:'NVDA',
+  samsung:'005930.KS', toyota:'TM', sony:'SONY', nike:'NKE', coca:'KO', 'coca-cola':'KO',
+  pepsi:'PEP', walmart:'WMT', disney:'DIS', paypal:'PYPL', twitter:'TWTR',
+  uber:'UBER', airbnb:'ABNB', spotify:'SPOT', shopify:'SHOP', salesforce:'CRM',
+  oracle:'ORCL', intel:'INTC', amd:'AMD', ibm:'IBM', adobe:'ADBE',
+  visa:'V', mastercard:'MA', jpmorgan:'JPM', 'bank of america':'BAC', goldman:'GS',
+  exxon:'XOM', shell:'SHEL', bp:'BP', boeing:'BA', ford:'F', gm:'GM',
+  pfizer:'PFE', johnson:'JNJ', 'johnson & johnson':'JNJ', moderna:'MRNA',
+  berkshire:'BRK-B', blackrock:'BLK', alibaba:'BABA', baidu:'BIDU', tencent:'TCEHY',
+};
+function extractStockQuery(msg) {
+  const t = msg.toLowerCase();
+  if (!/stock|share|price|ticker|market|trading|listed|equity/.test(t)) return null;
+  for (const [name, ticker] of Object.entries(STOCK_TICKERS)) {
+    if (t.includes(name)) return ticker;
+  }
+  const m = t.match(/\b([a-z]{1,5})\s+stock\b/);
+  if (m) return m[1].toUpperCase();
+  const m2 = t.match(/stock\s+(?:of|for|price of)?\s*([a-z]+)/);
+  if (m2 && STOCK_TICKERS[m2[1]]) return STOCK_TICKERS[m2[1]];
+  return null;
+}
+async function fetchStockPrice(symbol) {
+  const yahooUrl = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?interval=1d&range=2d`;
+  const proxies = [
+    `https://corsproxy.io/?url=${encodeURIComponent(yahooUrl)}`,
+    `https://api.allorigins.win/get?url=${encodeURIComponent(yahooUrl)}`,
+  ];
+  for (const proxyUrl of proxies) {
+    try {
+      const res = await fetch(proxyUrl);
+      let data = await res.json();
+      if (data.contents) data = JSON.parse(data.contents);
+      const meta = data.chart.result[0].meta;
+      const price  = meta.regularMarketPrice;
+      const prev   = meta.chartPreviousClose || meta.previousClose || price;
+      const change = price - prev;
+      const pct    = ((change / prev) * 100).toFixed(2);
+      const arrow  = change >= 0 ? '▲' : '▼';
+      const sign   = change >= 0 ? '+' : '';
+      const name   = meta.longName || meta.shortName || symbol;
+      const cur    = meta.currency || 'USD';
+      const exch   = meta.exchangeName || '';
+      return `📈 Stock Price — ${name}\n\n` +
+             `Symbol: ${symbol}   Exchange: ${exch}\n` +
+             `Price:  ${cur} ${price.toFixed(2)}\n` +
+             `Change: ${arrow} ${sign}${change.toFixed(2)} (${sign}${pct}%)\n` +
+             `Prev Close: ${cur} ${prev.toFixed(2)}\n\n` +
+             `_Live data from Yahoo Finance_`;
+    } catch(e) { continue; }
+  }
+  return `Sorry, I couldn't fetch the stock price for "${symbol}" right now. Please try again shortly.`;
+}
+
+// ==================== COUNTRY BUSINESS FACTS ====================
+const COUNTRY_DATA = {
+  usa:         { name:'United States', flag:'🇺🇸', capital:'Washington D.C.', currency:'USD', gdp:'$27.4 trillion', population:'335 million', corpTax:'21%', ease:'#55 (World Bank)', industries:'Technology, Finance, Healthcare, Defence, Retail', note:'Largest economy globally; strong IP laws, deep capital markets, highly entrepreneurial ecosystem.' },
+  uk:          { name:'United Kingdom', flag:'🇬🇧', capital:'London', currency:'GBP', gdp:'$3.1 trillion', population:'68 million', corpTax:'25%', ease:'#8 (World Bank)', industries:'Finance, Pharma, Aerospace, Creative Industries, Energy', note:'Major global financial hub; strong legal system; one of the easiest places to start a business.' },
+  germany:     { name:'Germany', flag:'🇩🇪', capital:'Berlin', currency:'EUR', gdp:'$4.5 trillion', population:'84 million', corpTax:'30%', ease:'#22 (World Bank)', industries:'Automotive, Engineering, Chemicals, Finance, Logistics', note:'Largest economy in Europe; renowned for manufacturing excellence and "Mittelstand" mid-sized companies.' },
+  france:      { name:'France', flag:'🇫🇷', capital:'Paris', currency:'EUR', gdp:'$3.0 trillion', population:'68 million', corpTax:'25%', ease:'#32 (World Bank)', industries:'Luxury Goods, Aerospace, Tourism, Energy, Agriculture', note:'Home to many global luxury brands; strong state involvement in strategic industries.' },
+  japan:       { name:'Japan', flag:'🇯🇵', capital:'Tokyo', currency:'JPY', gdp:'$4.2 trillion', population:'125 million', corpTax:'29.7%', ease:'#29 (World Bank)', industries:'Automotive, Electronics, Robotics, Finance, Retail', note:'Third-largest economy; world leader in advanced manufacturing and robotics technology.' },
+  china:       { name:'China', flag:'🇨🇳', capital:'Beijing', currency:'CNY', gdp:'$18.5 trillion', population:'1.4 billion', corpTax:'25%', ease:'#31 (World Bank)', industries:'Manufacturing, Technology, E-commerce, Energy, Finance', note:'Second-largest economy; factory of the world; rapidly growing tech and consumer sector.' },
+  india:       { name:'India', flag:'🇮🇳', capital:'New Delhi', currency:'INR', gdp:'$3.9 trillion', population:'1.44 billion', corpTax:'22%', ease:'#63 (World Bank)', industries:'IT Services, Pharma, Textiles, Agriculture, Finance', note:'Fastest-growing large economy; massive tech talent pool; strong startup and outsourcing ecosystem.' },
+  canada:      { name:'Canada', flag:'🇨🇦', capital:'Ottawa', currency:'CAD', gdp:'$2.1 trillion', population:'38 million', corpTax:'26.5%', ease:'#23 (World Bank)', industries:'Energy, Mining, Finance, Real Estate, Tech', note:'Business-friendly environment; strong trade links with the USA via USMCA agreement.' },
+  australia:   { name:'Australia', flag:'🇦🇺', capital:'Canberra', currency:'AUD', gdp:'$1.7 trillion', population:'26 million', corpTax:'30%', ease:'#14 (World Bank)', industries:'Mining, Agriculture, Finance, Tourism, Education', note:'Stable economy with strong resource exports; gateway to Asia-Pacific markets.' },
+  singapore:   { name:'Singapore', flag:'🇸🇬', capital:'Singapore', currency:'SGD', gdp:'$500 billion', population:'6 million', corpTax:'17%', ease:'#2 (World Bank)', industries:'Finance, Logistics, Tech, Biomedical, Trade', note:'Top-ranked business hub in Asia; very low tax, minimal red tape, strong rule of law.' },
+  uae:         { name:'United Arab Emirates', flag:'🇦🇪', capital:'Abu Dhabi', currency:'AED', gdp:'$509 billion', population:'10 million', corpTax:'9%', ease:'#16 (World Bank)', industries:'Oil & Gas, Tourism, Finance, Real Estate, Trade', note:'Major Middle East business hub; zero personal income tax; growing free-trade zones.' },
+  brazil:      { name:'Brazil', flag:'🇧🇷', capital:'Brasília', currency:'BRL', gdp:'$2.1 trillion', population:'215 million', corpTax:'34%', ease:'#124 (World Bank)', industries:'Agriculture, Mining, Manufacturing, Oil, Finance', note:'Largest economy in Latin America; massive agricultural exporter; complex regulatory environment.' },
+  southafrica: { name:'South Africa', flag:'🇿🇦', capital:'Pretoria', currency:'ZAR', gdp:'$405 billion', population:'60 million', corpTax:'27%', ease:'#84 (World Bank)', industries:'Mining, Finance, Agriculture, Tourism, Manufacturing', note:'Most industrialised economy in Africa; key gateway to Sub-Saharan markets.' },
+  nigeria:     { name:'Nigeria', flag:'🇳🇬', capital:'Abuja', currency:'NGN', gdp:'$477 billion', population:'220 million', corpTax:'30%', ease:'#131 (World Bank)', industries:'Oil & Gas, Agriculture, Telecom, Finance, Entertainment', note:'Largest economy in Africa by GDP; massive young population driving fintech and startup growth.' },
+  kenya:       { name:'Kenya', flag:'🇰🇪', capital:'Nairobi', currency:'KES', gdp:'$118 billion', population:'54 million', corpTax:'30%', ease:'#56 (World Bank)', industries:'Agriculture, Telecom, Finance, Tourism, Manufacturing', note:'East Africa business hub; global leader in mobile money (M-Pesa); growing tech scene.' },
+  mexico:      { name:'Mexico', flag:'🇲🇽', capital:'Mexico City', currency:'MXN', gdp:'$1.3 trillion', population:'130 million', corpTax:'30%', ease:'#60 (World Bank)', industries:'Manufacturing, Oil, Agriculture, Tourism, Finance', note:'Second-largest economy in Latin America; major US trade partner; growing nearshoring destination.' },
+  southkorea:  { name:'South Korea', flag:'🇰🇷', capital:'Seoul', currency:'KRW', gdp:'$1.7 trillion', population:'52 million', corpTax:'25%', ease:'#5 (World Bank)', industries:'Electronics, Automotive, Shipbuilding, Steel, K-Pop/Media', note:'Home of Samsung, Hyundai, LG; highly connected digital economy and export powerhouse.' },
+  switzerland: { name:'Switzerland', flag:'🇨🇭', capital:'Bern', currency:'CHF', gdp:'$869 billion', population:'8.8 million', corpTax:'19.7%', ease:'#36 (World Bank)', industries:'Finance, Pharma, Watches, Tourism, Food', note:'Global wealth management centre; home to many multinational HQs; highly innovative.' },
+  netherlands: { name:'Netherlands', flag:'🇳🇱', capital:'Amsterdam', currency:'EUR', gdp:'$1.1 trillion', population:'17.9 million', corpTax:'25.8%', ease:'#42 (World Bank)', industries:'Logistics, Agriculture, Finance, Tech, Energy', note:'Europe logistics hub; Rotterdam is EU largest port; attractive HQ location for multinationals.' },
+  sweden:      { name:'Sweden', flag:'🇸🇪', capital:'Stockholm', currency:'SEK', gdp:'$530 billion', population:'10.5 million', corpTax:'20.6%', ease:'#10 (World Bank)', industries:'Manufacturing, Tech, Pharma, Finance, Design', note:'Birthplace of Spotify, IKEA, H&M; strong innovation culture and highly educated workforce.' },
+  indonesia:   { name:'Indonesia', flag:'🇮🇩', capital:'Jakarta', currency:'IDR', gdp:'$1.4 trillion', population:'275 million', corpTax:'22%', ease:'#73 (World Bank)', industries:'Agriculture, Mining, Manufacturing, Tourism, Finance', note:'Largest economy in Southeast Asia; fourth most populous country; booming e-commerce sector.' },
+  saudi:       { name:'Saudi Arabia', flag:'🇸🇦', capital:'Riyadh', currency:'SAR', gdp:'$1.1 trillion', population:'35 million', corpTax:'20%', ease:'#62 (World Bank)', industries:'Oil & Gas, Finance, Construction, Tourism, Mining', note:'Largest oil exporter; Vision 2030 driving major economic diversification and reform.' },
+};
+const COUNTRY_ALIASES = {
+  'united states':'usa','united state':'usa',
+  'america':'usa','american':'usa',
+  'united kingdom':'uk','britain':'uk','england':'uk','british':'uk',
+  'south africa':'southafrica','south korea':'southkorea',
+  'saudi arabia':'saudi','saudi':'saudi',
+  'uae':'uae','dubai':'uae','emirates':'uae',
+};
+function _wordMatch(phrase, text) {
+  return new RegExp('(?:^|\\s|,)' + phrase.replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&') + '(?:\\s|,|$|\\?|!)').test(text);
+}
+function extractCountryQuery(msg) {
+  const t = msg.toLowerCase();
+  if (!/(?:country|countr|economy|gdp|facts about|business in|invest in|market in|tax in|trade in|industry in|tell me about|business environment|about the)/.test(t)) return null;
+  for (const [alias, key] of Object.entries(COUNTRY_ALIASES)) {
+    if (_wordMatch(alias, t)) return key;
+  }
+  for (const key of Object.keys(COUNTRY_DATA)) {
+    if (_wordMatch(key, t)) return key;
+    if (_wordMatch(COUNTRY_DATA[key].name.toLowerCase(), t)) return key;
+  }
+  return null;
+}
+function displayCountryCard(key) {
+  const d = COUNTRY_DATA[key];
+  if (!d) return;
+  const chat = document.getElementById('chat-box');
+  const wrap = document.createElement('div');
+  wrap.className = 'message bot';
+  wrap.style.cssText = 'max-width:96%;width:96%;padding:0;background:none;float:left;margin-right:auto;';
+  wrap.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);color:#e2e8f0;border-radius:14px;padding:18px 20px;font-family:sans-serif;box-shadow:0 4px 18px rgba(0,0,0,0.18);">
+      <div style="font-size:1.6em;margin-bottom:4px;">${d.flag} <strong>${d.name}</strong></div>
+      <div style="color:#94a3b8;font-size:0.85em;margin-bottom:14px;">Business Facts Overview</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;font-size:0.88em;margin-bottom:12px;">
+        <div><span style="color:#64748b;">Capital</span><br><strong>${d.capital}</strong></div>
+        <div><span style="color:#64748b;">Currency</span><br><strong>${d.currency}</strong></div>
+        <div><span style="color:#64748b;">GDP</span><br><strong>${d.gdp}</strong></div>
+        <div><span style="color:#64748b;">Population</span><br><strong>${d.population}</strong></div>
+        <div><span style="color:#64748b;">Corp. Tax Rate</span><br><strong>${d.corpTax}</strong></div>
+        <div><span style="color:#64748b;">Ease of Business</span><br><strong>${d.ease}</strong></div>
+      </div>
+      <div style="margin-bottom:8px;font-size:0.88em;"><span style="color:#64748b;">Key Industries</span><br><strong>${d.industries}</strong></div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:8px;padding:10px 12px;font-size:0.84em;color:#cbd5e1;margin-top:4px;">💡 ${d.note}</div>
+    </div>`;
+  chat.appendChild(wrap);
+  chat.scrollTop = chat.scrollHeight;
+}
+function displayStockCard(text) {
+  const chat = document.getElementById('chat-box');
+  const lines = text.split('\n').filter(l => l.trim());
+  const header = lines[0].replace('📈 Stock Price — ','');
+  const rows = lines.slice(2).filter(l => l.includes(':'));
+  const note = lines[lines.length-1];
+  const isUp = text.includes('▲');
+  const color = isUp ? '#10b981' : '#ef4444';
+  const wrap = document.createElement('div');
+  wrap.className = 'message bot';
+  wrap.style.cssText = 'max-width:96%;width:96%;padding:0;background:none;float:left;margin-right:auto;';
+  wrap.innerHTML = `
+    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#e2e8f0;border-radius:14px;padding:18px 20px;font-family:sans-serif;box-shadow:0 4px 18px rgba(0,0,0,0.18);">
+      <div style="font-size:1.1em;font-weight:700;margin-bottom:14px;">📈 ${header}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;font-size:0.88em;">
+        ${rows.map(r=>{const[k,...v]=r.split(':');return `<div><span style="color:#64748b;">${k.trim()}</span><br><strong style="${k.includes('Change')?'color:'+color+';':''}">${v.join(':').trim()}</strong></div>`;}).join('')}
+      </div>
+      <div style="margin-top:12px;font-size:0.78em;color:#475569;">${note}</div>
+    </div>`;
+  chat.appendChild(wrap);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// ==================== TYPING INDICATOR ====================
+function showTypingIndicator() {
+  removeTypingIndicator();
+  const chatBox = document.getElementById('chat-box');
+  const el = document.createElement('div');
+  el.id = 'typing-indicator';
+  el.className = 'typing-indicator';
+  el.innerHTML = '<span></span><span></span><span></span>';
+  chatBox.appendChild(el);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+function removeTypingIndicator() {
+  const el = document.getElementById('typing-indicator');
+  if (el) el.remove();
+}
+
+// ==================== CURRENCY CONVERTER ====================
+function extractCurrencyQuery(msg) {
+  const t = msg.toLowerCase().trim();
+  const m = t.match(/(?:convert\s+)?(\d+(?:[.,]\d+)?)\s*([a-z]{3})\s+(?:to|in|into)\s+([a-z]{3})/);
+  if (m) return { amount: parseFloat(m[1].replace(',','.')), from: m[2].toUpperCase(), to: m[3].toUpperCase() };
+  const m2 = t.match(/(?:how much is\s+)?(\d+(?:[.,]\d+)?)\s*([a-z]{3})\s+(?:in|to|into)\s+([a-z]{3})/);
+  if (m2) return { amount: parseFloat(m2[1].replace(',','.')), from: m2[2].toUpperCase(), to: m2[3].toUpperCase() };
+  return null;
+}
+async function convertCurrency(amount, from, to) {
+  try {
+    const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+    const data = await res.json();
+    if (data.result === 'success' && data.rates && data.rates[to] !== undefined) {
+      const rate = data.rates[to];
+      const converted = (amount * rate).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const rateStr = rate < 0.01 ? rate.toExponential(4) : rate.toFixed(4);
+      return `💱 Currency Conversion\n\n${amount.toLocaleString()} ${from}  =  ${converted} ${to}\n\nRate: 1 ${from} = ${rateStr} ${to}\nUpdated: live exchange rate`;
+    }
+    return `Sorry, I don't recognise the currency code "${to}". Please use standard 3-letter codes like USD, EUR, GBP, JPY, CAD, AUD, INR, CNY, CHF, SGD.`;
+  } catch(e) {
+    return `Sorry, I couldn't fetch the exchange rate right now. Please check your connection and try again.`;
+  }
 }
 
 // ==================== IMAGE GENERATOR (canvas-based, no API) ====================
@@ -5819,13 +6665,50 @@ function addImageToChat(topic, dataUrl) {
 
 async function processQuestion(msg) {
   if (businessCreationFlow.active) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 500));
+    removeTypingIndicator();
     const reply = handleBusinessCreationStep(msg);
     addMessage(reply, 'bot');
     return;
   }
 
+  const currencyQuery = extractCurrencyQuery(msg);
+  if (currencyQuery) {
+    showTypingIndicator();
+    const reply = await convertCurrency(currencyQuery.amount, currencyQuery.from, currencyQuery.to);
+    removeTypingIndicator();
+    addMessage(reply, 'bot');
+    return;
+  }
+
+  const stockSymbol = extractStockQuery(msg);
+  if (stockSymbol) {
+    showTypingIndicator();
+    const stockText = await fetchStockPrice(stockSymbol);
+    removeTypingIndicator();
+    if (stockText.startsWith('Sorry')) {
+      addMessage(stockText, 'bot');
+    } else {
+      displayStockCard(stockText);
+    }
+    return;
+  }
+
+  const countryKey = extractCountryQuery(msg);
+  if (countryKey) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 500));
+    removeTypingIndicator();
+    displayCountryCard(countryKey);
+    return;
+  }
+
   const imgTopic = extractImageTopic(msg);
   if (imgTopic) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 400));
+    removeTypingIndicator();
     addMessage(`Creating a visual image for "${imgTopic}"...`, 'bot');
     try {
       const dataUrl = generateImageForTopic(imgTopic);
@@ -5838,10 +6721,16 @@ async function processQuestion(msg) {
 
   const pptTopic = getPptRequestTopic(msg);
   if (pptTopic === 'needTopic') {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 500));
+    removeTypingIndicator();
     addMessage('Please specify the topic for the presentation, for example: "Create a presentation about marketing strategy".', 'bot');
     return;
   }
   if (pptTopic) {
+    showTypingIndicator();
+    await new Promise(r => setTimeout(r, 600));
+    removeTypingIndicator();
     addMessage(`✅ Generating your presentation about "${pptTopic}". Download should start shortly.`, 'bot');
     const success = await generatePptForTopic(pptTopic);
     if (!success) {
@@ -5849,6 +6738,10 @@ async function processQuestion(msg) {
     }
     return;
   }
+
+  showTypingIndicator();
+  await new Promise(r => setTimeout(r, 700));
+  removeTypingIndicator();
   const reply = getBotReply(msg);
   addMessage(reply, 'bot');
 }
