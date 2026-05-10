@@ -4815,10 +4815,10 @@ function extractImageTopic(text) {
 
 function extractPptTopic(text) {
   const patterns = [
-    /\b(?:ppt|presentation|slides|slide deck)\b(?:\s*(?:about|on|for|about the topic of)\s*)(.+)$/i,
-    /\b(?:create|generate|make|build|prepare|compose|draft)\b.*\b(?:ppt|presentation|slides|slide deck)\b.*\b(?:about|on|for)\s*(.+)$/i,
-    /\b(?:presentation|slides|ppt|slide deck)\b.*\b(?:about|on|for|on the topic of)\b\s*(.+)$/i,
-    /\b(?:create|generate|make|build|prepare|compose|draft)\b.*\b(?:presentation|slides|slide deck)\b\b.*$/i
+    /\b(?:ppt|powerpoint|presentation|slides|slide deck)\b(?:\s*(?:about|on|for|about the topic of)\s*)(.+)$/i,
+    /\b(?:create|generate|make|build|prepare|compose|draft)\b.*\b(?:ppt|presentation|powerpoint|slides|slide deck)\b.*\b(?:about|on|for)\s*(.+)$/i,
+    /\b(?:presentation|powerpoint|slides|ppt|slide deck)\b.*\b(?:about|on|for|on the topic of)\b\s*(.+)$/i,
+    /\b(?:create|generate|make|build|prepare|compose|draft)\b.*\b(?:presentation|powerpoint|slides|slide deck)\b\b.*$/i
   ];
   for (const pattern of patterns) {
     const match = text.match(pattern);
