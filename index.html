@@ -8165,18 +8165,14 @@ async function sendMessage() {
   addMessage(message, 'user');
   userInputEl.value = '';
 
-const questions = message
-  .split(/[?]/) // split by question mark
-  .flatMap(q => q.split(/\band\b/i)) // ALSO split by "and"
-  .map(q => q.trim())
-  .filter(q => q.length > 2);
-
-if (questions.length > 1) {
-  for (const q of questions) {
-    await processQuestion(q + '?');
+  const questions = message.split('?').map(q => q.trim()).filter(q => q.length > 1);
+  if (questions.length > 1) {
+    for (const q of questions) {
+      await processQuestion(q + '?');
+    }
+  } else {
+    await processQuestion(message);
   }
-} else {
-  await processQuestion(message);
 }
 
 $("#user-input").on('keypress', function(e) {
