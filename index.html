@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -386,43 +388,55 @@ flex: 0;
 
 .chat-input-area input {
     flex: 1;
-    padding: 10px 14px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
+    padding: 14px 20px;
+    border: 2px solid #ccc;
+    border-radius: 28px;
     background-color: #fff;
     color: #000;
     font-family: Arial, sans-serif;
-    min-height: 38px;
-    font-size: 14px;
+    min-height: 52px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.chat-input-area input:focus {
+    border-color: #007bff;
 }
 
 body.dark .chat-input-area input {
     background-color: #0f3460;
     color: #e0e0e0;
-    border: 1px solid #444;
+    border: 2px solid #444;
+}
+
+body.dark .chat-input-area input:focus {
+    border-color: #4da3ff;
 }
 
 .chat-input-area .send-btn {
     background-color: #28a745;
     border: none;
-    padding: 10px 16px;
-    border-radius: 20px;
+    padding: 14px 24px;
+    border-radius: 28px;
     color: white;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 0.9em;
+    font-weight: 700;
+    font-size: 1em;
     transition: all 0.3s;
     white-space: nowrap;
     flex-shrink: 0;
-    height: 38px;
+    height: 52px;
     display: flex;
     align-items: center;
     justify-content: center;
+    letter-spacing: 0.3px;
 }
 
 .chat-input-area .send-btn:hover {
     background-color: #218838;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40,167,69,0.35);
 }
 
 .input-hint {
@@ -2677,6 +2691,203 @@ const intents = [
   "Non-negotiable habits of high-performing entrepreneurs: 7-8 hours sleep (sleep deprivation destroys decision quality), daily exercise (improves focus and resilience), weekly 'shutdown ritual' (clear to-do list, plan next week, close laptop), and at least one full day off per week. 💪",
   "Cal Newport's 'Deep Work' principle: the most productive entrepreneurs aren't working more hours — they're protecting more hours of uninterrupted, high-concentration work. 4 hours of deep work beats 8 hours of fragmented work every time. ⚡"
 ]},
+
+// ==================== ADDITIONAL INTENTS BATCH 2 ====================
+
+// PERSONAL FINANCE & MONEY MANAGEMENT
+{tag:"budgeting_personal",patterns:["personal budget","how to budget personal finances","manage my money","personal finance tips","how to control spending","spending plan"],responses:[
+  "Personal budgeting starts with the 50/30/20 rule: 50% to needs (rent, food, bills), 30% to wants (dining out, entertainment), 20% to savings and debt repayment. Simple and effective. 💰",
+  "Zero-based budgeting: assign every dollar a purpose until income minus expenses = 0. Every dollar has a job. Apps like YNAB (You Need A Budget) make this easy. The discipline it builds is transformative. 📊",
+  "The most important personal finance habit: pay yourself first. Before any bill or expense, transfer your savings amount automatically on payday. If you wait until the end of the month, there's nothing left. Automate it. 🏦",
+  "Track every expense for 30 days — most people are shocked by what they find. Coffee, subscriptions, impulse purchases, and eating out often total $500–$1,000/month that could be going to savings or investment. 💡"
+]},
+{tag:"debt_management",patterns:["how to get out of debt","debt management","pay off debt","debt free","reduce debt","too much debt","debt repayment strategy"],responses:[
+  "Two proven debt repayment strategies: 1) Avalanche — pay minimum on all, put extra toward highest interest rate first (saves the most money). 2) Snowball — pay smallest balance first (Dave Ramsey method — gives psychological wins). Pick the one you'll actually stick to. 💳",
+  "The first step to getting out of debt: stop creating more of it. Cut up the credit cards, freeze the buy-now-pay-later accounts, and live within your income — even if it's uncomfortable. You can't bail out a sinking boat while the tap is still running. 🚫",
+  "Consolidation options: personal loan (lower interest than credit cards), balance transfer card (0% intro period), or debt management plan through a nonprofit credit counselor. Compare total cost — not just monthly payment — before choosing. 📋",
+  "High-interest debt (credit cards at 18–25%) is a financial emergency. A $5,000 card balance at 20% costs $1,000/year in interest alone — for nothing. Eliminating high-interest debt is the guaranteed 20% return you won't find anywhere else. 🚨"
+]},
+{tag:"passive_income_ideas",patterns:["passive income ideas","how to make passive income","earn money while sleeping","passive income streams","ways to earn passive income","residual income"],responses:[
+  "Top passive income streams for entrepreneurs: 1️⃣ Digital products (ebooks, templates, courses — create once, sell forever) 2️⃣ Affiliate marketing 3️⃣ Dividend stocks 4️⃣ Rental income 5️⃣ Licensing (music, software, IP) 6️⃣ YouTube/content monetization. 💰",
+  "The truth about passive income: almost nothing is truly passive at the start. You trade massive upfront effort (creating a course, building an audience, buying a rental property) for ongoing income later. 'Passive' really means 'not trading time for money in the long run.' 🔄",
+  "Best starter passive income for knowledge workers: create a digital product solving a specific problem. A $47 PDF solving one niche problem, sold to 100 people/month = $4,700/month. The work is creating and marketing it — after that, it runs. 📄",
+  "The Rental Property formula: buy at the right price, in the right area, with positive cash flow (rent > mortgage + expenses). Even one cash-flowing property adds meaningful monthly income and long-term wealth through appreciation. 🏠"
+]},
+{tag:"investing_basics",patterns:["how to start investing","investing for beginners","where to invest money","how to invest","investment basics","start investing","best investments"],responses:[
+  "Investing basics: 1️⃣ Start with an emergency fund (3-6 months expenses in cash) 2️⃣ Eliminate high-interest debt first 3️⃣ Invest in tax-advantaged accounts (401k, IRA, ISA) to the maximum 4️⃣ Use low-cost index funds 5️⃣ Be consistent — time in the market beats timing the market. 📈",
+  "The single best investment strategy for most people: broad market index funds (S&P 500 ETF like VOO or VTI). 30-year average return ~10%/year. Zero stock-picking required. Warren Buffett himself recommends this for ordinary investors. 🏆",
+  "Dollar-cost averaging: invest a fixed amount on a regular schedule (e.g., $500/month) regardless of market conditions. You automatically buy more shares when prices are low and fewer when high. This removes emotional decision-making from investing. 📅",
+  "Investment risk by asset class: Cash (low return, low risk), Bonds (moderate return, low-moderate risk), Index Funds (higher return, market risk), Real Estate (higher return, illiquidity risk), Individual Stocks (variable return, high risk), Crypto (speculative, very high risk). Match risk to your timeline. ⚖️"
+]},
+
+// MARKETING DEEP DIVE
+{tag:"content_marketing",patterns:["what is content marketing","content marketing strategy","how to do content marketing","create content for business","content marketing tips"],responses:[
+  "Content marketing is creating and distributing valuable, relevant content to attract and retain a clearly defined audience — with the goal of driving profitable customer action. It's marketing that doesn't feel like marketing. 📝",
+  "The content marketing flywheel: create great content → attract organic traffic → build email list → nurture with more content → convert to customers → customers share content → cycle repeats. It takes 6-12 months to gain momentum, then compounds. 🔄",
+  "Best content formats by goal: Blog posts (SEO, awareness), YouTube videos (trust, authority), Podcast (deep loyalty), LinkedIn posts (B2B leads), Instagram Reels (reach and discovery), Email newsletter (conversion and retention). Pick 1-2 and go deep. 🎯",
+  "Content quality vs quantity debate: one exceptional, deeply researched piece of content outperforms 20 mediocre posts every time. Google rewards E-E-A-T (Experience, Expertise, Authoritativeness, Trustworthiness). Invest in depth over volume. 💡"
+]},
+{tag:"influencer_marketing",patterns:["influencer marketing","work with influencers","how to use influencers","influencer strategy","find influencers for my brand","micro influencer"],responses:[
+  "Influencer marketing connects brands with content creators who have engaged audiences. Key insight: micro-influencers (10K–100K followers) often deliver better ROI than mega-influencers — their audiences trust them more and engagement rates are 3-5× higher. 🌟",
+  "Influencer selection criteria: 1️⃣ Audience match (do their followers match your customer?) 2️⃣ Engagement rate (>3% is good) 3️⃣ Content quality 4️⃣ Brand alignment (does their style fit yours?) 5️⃣ Past brand partnerships (were they authentic?). 📊",
+  "Nano-influencers (1K–10K followers) are the hidden gem for local and niche businesses. They often work for free products, deliver authentic content, and have hyper-engaged audiences. A local restaurant giving free meals to 20 nano-influencers can generate massive local awareness. 🍽️",
+  "Always agree on: deliverables (what content, how many posts), usage rights (can you repurpose their content?), disclosure requirements (FTC requires #ad or #sponsored), and performance metrics before any partnership. Get it in writing. 📋"
+]},
+{tag:"viral_marketing",patterns:["how to go viral","viral marketing","make content go viral","viral content strategy","how do things go viral"],responses:[
+  "The 6 principles of viral content (Jonah Berger, Contagious): Social Currency (makes people look good), Triggers (top of mind), Emotion (high arousal feelings), Public (visible to others), Practical Value (useful information), Stories (narrative wrapper). The more boxes you tick, the more shareable it is. 🔥",
+  "Going viral is not a strategy — it's an outcome. You can't force virality, but you can create conditions for it: strong emotion (awe, humor, outrage), easy sharing mechanism, and broad relevance. Most viral content is either very funny, very surprising, or very useful. 💡",
+  "The Old Spice Man campaign, Dollar Shave Club's launch video, Dove Real Beauty — all viral because they were genuinely entertaining AND on-brand. Chasing virality with low-quality content harms more than helps. Create outstanding content and let it find its audience. 🎬",
+  "For small businesses: the easiest path to local virality is extraordinary customer service. A restaurant that gives a free dessert to a customer who mentions their birthday gets Instagram posts, TikToks, and word-of-mouth worth thousands in advertising. 🎂"
+]},
+{tag:"google_ads",patterns:["google ads","google advertising","pay per click","ppc advertising","how to run google ads","google adwords","paid search"],responses:[
+  "Google Ads (Pay-Per-Click) puts your ad in front of people searching for exactly what you sell. You only pay when someone clicks. Average ROI is $2 for every $1 spent — but this varies hugely by industry and execution. 🎯",
+  "Google Ads basics: 1️⃣ Keyword research (what are customers searching?) 2️⃣ Write compelling ad copy (headline + description + URL) 3️⃣ Create a dedicated landing page (not your homepage) 4️⃣ Set bidding strategy 5️⃣ Track conversions 6️⃣ Optimize weekly. 📊",
+  "The biggest Google Ads mistakes: sending traffic to your homepage (use a dedicated landing page), ignoring negative keywords (stops wasting budget on irrelevant searches), and not tracking conversions (you can't optimize what you don't measure). 🚫",
+  "Google Ads is best for: businesses where customers actively search for the solution (plumber, accountant, lawyer, software). Less effective for new product categories where people don't know to search yet — use Facebook/Instagram for those. 💡"
+]},
+{tag:"facebook_ads",patterns:["facebook ads","facebook advertising","instagram ads","meta ads","social media advertising","how to run facebook ads","paid social"],responses:[
+  "Meta Ads (Facebook + Instagram) let you target people based on demographics, interests, behaviors, and lookalike audiences — not just what they search for. Best for: e-commerce, local businesses, B2C products, and brand awareness. 📱",
+  "The winning Meta Ads formula: strong creative (video > image), clear value proposition in the first 3 seconds, specific audience targeting, and a frictionless landing page. The creative is 80% of your ad's success — invest in it. 🎨",
+  "Meta Ads funnel: Top (broad audience, brand awareness), Middle (retargeting website visitors, video viewers), Bottom (retarget add-to-cart, custom lists). Most beginners only run top-of-funnel ads and wonder why they don't convert. Build the full funnel. 🔄",
+  "Key metrics: CPM (cost per 1,000 impressions), CPC (cost per click), CTR (click-through rate — aim for 1%+), CPA (cost per acquisition — your main target). If CPA is below your customer lifetime value, scale up. If not, optimize first. 📊"
+]},
+{tag:"email_list_building",patterns:["how to build email list","grow email subscribers","email list growth","lead magnet","get more subscribers","email marketing list"],responses:[
+  "The fastest email list growth tactics: 1️⃣ Lead magnet (free resource in exchange for email — guide, template, checklist, mini-course) 2️⃣ Pop-up with exit intent 3️⃣ Content upgrades (bonus content within blog posts) 4️⃣ Referral program ('share and get free X') 5️⃣ Webinars. 📧",
+  "Lead magnet ideas that convert: specific checklists ('17-Point Launch Checklist'), swipe files ('50 Email Subject Lines That Get Opened'), templates ('Business Plan Template'), mini-courses ('5-Day Sales Email Challenge'), calculators, and quizzes. The more specific and actionable, the higher the opt-in rate. 🎁",
+  "Your email list is the one asset you truly own. Social media accounts can be banned, algorithms change, ad costs rise — but your email list belongs to you. 1,000 engaged subscribers on your list are worth more than 10,000 social media followers. 💎",
+  "List quality over quantity: an unengaged list of 10,000 is worth less than an engaged list of 1,000. Clean your list every 6 months — remove people who haven't opened in 90 days. A clean list gets better deliverability and open rates. ✅"
+]},
+
+// BUSINESS OPERATIONS
+{tag:"crm_basics",patterns:["what crm should i use","best crm for small business","do i need a crm","crm for startups","crm recommendation"],responses:[
+  "Best CRMs by business size: Startup (HubSpot Free — excellent free tier), Small Business (Pipedrive — simple and sales-focused), Growing Business (Zoho CRM — affordable and powerful), Enterprise (Salesforce — infinitely customizable). Start free, upgrade when you outgrow it. 🛠️",
+  "You need a CRM when: you're managing more than 20 active prospects, deals are falling through the cracks, you can't remember where a conversation left off, or your team is all using separate spreadsheets. That moment usually comes sooner than you think. 📋",
+  "CRM success principle: a CRM is only as good as the data in it. 'If it's not in the CRM, it didn't happen.' Make logging calls, emails, and meetings a non-negotiable team standard from day one. 🎯",
+  "Key CRM features for small businesses: contact management, pipeline visualization, email integration, task reminders, and basic reporting. Don't over-engineer it — the best CRM is the one your team actually uses. 💡"
+]},
+{tag:"project_management_tools",patterns:["project management tools","best project management software","how to manage projects","task management software","team project tools","trello vs asana","notion vs asana"],responses:[
+  "Top project management tools in 2026: Notion (all-in-one wiki + tasks), Asana (structured task management), Linear (engineering teams), Monday.com (visual project tracking), Trello (simple Kanban boards), ClickUp (feature-rich, steep learning curve). Each suits a different style. 🛠️",
+  "How to pick: Trello for simple visual boards, Asana for structured project tracking with dependencies, Notion for teams who also need docs and wikis, Linear for software teams, Monday.com for non-technical teams who need visual dashboards. Don't overthink it — pick one and use it consistently. 🎯",
+  "The most common mistake: spending more time organizing tasks in a tool than doing the tasks. Keep your system as simple as possible. A well-used Trello board beats an elaborate ClickUp setup nobody actually updates. 💡",
+  "Project management fundamentals that matter more than the tool: clear task ownership (one person responsible per task), realistic deadlines, regular check-ins, and a way to flag blockers early. The tool enforces the system — the system is what matters. 📊"
+]},
+{tag:"accounting_software",patterns:["best accounting software","accounting tools","bookkeeping software","quickbooks alternative","small business accounting","how to do bookkeeping","xero vs quickbooks"],responses:[
+  "Best accounting software by size: Freelancer/Sole Trader (Wave — completely free), Small Business (Xero — excellent UX, strong app integrations), US Small Business (QuickBooks Online — most popular, extensive features), Growing Business (Sage — advanced reporting). 📊",
+  "Non-negotiable bookkeeping habits: separate business and personal bank accounts (day one, no exceptions), record every transaction weekly, reconcile accounts monthly, and review P&L and cash flow statements every month. If you don't know your numbers, you can't run your business. 💡",
+  "When to hire a bookkeeper: when you're spending more than 5 hours/month on bookkeeping. A bookkeeper costs $300–$800/month and saves you 10+ hours. The ROI is almost always positive — your time is worth more applied to revenue-generating activities. 🕐",
+  "The difference: bookkeeping (recording transactions) vs accounting (interpreting financials, tax planning, strategic advice). Start with a bookkeeper, add an accountant when revenue exceeds $100K or taxes become complex. Both are investments, not costs. 📋"
+]},
+{tag:"hiring_strategy",patterns:["when to hire","first hire","who to hire first","hiring plan","build a team","scaling with people","right time to hire"],responses:[
+  "When to hire your first employee: when you're consistently turning down work or working 60+ hours/week, AND you have 3-6 months of their salary in the bank, AND the role will directly generate or protect revenue. All three conditions should be true. 👥",
+  "Who to hire first: hire to remove your biggest bottleneck. If you're the only salesperson, hire someone to free up your time for delivery. If delivery is the bottleneck, hire there. Don't hire your weakness — hire where growth is being choked. 🎯",
+  "The 'A-player' rule: one A-player does the work of 2-3 B-players and raises the team around them. It's worth paying 20% more for an A-player. But hiring wrong is catastrophic — a bad hire costs 2-3× their annual salary in lost productivity, management time, and rehiring costs. ⚠️",
+  "Hire slow, fire fast — but humanely. Take 3-4 weeks to make a hiring decision (multiple interviews, work sample, reference checks). But if someone isn't working out after a genuine improvement period, acting fast protects the whole team. Delay only makes it worse. 💡"
+]},
+{tag:"outsourcing",patterns:["when to outsource","what to outsource","outsourcing tips","hire freelancers","outsource vs hire","fiverr upwork","virtual assistant"],responses:[
+  "The outsourcing rule: outsource tasks that are: repetitive, time-consuming, not core to your business, and documentable. Great outsourcing candidates: bookkeeping, social media scheduling, data entry, customer support, graphic design, web development. 🤝",
+  "Best platforms for outsourcing: Upwork (vetted freelancers, all skills), Fiverr (fixed-price tasks, creative work), Toptal (top 3% of developers), Onlinejobs.ph (virtual assistants — excellent value), LinkedIn (professional hires). 🌐",
+  "The $10/$100/$1000/hour exercise: list all your tasks, categorize by what they're worth per hour. Outsource the $10/hour tasks immediately, delegate $100/hour tasks as soon as possible, and focus YOUR time on $1000/hour strategic work. 🎯",
+  "Outsourcing success requires: a detailed brief (never assume), clear deliverables and deadlines, a trial project before a big commitment, and regular communication. The biggest outsourcing failure is poor documentation — write down exactly what 'done' looks like. 📋"
+]},
+
+// TECHNOLOGY & TOOLS
+{tag:"no_code_tools",patterns:["no code tools","no code app builder","build app without coding","nocode","low code","build website without coding","webflow bubble"],responses:[
+  "Top no-code tools in 2026: Webflow (professional websites), Bubble (complex web apps), Glide (mobile apps from spreadsheets), Zapier/Make (automation), Airtable (database apps), Typeform (forms and surveys), Shopify (ecommerce). 🛠️",
+  "No-code is transforming entrepreneurship: you can now build an MVP, automate operations, and launch a product without writing a single line of code. What took $50K+ in development 5 years ago can be done for $100/month today. 🚀",
+  "No-code validation strategy: before hiring developers, build your MVP with no-code tools. Get real customers and real revenue. THEN invest in custom development if the business proves itself. This saves massive capital and de-risks the build. 💡",
+  "When to go beyond no-code: when your product has scaled to where the tool's limitations become a growth constraint (performance, customization, integrations). Most businesses never reach this point. Start no-code, switch when you must. 📈"
+]},
+{tag:"cybersecurity_small_business",patterns:["cybersecurity for small business","how to protect my business online","data security business","prevent hacking","business data protection","cyber attack prevention"],responses:[
+  "The top cybersecurity threats for small businesses: phishing emails (employees click malicious links), weak passwords, unpatched software, and ransomware. 43% of cyberattacks target small businesses — yet most believe 'we're too small to be a target.' 🎯",
+  "Essential cybersecurity basics: 1️⃣ Use a password manager (1Password, Bitwarden) 2️⃣ Enable 2-factor authentication on everything 3️⃣ Keep all software updated 4️⃣ Train employees on phishing 5️⃣ Back up data daily (3-2-1 rule: 3 copies, 2 media types, 1 offsite). 🔐",
+  "The human firewall: 90% of successful cyberattacks involve human error. Your employees are your biggest vulnerability AND your best defense. Run phishing simulation tests, make security training mandatory, and create a culture where people report suspicious activity without fear. 👥",
+  "Cyber insurance is increasingly essential. A ransomware attack on a small business averages $200K in damages. Cyber insurance typically costs $1,000–$3,000/year. For a business handling customer data, this is non-negotiable risk management. 🛡️"
+]},
+
+// ADVANCED STRATEGY
+{tag:"competitive_advantage",patterns:["what is competitive advantage","how to build competitive advantage","sustainable competitive advantage","moat","business moat","what makes my business unique"],responses:[
+  "A competitive advantage is what makes your business better than alternatives in a way customers value AND competitors find hard to copy. Warren Buffett calls it a 'moat' — something protecting your business from competition. 🏰",
+  "The 5 types of business moats: 1) Network effects (product gets better as more people use it — WhatsApp, LinkedIn) 2) Switching costs (expensive to leave — enterprise software) 3) Cost advantages (scale, proprietary processes) 4) Intangible assets (brand, patents, licenses) 5) Efficient scale (natural monopoly in a niche). 🔍",
+  "Most small businesses compete on price — the worst moat because anyone can undercut you. Instead: compete on relationships (deeply personal service), specialization (niche expertise no generalist can match), or speed (first to market, fastest delivery). 🎯",
+  "Building a moat takes time. The strategy: pick a niche narrow enough that you can dominate it, deliver exceptional value until customers can't imagine switching, then deepen the moat with data, brand, and relationships. Think years, not months. 📅"
+]},
+{tag:"business_pivot",patterns:["should i pivot","what is a business pivot","how to pivot my business","when to pivot","business pivot examples","change business direction"],responses:[
+  "A pivot is a structured course correction — keeping one foot in what's working while shifting strategy based on what you've learned. Famous pivots: YouTube (video dating site → video sharing), Slack (gaming company → team chat), Instagram (check-in app → photo sharing). 🔄",
+  "Signs you need to pivot: customers use your product differently than intended (pivot to what they actually want), growth has completely stalled despite good execution, a small side feature is more popular than your core product, or the market fundamentally changed. 🔍",
+  "How to pivot well: 1️⃣ Collect and analyze all customer data 2️⃣ Identify what IS working (keep it) 3️⃣ Form a clear hypothesis for the new direction 4️⃣ Test with a small experiment 5️⃣ Validate before fully committing 6️⃣ Communicate transparently with team and investors. 📋",
+  "The hardest part of pivoting: letting go of sunk costs. The money and time you've already spent are gone regardless of what you decide next. The only question is: what gives you the best chance of success FROM HERE? Sunk costs are irrelevant to that decision. 💡"
+]},
+{tag:"niche_business",patterns:["what is a niche business","how to find a niche","niche market strategy","niche vs mass market","niche marketing","find my niche"],responses:[
+  "A niche is a narrowly defined segment of a market with specific characteristics and needs. The riches are in the niches: a 'business consultant' competes with millions; a 'SaaS onboarding consultant for fintech startups' has almost no competition. 🎯",
+  "Niching down feels scary — 'what if I exclude potential customers?' But the counter-intuitive truth: the narrower your focus, the easier it is to become the obvious choice, charge premium prices, and generate word-of-mouth within that specific community. 💡",
+  "How to find your niche: 1️⃣ Start with your skills and interests 2️⃣ Identify specific problems you can solve 3️⃣ Find underserved communities with that problem 4️⃣ Validate that they'll pay 5️⃣ Check if the niche is large enough to sustain a business (but not so large that giants dominate). 🔍",
+  "Niche examples that work: Accounting specifically for food trucks. Legal services for YouTubers. Marketing only for chiropractors. HR consulting only for companies 10-50 people. Each is small enough to own completely and large enough to build a great business. 🏆"
+]},
+{tag:"business_networking",patterns:["how to network for business","business networking tips","networking events","build business network","linkedin networking","grow professional network"],responses:[
+  "Business networking is building relationships with people who can create mutual value — customers, partners, investors, mentors, and peers. The mindset shift: stop networking to get, and start networking to give. The returns come, but indirectly. 🤝",
+  "LinkedIn is the most powerful B2B networking tool ever built. Optimize your profile (professional photo, clear headline, specific about who you help), post valuable content consistently, and send personalized connection requests with a specific reason. 10 minutes/day compounds dramatically. 💼",
+  "The 5-15-5 networking rule: spend 5 minutes helping someone (share an article, make an intro), 15 minutes learning something new, 5 minutes on a meaningful conversation. Do this daily and your network becomes your superpower. ⚡",
+  "Events and conferences: don't attend to collect business cards — attend with a goal (meet 3 specific types of people). Research attendees beforehand on LinkedIn. Follow up within 24 hours with a specific reference to your conversation. 80% of people never follow up. Be the 20%. 📧"
+]},
+{tag:"business_exit_strategy",patterns:["how to exit business","sell my business","business valuation for sale","how much is my business worth","business sale","exit planning","when to sell"],responses:[
+  "Business valuation methods: 1) Revenue multiple (1-3× annual revenue for most small businesses), 2) EBITDA multiple (3-8× EBITDA for established businesses), 3) Asset-based (tangible asset value), 4) DCF (present value of future cash flows). Most small businesses sell at 2-4× EBITDA. 💰",
+  "How to maximize your exit price: 1️⃣ Start planning 2-3 years before you want to sell 2️⃣ Systematize everything (buyer wants a business, not a job) 3️⃣ Diversify customer base (no single customer >20% of revenue) 4️⃣ Grow recurring revenue 5️⃣ Clean up financials 6️⃣ Have a strong management team. 📈",
+  "Exit options: Strategic sale (to a competitor or company in adjacent market — usually highest price), Financial buyer (private equity — focuses on EBITDA), Management buyout (your team buys you out), Acqui-hire (buyer wants your team more than business), IPO (for large companies). 🚪",
+  "The biggest mistake in selling a business: being too dependent on the founder. If the business can't run without you for 3 months, buyers will either walk away or dramatically reduce the price (and require you to stay for years). Build systems and a team that makes you replaceable. 💡"
+]},
+
+// LIFESTYLE & MINDSET
+{tag:"morning_routine_entrepreneur",patterns:["morning routine entrepreneur","morning habits successful people","daily routine business","habits of successful entrepreneurs","productive morning","start day right"],responses:[
+  "The most common morning habits of high-performing entrepreneurs: waking early (5-6am), no phone for the first hour, exercise or movement, journaling or meditation, and tackling the single most important task before any meetings or emails. 🌅",
+  "The 'Miracle Morning' (Hal Elrod) framework: Silence (meditation, 5 min), Affirmations (3 min), Visualization (3 min), Exercise (20 min), Reading (20 min), Scribing/journaling (5 min). Total: ~56 minutes. Reported by thousands of entrepreneurs as transformative. ⏰",
+  "Why morning routines matter for entrepreneurs: decision fatigue is real. By afternoon, decision quality drops significantly. Front-load your most important creative and strategic work in the morning when your mind is freshest. Protect that window ferociously. 🧠",
+  "Design YOUR morning routine — don't copy someone else's. What gives you energy and focus? Some entrepreneurs need a slow start with coffee and journaling. Others need a hard workout. Experiment for 30 days with different approaches. The best routine is the one you do consistently. 💡"
+]},
+{tag:"time_management_business",patterns:["time management for entrepreneurs","how to manage time as business owner","time blocking","most important tasks","mit method","eat the frog","prioritization method"],responses:[
+  "Time blocking: schedule your day in chunks of focused time. Elon Musk, Bill Gates, and Cal Newport all use this method. Block 2-4 hours for deep work, 1 hour for email/communication, specific slots for meetings. Never let your calendar be reactive — design it proactively. 📅",
+  "The MIT (Most Important Task) method: identify 1-3 tasks each morning that would make the day a success if completed. Do those FIRST, before anything else. If the day gets derailed by fires, you've still moved the most important things forward. 🎯",
+  "The two-minute rule (David Allen, Getting Things Done): if a task takes less than 2 minutes, do it immediately. If it takes longer, schedule it. This clears mental clutter and prevents small tasks from becoming large backlogs. ⚡",
+  "The entrepreneur's #1 time thief: low-value meetings. Every meeting should have a written agenda, a clear decision to be made or outcome to achieve, and a strict end time. Most one-hour meetings can be 15-minute Loom videos or a Slack message. Ruthlessly protect your calendar. 🚫"
+]},
+{tag:"books_for_entrepreneurs",patterns:["best books for entrepreneurs","books every entrepreneur should read","business book recommendations","top business books","must read business books"],responses:[
+  "Essential entrepreneurship books: 📚 'Zero to One' (Peter Thiel — how to build monopolies), 'The Lean Startup' (Eric Ries — validate before building), '$100M Offers' (Alex Hormozi — irresistible offers), 'The E-Myth Revisited' (Michael Gerber — build systems not jobs), 'Good to Great' (Jim Collins — what separates great companies). 🏆",
+  "Finance and strategy books: 'The Intelligent Investor' (Ben Graham — value investing), 'Thinking in Bets' (Annie Duke — decision-making under uncertainty), 'The Personal MBA' (Josh Kaufman — complete business education in one book), 'Blue Ocean Strategy' (Kim & Mauborgne — create uncontested markets). 📖",
+  "Sales and marketing books: 'Influence' (Robert Cialdini — psychology of persuasion), '$100M Leads' (Alex Hormozi — lead generation), 'Contagious' (Jonah Berger — why things spread), 'Never Split the Difference' (Chris Voss — negotiation), 'Dotcom Secrets' (Russell Brunson — online funnels). 🎯",
+  "Leadership and mindset books: 'Extreme Ownership' (Jocko Willink — radical accountability), 'Atomic Habits' (James Clear — habit formation), 'Mindset' (Carol Dweck — growth vs fixed mindset), 'Principles' (Ray Dalio — systematic decision-making), 'The Hard Thing About Hard Things' (Ben Horowitz — brutal honesty about building companies). 💪"
+]},
+
+// QUICK PRACTICAL ANSWERS
+{tag:"business_name_tips",patterns:["how to name my business","business name ideas","choose business name","name my company","good business name","brand name tips"],responses:[
+  "Great business name criteria: 1️⃣ Easy to spell and pronounce 2️⃣ Memorable (ideally 1-2 syllables) 3️⃣ Domain available (.com preferred) 4️⃣ Not trademarked 5️⃣ Passes the 'phone test' (can you say it on a phone without spelling it?) 6️⃣ Makes sense to your target customer. 📛",
+  "Types of business names: Descriptive (says what you do — Facebook, Instagram), Invented (made-up — Kodak, Xerox), Founder-based (Ford, Disney), Acronym (IBM, GE — avoid for new businesses, hard to remember), Metaphorical (Amazon, Apple — evoke feeling). 🎨",
+  "Check before committing: Google it (does it exist?), search USPTO trademark database, check domain availability (Namecheap, GoDaddy), search LinkedIn and Instagram. Rebranding after growth is painful and expensive — get it right early. 🔍",
+  "Future-proofing tip: avoid names too narrow to your current product. Amazon was named for the biggest river (scale), not 'Jeff's Bookstore.' If you might expand your offerings in 5 years, choose a name with room to grow. 📈"
+]},
+{tag:"logo_branding",patterns:["how to create a logo","logo design tips","brand identity","visual branding","logo for startup","color psychology business"],responses:[
+  "Logo design principles: Simple (recognizable at any size), Memorable (distinct and unique), Timeless (avoid trendy design that dates), Versatile (works in black/white, all sizes), Appropriate (fits your industry and audience). Think Nike swoosh — simple but iconic. ✨",
+  "Color psychology in branding: Blue (trust, reliability — finance, tech: IBM, PayPal), Red (energy, urgency — food, retail: Coca-Cola, Target), Green (health, growth — eco, finance: Whole Foods, Robinhood), Orange (friendly, affordable — Amazon), Black (luxury, premium — Apple, Chanel). 🎨",
+  "Budget logo options: Canva (free, DIY — good for early stage), 99designs or DesignCrowd (crowdsourced, $300-600), Fiverr (freelance, $50-200), Local designer ($500-2,000), Branding agency ($5,000+). For early-stage businesses, Canva or Fiverr is sufficient. 💡",
+  "Brand identity beyond the logo: typography (consistent fonts), color palette (2-3 primary colors + 1-2 accent), tone of voice (how you write), imagery style (photography aesthetic), and visual patterns. Consistency across all touchpoints builds brand recognition. 🏆"
+]},
+{tag:"how_to_get_first_customers",patterns:["how to get first customers","first customers","get clients","find first customer","get sales","acquire first clients","no customers"],responses:[
+  "Getting your first 10 customers: don't run ads — talk to people. Personal outreach to everyone you know who might fit the profile. Offer a 'founder discount' or free pilot in exchange for honest feedback and a testimonial. Do things that don't scale — it's temporary. 🚀",
+  "The fastest path to first customers: 1️⃣ Define your ideal customer precisely 2️⃣ Go where they already gather (Facebook groups, Reddit, Slack communities, LinkedIn) 3️⃣ Be genuinely helpful without pitching 4️⃣ When they have the problem you solve, offer to help 5️⃣ Convert the conversation. 🎯",
+  "Cold outreach that works: hyper-personalize each message (reference their specific situation), lead with a specific pain point (not your product features), make it easy to respond (one clear question), and follow up 2-3 times. A 2% response rate on 500 personalized emails = 10 new conversations. 📧",
+  "Leverage existing networks: your alumni network, former colleagues, LinkedIn connections, industry associations, and local business groups. Someone who already knows you is 10× easier to convert than a cold prospect. Start warm, then expand cold. 🤝"
+]},
+{tag:"customer_complaints",patterns:["how to handle customer complaints","dealing with unhappy customers","customer complaints","angry customer","customer service problem","resolve customer issues"],responses:[
+  "The HEARD framework for handling complaints: Hear (listen without interrupting), Empathize ('I completely understand why you feel that way'), Apologize (without deflecting blame), Resolve (fix it fast), Diagnose (understand how to prevent it). This de-escalates 90% of situations. 🎯",
+  "A handled complaint well is MORE valuable than no complaint at all. Research shows customers whose complaints are resolved satisfactorily become MORE loyal than customers who never had a problem. The complaint is an opportunity to earn trust. 💡",
+  "Never argue with a customer online. A public response to a negative review should: acknowledge the issue, apologize, offer to resolve privately (move it offline). Defensive responses multiply the damage. Gracious responses win observers. 📱",
+  "Track complaints as business intelligence. If 10 people complain about the same thing, 100 people silently felt the same way and just left. Complaints are free market research. Create a system to capture, categorize, and act on them monthly. 📊"
+]},
+{tag:"business_goals",patterns:["how to set business goals","smart goals","business goal setting","okrs","key results","set goals for my business","annual business goals"],responses:[
+  "SMART goals framework: Specific (clear, not vague), Measurable (quantified — '$10K revenue' not 'more revenue'), Achievable (stretch but realistic), Relevant (tied to business strategy), Time-bound (deadline). Without all five, a goal is a wish. 🎯",
+  "OKRs (Objectives and Key Results) — used by Google, Intel, Spotify: Set 3-5 qualitative Objectives ('Become the leading customer service platform for restaurants'), each with 3-4 measurable Key Results ('Reach 500 paying restaurants', 'Achieve NPS of 60+'). Review monthly, grade quarterly. 📊",
+  "The annual planning rhythm: 1️⃣ Reflect on last year (what worked, what didn't) 2️⃣ Set 3 big annual goals 3️⃣ Break into quarterly milestones 4️⃣ Break into monthly priorities 5️⃣ Break into weekly tasks 6️⃣ Review weekly. The plan is nothing; the planning and reviewing is everything. 🔄",
+  "Goal-setting pitfall: setting too many goals. Focus wins. Three well-executed goals beat ten half-executed ones. Jeff Bezos says Amazon always has one big thing they're focused on — not ten. Ruthlessly prioritize. 💡"
+]},
+
 
 // BUSINESS COMPARISON
 {tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
