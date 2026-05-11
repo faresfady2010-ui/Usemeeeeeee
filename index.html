@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -876,9 +874,11 @@ let conversationContext = {
   lastSubject: '',
   lastTag: '',
 };
+let lastMatchedIntent = null;
 
 function updateConversationContext(intent) {
   conversationContext.lastTag = intent.tag;
+  lastMatchedIntent = intent;
   const stopWords = new Set(['what','that','this','with','from','have','will','does','when','where','which','them','they','about','into','your','more','some','than','also','very']);
   const firstPattern = intent.patterns[0] || '';
   const words = firstPattern.toLowerCase().split(/\s+/).filter(w => w.length > 3 && !stopWords.has(w));
@@ -1072,17 +1072,57 @@ const intents = [
 "To go viral: create emotional or entertaining content, follow trends, and make it easy to share."
 ]},
 // MONEY
-{tag:"profit",patterns:["what is profit","profit meaning"],responses:["Profit is the money left after subtracting costs from revenue."]},
-{tag:"revenue",patterns:["what is revenue","income of business"],responses:["Revenue is the total income a business earns from sales."]},
-{tag:"costs",patterns:["what are costs","business expenses"],responses:["Costs are the money spent to run a business."]},
-{tag:"loss",patterns:["what is loss"],responses:["Loss happens when costs are higher than revenue."]},
+{tag:"profit",patterns:["what is profit","profit meaning","what does profit mean","define profit"],responses:[
+  "Profit is the money left after subtracting ALL costs from revenue. It's the ultimate goal of any business. 💰",
+  "Profit = Revenue − Total Costs. Simple formula, hard to master. Most businesses fail not because they don't make sales, but because costs eat the profit. 📊",
+  "There are three layers: Gross Profit (after production costs), Operating Profit (after overhead), and Net Profit (after everything including taxes). Net profit is the real number. 🎯",
+  "Profit is the reward for creating value and managing costs well. A business without profit eventually dies — it's the oxygen of commerce. Want me to explain gross vs net profit? 💡"
+]},
+{tag:"revenue",patterns:["what is revenue","income of business","what does revenue mean","total income"],responses:[
+  "Revenue is the total income a business earns from selling products or services — BEFORE any costs are deducted. It's the top line of an income statement. 💵",
+  "Revenue = Price × Quantity Sold. It's also called 'sales' or 'turnover'. High revenue with poor cost control still means losses. Revenue is vanity, profit is sanity. 📈",
+  "There are different types: Product Revenue, Service Revenue, Recurring Revenue (subscriptions), and One-Time Revenue. Recurring revenue is the most valuable for business stability. 🔄",
+  "Revenue tells you how big your business is. Profit tells you how healthy it is. Both matter — but focus on profit first, revenue second. 🎯"
+]},
+{tag:"costs",patterns:["what are costs","business expenses","what are business costs","types of costs"],responses:[
+  "Costs are all the money a business spends to operate. They fall into Fixed (rent, salaries — same every month) and Variable (materials, shipping — change with output). 💸",
+  "Key types: COGS (direct production costs), Operating Expenses (overheads), Capital Expenditure (long-term assets), and Financing Costs (interest on debt). 📋",
+  "The golden rule: costs must be lower than revenue to make profit. Most businesses fail because they don't track costs rigorously enough. Know every cost in your business. 🔍",
+  "Smart businesses separate essential costs (keep the lights on) from growth costs (generate more revenue). Cut the first category ruthlessly; invest wisely in the second. 💡"
+]},
+{tag:"loss",patterns:["what is loss","what is a business loss","define loss","business loss meaning"],responses:[
+  "A loss occurs when your total costs exceed your total revenue. Loss = Costs − Revenue when costs are higher. It means the business consumed more value than it created. 📉",
+  "Not all losses are fatal. A startup can strategically operate at a loss to gain market share (like Amazon did for years). But uncontrolled, ongoing losses lead to bankruptcy. ⚠️",
+  "Types of loss: Gross Loss (COGS > Revenue), Operating Loss (overheads too high), Net Loss (total company loss after all items). Track which type you have — the solution differs for each. 🔍",
+  "A loss is a signal, not a death sentence. Analyze WHY costs exceed revenue — is it pricing too low, costs too high, or insufficient sales volume? Fix the right problem. 🛠️"
+]},
 {tag:"profit_prediction",patterns:["predict profit","estimate profit","profit forecast","profit or loss","profit prediction","will i make a profit","will i have a loss","calculate profit","calculate loss","estimate loss","forecast profit"],responses:["Share your revenue and expense numbers and I can estimate whether that means profit or loss."]},
-{tag:"cash_flow",patterns:["cash flow"],responses:["Cash flow shows money coming in and going out of a business."]},
+{tag:"cash_flow",patterns:["cash flow","what is cash flow","cash flow meaning","business cash flow"],responses:[
+  "Cash flow tracks the actual movement of money into and out of a business. Positive cash flow = more coming in than going out. Negative = danger zone. 💵",
+  "Critical truth: a business can be profitable on paper but go bankrupt due to poor cash flow. If customers pay in 90 days but you pay suppliers in 30 days, you have a cash flow gap. 🚨",
+  "Three types: Operating Cash Flow (from core business), Investing Cash Flow (buying/selling assets), Financing Cash Flow (loans, dividends). Operating cash flow is the most important. 📊",
+  "Cash flow is the heartbeat of a business. Even one missed payroll or unpaid supplier can cascade into collapse. Always maintain 3-6 months of expenses as a cash reserve. 💡"
+]},
 
 // ENTREPRENEURSHIP
-{tag:"entrepreneur",patterns:["what is entrepreneur"],responses:["An entrepreneur is someone who starts and manages a business."]},
-{tag:"entrepreneurship",patterns:["what is entrepreneurship"],responses:["Entrepreneurship is the process of creating and running a business."]},
-{tag:"startup",patterns:["what is startup"],responses:["A startup is a newly created business."]},
+{tag:"entrepreneur",patterns:["what is entrepreneur","entrepreneur meaning","define entrepreneur","what does entrepreneur mean"],responses:[
+  "An entrepreneur is someone who identifies a problem, builds a solution, and takes the financial risk to bring it to market. The word comes from the French 'entreprendre' — to undertake. 🚀",
+  "Entrepreneurs are defined by action over ideas. The world is full of people with good ideas; entrepreneurs are the ones who execute, fail, learn, and persist until it works. 💪",
+  "The traits that matter most: resilience (to survive failure), customer obsession, comfort with uncertainty, and the ability to sell — both ideas and products. Not all heroes wear capes; some wear hoodies and work 16-hour days. 😄",
+  "Famous entrepreneurs and their first moves: Steve Jobs sold Wozniak's computer to a local store. Richard Branson started a student magazine from a church basement. Elon Musk coded his first game at age 12 and sold it for $500. They all started somewhere small. 🌱"
+]},
+{tag:"entrepreneurship",patterns:["what is entrepreneurship","entrepreneurship meaning","explain entrepreneurship","what does entrepreneurship mean"],responses:[
+  "Entrepreneurship is the process of identifying opportunities, mobilizing resources, and building organizations to create value — while managing the risks involved. 💼",
+  "It's equal parts art and science: creative problem-solving combined with financial discipline, people management, and market intuition. Most people have one; great entrepreneurs develop all four. 🎨",
+  "Entrepreneurship is not just starting businesses. It includes social entrepreneurship (solving social problems), intrapreneurship (innovating inside large companies), and serial entrepreneurship (building multiple ventures). 🌍",
+  "The Harvard Business School definition: 'the pursuit of opportunity beyond resources currently controlled.' In plain English: making something from nothing — and making it work. 🔥"
+]},
+{tag:"startup",patterns:["what is startup","startup meaning","what is a startup","define startup"],responses:[
+  "A startup is a newly formed business designed to grow fast. Unlike a traditional small business, a startup aims to scale to thousands or millions of customers — usually with technology at its core. 🚀",
+  "Paul Graham (Y Combinator) defines a startup as 'a company designed to grow fast.' The key word is designed — it's intentional, not accidental growth. 📈",
+  "Startups go through stages: Idea → Validation (do people want this?) → MVP (minimum viable product) → Launch → Growth → Scale. Most fail at Validation — they build before proving demand. 🔍",
+  "What separates a startup from a small business: startups seek venture capital, aim for massive scale, often operate at a loss to grow quickly, and are built to eventually be acquired or go public. 💡"
+]},
 {tag:"increase_profit",patterns:[
 "increase profit","make more profit","improve profit"
 ],responses:[
@@ -1165,58 +1205,216 @@ const intents = [
 {tag:"product_development",patterns:["product development"],responses:["Product development involves creating new products."]},
 
 // MARKET
-{tag:"market",patterns:["what is market"],responses:["A market is where buyers and sellers interact."]},
-{tag:"demand",patterns:["what is demand"],responses:["Demand is how much people want a product."]},
+{tag:"market",patterns:["what is market","market meaning","what is a market","define market","business market"],responses:[
+  "A market is any mechanism where buyers and sellers exchange goods, services, or information. It can be physical (a market stall) or digital (Amazon). Markets are defined by supply, demand, and price signals. 🏪",
+  "In business strategy, 'the market' refers to your potential customer base. Understanding your market means knowing its size (TAM), growth rate, key segments, and the forces shaping buyer decisions. 📊",
+  "Markets are classified by structure: Perfect Competition (many sellers, identical products), Monopoly (one seller), Oligopoly (few dominant sellers), and Monopolistic Competition (many sellers, differentiated products). Your strategy depends on which one you're in. 🎯",
+  "Every successful business starts by deeply understanding its market: Who are the buyers? What drives their decisions? What are they unhappy about with current options? Answer these before you build anything. 🔍"
+]},
+{tag:"demand",patterns:["what is demand","demand meaning","what is market demand","supply and demand","business demand"],responses:[
+  "Demand is the quantity of a product or service that consumers are willing and able to purchase at various price levels. The demand curve slopes downward — lower price = higher demand (usually). 📉",
+  "Understanding demand is everything. No demand = no business, no matter how great your product. Test demand BEFORE you build. Validate that people will actually pay money, not just say they like your idea. 💡",
+  "Price elasticity of demand measures how sensitive demand is to price changes. Luxury goods (inelastic) — people buy even if price rises. Commodities (elastic) — small price increase = big demand drop. Know your product's elasticity. 📊",
+  "Demand can be created, not just found. Apple created demand for the smartphone with the iPhone. Netflix created demand for streaming. Innovative businesses don't just serve existing demand — they invent new categories. 🚀"
+]},
 {tag:"supply",patterns:["what is supply"],responses:["Supply is how much of a product is available."]},
-{tag:"competition",patterns:["competition"],responses:["Competition is rivalry between businesses."]},
+{tag:"competition",patterns:["competition","what is competition","business competition","competitive market","competitors"],responses:[
+  "Competition is the rivalry between businesses serving the same customers with similar offerings. It drives innovation, keeps prices fair, and forces companies to continuously improve. 🏆",
+  "Michael Porter's 5 Forces of competition: Existing competitors, Threat of new entrants, Threat of substitutes, Power of buyers, Power of suppliers. Understanding all five reveals the true competitive landscape. 🔍",
+  "The best response to competition is not to fight them directly — it's to differentiate so clearly that comparison becomes difficult. Apple doesn't compete with budget phones; Tesla doesn't compete with normal car dealers. Be in a category of one. 🎯",
+  "Competitive intelligence means studying your rivals: their pricing, messaging, product features, customer reviews, and strategy. What do their unhappy customers complain about? That gap is your opportunity. 💡"
+]},
 
 // MANAGEMENT
-{tag:"management",patterns:["what is management"],responses:["Management involves planning and controlling business activities."]},
-{tag:"leadership",patterns:["leadership"],responses:["Leadership is guiding and motivating people."]},
-{tag:"teamwork",patterns:["teamwork"],responses:["Teamwork is working together to achieve goals."]},
-{tag:"communication",patterns:["communication"],responses:["Communication is sharing information effectively."]},
+{tag:"management",patterns:["what is management","management meaning","what does management mean","explain management"],responses:[
+  "Management is the process of planning, organising, leading, and controlling resources to achieve organizational goals efficiently and effectively. The classic 4 functions by Henri Fayol. 📋",
+  "Great management is invisible — things just work. Poor management is very visible — missed deadlines, confused teams, and firefighting. The best managers create systems so they don't need to be involved in every decision. 🎯",
+  "There's a difference between managing and leading. Management is about processes and control. Leadership is about vision and people. The best managers do both — run efficient systems AND inspire their teams. 💪",
+  "The key management skills: delegation (trust others to execute), communication (clarity prevents chaos), prioritization (focus on high-impact work), and feedback (continuous improvement loops). 🔄"
+]},
+{tag:"leadership",patterns:["leadership","what is leadership","leadership meaning","effective leadership","how to be a good leader"],responses:[
+  "Leadership is the ability to influence, inspire, and guide others toward a shared goal. The best leaders don't need authority — people follow them because they trust and believe in them. 🌟",
+  "Research by Gallup shows that managers (a form of leadership) account for 70% of the variance in team engagement. A great leader can transform a mediocre team; a poor leader can destroy a great one. 📊",
+  "The 5 levels of leadership (John Maxwell): Position (you're the boss), Permission (people follow willingly), Production (results create influence), People Development (you grow others), Pinnacle (you develop other leaders). Most managers never get past level 2. 🏆",
+  "Leadership isn't about having all the answers — it's about creating the conditions for others to find answers. Ask better questions, listen more than you speak, and give credit generously. 💡",
+  "The most important leadership skill in 2026: psychological safety. Google's Project Aristotle found that the #1 predictor of high-performing teams is whether people feel safe to speak up, take risks, and admit mistakes without fear. 🛡️"
+]},
+{tag:"teamwork",patterns:["teamwork","what is teamwork","importance of teamwork","team collaboration","working together"],responses:[
+  "Teamwork is the coordinated effort of multiple people working toward a shared goal, where combined output exceeds what individuals could achieve alone. The power of 1 + 1 = 3. 🤝",
+  "Patrick Lencioni's Five Dysfunctions of a Team: Absence of Trust, Fear of Conflict, Lack of Commitment, Avoidance of Accountability, Inattention to Results. Fix these in order and you have a high-performing team. 📋",
+  "The best teams have: psychological safety (people speak up), clear roles (no overlap confusion), shared purpose (everyone knows WHY), and healthy conflict (they debate ideas, not attack people). 💡",
+  "Google's Project Aristotle studied 180 teams and found the #1 factor in team success wasn't talent, experience, or IQ — it was psychological safety. Does every voice feel heard and valued? 🧠"
+]},
+{tag:"communication",patterns:["communication","what is communication","business communication","effective communication","how to communicate better"],responses:[
+  "Business communication is the exchange of information between people within and outside an organization to achieve business goals. Bad communication costs companies an average of $62.4 million per year (SHRM research). 📢",
+  "The 7 Cs of effective communication: Clear, Concise, Concrete, Correct, Coherent, Complete, and Courteous. Most communication failures come from being unclear or incomplete. ✅",
+  "In business, the biggest communication mistake is assuming people understood. Always confirm: 'What's your understanding of what we agreed?' You'll be surprised how often alignment breaks down. 🔍",
+  "The most underrated communication skill: listening. Most people listen to respond, not to understand. The best business communicators ask more questions and speak less. They learn more and build stronger relationships. 👂"
+]},
 
 // FINANCE
-{tag:"finance",patterns:["what is finance"],responses:["Finance is managing money in a business."]},
-{tag:"budget",patterns:["budget"],responses:["A budget is a financial plan of income and expenses."]},
-{tag:"investment",patterns:["investment"],responses:["Investment is putting money into something to earn profit."]},
-{tag:"risk",patterns:["risk"],responses:["Risk is the chance of losing money."]},
+{tag:"finance",patterns:["what is finance","finance meaning","business finance","what does finance mean","explain finance"],responses:[
+  "Finance is the study and management of money, investments, and other financial instruments. In business, it covers three areas: Corporate Finance (raising capital, investment decisions), Financial Markets (stocks, bonds), and Personal Finance (individual money management). 💰",
+  "Business finance has three core questions: Where do we get money? (Financing), Where do we invest it? (Investing), and How do we manage it day-to-day? (Working Capital). Answer these well and the business thrives. 📊",
+  "The three financial statements every business owner must understand: Income Statement (profit/loss over time), Balance Sheet (snapshot of assets and liabilities), and Cash Flow Statement (actual money movement). Together they tell the complete story of a business. 📋",
+  "Finance is the language of business. Even non-financial managers make better decisions when they understand ROI, cash flow, margins, and break-even. Warren Buffett reads financial statements the way others read novels — fluently and with deep comprehension. 📚"
+]},
+{tag:"budget",patterns:["budget","what is a budget","business budget","how to make a budget","budgeting"],responses:[
+  "A budget is a financial roadmap — it estimates expected income and expenses over a future period, helping businesses plan, control spending, and achieve financial goals. 💼",
+  "There are different budget types: Operating Budget (day-to-day expenses), Capital Budget (long-term investments), Cash Flow Budget (predicting cash availability), and Master Budget (all combined). 📊",
+  "The budgeting process: 1️⃣ Review past data 2️⃣ Set financial goals 3️⃣ Estimate revenue 4️⃣ Plan expenses 5️⃣ Calculate net position 6️⃣ Monitor and adjust monthly. Budget vs actuals comparison is how businesses stay on track. 📋",
+  "Zero-based budgeting (used by large companies like P&G) requires justifying EVERY expense from scratch each period — not just adjusting last year's numbers. It eliminates waste but takes more effort. Worth it for any business over $1M in revenue. 🎯"
+]},
+{tag:"investment",patterns:["investment","what is investment","business investment","investing","what does investment mean"],responses:[
+  "Investment is committing money or resources today with the expectation of generating greater returns in the future. In business, this means equipment, marketing, people, R&D, or new markets. 📈",
+  "Every business decision is an investment. Hiring an employee, launching a product, buying software — all are investments of time and money. The discipline is in measuring which investments generate the best return. ROI is your compass. 🧭",
+  "The risk-return trade-off is fundamental: higher potential returns require higher risk. A government bond returns ~4%, a startup investment might return 10× or $0. Understanding your risk tolerance guides investment decisions. ⚖️",
+  "Warren Buffett's rule #1: Never lose money. Rule #2: Never forget rule #1. The math is brutal — lose 50% and you need 100% return just to break even. Protecting capital is as important as growing it. 🛡️"
+]},
+{tag:"risk",patterns:["risk","what is risk","business risk","risk management","types of risk"],responses:[
+  "Business risk is the possibility that events will have a negative impact on your business goals — financial loss, reputational damage, or operational failure. Every business decision carries some risk. ⚠️",
+  "The four main business risks: Strategic (wrong direction), Financial (cash/debt), Operational (internal failures), and External (market, competition, regulation). Each needs a different mitigation approach. 📊",
+  "Risk management is not about eliminating risk — it's about taking the RIGHT risks deliberately. Entrepreneurs who avoid all risk end up in the lowest-reward zone. Calculated risk-taking is the engine of business growth. 🎯",
+  "The risk matrix plots likelihood vs impact. High likelihood + high impact = address immediately. Low likelihood + low impact = monitor. This helps prioritize where to focus mitigation efforts. 📋"
+]},
 
 // OPERATIONS
-{tag:"operations",patterns:["operations"],responses:["Operations manage daily business activities."]},
-{tag:"production",patterns:["production"],responses:["Production is creating goods or services."]},
-{tag:"quality",patterns:["quality"],responses:["Quality means how good a product or service is."]},
+{tag:"operations",patterns:["operations","what is operations","business operations","operations management","what are operations"],responses:[
+  "Business operations are the day-to-day activities that keep a company running and delivering value to customers — production, logistics, customer service, quality control, and process management. ⚙️",
+  "Operational excellence means doing the right things, in the right order, with the least waste. Companies like Toyota and Amazon are legendary for their operational discipline — it's a genuine competitive advantage. 🏆",
+  "Key operations metrics: throughput (output rate), utilization (% capacity used), cycle time (how long a process takes), defect rate (quality), and on-time delivery %. Watch these numbers and you understand operational health. 📊",
+  "The biggest operational mistake: scaling before processes are documented. When you can't describe how something is done, you can't teach it, improve it, or delegate it. Write SOPs before you grow. 📋"
+]},
+{tag:"production",patterns:["production","what is production","business production","production process"],responses:[
+  "Production is the process of transforming inputs (raw materials, labor, energy) into outputs (goods or services) that customers value. Efficiency and quality are the two key dimensions. 🏭",
+  "Production strategies: Make-to-Stock (produce in advance, e.g., supermarkets), Make-to-Order (produce after order, e.g., custom furniture), and Assemble-to-Order (pre-make components, assemble to spec, e.g., Dell computers). Each has different inventory and cash flow implications. 📦",
+  "Lean production (pioneered by Toyota) eliminates 7 types of waste: Overproduction, Waiting, Transportation, Overprocessing, Inventory, Motion, and Defects. The goal: produce exactly what's needed, when it's needed, with zero waste. ♻️",
+  "Production capacity planning is critical — too little means missed orders and unhappy customers; too much means high costs and waste. Build capacity slightly ahead of demand, not way ahead. 📈"
+]},
+{tag:"quality",patterns:["quality","what is quality","product quality","service quality","quality control"],responses:[
+  "Quality is conformance to customer expectations — consistently delivering what was promised. It's not about perfection; it's about reliability and meeting the standard customers paid for. ✅",
+  "The cost of poor quality is enormous: rework, returns, warranty claims, reputation damage, and lost customers. Research shows acquiring a new customer costs 5-7x more than retaining an existing one — and poor quality is the #1 reason customers leave. 📉",
+  "Total Quality Management (TQM) and Six Sigma are frameworks for building quality INTO processes, not inspecting it OUT at the end. Prevention is always cheaper than correction. 🔄",
+  "The Japanese concept of Kaizen — continuous incremental improvement — is behind companies like Toyota and Sony dominating global quality rankings. Small daily improvements compound into enormous quality advantages over time. 📈"
+]},
 
 // SALES
-{tag:"sales",patterns:["sales"],responses:["Sales involve selling products to customers."]},
-{tag:"pricing",patterns:["pricing"],responses:["Pricing is setting the value of a product."]},
-{tag:"discount",patterns:["discount"],responses:["A discount reduces the price of a product."]},
+{tag:"sales",patterns:["sales","what is sales","sales meaning","business sales","how to sell"],responses:[
+  "Sales is the process of persuading a potential customer that your product or service solves their problem better than alternatives — and getting them to exchange money for it. It's the lifeblood of every business. 💪",
+  "The best sales approach in 2026: consultative selling. Instead of pitching features, ask questions to understand the customer's pain deeply, then show specifically how your solution addresses that pain. Stop selling — start solving. 🎯",
+  "Sales funnel: Awareness → Interest → Consideration → Intent → Purchase → Loyalty. Most businesses focus only on the Purchase step. The best businesses optimize every stage, especially post-purchase loyalty. 🔄",
+  "The most important sales stat: 80% of sales happen after the 5th follow-up, but 44% of salespeople give up after just one. Persistent, helpful follow-up — not pestering — is where most revenue is won. 📞"
+]},
+{tag:"pricing",patterns:["pricing","what is pricing","business pricing","product pricing","how to price"],responses:[
+  "Pricing is one of the most powerful levers in business. A 1% price increase with no change in volume = roughly 7-11% profit improvement (McKinsey research). Most businesses undercharge. 💰",
+  "Four pricing strategies: Cost-Plus (cost + markup), Value-Based (what it's worth to customer), Competitive (match rivals), Penetration (low to gain share). Value-based almost always yields the highest profit. 🎯",
+  "Psychological pricing uses the way humans perceive numbers: $9.99 feels much less than $10 (charm pricing). $997 vs $1,000 works the same way. Anchor pricing (show the higher price first) makes the real price feel like a deal. 🧠",
+  "The price you charge communicates your positioning. Charge too little and you signal low quality. Charge premium prices and you signal confidence and exclusivity. Price is a marketing message, not just a number. 💎"
+]},
+{tag:"discount",patterns:["discount","business discount","offer discounts","discount strategy","should i discount"],responses:[
+  "A discount is a reduction from the standard price offered to stimulate demand, reward loyalty, or clear inventory. Used strategically, discounts can grow revenue. Used carelessly, they erode margins and train customers to wait for sales. ⚠️",
+  "The discounting trap: if you regularly discount 20%, customers learn to wait. Your 'real' price becomes the discounted price. Apple almost never discounts — and maintains premium brand perception as a result. 🍎",
+  "Better alternatives to discounts: add value instead of cutting price (add a bonus, extend warranty, include training), offer loyalty rewards (reward existing customers without lowering acquisition price), or bundle products. 💡",
+  "When discounts work: clearing end-of-season inventory, rewarding long-term customers privately, winning a strategic account where future value justifies initial price cut, and limited-time promotions that create genuine urgency. 📦"
+]},
 
 // HR
-{tag:"human_resources",patterns:["human resources","hr"],responses:["HR manages employees in a business."]},
-{tag:"recruitment",patterns:["recruitment"],responses:["Recruitment is hiring employees."]},
-{tag:"training",patterns:["training"],responses:["Training improves employee skills."]},
-{tag:"motivation",patterns:["motivation"],responses:["Motivation encourages employees to work better."]},
+{tag:"human_resources",patterns:["human resources","hr","what is hr","what is human resources","hr management"],responses:[
+  "Human Resources (HR) manages the complete employee lifecycle: recruitment, onboarding, training, performance management, compensation, culture, and offboarding. People are any business's most critical asset. 👥",
+  "Modern HR is strategic, not just administrative. It's about building the organizational capabilities needed to execute the business strategy — attracting the right talent, developing skills, and creating a culture that retains them. 🎯",
+  "The HR metrics that matter: Employee Retention Rate, Time-to-Hire, Cost-per-Hire, Employee Engagement Score, Absenteeism Rate, and Training ROI. Companies that track these outperform those that don't. 📊",
+  "The biggest HR mistake for small businesses: hiring too fast and firing too slow. Make hiring decisions carefully (skills + culture fit + growth potential), and address performance issues quickly and fairly before they damage team morale. ⚡"
+]},
+{tag:"recruitment",patterns:["recruitment","what is recruitment","hiring employees","how to recruit","talent acquisition"],responses:[
+  "Recruitment is the process of identifying, attracting, screening, and hiring qualified candidates to fill job roles. It's one of the highest-leverage activities in business — one great hire can be worth 10 average ones. 🏆",
+  "The best hiring process: 1️⃣ Clear job description with specific outcomes (not just tasks) 2️⃣ Structured interviews with consistent questions 3️⃣ Work sample test (see them actually do the job) 4️⃣ Reference checks (call, don't just email) 5️⃣ Cultural fit assessment. 📋",
+  "Common hiring mistakes: hiring for technical skills while ignoring attitude, hiring based on how articulate someone is in interviews (not predictive), and moving too slowly (great candidates have multiple offers). 🚀",
+  "The 2026 recruitment landscape: 60%+ of candidates research a company's culture on Glassdoor before applying. Your employer brand — how current and former employees talk about you — is your biggest recruitment asset. 🌟"
+]},
+{tag:"training",patterns:["training","employee training","staff training","training and development","workplace training"],responses:[
+  "Employee training is the systematic process of improving knowledge, skills, and behaviors to improve job performance. Companies that invest in learning have 37% higher productivity and 218% higher revenue per employee (ATD research). 📚",
+  "Types of training: On-the-job (learn by doing), Mentoring (learn from experience), Classroom/e-learning (structured courses), Cross-training (learn other roles), and Leadership development. Each serves a different purpose. 🎓",
+  "The 70-20-10 learning model: 70% of learning comes from on-the-job experience, 20% from feedback and working with others, and only 10% from formal training. Design your training programs accordingly. 📊",
+  "The ROI of training is often underestimated. Google found that manager training alone improved team performance scores by 25%. A skilled manager is worth 10 hours of strategy meetings. Invest in your people. 💡"
+]},
+{tag:"motivation",patterns:["motivation","employee motivation","how to motivate employees","what motivates people","motivation at work"],responses:[
+  "Employee motivation is the level of energy, commitment, and creativity that employees bring to their work. Motivated employees are 17% more productive and 21% more profitable to their companies (Gallup). 🔥",
+  "Maslow's hierarchy: Physiological → Safety → Belonging → Esteem → Self-Actualization. Most workplaces cover the bottom two. The best workplaces also deliver belonging, recognition, and opportunities for personal growth. 🏔️",
+  "Herzberg's Two-Factor Theory: Hygiene factors (salary, working conditions) prevent dissatisfaction but don't create motivation. Motivators (achievement, recognition, growth, responsibility) create genuine engagement. Pay alone doesn't motivate — it just prevents people from being demotivated. 💡",
+  "Dan Pink's research on motivation: for creative and knowledge work, the three drivers are Autonomy (control over your work), Mastery (getting better at things that matter), and Purpose (contribution to something meaningful). Traditional carrot-and-stick management actually REDUCES performance for complex tasks. 🧠"
+]},
 
 // ECONOMY
-{tag:"economy",patterns:["economy"],responses:["Economy is the system of production and consumption."]},
-{tag:"globalization",patterns:["globalization"],responses:["Globalization connects businesses worldwide."]},
-{tag:"ecommerce",patterns:["ecommerce"],responses:["Ecommerce is buying and selling online."]},
+{tag:"economy",patterns:["economy","what is economy","the economy","economic system","business economy"],responses:[
+  "The economy is the system by which a society produces, distributes, and consumes goods and services. It encompasses all transactions between individuals, businesses, and governments. 🌍",
+  "Business cycles (expansion, peak, contraction, trough) affect every business. During expansion: invest and grow. During contraction: protect cash and cut non-essential costs. The businesses that survive downturns emerge stronger because competitors fold. 📈📉",
+  "Key economic indicators that affect your business: GDP growth rate, inflation (CPI), interest rates, unemployment rate, and consumer confidence index. Each signals opportunity or risk for different types of businesses. 📊",
+  "Micro vs Macro economics: Microeconomics studies individual businesses and markets (pricing, supply/demand). Macroeconomics studies the overall economy (inflation, growth, monetary policy). Both affect your business strategy. 🔍"
+]},
+{tag:"globalization",patterns:["globalization","what is globalization","global business","international trade","globalization meaning"],responses:[
+  "Globalization is the process by which businesses, people, and governments become increasingly interconnected across national borders through trade, technology, and information flow. 🌐",
+  "Globalization creates enormous opportunities: access to cheaper inputs (labor, materials), larger markets for your products, global talent pools, and partnerships across borders. But it also creates risks: currency fluctuation, supply chain fragility, and geopolitical disruption. ⚖️",
+  "The COVID-19 pandemic exposed the fragility of hyper-globalized supply chains. Many businesses are now adopting 'nearshoring' — bringing supply chains closer to home — to balance cost efficiency with resilience. 🔄",
+  "For small businesses, globalization means you can sell globally on Day 1. A Nigerian entrepreneur on Etsy, a Filipino freelancer on Upwork, a Brazilian developer on GitHub — the borders of business have dissolved. 🚀"
+]},
+{tag:"ecommerce",patterns:["ecommerce","what is ecommerce","online selling","online store","ecommerce meaning","ecommerce business"],responses:[
+  "Ecommerce is the buying and selling of products and services over the internet. Global ecommerce sales exceeded $6 trillion in 2024 and are projected to reach $8 trillion by 2027. It's the fastest growing retail channel. 🛒",
+  "Types of ecommerce: B2C (business to consumer, e.g., Amazon), B2B (business to business, e.g., Alibaba), C2C (consumer to consumer, e.g., eBay), D2C (direct to consumer, brands selling direct). Each has different economics and strategies. 📊",
+  "The ecommerce success formula: great product + strong brand + excellent photography + fast website + easy checkout + stellar customer service. Most stores fail not on the product — but on the shopping experience. 🎯",
+  "Dropshipping, print-on-demand, private labeling, and digital products are all ecommerce models that require minimal upfront inventory. Each has different margins and competition levels. The best model for you depends on your skills and capital. 💡"
+]},
 
 // ETHICS
-{tag:"ethics",patterns:["business ethics"],responses:["Business ethics are moral principles in business."]},
+{tag:"ethics",patterns:["business ethics","what is business ethics","ethics in business","ethical business practices","importance of ethics"],responses:[
+  "Business ethics are the moral principles and values that guide how a company conducts itself — with customers, employees, suppliers, and society. Ethics isn't just about avoiding scandal; it's a long-term competitive advantage. ✨",
+  "Ethical businesses tend to outperform unethical ones over the long term. Reputation is worth billions — and one ethical breach can destroy decades of trust. Enron, Volkswagen's diesel scandal, and WeWork are cautionary tales of what happens when ethics are abandoned for short-term gains. ⚠️",
+  "The triple bottom line: People, Planet, Profit. Modern businesses are accountable not just to shareholders but to employees, communities, and the environment. Consumers increasingly choose ethical brands. 🌍",
+  "Practical ethics in business: pay fairly, honor contracts, treat customer data with respect, be honest in advertising, don't exploit workers in the supply chain, and report finances accurately. Ethics is the daily choice to do the right thing, especially when no one is watching. 💡"
+]},
 {tag:"csr",patterns:["social responsibility"],responses:["Businesses should help society and environment."]},
 
 // ACCOUNTING
-{tag:"assets",patterns:["assets"],responses:["Assets are things a business owns."]},
-{tag:"liabilities",patterns:["liabilities"],responses:["Liabilities are debts a business owes."]},
-{tag:"equity",patterns:["equity"],responses:["Equity is the owner's share in a business."]},
+{tag:"assets",patterns:["assets","what are assets","business assets","asset meaning","types of assets"],responses:[
+  "Assets are everything a business owns that has economic value: cash, equipment, property, inventory, accounts receivable, and intellectual property. The balance sheet shows all assets. 💰",
+  "Two categories: Current Assets (converted to cash within a year — cash, inventory, receivables) and Non-Current Assets (long-term — property, machinery, patents). The ratio tells you a lot about the business model. 📊",
+  "Tangible vs Intangible assets: tangible (physical — machinery, buildings), intangible (non-physical — brand, patents, customer relationships). The most valuable companies in the world (Apple, Google) have intangible assets worth more than their tangible ones. 🧠",
+  "Asset management is about maximizing return on assets (ROA). Every asset should be working hard. Idle assets are dead weight — they consume capital without generating return. 📈"
+]},
+{tag:"liabilities",patterns:["liabilities","what are liabilities","business liabilities","liability meaning","types of liabilities"],responses:[
+  "Liabilities are financial obligations a business owes to others — bank loans, accounts payable to suppliers, salaries owed, taxes due, and bonds issued. They appear on the balance sheet opposite assets. 📋",
+  "Current Liabilities (due within 1 year): accounts payable, short-term loans, accrued expenses. Long-term Liabilities (due beyond 1 year): mortgages, bonds, long-term loans. The split matters for cash flow planning. ⏰",
+  "Not all liabilities are bad. Strategic debt (to buy productive assets or fund growth) amplifies returns. Uncontrolled debt (to cover operating losses) destroys businesses. The key ratio: can your operating profit comfortably cover interest payments? ⚖️",
+  "Liabilities management: keep current liabilities low relative to current assets (healthy current ratio is >1.5), use long-term debt for long-term assets, and always know your total debt-to-equity ratio. 📊"
+]},
+{tag:"equity",patterns:["equity","what is equity","owner equity","business equity","equity meaning"],responses:[
+  "Equity is the owner's residual interest in a business: Assets − Liabilities = Equity. If you own $500K in assets and have $200K in debt, your equity (ownership stake) is $300K. 💎",
+  "For startups, equity is distributed between founders, investors, and employees (via stock options). Equity allocation is one of the most important and irreversible decisions early-stage founders make. Think carefully before giving any away. ⚖️",
+  "Return on Equity (ROE) = Net Income ÷ Equity × 100%. It measures how efficiently a business generates profit from shareholders' investment. Warren Buffett targets companies with consistently high ROE (15%+) as signs of durable competitive advantage. 📊",
+  "Dilution happens when new shares are issued, reducing existing shareholders' percentage ownership. Founders must understand that raising investment means giving up equity. The trade-off: a smaller slice of a much bigger pie can be worth more than 100% of nothing. 🥧"
+]},
 {tag:"break_even",patterns:["break even"],responses:["Break-even is when revenue equals costs."]},
 
 // SUCCESS
-{tag:"business_success",patterns:["what makes business successful"],responses:["Success comes from good planning, marketing, and customer satisfaction."]},
-{tag:"business_growth",patterns:["business growth"],responses:["Growth means increasing sales or size."]},
-{tag:"innovation",patterns:["innovation"],responses:["Innovation means creating new ideas."]},
+{tag:"business_success",patterns:["what makes business successful","how to make a business successful","keys to business success","successful business","how businesses succeed"],responses:[
+  "The foundation of business success: a product people actually want + a way to reach them profitably + a team that executes well. Simple to state, brutal to execute. 🏆",
+  "Research on business success (Stanford, Harvard) consistently finds: customer obsession (not product obsession), financial discipline (know your numbers), and adaptability (ability to pivot when needed) as the three defining traits of lasting success. 🎯",
+  "Jeff Bezos's day-one philosophy: always act like you're a startup, even when you're huge. Customer obsession over competitor focus. Willingness to fail. Long-term thinking over quarterly results. This mindset built Amazon from a garage to a $1.5 trillion company. 📦",
+  "The unsexy truth about business success: it's mostly execution, not ideas. 1,000 people had the same idea as Airbnb, Uber, and Facebook. The founders who succeeded were the ones who worked hardest, solved problems fastest, and refused to quit. 💪",
+  "Success checklist: ✅ Real customer demand validated BEFORE heavy investment ✅ Positive unit economics (each unit sold is profitable) ✅ Repeatable sales process ✅ Team that executes ✅ Cash runway to survive lean periods. Build these and the rest follows. 🚀"
+]},
+{tag:"business_growth",patterns:["business growth","what is business growth","how to grow a business","growing a business","growth strategy"],responses:[
+  "Business growth is the sustained increase in a company's revenue, profit, customer base, or market share over time. The key word is 'sustained' — a one-off spike is not growth. 📈",
+  "The Ansoff Matrix gives 4 growth strategies: Market Penetration (sell more of existing products to existing customers), Market Development (enter new markets with existing products), Product Development (new products to existing customers), Diversification (new products, new markets — highest risk). 📊",
+  "Growth killers: scaling operations before processes are solid, hiring too fast, expanding geographically before the core business is profitable, and ignoring existing customer retention while obsessing over new acquisition. 🚧",
+  "The compounding power of consistent growth: 25% annual growth means doubling every 3 years. A business doing $500K today doing 25% per year for 10 years = $4.6 million. Consistency beats explosiveness in the long run. 💡"
+]},
+{tag:"innovation",patterns:["innovation","what is innovation","business innovation","how to innovate","innovative ideas","importance of innovation"],responses:[
+  "Innovation is the implementation of new or significantly improved products, processes, or business models that create value. Note: it's not just new ideas — it's new ideas that work in the market. 💡",
+  "Peter Drucker said: 'Innovation is the specific tool of entrepreneurs.' It's the means by which they exploit change as an opportunity. Most successful innovations aren't radical — they're incremental improvements on existing solutions. 🔧",
+  "Types of innovation: Product Innovation (new or better products), Process Innovation (better ways to operate), Business Model Innovation (new ways to create or capture value), and Disruptive Innovation (creates new markets by serving overlooked customers). 📊",
+  "The innovation paradox: large companies struggle to innovate because success makes them risk-averse. The innovator's dilemma (Clayton Christensen) explains how disruption almost always comes from the outside — smaller players with nothing to lose. 🎯",
+  "How to build an innovative culture: celebrate failure as learning, give people 20% time for experiments (Google's approach), have a dedicated innovation budget, and most importantly — stay obsessively close to your customers' unmet needs. 🌟"
+]},
 
 // BUSINESS CREATION
 {tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
@@ -2360,6 +2558,126 @@ const intents = [
     {tag:"term_monopolistic_competition",patterns:["monopolistic competition"],responses:["Monopolistic Competition: Many competitors with differentiated products. Some pricing power. 📊"]},
     {tag:"term_bull_market",patterns:["bull market","what is bull market"],responses:["Bull Market: Market with rising prices and investor optimism. Good for buyers. 📈"]},
     {tag:"term_bear_market",patterns:["bear market","what is bear market"],responses:["Bear Market: Market with falling prices and investor pessimism. Risk for buyers. 📉"]},
+
+// ==================== NEW INTENTS ====================
+// ARTIFICIAL INTELLIGENCE & TECHNOLOGY
+{tag:"ai_meaning",patterns:["what is artificial intelligence","what is ai","explain ai","ai definition","define ai"],responses:[
+  "Artificial Intelligence (AI) is the simulation of human intelligence by computers — enabling machines to learn, reason, solve problems, and make decisions. In business, AI automates tasks, personalizes experiences, and uncovers insights from data. 🤖",
+  "AI breaks down into: Machine Learning (learns from data), Natural Language Processing (understands text/speech), Computer Vision (interprets images), and Robotics Process Automation (automates repetitive tasks). Each has powerful business applications. 📊",
+  "AI in business 2026: used for customer service chatbots, demand forecasting, fraud detection, personalized marketing, and supply chain optimization. Companies using AI effectively see 20-30% cost reductions and significant revenue uplift. 💡",
+  "The key to AI adoption: start with a specific, measurable business problem (e.g., 'reduce customer support tickets by 30%'), find the right tool, run a small pilot, measure results, then scale. Don't adopt AI for AI's sake. 🎯"
+]},
+{tag:"blockchain_meaning",patterns:["what is blockchain","blockchain meaning","explain blockchain","how does blockchain work"],responses:[
+  "Blockchain is a distributed digital ledger that records transactions across multiple computers in a way that cannot be altered retroactively. Think of it as a Google Doc that thousands of people can read but nobody can secretly edit. 🔗",
+  "Business applications of blockchain: supply chain transparency (track products from farm to shelf), smart contracts (self-executing agreements), digital payments (faster and cheaper cross-border transfers), and NFTs (digital ownership verification). 💼",
+  "The key properties: Decentralized (no single authority), Transparent (all transactions visible), Immutable (records cannot be changed), and Secure (cryptographically protected). These make it useful for trust-sensitive industries. 🔐",
+  "Despite the hype, blockchain is not the solution to every problem. It shines when multiple untrusting parties need to share records without a central authority. For most internal business problems, a regular database is faster and cheaper. 💡"
+]},
+{tag:"digital_transformation_meaning",patterns:["what is digital transformation","digital transformation meaning","explain digital transformation","how to digitize my business"],responses:[
+  "Digital transformation is the process of integrating digital technology into all areas of a business — fundamentally changing how you operate and deliver value to customers. It's not just software; it's a cultural change. 💻",
+  "The four pillars: 1️⃣ Customer Experience (digital touchpoints) 2️⃣ Operations (automation and efficiency) 3️⃣ Business Model (new digital revenue streams) 4️⃣ Culture (data-driven decision making and innovation mindset). 🏛️",
+  "Common mistakes: treating it as an IT project instead of a business strategy, starting with technology before defining the problem, and ignoring change management (the hardest part is people, not tech). 🚧",
+  "Start small: identify your most painful manual process, digitize just that one thing, measure the time/cost savings, then repeat. Digital transformation is a journey of hundreds of small steps, not one big leap. 🚀"
+]},
+
+// PERSONAL DEVELOPMENT FOR ENTREPRENEURS
+{tag:"mindset",patterns:["entrepreneurial mindset","growth mindset","entrepreneur mindset","how to think like an entrepreneur","mindset for success"],responses:[
+  "The entrepreneurial mindset is a set of beliefs and thinking patterns that identify and pursue opportunities, embrace uncertainty, learn from failure, and continuously improve. It can be trained — it's not something you're born with. 🧠",
+  "Carol Dweck's Growth Mindset research: people who believe abilities can be developed (growth mindset) outperform those who believe talent is fixed (fixed mindset). In business, this means embracing challenges, persisting through setbacks, and seeing effort as the path to mastery. 💪",
+  "The 5 mindset shifts that change everything: 1) Problems are opportunities 2) Failure is feedback 3) Every skill is learnable 4) Network is net worth 5) Long-term thinking over short-term comfort. Practice one per week. 🎯",
+  "Jeff Bezos frames business decisions as 'one-way doors' (irreversible, decide slowly) vs 'two-way doors' (reversible, decide fast). Most decisions are two-way doors. This mindset eliminates analysis paralysis and speeds execution. 🚪"
+]},
+{tag:"productivity_tips",patterns:["how to be productive","productivity tips","how to get more done","work more efficiently","time management tips","stop procrastinating"],responses:[
+  "Top productivity principle: work on your ONE most important task first, every morning, before checking email or messages. This is called 'eating the frog' (Brian Tracy). Most people do the easy stuff first and wonder why nothing important gets done. 🐸",
+  "The Eisenhower Matrix: Urgent+Important (do now), Important+Not Urgent (schedule), Urgent+Not Important (delegate), Not Urgent+Not Important (eliminate). Most entrepreneurs live in the wrong quadrant — fighting fires instead of building systems. 🔥",
+  "Deep work (Cal Newport): the ability to focus without distraction on cognitively demanding tasks is the most valuable skill in 2026, and the rarest. Schedule 2-3 hour blocks of uninterrupted focus daily. No phone, no email, no meetings. Watch your output transform. 🎯",
+  "Energy management beats time management. Schedule creative and strategic work when your energy is highest (usually morning). Handle email, meetings, and admin when energy is lower. Work with your biology, not against it. ⚡"
+]},
+{tag:"failure_in_business",patterns:["business failure meaning","why is failure important","learn from failure","dealing with business failure","business failed what next","afraid of failing"],responses:[
+  "Failure is not the opposite of success — it's part of the path to it. 9 out of 10 startups fail, but 65% of successful startup founders failed at least once before. The failure wasn't the end; it was the education. 📚",
+  "The key question after failure is not 'what went wrong?' but 'what did I learn that I couldn't have learned any other way?' Every business failure teaches market reality, operational discipline, team dynamics, and personal resilience. 💡",
+  "Amazon has tried and failed at hundreds of products (Fire Phone, Amazon Auctions, etc.). Jeff Bezos said: 'If you're not failing, you're not innovating enough.' A culture that punishes failure is a culture that stops innovating. 🚀",
+  "After a business failure: 1️⃣ Give yourself time to process (don't rush back) 2️⃣ Do an honest post-mortem (what really happened?) 3️⃣ Identify the transferable lessons 4️⃣ Apply those lessons to the next venture. Failed founders who learn become exceptional second-time founders. 💪"
+]},
+
+// FINANCIAL LITERACY
+{tag:"compound_interest",patterns:["what is compound interest","compound interest meaning","how does compound interest work","compound interest example"],responses:[
+  "Compound interest is interest earned on both your initial investment AND on previously earned interest. Einstein reportedly called it 'the eighth wonder of the world.' $10,000 at 8% annual return = $46,610 after 20 years (not $26,000 — because returns compound). 📈",
+  "In business terms: compounding applies to customer growth (referrals create referrals), skill development (small daily improvements compound), and brand reputation. The key is consistency over time. ⏰",
+  "The compounding formula: A = P(1 + r/n)^(nt). But you don't need the formula — just understand the principle: start early, be consistent, reinvest returns, and give it time. The biggest variable is patience. 💡",
+  "Debt has reverse compounding — it works against you exponentially. A 20% interest credit card on $5,000 = $1,000 interest in year 1. If unpaid, year 2 interest is on $6,000. The snowball rolls the wrong way. Eliminate high-interest debt fast. 🚨"
+]},
+{tag:"financial_freedom",patterns:["what is financial freedom","how to achieve financial freedom","financial independence","passive income for freedom","financial freedom meaning"],responses:[
+  "Financial freedom is having enough wealth or passive income to cover your living expenses without needing to work actively. It's not about being rich — it's about having choices. 🌟",
+  "The FIRE movement (Financial Independence, Retire Early) formula: save 25× your annual expenses and you can live off 4% withdrawal rate indefinitely (the 4% rule). The math works; the discipline required is the hard part. 📊",
+  "For business owners, financial freedom often comes from building a business that runs without you — systemized, delegated, generating passive or semi-passive income. This is the 'E-Myth' (Michael Gerber) premise: build a business, not a job. 🏗️",
+  "Steps toward financial freedom: 1️⃣ Eliminate high-interest debt 2️⃣ Build 6-month emergency fund 3️⃣ Invest consistently (index funds, rental property, business equity) 4️⃣ Build multiple income streams 5️⃣ Keep lifestyle inflation low. The math is simple; the behavior is hard. 💡"
+]},
+
+// MODERN BUSINESS TOPICS
+{tag:"sustainability_business",patterns:["sustainable business","how to make my business sustainable","green business","eco friendly business","sustainability strategy","environmental business"],responses:[
+  "A sustainable business meets present needs without compromising future generations' ability to meet theirs (Brundtland definition). In practice: reducing waste, using renewable energy, sourcing ethically, and measuring environmental impact. 🌱",
+  "Business case for sustainability: 73% of global consumers say they'd definitely or probably change habits to reduce environmental impact (Nielsen). Sustainable businesses attract better employees, better investors, and increasingly, better customers. 📊",
+  "Sustainability frameworks: ESG (Environmental, Social, Governance), Triple Bottom Line (People, Planet, Profit), and B Corporation certification. These are increasingly required by investors and corporate customers. 🏆",
+  "Start with what you can measure: carbon footprint (carbon.tool.coop), supply chain traceability, packaging waste, and energy consumption. You can't manage what you don't measure. Then set improvement targets and report progress publicly. 🎯"
+]},
+{tag:"remote_team_management",patterns:["how to manage remote team","remote team management","manage employees remotely","remote work tips","virtual team management","hybrid work management"],responses:[
+  "Remote team management requires deliberate design — the informal office communication that used to happen naturally now has to be intentional. Over-communicate: document decisions, summarize meetings, clarify expectations in writing. 📱",
+  "The 4 pillars of remote team success: 1️⃣ Clear goals (everyone knows what winning looks like) 2️⃣ Async-first communication (reduce meetings, use Loom/Notion) 3️⃣ Regular 1:1s (weekly, focused on wellbeing + blockers) 4️⃣ Virtual culture (celebrate wins, create casual connection). 🤝",
+  "Tools stack for remote teams: Slack/Teams (async chat), Zoom/Meet (video), Notion/Confluence (docs), Asana/Linear (tasks), Loom (async video), Miro (visual collaboration). Pick one tool per category and use it consistently. Don't over-tool. 🛠️",
+  "The #1 remote management mistake: measuring hours instead of outcomes. Remote work only functions well with output-based management. Define clear deliverables, measure results, and trust your team to manage their time. Micromanaging remotely kills morale and productivity. 🎯"
+]},
+{tag:"negotiation_tips",patterns:["how to negotiate","negotiation skills","how to negotiate better","tips for negotiation","negotiation tactics","negotiate salary","negotiate price"],responses:[
+  "The most powerful negotiation principle: BATNA (Best Alternative To a Negotiated Agreement). Know your walkaway point before entering any negotiation. The party with the stronger BATNA has the leverage. Know yours; discover theirs. 🎯",
+  "Never make the first offer if you can avoid it. But if you must go first, anchor HIGH (for selling) or LOW (for buying). The first number anchors the entire conversation — it's one of the most documented effects in behavioral economics. ⚖️",
+  "The Chris Voss (FBI hostage negotiator) framework: use 'tactical empathy' — label the other side's emotions ('It seems like you're worried about...'), use mirroring (repeat the last 3 words as a question), and let silence do the work. Most people can't stand silence and fill it with concessions. 🤐",
+  "In business negotiations: separate the people from the problem, focus on interests not positions, generate multiple options before deciding, and insist on objective criteria (market rates, precedent, expert opinion). This is the Harvard Negotiation Project framework — proven in thousands of deals. 🤝"
+]},
+{tag:"fundraising_pitch",patterns:["how to pitch to investors","investor pitch","pitch deck","how to create a pitch","startup pitch","how to present to investors","pitch to vc"],responses:[
+  "The perfect investor pitch deck (Sequoia Capital format): 1️⃣ Purpose (one-line mission) 2️⃣ Problem 3️⃣ Solution 4️⃣ Why Now? 5️⃣ Market Size 6️⃣ Product 7️⃣ Business Model 8️⃣ Traction 9️⃣ Team 🔟 Financials. 10-12 slides maximum. 📊",
+  "Investors back people first, ideas second. The #1 thing they ask: 'Why is THIS team uniquely positioned to win in THIS market?' Your unfair advantages — domain expertise, proprietary data, network, or technical edge — must shine through. 🌟",
+  "The most common pitch mistakes: too long (>15 min), too much feature detail (investors care about market and traction, not how it works), no clear ask ('we need $500K to hire 3 engineers and reach $1M ARR' beats 'we're raising'), and projections with no logical basis. 🚫",
+  "Show traction above everything else. A chart going up and to the right, even from a small base, is worth 10 slides of storytelling. Real user numbers, revenue, or even strong qualitative feedback ('we have 20 customers paying $500/month') changes the conversation completely. 📈"
+]},
+{tag:"customer_persona",patterns:["what is a customer persona","buyer persona","ideal customer","customer profile","target customer","who is my customer","define my customer"],responses:[
+  "A customer persona is a semi-fictional representation of your ideal customer based on market research and real data about your existing customers — their demographics, behaviors, motivations, and goals. 🎯",
+  "Building a persona: 1️⃣ Interview 10-20 real customers 2️⃣ Look for patterns in WHO they are (demographics), WHAT they want (goals), WHY they buy (motivations), and what holds them back (barriers). 3️⃣ Give the persona a name and story. 'Marketing Manager Maria, 32, overwhelmed by spreadsheets...' 📋",
+  "The difference between demographics and psychographics: demographics tell you WHO (age, gender, income). Psychographics tell you WHY (values, beliefs, lifestyle, fears). The best marketing speaks to psychographics, not just demographics. 🧠",
+  "One counterintuitive truth: most businesses serve 2-3 distinct personas but try to market to all of them the same way. Segment your personas. Create separate messaging for each. You'll convert far better when the message feels like it was written specifically for one type of person. 💡"
+]},
+{tag:"delegation_skills",patterns:["how to delegate","delegation in business","why delegate","delegate tasks","management delegation","how to let go of control"],responses:[
+  "Delegation is the act of assigning responsibility and authority to others to complete specific tasks, while the manager retains accountability for outcomes. It's one of the highest-leverage skills in leadership — and one of the hardest for founders to develop. 🎯",
+  "The 4 levels of delegation: 1) 'Do exactly what I say' (no delegation), 2) 'Research options and recommend' (low), 3) 'Decide and tell me' (medium), 4) 'Handle it completely' (full delegation). Move people up levels as they prove capability. 📊",
+  "Why founders struggle to delegate: they believe 'nobody can do it as well as me.' This is often true initially — but it's irrelevant. Done 80% as well by someone else frees you to do 5 other things at 100%. Perfectionism kills scalability. 💡",
+  "Effective delegation formula: 1️⃣ Define the outcome clearly (not the process) 2️⃣ Confirm understanding 3️⃣ Give the right authority and resources 4️⃣ Set check-in points 5️⃣ Give feedback on results. Then STEP BACK. Hovering defeats the purpose. 🤝"
+]},
+{tag:"decision_making_frameworks",patterns:["how to make better decisions","decision making framework","business decisions","make decisions faster","decision making process","how to decide"],responses:[
+  "The Bezos regret minimization framework: imagine yourself at 80 years old. Which decision would you regret NOT taking? This eliminates short-term fear and focuses on long-term values. 🕰️",
+  "For reversible decisions (two-way doors): decide fast, gather data after, iterate. For irreversible decisions (one-way doors): slow down, gather more data, consult advisors. Most business decisions are two-way doors — so move fast. 🚪",
+  "The WRAP framework (Chip Heath): Widen your options (don't just choose A or B — find C), Reality-test your assumptions (seek disconfirming evidence), Attain distance (sleep on it, ask 'what would I tell a friend?'), Prepare to be wrong (plan for failure). 🔍",
+  "Data beats intuition for strategic decisions — but only when the data is good. Bad data + fancy analysis = garbage in, garbage out. For human and cultural decisions, experienced intuition often beats spreadsheets. Know when to use which. 📊"
+]},
+{tag:"brand_storytelling",patterns:["brand story","how to tell my brand story","brand storytelling","business story","tell my company story","brand narrative"],responses:[
+  "Brand storytelling is the use of narrative to connect your brand's identity to customers' values and emotions. Humans are wired for stories — we remember them 22× better than facts alone (Stanford research). 📖",
+  "The best brand stories follow a simple structure: 1️⃣ The Struggle (what problem existed?) 2️⃣ The Discovery (how did you find the solution?) 3️⃣ The Transformation (how does your solution change lives?) 4️⃣ The Invitation (join us). This works for everything from a homepage to a pitch. 🎬",
+  "Apple's story isn't about computers — it's about rebels who think differently changing the world. Nike's story isn't about shoes — it's about every athlete's internal struggle and triumph. Your brand story should be about your CUSTOMER's transformation, not your product's features. 🌟",
+  "Authentic stories outperform polished ones. The story of why you personally started the business — a real frustration, a real moment of discovery — connects far better than corporate-speak. Vulnerability builds trust. Share the real reason you started. ❤️"
+]},
+
+// COMMON QUESTIONS THAT SHOULD WORK  
+{tag:"how_to_save_money_business",patterns:["how to save money in business","reduce business costs","cut business expenses","save money business","ways to reduce costs"],responses:[
+  "Top ways to reduce business costs: 1️⃣ Audit every subscription and cancel unused ones 2️⃣ Renegotiate supplier contracts annually 3️⃣ Move to cloud (eliminate on-premise servers) 4️⃣ Go remote or hybrid (reduce office space) 5️⃣ Automate repetitive tasks (Zapier, Make). 💰",
+  "Apply the 80/20 rule to costs: 20% of your costs drive 80% of your expenses. Find those 20% and tackle them first. A $200/month SaaS tool you're not using is $2,400/year wasted. Multiply that by 10 unused tools = $24,000/year. 📊",
+  "Negotiate everything — rent, supplier prices, insurance, credit card processing fees. Vendors rarely offer their best price upfront. A polite conversation asking 'Is there any flexibility on this?' can save 10-20% immediately. 🤝",
+  "Outsource vs hire full-time: for non-core tasks (graphic design, bookkeeping, social media, IT support), outsourcing is often 50-60% cheaper than a full-time employee when you factor in salary, benefits, office space, and training. 💡"
+]},
+{tag:"work_life_balance",patterns:["work life balance","burnout prevention","how to avoid burnout","entrepreneur burnout","work too much","balance work and life","entrepreneur wellbeing"],responses:[
+  "Burnout is the #1 silent killer of entrepreneur performance. Signs: chronic exhaustion that sleep doesn't fix, cynicism about work, declining creativity and focus. If you're experiencing these, your first priority is recovery — not hustle. ⚠️",
+  "The Pareto principle applied to entrepreneur life: identify the 20% of your work that generates 80% of your results. Do MORE of that. Eliminate the rest. Working 80 hours/week on low-value activities is worse than working 30 hours on high-value ones. 🎯",
+  "Non-negotiable habits of high-performing entrepreneurs: 7-8 hours sleep (sleep deprivation destroys decision quality), daily exercise (improves focus and resilience), weekly 'shutdown ritual' (clear to-do list, plan next week, close laptop), and at least one full day off per week. 💪",
+  "Cal Newport's 'Deep Work' principle: the most productive entrepreneurs aren't working more hours — they're protecting more hours of uninterrupted, high-concentration work. 4 hours of deep work beats 8 hours of fragmented work every time. ⚡"
+]},
+
 // BUSINESS COMPARISON
 {tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
 
@@ -5934,9 +6252,82 @@ function respondWithIntent(intent, userInput) {
   return getLocalizedResponse(intent);
 }
 
+
+// ==================== FOLLOW-UP SYSTEM ====================
+const deepExplanations = {
+  "what_is_business": "To go deeper: A business is really about creating a repeatable system that delivers value. The three pillars are: (1) a product/service people want, (2) a way to reach those people, and (3) a way to make more money than you spend. Even the biggest companies in the world — Apple, Amazon, Google — are just very refined versions of this simple formula. 📐",
+  "marketing_strategy": "Going deeper on marketing strategy: the most powerful framework is the 4 Ps — Product (what you sell), Price (what you charge), Place (where you sell it), Promotion (how you tell people). Every marketing decision falls under one of these. Nail all four and you have a complete strategy. Most businesses only focus on Promotion and wonder why it doesn't work. 🎯",
+  "profit": "Deeper on profit: there are different types — Gross Profit (Revenue minus direct costs), Operating Profit (after overheads), and Net Profit (after everything including taxes). A business can have high gross profit but lose money after rent, salaries, and interest. Always look at net profit to understand the real health of a business. 💰",
+  "cash_flow": "Deeper on cash flow: cash flow and profit are NOT the same thing. A business can be profitable on paper but go bankrupt because it runs out of cash. This happens when customers pay late, you hold lots of inventory, or you grow too fast. The cash flow statement (Operating, Investing, Financing) shows exactly where cash comes from and goes to. 📊",
+  "startup": "Deeper on startups: what separates startups from regular businesses is the intent to scale massively. A startup is designed to grow to millions of users or billions in revenue. The key stages are: Ideation → Validation → Launch → Growth → Scaling. Most startups fail at Validation — they build something nobody wants. 🚀",
+  "branding_strategy": "Deeper on branding: a brand is a promise. Every touchpoint — your logo, the way you answer the phone, your packaging, your social media tone — either reinforces or breaks that promise. The strongest brands (Apple, Nike, Tesla) make customers feel something. Ask yourself: how do you want customers to FEEL when they interact with you? 🎨",
+  "seo": "Going deeper on SEO: there are three pillars — Technical SEO (site speed, crawlability), On-Page SEO (keywords, content quality), and Off-Page SEO (backlinks, authority). Google uses 200+ ranking signals. The most important in 2026: helpful, original content; fast mobile experience; and quality backlinks from authoritative sites. SEO takes 3-6 months to show results but compounds indefinitely. 🔍",
+  "roi": "Deeper on ROI: the formula is (Net Gain / Cost of Investment) × 100. But the real power is comparing ROIs across different uses of money. If marketing ROI is 300% and new equipment ROI is 80%, allocate more to marketing. Smart businesses use ROI as a decision filter for every major spending choice. 📊",
+  "entrepreneur": "Deeper on entrepreneurship: research by Harvard shows 9 out of 10 startups fail, but second-time entrepreneurs succeed at nearly double the rate. Why? They've learned to validate before building, manage cash, and hire well. The most valuable entrepreneurial skills are: selling, managing cash, making decisions with incomplete information, and resilience. 💪",
+  "leadership_styles": "Deeper on leadership: research by Goleman (Harvard) found 6 leadership styles. The most effective leaders switch styles based on context: Authoritative (long-term vision) works best in a crisis; Democratic (consensus-building) works for innovation; Coaching (develop people) works for talent retention. Great leaders have all 6 in their toolkit. 🏆",
+  "finance": "Deeper on business finance: the three core financial statements work together like a story. The Income Statement shows profitability over time. The Balance Sheet shows what you own vs owe at one point in time. The Cash Flow Statement shows where money actually moved. Mastering how these three connect is how you understand any business. 📋",
+  "pricing_strategy": "Deeper on pricing: value-based pricing is the most powerful approach. Instead of cost + markup, you price based on what the outcome is WORTH to the customer. A lawyer who saves you $100,000 in taxes can charge $10,000 — not because it costs $10,000 but because the value is $100,000. Find what your product saves or earns for the customer, and price off that. 💵",
+  "customer_retention_strategy": "Deeper on customer retention: it costs 5-7x more to acquire a new customer than to retain an existing one. The key drivers of retention are: perceived value (do they keep getting value?), emotional connection (do they feel understood?), and switching costs (is it painful to leave?). Best retention tactic: make customers feel like insiders — give them early access, ask their opinion, make them part of your story. ❤️",
+  "supply_chain": "Deeper on supply chain: a supply chain has 5 basic components — Suppliers (raw materials), Manufacturers (production), Distributors (warehousing), Retailers (selling), and Customers (end users). Disruptions at any node cascade downstream. COVID showed the world what happens when supply chains break. The most resilient supply chains have: multiple suppliers per category, safety stock, and real-time visibility. 🔗",
+  "swot_analysis": "Deeper on SWOT: Strengths and Weaknesses are INTERNAL (things you control). Opportunities and Threats are EXTERNAL (market forces outside your control). The real value of SWOT is in the cross-analysis: SO strategies (use strengths to capture opportunities), ST strategies (use strengths to counter threats), WO strategies (overcome weaknesses to capture opportunities), WT strategies (minimize weaknesses and threats). 📋",
+  "break_even_analysis": "Deeper on break-even: Break-even = Fixed Costs ÷ (Unit Price − Variable Cost per Unit). Example: Fixed costs = $10,000/month. You sell coffee at $5, variable cost is $2. Break-even = $10,000 ÷ $3 = 3,334 cups/month. This tells you the MINIMUM you must sell to survive. Below this = loss. Above this = profit. Every business owner should know this number cold. ☕",
+  "dcf": "Deeper on DCF: Discounted Cash Flow says a dollar today is worth more than a dollar tomorrow (time value of money). To value a business: project future free cash flows (5-10 years), choose a discount rate (usually WACC), calculate the terminal value, then sum everything in present-day terms. DCF is highly sensitive to assumptions — change the growth rate by 1% and valuation can shift by 20%+. This is why valuation is more art than science. 📐",
+  "product_market_fit": "Deeper on product-market fit: Marc Andreessen defined it as 'being in a good market with a product that can satisfy that market.' The famous test: if you had to shut down your product, what % of users would be very disappointed? 40%+ = product-market fit. Below 40% = keep iterating. Signs you have PMF: people are using it even when it's broken, word-of-mouth is growing, customers get angry when you suggest removing features. 🎯",
+  "networking_strategy": "Deeper on networking: the most effective networking is asymmetric — give more than you take. Share useful content, make introductions for others, send a relevant article with no ask attached. When you build a reputation as someone who adds value, opportunities come to you. Also: weak ties (acquaintances) are statistically more valuable for opportunities than strong ties (close friends) — this is the Granovetter 'strength of weak ties' research. 🌐",
+  "risk": "Deeper on business risk: there are 4 types — Strategic (wrong decisions), Operational (internal failures), Financial (cash/debt problems), and External (market, regulatory, competitive). Each needs a different mitigation. Financial risk is mitigated by cash reserves. Operational risk by processes and redundancy. Strategic risk by constant customer feedback. External risk by scenario planning and diversification. ⚠️",
+};
+
+const exampleResponses = {
+  "what_is_business": "Real-world example: Airbnb is a perfect illustration of a business. They identified a problem (empty rooms + travelers needing affordable accommodation), created a solution (an online marketplace), and monetized it (taking 3% from hosts + service fee from guests). They didn't own any hotels yet built a business worth $80 billion. That's the power of the business model — solving a real problem at scale. 🏠",
+  "marketing_strategy": "Example of a brilliant marketing strategy: Dollar Shave Club launched in 2012 with one viral YouTube video that cost $4,500 to make. It got 12,000 sign-ups in 48 hours. Their strategy: (1) Target frustrated male razor buyers, (2) Use humor to cut through the noise, (3) Offer a simple monthly subscription. The entire strategy fit on one page. They were acquired by Unilever for $1 billion. 🪒",
+  "profit": "Practical example: You run a coffee shop. Monthly revenue = $20,000. Cost of coffee/milk/supplies (COGS) = $6,000 → Gross Profit = $14,000. Rent + staff + utilities = $11,000 → Operating Profit = $3,000. Interest on loan = $500, taxes = $600 → Net Profit = $1,900. That's your real take-home. Many shops show $20K in sales and wonder why there's no money — the answer is always in the costs. ☕",
+  "cash_flow": "Classic cash flow trap example: A clothing boutique gets a huge $50,000 wholesale order. They spend $30,000 buying inventory. But the buyer pays on 90-day terms. Now the boutique has $0 cash for 3 months but still has to pay rent, salaries, and utilities. They were profitable on paper but nearly went bankrupt because of cash flow timing. Solution: negotiate shorter payment terms or use invoice financing. 👗",
+  "branding_strategy": "Example — Apple's branding: Apple's brand stands for 'creativity and human empowerment through elegant technology.' Every decision reinforces this — minimalist packaging, white earbuds (status symbol), 'Think Different' campaigns, even the unboxing experience. Apple charges $1,200 for a MacBook when a $400 Windows laptop does the same job. The $800 difference is entirely brand value — people pay for what it means to own Apple. 🍎",
+  "pricing_strategy": "Real pricing example: Starbucks charges $6 for a coffee that costs them $0.80 to make. That's a 650% markup. Why do people pay it? Not for the coffee — for the experience (comfortable space), the status (walking with a Starbucks cup), and consistency (same taste everywhere). This is value-based pricing in action. They price off the lifestyle, not the ingredient cost. ☕",
+  "seo": "Practical SEO example: A local plumber in Chicago writes one detailed blog post: '10 Most Common Pipe Problems in Chicago Winters (And How to Fix Them).' This ranks #1 on Google for 'Chicago pipe repair.' The post gets 2,000 organic visits/month, 5% call the plumber, that's 100 new leads/month — all free, indefinitely. That one article generates more business than a $1,500/month Google Ads spend. 🔧",
+  "startup": "Example — Dropbox: Drew Houston was frustrated at forgetting his USB drive. He built a simple file-syncing tool, uploaded a demo video, and 75,000 people joined the waitlist overnight. He had zero code written. That's lean startup — validate FIRST, build SECOND. Dropbox went from idea to $10B valuation in 8 years by solving one specific problem (file sync) better than anyone else. 💾",
+  "roi": "ROI calculation example: You spend $2,000 on a Facebook ad campaign. It generates 40 sales at $100 each = $4,000 revenue. Assuming $2,500 in costs (ads + product cost), net gain = $1,500. ROI = ($1,500 ÷ $2,000) × 100 = 75% ROI. For every dollar spent, you got $1.75 back. Now compare: if a different campaign spent $2,000 and returned 300% ROI, you'd shift budget there. That's data-driven marketing. 📊",
+  "break_even_analysis": "Break-even example with a gym: Fixed costs = $8,000/month (rent, insurance, staff). Monthly membership = $50. Variable cost per member = $5 (utilities per person). Break-even = $8,000 ÷ ($50 - $5) = 178 members. Below 178 members = losing money. At 200 members = $1,000 profit/month. At 300 members = $5,500 profit/month. This tells the owner exactly what target to hit before the gym survives. 🏋️",
+  "swot_analysis": "SWOT example for a local restaurant: Strengths: unique fusion menu, loyal local following, experienced chef. Weaknesses: small seating capacity, no online ordering, limited parking. Opportunities: growing food delivery market, tourism in the area, untapped corporate catering. Threats: new competitors opening, rising food costs, changing dietary trends. Strategy: launch delivery to overcome seating limits and capture the growing delivery opportunity. 🍽️",
+  "product_market_fit": "Product-market fit story: Slack was originally a gaming company (Glitch) that built an internal chat tool for their own team. The game flopped. But when they showed other companies the chat tool, everyone wanted it immediately. Users were signing up without any marketing. That organic pull — people finding you without being sold to — is the clearest signal of product-market fit. Slack sold to Salesforce for $27.7 billion. 💬",
+  "dcf": "DCF example: A small business generates $100,000 free cash flow/year, growing 5%/year. Using a 10% discount rate: Year 1 = $100K ÷ 1.10 = $90,909. Year 2 = $105K ÷ 1.21 = $86,777. ...and so on for 5-10 years, plus a terminal value. Sum them all up and you get the intrinsic value. If you can buy it for less than that sum = good deal. More than that sum = overpaying. 💡",
+  "customer_retention_strategy": "Retention example — Amazon Prime: Amazon charges $139/year for Prime. Why? Because Prime members spend 2× more than non-Prime members ($1,400 vs $600/year average). The subscription fee PAYS for loyalty. The more a customer pays upfront, the more they want to justify the cost by using the service. This is called 'sunk cost lock-in' — and it's one of the most powerful retention mechanisms ever built. 📦",
+  "leadership_styles": "Leadership example: Satya Nadella transformed Microsoft using a coaching leadership style. When he took over in 2014, Microsoft had a toxic, competitive culture. He introduced 'growth mindset' — failure is learning, not weakness. Microsoft's stock went from $38 to over $400 under his leadership. The lesson: culture change driven by the CEO's leadership style can be worth hundreds of billions of dollars. 📈",
+};
+
+function getDeepExplanation(intent) {
+  if (!intent) return "I don't have more details on that. Try asking about a specific business topic! 💡";
+  const deep = deepExplanations[intent.tag];
+  if (deep) return deep;
+  // Generic deep explanation
+  const resp = intent.responses[Math.floor(Math.random() * intent.responses.length)];
+  const subject = conversationContext.lastSubject || intent.tag.replace(/_/g, ' ');
+  return `Going deeper on ${subject}:\n\n${resp}\n\n💡 The key insight is that understanding ${subject} deeply — not just the definition — separates good business decisions from great ones. Want me to give you a real-world example of this in action?`;
+}
+
+function getExampleFor(intent) {
+  if (!intent) return "Give me a specific topic and I'll show you a real-world example! 💡";
+  const ex = exampleResponses[intent.tag];
+  if (ex) return ex;
+  // Generic example
+  const subject = conversationContext.lastSubject || intent.tag.replace(/_/g, ' ');
+  return `📌 Real-world example of ${subject}:\n\nImagine a small business owner applying this concept: they focus their entire strategy around ${subject}, measure it consistently, and adjust based on results. The businesses that truly master ${subject} tend to outperform competitors by 2-3× in their category. Want me to break down a specific industry example?`;
+}
+
 function getBotReply(input) {
 let rawInput = input.toLowerCase().trim();
 let userInput = resolvePronouns(rawInput);
+
+// ==================== FOLLOW-UP DETECTION ====================
+const followUpMore = /\b(explain more|tell me more|more details?|elaborate|go deeper|expand on that|more info|give more info|what else|continue|keep going|can you explain|i want more|say more|deeper)\b/i;
+const followUpExample = /\b(give me an? example|show me an? example|example please|for example|can you give an? example|any example|example of (that|this|it)|what.*example|real.world example)\b/i;
+
+if (lastMatchedIntent && followUpMore.test(rawInput)) {
+  return getDeepExplanation(lastMatchedIntent);
+}
+if (lastMatchedIntent && followUpExample.test(rawInput)) {
+  return getExampleFor(lastMatchedIntent);
+}
 
 // Profit prediction
 const predictionTrigger = /(predict|estimate|forecast|calculate|profit or loss|profit forecast|loss forecast|will i make a profit|will i have a loss)/;
