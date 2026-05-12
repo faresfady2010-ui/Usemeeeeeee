@@ -401,6 +401,7 @@ body.dark .input-hint { color: #bbb; }
 
 /* ===== CHATGPT-STYLE INPUT BOX ===== */
 .gpt-input-box {
+    flex: 1;
     display: flex;
     align-items: center;
     background: #fff;
@@ -410,6 +411,7 @@ body.dark .input-hint { color: #bbb; }
     gap: 6px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     transition: border-color 0.2s, box-shadow 0.2s;
+    min-width: 0;
 }
 .gpt-input-box:focus-within {
     border-color: #bbb;
@@ -464,54 +466,54 @@ body.dark .gpt-plus-btn:hover { background: #3a3a3a; }
 body.dark .gpt-text-input { color: #e0e0e0; caret-color: #4da3ff; }
 .gpt-text-input::placeholder { color: #aaa; }
 
-/* right icon buttons group */
-.gpt-right-btns {
+/* outer row: input box + voice + send side by side */
+.input-outer-row {
     display: flex;
     align-items: center;
-    gap: 4px;
-    flex-shrink: 0;
+    gap: 8px;
+    width: 100%;
 }
 
 /* mic button */
 #voice-btn {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
     border-radius: 50%;
     border: none;
-    background: transparent;
+    background: #eee;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background 0.2s;
-    color: #555;
     flex-shrink: 0;
 }
-#voice-btn:hover { background: #f0f0f0; }
-body.dark #voice-btn { color: #bbb; }
-body.dark #voice-btn:hover { background: #3a3a3a; }
+#voice-btn:hover { background: #ddd; }
+body.dark #voice-btn { background: #0f3460; color: #e0e0e0; }
+body.dark #voice-btn:hover { background: #1a1a2e; }
 #voice-btn.listening { background: #ff4d4d; color: white; animation: pulse 1s infinite; }
 
-/* send arrow button */
+/* send button */
 .gpt-send-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
+    background-color: #28a745;
     border: none;
-    background: #000;
+    padding: 0 20px;
+    border-radius: 24px;
     color: white;
     cursor: pointer;
+    font-weight: 700;
+    font-size: 1em;
+    transition: all 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
+    letter-spacing: 0.3px;
 }
-.gpt-send-btn:hover { background: #333; transform: scale(1.05); }
-.gpt-send-btn svg { width: 16px; height: 16px; }
-body.dark .gpt-send-btn { background: #fff; color: #000; }
-body.dark .gpt-send-btn:hover { background: #e0e0e0; }
+.gpt-send-btn:hover { background-color: #218838; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(40,167,69,0.35); }
 
 /* MODAL */
 .modal {
@@ -868,18 +870,14 @@ body.dark #image-preview-name { color: #aaa; }
             <span id="image-preview-name"></span>
             <button id="remove-image-btn" onclick="removeImage()" title="Remove image">✕</button>
         </div>
-        <div class="gpt-input-box">
-            <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
-            <button class="gpt-plus-btn" id="photo-btn" onclick="onPhotoBtnClick()" title="Add photo or image">+</button>
-            <input type="text" id="user-input" class="gpt-text-input" data-i18n-placeholder="chatPlaceholder" placeholder="Message Usemee...">
-            <div class="gpt-right-btns">
-                <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
-                <button class="gpt-send-btn" onclick="sendMessage()" title="Send">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
-                    </svg>
-                </button>
+        <div class="input-outer-row">
+            <div class="gpt-input-box">
+                <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
+                <button class="gpt-plus-btn" id="photo-btn" onclick="onPhotoBtnClick()" title="Add photo or image">+</button>
+                <input type="text" id="user-input" class="gpt-text-input" data-i18n-placeholder="chatPlaceholder" placeholder="Message Usemee...">
             </div>
+            <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
+            <button class="gpt-send-btn" onclick="sendMessage()" data-i18n="sendBtn">Send</button>
         </div>
     </div>
 </div>
@@ -8244,11 +8242,15 @@ async function analyzeImageWithGemini(base64data, mimeType, userQuestion) {
     };
 
     try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 60000);
         const res = await fetch('/api/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
+            signal: controller.signal
         });
+        clearTimeout(timer);
         const data = await res.json();
         if (data.error) {
             if (data.error.code === 429) return '⏳ The AI is busy right now (free tier limit). Please wait about 30 seconds and try again.';
@@ -8256,7 +8258,8 @@ async function analyzeImageWithGemini(base64data, mimeType, userQuestion) {
         }
         return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not analyze the image. Please try again.';
     } catch (e) {
-        return '❌ Network error. Please check your connection and try again.';
+        if (e.name === 'AbortError') return '⏳ The request timed out. Try a smaller image or try again.';
+        return `❌ Network error: ${e.message}`;
     }
 }
 
