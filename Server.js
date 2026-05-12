@@ -31,7 +31,7 @@ function readBody(req) {
 const server = http.createServer(async (req, res) => {
 
     if (req.method === 'POST' && req.url === '/api/analyze') {
-        const apiKey = process.env.GROQ_API_KEY;
+        const apiKey = "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";
         if (!apiKey) {
             res.writeHead(500, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Groq API key not configured on server.' }));
