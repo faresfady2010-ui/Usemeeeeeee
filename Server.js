@@ -30,41 +30,80 @@ function readBody(req) {
 
 const server = http.createServer(async (req, res) => {
 
-    // Gemini proxy endpoint
     if (req.method === 'POST' && req.url === '/api/analyze') {
-        const apiKey = process.env.GEMINI_API_KEY;
+        const apiKey = process.env.GROQ_API_KEY;
         if (!apiKey) {
-            console.error('[analyze] GEMINI_API_KEY is not set');
             res.writeHead(500, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Gemini API key not configured on server.' }));
+            res.end(JSON.stringify({ error: 'Groq API key not configured on server.' }));
             return;
         }
         try {
             const bodyStr = await readBody(req);
-            console.log('[analyze] Received request, body length:', bodyStr.length);
+            const incoming = JSON.parse(bodyStr);
 
-            const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const parts = incoming.contents?.[0]?.parts || [];
+            const textPart = parts.find(p => p.text);
+            const imagePart = parts.find(p => p.inline_data);
 
-            const geminiRes = await fetch(geminiUrl, {
+            if (!imagePart) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'This endpoint only accepts image requests.' }));
+                return;
+            }
+
+            const messages = [{
+                role: 'user',
+                content: [
+                    {
+                        type: 'image_url',
+                        image_url: {
+                            url: `data:${imagePart.inline_data.mime_type};base64,${imagePart.inline_data.data}`
+                        }
+                    },
+                    {
+                        type: 'text',
+                        text: textPart?.text || 'Analyze this image in detail.'
+                    }
+                ]
+            }];
+
+            const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: bodyStr
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+                    messages,
+                    max_tokens: 1500
+                })
             });
 
-            const responseText = await geminiRes.text();
-            console.log('[analyze] Gemini status:', geminiRes.status);
+            const groqData = await groqRes.json();
 
-            res.writeHead(geminiRes.status, { 'Content-Type': 'application/json' });
-            res.end(responseText);
+            if (!groqRes.ok) {
+                res.writeHead(groqRes.status, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: groqData.error || 'Groq error' }));
+                return;
+            }
+
+            const text = groqData.choices?.[0]?.message?.content || 'No response.';
+            const geminiFormatResponse = {
+                candidates: [{
+                    content: { parts: [{ text }] }
+                }]
+            };
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(geminiFormatResponse));
         } catch (e) {
-            console.error('[analyze] Error:', e.message);
             res.writeHead(500, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: e.message }));
         }
         return;
     }
 
-    // Static file serving
     let urlPath = req.url.split('?')[0];
     if (urlPath === '/') urlPath = '/index.html';
     if (urlPath.endsWith('/')) urlPath += 'index.html';
@@ -94,5 +133,4 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`Usemee running on port ${PORT}`);
-    const apiKey = "AIzaSyBnF4Qb9Lzhh7os9o0km-EulITN_uS5Tr4";
 });
