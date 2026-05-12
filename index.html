@@ -386,59 +386,6 @@ flex: 0;
     width: 100%;
 }
 
-.chat-input-area input {
-    flex: 1;
-    padding: 12px 18px;
-    border: 2px solid #ccc;
-    border-radius: 24px;
-    background-color: #fff;
-    color: #000;
-    font-family: Arial, sans-serif;
-    min-height: 46px;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.chat-input-area input:focus {
-    border-color: #007bff;
-}
-
-body.dark .chat-input-area input {
-    background-color: #0f3460;
-    color: #e0e0e0;
-    border: 2px solid #444;
-}
-
-body.dark .chat-input-area input:focus {
-    border-color: #4da3ff;
-}
-
-.chat-input-area .send-btn {
-    background-color: #28a745;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 24px;
-    color: white;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1em;
-    transition: all 0.3s;
-    white-space: nowrap;
-    flex-shrink: 0;
-    height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    letter-spacing: 0.3px;
-}
-
-.chat-input-area .send-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(40,167,69,0.35);
-}
-
 .input-hint {
     font-size: 0.85em;
     color: #555;
@@ -446,46 +393,125 @@ body.dark .chat-input-area input:focus {
 }
 body.dark .input-hint { color: #bbb; }
 
-#voice-btn {
-    border: none;
-    background-color: #eee;
-    padding: 0;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 18px;
-    transition: 0.2s;
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-#voice-btn:hover {
-    background-color: #ddd;
-}
-
-#voice-btn.listening {
-    background-color: #ff4d4d;
-    color: white;
-    animation: pulse 1s infinite;
-}
-
 @keyframes pulse {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
 
-body.dark #voice-btn {
-    background-color: #0f3460;
-    color: #e0e0e0;
+/* ===== CHATGPT-STYLE INPUT BOX ===== */
+.gpt-input-box {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 26px;
+    padding: 6px 8px 6px 10px;
+    gap: 6px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.gpt-input-box:focus-within {
+    border-color: #bbb;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.13);
+}
+body.dark .gpt-input-box {
+    background: #0f3460;
+    border-color: #1e5fa0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+body.dark .gpt-input-box:focus-within {
+    border-color: #666;
 }
 
-body.dark #voice-btn:hover {
-    background-color: #1a1a2e;
+/* + attachment button */
+.gpt-plus-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid #ccc;
+    background: transparent;
+    color: #555;
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    padding: 0;
 }
+.gpt-plus-btn:hover { background: #f0f0f0; border-color: #999; }
+body.dark .gpt-plus-btn { border-color: #555; color: #bbb; }
+body.dark .gpt-plus-btn:hover { background: #3a3a3a; }
+.gpt-plus-btn.has-image { background: #007bff; border-color: #007bff; color: white; }
+
+/* text input */
+.gpt-text-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 15px;
+    color: #000;
+    font-family: Arial, sans-serif;
+    min-width: 0;
+    padding: 6px 2px;
+    caret-color: #007bff;
+}
+body.dark .gpt-text-input { color: #e0e0e0; caret-color: #4da3ff; }
+.gpt-text-input::placeholder { color: #aaa; }
+
+/* right icon buttons group */
+.gpt-right-btns {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+/* mic button */
+#voice-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    color: #555;
+    flex-shrink: 0;
+}
+#voice-btn:hover { background: #f0f0f0; }
+body.dark #voice-btn { color: #bbb; }
+body.dark #voice-btn:hover { background: #3a3a3a; }
+#voice-btn.listening { background: #ff4d4d; color: white; animation: pulse 1s infinite; }
+
+/* send arrow button */
+.gpt-send-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    background: #000;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.gpt-send-btn:hover { background: #333; transform: scale(1.05); }
+.gpt-send-btn svg { width: 16px; height: 16px; }
+body.dark .gpt-send-btn { background: #fff; color: #000; }
+body.dark .gpt-send-btn:hover { background: #e0e0e0; }
 
 /* MODAL */
 .modal {
@@ -687,6 +713,72 @@ body.dark .data-table tbody tr:hover {
     background: #0f3460;
 }
 
+/* PHOTO UPLOAD BUTTON */
+#photo-btn {
+    border: none;
+    background-color: #eee;
+    padding: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+#photo-btn:hover { background-color: #ddd; }
+body.dark #photo-btn { background-color: #0f3460; color: #e0e0e0; }
+body.dark #photo-btn:hover { background-color: #1a1a2e; }
+#photo-btn.has-image { background-color: #007bff; color: white; }
+
+/* IMAGE PREVIEW */
+#image-preview-area {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #f0f8ff;
+    border-radius: 10px;
+    border: 1.5px solid #b3d9ff;
+}
+body.dark #image-preview-area { background: #0f3460; border-color: #1e5fa0; }
+#image-preview-thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1.5px solid #b3d9ff;
+}
+#image-preview-name {
+    flex: 1;
+    font-size: 12px;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+body.dark #image-preview-name { color: #aaa; }
+#remove-image-btn {
+    background: none;
+    border: none;
+    color: #e53935;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0 4px;
+    line-height: 1;
+}
+
+.chat-image-thumb {
+    max-width: 180px;
+    border-radius: 10px;
+    margin-top: 6px;
+    display: block;
+    cursor: pointer;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .chat-container {
@@ -771,10 +863,23 @@ body.dark .data-table tbody tr:hover {
 
   </div>
 
-        <div class="input-row">
-            <input type="text" id="user-input" data-i18n-placeholder="chatPlaceholder" placeholder="Type your message...">
-            <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
-            <button class="send-btn" onclick="sendMessage()" data-i18n="sendBtn">Send</button>
+        <div id="image-preview-area">
+            <img id="image-preview-thumb" src="" alt="preview">
+            <span id="image-preview-name"></span>
+            <button id="remove-image-btn" onclick="removeImage()" title="Remove image">✕</button>
+        </div>
+        <div class="gpt-input-box">
+            <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoSelect(event)">
+            <button class="gpt-plus-btn" id="photo-btn" onclick="onPhotoBtnClick()" title="Add photo or image">+</button>
+            <input type="text" id="user-input" class="gpt-text-input" data-i18n-placeholder="chatPlaceholder" placeholder="Message Usemee...">
+            <div class="gpt-right-btns">
+                <button id="voice-btn" onclick="startVoice()" title="Voice input">🎤</button>
+                <button class="gpt-send-btn" onclick="sendMessage()" title="Send">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -802,6 +907,7 @@ body.dark .data-table tbody tr:hover {
         <div id="calculatorContent"></div>
     </div>
 </div>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -8086,9 +8192,104 @@ async function processQuestion(msg) {
   addMessage(reply, 'bot');
 }
 
+// ==================== GEMINI PHOTO ANALYSIS ====================
+let selectedImageData = null;
+let selectedImageMime = null;
+
+function handlePhotoSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+        addMessage('Please select a valid image file (JPG, PNG, GIF, WebP).', 'bot');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        selectedImageData = e.target.result.split(',')[1];
+        selectedImageMime = file.type;
+        document.getElementById('image-preview-thumb').src = e.target.result;
+        document.getElementById('image-preview-name').textContent = file.name;
+        document.getElementById('image-preview-area').style.display = 'flex';
+        document.getElementById('photo-btn').classList.add('has-image');
+        document.getElementById('user-input').placeholder = 'Ask a question about the image, or press Send to analyze...';
+        document.getElementById('user-input').focus();
+    };
+    reader.readAsDataURL(file);
+    event.target.value = '';
+}
+
+function removeImage() {
+    selectedImageData = null;
+    selectedImageMime = null;
+    document.getElementById('image-preview-area').style.display = 'none';
+    document.getElementById('photo-btn').classList.remove('has-image');
+    document.getElementById('user-input').placeholder = typeof t === 'function' ? t('chatPlaceholder') : 'Message Usemee...';
+}
+
+function onPhotoBtnClick() {
+    document.getElementById('photo-input').click();
+}
+
+async function analyzeImageWithGemini(base64data, mimeType, userQuestion) {
+    const prompt = userQuestion
+        ? `${userQuestion}\n\nAnalyze the image carefully and give a detailed, step-by-step answer.`
+        : `Analyze this image carefully. If it contains homework, math problems, science questions, diagrams, or any educational content, provide a clear step-by-step solution with full explanation. If it's a business document or chart, provide insights. Otherwise describe what you see in detail.`;
+
+    const body = {
+        contents: [{ parts: [
+            { inline_data: { mime_type: mimeType, data: base64data } },
+            { text: prompt }
+        ]}],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 1500 }
+    };
+
+    try {
+        const res = await fetch('/api/analyze', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (data.error) {
+            if (data.error.code === 429) return '⏳ The AI is busy right now (free tier limit). Please wait about 30 seconds and try again.';
+            return `❌ Error: ${data.error.message || data.error}`;
+        }
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not analyze the image. Please try again.';
+    } catch (e) {
+        return '❌ Network error. Please check your connection and try again.';
+    }
+}
+
 async function sendMessage() {
   const userInputEl = document.getElementById('user-input');
   const message = userInputEl.value.trim();
+
+  // Handle image analysis via Gemini
+  if (selectedImageData) {
+    const displayMsg = message || '📷 Please analyze this image';
+    addMessage(displayMsg, 'user');
+
+    // Show image thumbnail in chat
+    const chatBox = document.getElementById('chat-box');
+    const imgDiv = document.createElement('div');
+    imgDiv.className = 'message user';
+    imgDiv.style.cssText = 'padding:6px;';
+    imgDiv.innerHTML = `<img src="data:${selectedImageMime};base64,${selectedImageData}" class="chat-image-thumb" onclick="this.style.maxWidth=this.style.maxWidth==='100%'?'180px':'100%'">`;
+    chatBox.appendChild(imgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    userInputEl.value = '';
+    const imgDataCopy = selectedImageData;
+    const mimeCopy = selectedImageMime;
+    removeImage();
+
+    showTypingIndicator();
+    const result = await analyzeImageWithGemini(imgDataCopy, mimeCopy, message);
+    removeTypingIndicator();
+    if (result) addMessage(result, 'bot');
+    return;
+  }
+
   if (message === '') return;
   addMessage(message, 'user');
   userInputEl.value = '';
