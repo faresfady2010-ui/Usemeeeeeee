@@ -8228,35 +8228,53 @@ function onPhotoBtnClick() {
     document.getElementById('photo-input').click();
 }
 
+// ⚠️ For GitHub Pages: paste your Groq API key below.
+// Get a free key at https://console.groq.com
+const GROQ_API_KEY = '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';
+
 async function analyzeImageWithGemini(base64data, mimeType, userQuestion) {
+    if (!GROQ_API_KEY || GROQ_API_KEY === 'YOUR_GROQ_API_KEY_HERE') {
+        return '❌ Image analysis is not configured. Please add your Groq API key to the HTML file.';
+    }
+
     const prompt = userQuestion
         ? `${userQuestion}\n\nAnalyze the image carefully and give a detailed, step-by-step answer.`
         : `Analyze this image carefully. If it contains homework, math problems, science questions, diagrams, or any educational content, provide a clear step-by-step solution with full explanation. If it's a business document or chart, provide insights. Otherwise describe what you see in detail.`;
 
     const body = {
-        contents: [{ parts: [
-            { inline_data: { mime_type: mimeType, data: base64data } },
-            { text: prompt }
-        ]}],
-        generationConfig: { temperature: 0.2, maxOutputTokens: 1500 }
+        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+        messages: [{
+            role: 'user',
+            content: [
+                {
+                    type: 'image_url',
+                    image_url: { url: `data:${mimeType};base64,${base64data}` }
+                },
+                { type: 'text', text: prompt }
+            ]
+        }],
+        max_tokens: 1500
     };
 
     try {
         const controller = new AbortController();
         const timer = setTimeout(() => controller.abort(), 60000);
-        const res = await fetch('/api/analyze', {
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GROQ_API_KEY}`
+            },
             body: JSON.stringify(body),
             signal: controller.signal
         });
         clearTimeout(timer);
         const data = await res.json();
-        if (data.error) {
-            if (data.error.code === 429) return '⏳ The AI is busy right now (free tier limit). Please wait about 30 seconds and try again.';
-            return `❌ Error: ${data.error.message || data.error}`;
+        if (!res.ok) {
+            if (res.status === 429) return '⏳ The AI is busy right now (rate limit). Please wait a moment and try again.';
+            return `❌ Error: ${data.error?.message || 'Unknown error'}`;
         }
-        return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not analyze the image. Please try again.';
+        return data.choices?.[0]?.message?.content || 'Sorry, I could not analyze the image. Please try again.';
     } catch (e) {
         if (e.name === 'AbortError') return '⏳ The request timed out. Try a smaller image or try again.';
         return `❌ Network error: ${e.message}`;
