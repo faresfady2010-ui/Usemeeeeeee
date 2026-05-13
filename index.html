@@ -84,9 +84,12 @@ body.dark .chat-container {
     transition: transform 0.3s ease;
     transform: translateX(-100%);
     box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
-    overflow-y: auto;
+    overflow: hidden;
     z-index: 99;
     border-radius: 8px 0 0 8px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .sidebar-menu.open {
@@ -154,10 +157,12 @@ body.dark .chat-container {
 }
 
 /* OVERLAY FOR CLOSING SIDEBAR */
+.sidebar-nav-scroll {
+    flex: 1;
+    overflow-y: auto;
+}
 .sidebar-account {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    flex-shrink: 0;
     width: 100%;
     box-sizing: border-box;
     padding: 14px 16px;
@@ -166,6 +171,7 @@ body.dark .chat-container {
     align-items: center;
     gap: 10px;
     border-top: 1px solid rgba(255,255,255,0.08);
+    margin-top: auto;
 }
 .sidebar-account-avatar {
     width: 36px;
@@ -937,12 +943,14 @@ body.dark #image-preview-name { color: #aaa; }
             <div class="sidebar-logo">📊</div>
             <div class="sidebar-title" data-i18n="menu">Menu</div>
         </div>
+        <div class="sidebar-nav-scroll">
         <ul>
             <li><a href="javascript:void(0)" onclick="closeSidebar()"><span class="sidebar-icon">💬</span><span data-i18n="chat">Chat</span></a></li>
             <li><a href="javascript:void(0)" onclick="showReportsModal(); closeSidebar();"><span class="sidebar-icon">📈</span><span data-i18n="reports">Reports</span></a></li>
             <li><a href="javascript:void(0)" onclick="showCalculatorModal(); closeSidebar();"><span class="sidebar-icon">🧮</span><span data-i18n="calculator">Calculator</span></a></li>
             <li><a href="javascript:void(0)" onclick="showPlannerModal(); closeSidebar();"><span class="sidebar-icon">📋</span><span data-i18n="planner">Planner</span></a></li>
         </ul>
+        </div>
 
         <!-- MY ACCOUNT SECTION -->
         <div class="sidebar-account" id="sidebarAccount">
