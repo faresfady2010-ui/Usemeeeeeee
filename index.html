@@ -7046,6 +7046,18 @@ if (bestScore > 0.5 && bestIntent) {
 return getFallbackMsg();
 }
 
+function notifyBotReply(text) {
+  if (!document.hidden) return;
+  if (!('Notification' in window)) return;
+  if (Notification.permission !== 'granted') return;
+  if (localStorage.getItem('notifications') !== 'enabled') return;
+  const preview = text.replace(/[#*_`]/g, '').trim().slice(0, 80);
+  new Notification('Usemee replied', {
+    body: preview || 'Your answer is ready!',
+    icon: 'https://cdn-icons-png.flaticon.com/512/4712/4712035.png'
+  });
+}
+
 function addMessage(text, sender) {
 const chatBox = document.getElementById('chat-box');
 const msgDiv = document.createElement('div');
@@ -7055,6 +7067,7 @@ chatBox.scrollTop = chatBox.scrollHeight;
 
 if (sender === 'bot') {
   typeMessage(msgDiv, text, function() {
+    notifyBotReply(text);
     const actions = document.createElement('div');
     actions.className = 'msg-actions';
 
