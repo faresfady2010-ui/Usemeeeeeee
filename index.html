@@ -1059,12 +1059,16 @@ window.addEventListener('load', function() {
     applyLangDirection(lang);
 });
 
-// Listen for language changes from settings
+// Listen for changes from settings page (language + dark mode)
 window.addEventListener('storage', function(e) {
     if (e.key === 'languageChanged') {
-        updatePageTranslations();
+        if (typeof updatePageTranslations === 'function') updatePageTranslations();
         const lang = localStorage.getItem('language') || 'en';
         applyLangDirection(lang);
+    }
+    if (e.key === 'darkModeChanged' || e.key === 'darkMode') {
+        const isDark = localStorage.getItem('darkMode') === 'enabled';
+        document.body.classList.toggle('dark', isDark);
     }
 });
 // ==================== HAMBURGER MENU FUNCTIONS ====================
@@ -1997,72 +2001,18 @@ const intents = [
 
 // BUSINESS CREATION
 {tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
-`1. Start with an idea (but validate it)
-A good business solves a real problem or meets a demand. Ask:
-What problem am I solving?
-Who cares about this enough to pay?
-Are people already spending money on something similar?
-Before investing heavily, test your idea:
-Talk to potential customers
-Run small experiments (sell a prototype, create a landing page, etc.)
-2. Do basic market research
-Understand your environment:
-Who are your competitors?
-What do they do well or poorly?
-What makes your idea different?
-This helps you find your niche instead of entering a crowded market blindly.
-3. Create a simple business plan
-You don’t need a 50-page document. Just cover:
-What you sell
-Who you sell to
-How you’ll make money
-Estimated costs and pricing
-How you’ll get customers
-Think of it as your roadmap, not a formal report.
-4. Choose a business structure
-Common options:
-Sole proprietorship (simple, but personal liability)
-Partnership
-LLC (limited liability, popular choice)
-Corporation (more complex)
-The right choice depends on your country and goals.
-5. Register your business
-This usually includes:
-Choosing a business name
-Registering with your government
-Getting licenses or permits if required
-Setting up a business bank account
-6. Sort out finances
-Estimate startup costs (equipment, marketing, inventory, etc.)
-Decide how to fund it:
-Personal savings
-Loans
-Investors
-Track income and expenses from day one
-7. Build your product or service
-Focus on a minimum viable version (MVP):
-Don’t aim for perfection
-Launch something usable quickly
-Improve based on feedback
-8. Market your business
-Even the best product won’t sell without visibility:
-Social media
-Word of mouth
-Website or online store
-Ads (optional at early stage)
-Pick 1–2 channels and do them well.
-9. Launch and learn
-Once you start:
-Listen to customer feedback
-Track what works and what doesn’t
-Adjust quickly
-Most successful businesses evolve after launch.
-10. Stay consistent
-Expect:
-Slow beginnings
-Mistakes
-Iteration
-Consistency and adaptability matter more than having a “perfect” idea.
+`Here are the key steps to create a business:
+
+1️⃣ Idea Generation
+2️⃣ Market Research
+3️⃣ Business Plan
+4️⃣ Legal Structure
+5️⃣ Register Your Business
+6️⃣ Finances
+7️⃣ Branding
+8️⃣ Build Your Product/Service
+9️⃣ Marketing
+🔟 Launch & Grow
 
 💡 What specific step would you like more details on?`
 ]},
@@ -3520,6 +3470,9 @@ Consistency and adaptability matter more than having a “perfect” idea.
 {tag:"business_comparison",patterns:["compare businesses","compare companies","compare two companies","which company is better","business comparison","compare business performance"],responses:["Let me show you a detailed comparison of these businesses with real data and analysis..."]},
 
 // DETAILED STARTUP & FUNDING
+{tag:"start_business_from_scratch",patterns:["how to start a business","start a business from scratch","how do i start a business","beginning a business","how to start my own business","starting a business guide","how to launch a business","start business with no money","cómo iniciar un negocio","comment démarrer une entreprise","كيف أبدأ مشروعاً","Unternehmen gründen","start a company","launch my own company","how to become an entrepreneur","steps to start a business","business startup guide","starting from zero"],responses:[
+  "Starting a business from scratch is one of the most exciting — and challenging — things you can do. Here is the complete step-by-step guide, from zero to your first paying customer:\n\n🚀 Phase 1 — Find and Validate a Profitable Idea (Week 1–2)\n\nStep 1: Find a problem worth solving.\nThe best businesses come from real problems, not invented solutions. Three ways to find them:\n• Personal frustration: What annoys you or people you know that no good solution exists for?\n• Industry insider knowledge: What broken process in an industry you understand could be improved?\n• Existing market gaps: What product/service exists elsewhere that hasn't reached your market yet?\n\nStep 2: Talk to potential customers before building anything.\nThe single most common startup mistake is building something nobody wants. Before spending any money or time building, talk to 10–20 potential customers. Ask: 'What's your biggest challenge with [problem area]?' and 'What solutions have you already tried?' Listen. Don't pitch. What they tell you is more valuable than any market research report.\n\nStep 3: Validate with real market signals — not opinions.\nAsking people 'would you use this?' gives you almost no useful information (people say yes to be polite). Validate with actions: pre-sell to 5 people before building, launch a landing page and run $50 in ads to measure click-through, or offer the service manually to 3 clients and see if they pay. If people won't pay for it before it's built, they almost certainly won't pay for it after.\n\n🚀 Phase 2 — Plan Your Business (Week 2–3)\n\nStep 4: Define your business model.\nHow will you make money? Common models: sell a product (physical or digital), charge for a service (done-for-you), sell a subscription (recurring revenue), take a marketplace commission, license your IP, or teach what you know (courses, coaching). Your business model determines your margins, cash flow, and how you spend your time. Choose carefully.\n\nStep 5: Identify your ideal customer precisely.\nWho has the problem you solve? Be specific — 'small business owners' is too vague. 'Female e-commerce founders doing $50K–$500K per year who struggle with paid ads' is a customer. The more specific your target, the more effective every marketing message will be and the less money you'll waste.\n\nStep 6: Define your competitive advantage.\nWhy will customers choose you over existing alternatives (including doing nothing)? Your advantage must be real and specific — not 'better quality' or 'great service' (everyone claims these). Real advantages: a unique methodology, a proprietary process, a niche focus competitors ignore, significantly lower price for equivalent quality, or superior speed of delivery.\n\nStep 7: Set your price.\nPrice based on the value you deliver to the customer, not on your costs. Research what competitors charge. Then ask: what is the outcome of my product worth to the customer? Price at 10–30% of the value you create. Test your price by having real conversations — if nobody pushes back on price, you may be too cheap.\n\n🚀 Phase 3 — Set Up Your Business Legally (Week 3–4)\n\nStep 8: Choose your business structure.\nFor most new businesses: start as a Sole Trader / Sole Proprietor if you're testing the idea and revenue is minimal. Form an LLC (US) or Ltd (UK) once you're generating consistent revenue — this protects your personal assets if anything goes wrong. The cost to form an LLC is typically $50–$500 — this is money well spent.\n\nStep 9: Register your business name and check availability.\nConfirm your name is available: (1) on your country's business registry, (2) as a domain name, (3) on key social media platforms, (4) as a trademark (check USPTO for US, IPO for UK). Register everything on the same day to prevent someone else from taking it.\n\nStep 10: Open a dedicated business bank account.\nNever mix personal and business money. A dedicated business account makes tax filing dramatically easier, makes you look more professional, and is legally important if you have a corporate structure. Many online banks (Mercury in the US, Tide/Starling in the UK) offer free business accounts.\n\nStep 11: Set up basic bookkeeping from day one.\nInstall accounting software immediately — QuickBooks, Xero, or Wave (free). Record every transaction from the start. The founders who set this up on day one have vastly less stress at tax time and make better decisions because they have accurate financial data.\n\n🚀 Phase 4 — Build the Simplest Version (Week 4–8)\n\nStep 12: Build a Minimum Viable Product (MVP).\nAn MVP is the simplest version of your product that delivers the core value. Strip out every non-essential feature. Your first version will not be perfect — ship it anyway. You learn 10× faster from real customers using a rough product than from spending months perfecting something in isolation. The goal of an MVP is not to impress — it's to learn.\n\nStep 13: Build a simple, professional web presence.\nYou don't need a complex website. You need: a clear homepage that explains what you do and who it's for, a way for people to contact you or buy from you, and social proof (even a few testimonials from friends or beta users). Platforms: Squarespace or Webflow (services), Shopify (physical products), or a simple landing page on Carrd ($19/year).\n\n🚀 Phase 5 — Get Your First Customers (Week 6–12)\n\nStep 14: Get customers manually first — do not rely on marketing.\nDo not wait for marketing to bring customers to you. Go and get them manually. Email 50 potential customers personally with a specific, personalised message. Post in Facebook Groups or Reddit communities your target customer uses (with genuine value, not spam). Ask every person you know for a referral or introduction. Offer a discounted launch price to the first 5 customers in exchange for feedback and a review. Your goal: 5 paying customers. Not 500. Just 5.\n\nStep 15: Deliver exceptional service to early customers.\nYour first 5–10 customers are your most valuable asset. Over-deliver. Check in constantly. Ask for detailed feedback. Turn them into raving fans. Why? (1) They become your first referral source, (2) they give you the testimonials that attract your next customers, (3) they tell you exactly what to improve. The founders who treat early customers like gold build businesses that grow through word-of-mouth.\n\nStep 16: Ask for reviews and referrals immediately after a positive outcome.\nThe best time to ask for a referral is at the moment of highest customer satisfaction — right after they've achieved the outcome they paid for. The best time to ask for a review is 24–48 hours after a positive experience. Do not wait. Momentum is everything at this stage.\n\n🚀 Phase 6 — Build Systems and Scale (Month 3 onwards)\n\nStep 17: Document your processes.\nAs soon as you find what works — a sales script, a delivery process, a customer onboarding flow — write it down. Documented processes can be delegated, improved, and scaled. Undocumented processes exist only in your head and make you the bottleneck of your own business.\n\nStep 18: Build your marketing engine.\nNow that you have proof the business works, build a system that brings customers to you consistently. Choose one marketing channel based on where your customers spend time (social media, SEO, email, partnerships, paid ads) and master it completely before adding another. Consistency in one channel for 12 months outperforms dabbling in 10 channels simultaneously.\n\nStep 19: Measure what matters.\nTrack monthly: revenue, expenses, net profit, customer acquisition cost, and customer lifetime value. Review weekly: leads coming in, conversion rate, and outstanding invoices. Review daily: cash position. These numbers tell you the health of your business and where to focus your energy.\n\nStep 20: Hire help when you're ready.\nHire when a specific task is consuming more than 20 hours of your week that someone else could do, and when you can afford 6 months of their cost even if revenue stopped. Your first hire should free your highest-value time so you can focus on growth. Hire slowly. Hire for character and work ethic first, skills second — skills can be trained, character cannot.\n\n💡 The most important mindset to carry through every phase:\nEvery successful business you admire started exactly where you are — with an unproven idea, no customers, and uncertainty about whether it would work. What separated the founders who made it from those who didn't was not brilliance or luck. It was showing up every day, learning faster than everyone else, and refusing to quit before they found what worked. Start today. Start imperfectly. Adjust as you go. The only failed business is the one that was never launched. 🚀"
+]},
 {tag:"startup_funding_guide",patterns:["how to get funding","where to get funding","find investors","get investment","startup funding guide","how to raise money","obtener financiamiento","obtener inversión","financement startup","التمويل","تمويل الشركات الناشئة","Startup finanzieren"],responses:[
   "Raising money for your startup is one of the most important skills a founder can develop. Here's a complete guide to every funding option available:\n\n💰 Stage 1 — Bootstrapping (Self-Funding)\nUse your own savings, income from freelancing, or early customer revenue to fund the business. This is the best option when possible — you keep 100% equity and maintain full control. Many successful companies (Mailchimp, Basecamp, Atlassian) were built entirely without external investment. The discipline of bootstrapping forces you to become profitable quickly.\n\n💰 Stage 2 — Friends, Family & Fools\nAlso called the 'Love Money' round. These are people who invest in YOU, not your business. Typical amounts: $5,000–$50,000. Be careful — mixing personal relationships and money is risky. Always put the terms in writing (even with family), use a simple loan or SAFE note, and be honest about the risk of losing their money.\n\n💰 Stage 3 — Grants & Competitions\nMany governments and foundations offer non-dilutive grants (free money you don't repay and don't give equity for). Also look for startup competitions — winning one gives you cash, credibility, and press coverage. Research grants specific to your industry, location, and demographic.\n\n💰 Stage 4 — Angel Investors\nAngel investors are wealthy individuals who invest $10,000–$500,000 in early-stage startups in exchange for equity (typically 5–15%). How to find them: AngelList, Gust, local angel networks, LinkedIn, and startup events. What they want: a large market, a strong team, early traction, and a compelling story. Use a convertible note or SAFE note for simplicity at this stage.\n\n💰 Stage 5 — Accelerators & Incubators\nPrograms like Y Combinator, Techstars, 500 Startups, and hundreds of regional programs offer: $50,000–$500,000 in funding, mentorship, a powerful network, and credibility. In exchange they take 5–10% equity. Acceptance rates are 1–3%, so treat the application like a job interview. Alumni networks are incredibly valuable.\n\n💰 Stage 6 — Venture Capital (Series A and beyond)\nVC firms invest $3M–$100M+ in exchange for 15–30% equity. They only invest in businesses targeting $100M+ markets with the potential to return 10–100x. To raise VC: you need product-market fit, growing revenue, a scalable model, and warm introductions to partners. Cold applications rarely work.\n\n🔑 The Golden Rules of Fundraising:\n• Only raise money when you have clear evidence of what it will unlock\n• Raise enough for 18–24 months of runway, not just 6 months\n• Build relationships with investors before you need them\n• The best fundraising tool is strong traction — nothing replaces it\n• Understand dilution — every round reduces your ownership percentage\n• Get a startup lawyer to review all investment documents\n\n💡 Most investors say no 90% of the time — rejection is not failure, it's part of the process. The founders who succeed are the ones who keep refining their pitch and traction after each rejection. 🚀"
 ]},
