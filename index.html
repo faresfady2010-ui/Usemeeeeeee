@@ -4123,7 +4123,526 @@ const intents = [
 {tag:"private_equity",patterns:["what is private equity?","how does private equity work?","what happens when private equity buys a company?"],responses:["Private equity (PE): investment firms that acquire companies using a combination of equity and debt (leveraged buyouts), improve operations and/or growth, then sell after 3-7 years for a return. PE is attracted to: strong cash flow, market leadership, and management teams willing to stay. 💰","When PE buys your company: expect focus on EBITDA improvement (cost reduction and revenue growth), increased reporting requirements, debt on the balance sheet (reduces financial flexibility), and a clear exit plan. Management typically receives equity (aligned incentives). PE ownership can be transformative — or extractive — depending on the firm. ⚠️"]},
 {tag:"dividends_business",patterns:["how should i pay myself dividends?","what are dividends in a private company?","dividend vs salary which is better for business owner?"],responses:["Dividends (UK/most jurisdictions): distributions of after-tax profit to shareholders. Taxed at lower rates than salary in most countries (UK dividend tax: 8.75%/33.75%/39.35% vs income tax 20%/40%/45%). Combining salary + dividends is often the most tax-efficient structure for owner-managers. 💰","Dividend vs salary for business owners: salary provides pension contributions and employment rights; dividends are more tax-efficient above the salary threshold. The optimal mix depends on your jurisdiction, company profitability, and personal tax situation. Consult a tax advisor — the rules change regularly. 📊"]},
 {tag:"angel_investing",patterns:["what is angel investing?","how do i become an angel investor?","what do angel investors look for?"],responses:["Angel investing: investing personal capital (typically $10K-$500K per deal) into early-stage startups in exchange for equity. Angels accept high failure rates (70-80% of deals return nothing) because the successful ones return 10-100×. Diversification across 20+ deals is recommended. 💰","What angels look for: exceptional founders (more than the idea), large addressable market (must be able to become a big business), unfair advantage (why this team?), early traction (evidence of demand), and a clear path to returns (how will they eventually sell?). 🎯"]},
+
+// ============================================================
+// CHATBOT IDENTITY & CAPABILITY INTENTS
+// ============================================================
+{tag:"chatbot_what_can_you_do",patterns:["what can you do","what are you capable of","what do you help with","what can this chatbot do","show me what you can do","list your features","what is your purpose","what do you offer","your capabilities","help me understand what you do"],responses:[
+  "I can help you with: 💼 Business strategy & planning | 📈 Finance & investment questions | 🚀 Startup advice | 📊 Stock prices (real-time) | 💱 Currency conversion | 🌍 Country facts | 📋 Business reports & planners | 🖼️ Image analysis | 💡 Idea generation | and much more. Just ask!",
+  "I'm your business assistant. Ask me anything about marketing, finance, startups, pricing, strategy, investing, or running a business. I can also look up stock prices, convert currencies, generate business plans, and analyze images. 🚀",
+  "Here's what I do best: answer business questions, give real-world examples, help you plan and calculate, look up live stock prices, convert currencies, generate business ideas, and analyze photos you send me. What do you need? 💡"
+]},
+{tag:"chatbot_who_made_you",patterns:["who made you","who created you","who built you","who is your creator","who developed you","who coded you","who designed you","who invented you"],responses:[
+  "I was created by the Usemee team — built to be your smart business assistant. 🚀",
+  "I'm Usemee, built by the Usemee team to help you navigate the world of business, finance, and entrepreneurship. 💼",
+  "The Usemee team built me from the ground up to give everyone access to a smart business advisor — right in their pocket. 🌟"
+]},
+{tag:"chatbot_what_is_usemee",patterns:["what is usemee","tell me about usemee","what does usemee do","about usemee","usemee chatbot","explain usemee"],responses:[
+  "Usemee is a smart business chatbot designed to help entrepreneurs, students, investors, and professionals get instant answers to business questions — anytime, anywhere. 🚀",
+  "Usemee is your always-on business advisor. Whether you're starting a company, making an investment, or learning about finance — I'm here to help with clear, practical answers. 💼",
+  "Usemee combines a huge knowledge base on business, finance, and entrepreneurship with live data tools like stock lookup and currency conversion. It's like having a business advisor in your pocket. 💡"
+]},
+{tag:"chatbot_name",patterns:["what is your name","who are you","what are you called","your name","introduce yourself","what should i call you"],responses:[
+  "I'm Usemee — your personal business assistant! Ask me anything about business, finance, startups, or investing. 💼",
+  "My name is Usemee. I'm here to help you with business strategy, financial questions, startup advice, and much more. What can I help you with? 🚀",
+  "I go by Usemee! Think of me as your always-available business advisor and knowledge partner. 🌟"
+]},
+{tag:"chatbot_are_you_ai",patterns:["are you a robot","are you ai","are you artificial intelligence","are you human","are you a bot","are you real","are you a machine","are you a computer","are you chatgpt","are you a real person"],responses:[
+  "I'm an AI-powered chatbot — not a human, but trained to give you genuinely useful business answers! 🤖",
+  "Yes, I'm an AI assistant! I don't have feelings, but I do have a massive knowledge base on business, finance, and entrepreneurship. 💡",
+  "I'm a bot — but a smart one! I can answer business questions, look up stock prices, convert currencies, and help you plan your next business move. 🚀"
+]},
+{tag:"chatbot_how_work",patterns:["how do you work","how does this chatbot work","how do you answer questions","how do you know things","where do your answers come from","how are you trained"],responses:[
+  "I match your question to a huge library of business knowledge, then pick the most accurate and helpful answer. For stock prices and currencies, I fetch live data. For images, I use AI vision analysis. 🧠",
+  "I work by understanding what you're asking, matching it to my business knowledge base, and returning the most relevant answer. The more specific your question, the better my answer! 💡",
+  "I use intent-matching — I read your message, understand what you mean, and find the best answer from thousands of business topics I know. Try asking anything! 🚀"
+]},
+{tag:"chatbot_topics",patterns:["what topics do you know","what subjects do you cover","what can i ask you about","what do you know","topics you cover","what areas do you know"],responses:[
+  "I cover: Business strategy, Marketing, Finance, Investing, Startups, Entrepreneurship, Sales, Operations, HR, Legal, Accounting, Leadership, E-commerce, Digital marketing, Economics, Country facts, Stock markets, Crypto, and much more! 📚",
+  "My knowledge covers hundreds of business topics: from how to write a business plan, to reading financial statements, to understanding venture capital, to marketing on TikTok. Just ask! 💡",
+  "Ask me about: starting a business, growing a business, investing money, understanding markets, pricing strategies, team management, legal structures, taxes, branding — the list goes on! 🚀"
+]},
+{tag:"chatbot_remember",patterns:["do you remember me","do you remember our conversation","do you have memory","can you remember what i said","do you store my data","do you save chats"],responses:[
+  "I remember our conversation while we chat, but I don't store it after you close the page. Each new session starts fresh. 🔒",
+  "Within our current chat I can follow the conversation, but I don't have long-term memory between sessions. Your privacy is protected — I don't save your chats. 💡",
+  "I can follow context within our current conversation (so you can say 'tell me more' and I'll know what you mean), but I don't remember previous sessions. 🧠"
+]},
+{tag:"chatbot_mistakes",patterns:["can you make mistakes","are you always right","do you make errors","can i trust your answers","how accurate are you","are your answers correct"],responses:[
+  "I try to be as accurate as possible, but I can make mistakes — especially on very specific or recent topics. Always verify important business or financial decisions with a professional. 💡",
+  "I'm knowledgeable but not infallible. For major decisions — legal, financial, tax — please consult a qualified professional. Use me as a starting point, not the final word. ⚠️",
+  "My answers are based on established business knowledge and are generally reliable, but treat them as guidance, not professional advice. For critical decisions, always get expert input. 🎯"
+]},
+{tag:"chatbot_languages",patterns:["what languages do you speak","do you speak spanish","do you speak arabic","do you speak french","multilingual","what language can you use","can you answer in arabic","can you answer in spanish"],responses:[
+  "I support multiple languages including English, Spanish, French, German, and Arabic! Go to Settings to change the language. 🌍",
+  "I can respond in several languages. Change the language in Settings to switch. Currently supported: English, Spanish, French, German, and Arabic. 🌐",
+  "Usemee is multilingual! Head to the Settings page to change your preferred language. 🗣️"
+]},
+{tag:"chatbot_free",patterns:["is this free","is usemee free","do i need to pay","how much does this cost","is there a subscription","is this app free"],responses:[
+  "Usemee is free to use! Just open it and start asking business questions. No subscription required. 🎉",
+  "Yes — completely free! Ask as many business questions as you like at no cost. 💡",
+  "Usemee is free. No credit card, no signup required — just ask your question and get your answer. 🚀"
+]},
+{tag:"chatbot_available",patterns:["are you available 24 7","are you always available","when are you available","what hours are you open","do you sleep","are you online now"],responses:[
+  "I'm available 24/7, 365 days a year — no office hours, no waiting. Ask me anything, anytime. ⏰",
+  "Always on! Unlike a human advisor, I never sleep, take holidays, or make you wait. I'm here whenever you need me. 💡",
+  "I don't have office hours — I'm here around the clock. Business questions at 2am? No problem. 🌙"
+]},
+{tag:"chatbot_internet",patterns:["can you search the internet","do you have internet access","can you browse the web","can you look things up online","do you have real time data"],responses:[
+  "I can fetch live stock prices and real-time currency exchange rates! For general knowledge, I use my built-in business knowledge base rather than live web browsing. 📊",
+  "I have live access to stock price data and currency rates. For other topics, I draw from my built-in knowledge. Try asking for a stock price or currency conversion! 💹",
+  "Live data I can get: stock prices and currency exchange rates. Everything else comes from my large built-in knowledge base on business and finance. 🌐"
+]},
+{tag:"chatbot_image",patterns:["can you analyze images","can you read images","image analysis","can you see photos","can you read a picture","photo analysis","can you analyze a photo"],responses:[
+  "Yes! Click the + button in the input box to upload an image. I can analyze charts, business documents, homework, diagrams, and more. 🖼️",
+  "Absolutely — I can analyze photos and images. Tap the + (attachment) button to upload one. I'll describe what I see and provide insights. 📷",
+  "Image analysis is one of my features! Upload any image using the + button and ask me about it — I can read charts, documents, diagrams, and more. 🔍"
+]},
+{tag:"chatbot_difference_chatgpt",patterns:["how are you different from chatgpt","are you like chatgpt","what is the difference between you and chatgpt","are you better than chatgpt","compared to chatgpt"],responses:[
+  "ChatGPT is a general-purpose AI. I'm Usemee — specialized for business, finance, and entrepreneurship. I also include built-in tools: live stock prices, currency conversion, business reports, and planners. More focused, more useful for business. 💼",
+  "I'm purpose-built for business. While ChatGPT covers almost everything, I go deep on business strategy, finance, investing, and entrepreneurship — with extra tools like stock lookup and currency conversion built in. 🚀",
+  "I'm a business-specialist chatbot. I'm not trying to do everything — I'm trying to be the best possible assistant for business questions, with live financial data and planning tools built in. 🎯"
+]},
+{tag:"chatbot_voice",patterns:["can you understand voice","voice input","can i speak to you","microphone","can i talk to you","voice message","speech to text"],responses:[
+  "Yes! Tap the 🎤 microphone button and speak your question — I'll convert it to text and answer. Voice input is supported on most modern browsers. 🎙️",
+  "Voice input is enabled! Hit the mic button and speak naturally. Works best in Chrome or Safari. 🎤",
+  "You can use the microphone button to speak your question instead of typing. I'll listen and respond just the same! 🎙️"
+]},
+{tag:"chatbot_stock_lookup",patterns:["can you look up stocks","how do i check a stock price","stock price lookup","how does stock lookup work","can you get stock prices"],responses:[
+  "Yes! Just type something like 'stock price of Apple' or 'TSLA stock' and I'll fetch the current price for you. 📈",
+  "Type any company name or ticker symbol (like AAPL, GOOGL, AMZN) and ask for the stock price — I'll get it for you in real time. 💹",
+  "Try: 'What is the stock price of Tesla?' or 'AAPL stock' — I'll pull the live price instantly. 📊"
+]},
+{tag:"chatbot_currency",patterns:["can you convert currency","how does currency conversion work","convert money","exchange rate","can you convert dollars to euros"],responses:[
+  "Yes! Just ask something like 'convert 100 USD to EUR' or '500 GBP in Japanese Yen' and I'll give you the current rate. 💱",
+  "Currency conversion is built in. Try: '200 dollars to euros' or '1000 AED to USD' — I'll calculate it with live rates. 🌍",
+  "I can convert between any major currencies in real time. Just phrase it like '100 USD to GBP' and I'll handle the rest. 💹"
+]},
+{tag:"chatbot_suggestions",patterns:["give me suggestions","what should i ask","suggest a question","example questions","ideas what to ask","i dont know what to ask","where do i start"],responses:[
+  "Here are some things you can ask me: 💡 'How do I start a business?' | 📊 'What is cash flow?' | 📈 'Stock price of Apple' | 💱 'Convert 100 USD to EUR' | 🚀 'Give me a business idea' | 📋 'What is a SWOT analysis?'",
+  "Great starting questions: 'How do I market my business?', 'What is ROI?', 'How do I get funding?', 'What makes a good business plan?', 'What is the stock price of Tesla?' — pick one and let's go! 🎯",
+  "Try asking: 'How do I grow my business?', 'What is venture capital?', 'Give me a business idea', 'What is compound interest?', or 'Tell me about dropshipping'. I'm ready! 🚀"
+]},
+{tag:"chatbot_plan",patterns:["open planner","show planner","business planner","financial planner","open the planner","budget planner"],responses:[
+  "Click the 📋 Planner button in the menu to open the Business Financial Planner! You can set budgets, timelines, and track projections. 📊",
+  "The Planner tool is in the sidebar menu. It helps you map out financial projections, set growth targets, and plan your business budget. 💰",
+  "Tap the menu (☰) and choose Planner — or click the Planner button — to open the financial planning tool. 📋"
+]},
+{tag:"chatbot_reports",patterns:["open reports","show reports","business reports","generate a report","open the reports section"],responses:[
+  "Click 📈 Reports in the sidebar menu to generate a full business performance report with charts and metrics! 📊",
+  "The Reports section generates visual business dashboards. Open it from the sidebar menu — just enter your business data and I'll create charts and metrics. 📈",
+  "Go to Reports (in the sidebar) to create a detailed business report with revenue, expense, and growth charts. 💼"
+]},
+
+// ============================================================
+// NEW BUSINESS INTENTS — GIG & CREATOR ECONOMY
+// ============================================================
+{tag:"gig_economy",patterns:["what is the gig economy","gig economy meaning","gig workers","freelance economy","on demand work"],responses:[
+  "The gig economy is a labour market of short-term contracts and freelance work rather than permanent jobs. Platforms like Uber, Fiverr, and Upwork are prime examples. It offers flexibility but lacks job security and benefits. 🚀",
+  "Gig economy: workers take on individual 'gigs' (tasks, projects, or shifts) instead of traditional employment. It's grown massively — about 36% of US workers participate in some form of gig work. Pros: flexibility. Cons: no benefits, unstable income. 💼"
+]},
+{tag:"creator_economy",patterns:["what is the creator economy","creator economy","how do content creators make money","influencer business model","being a content creator"],responses:[
+  "The creator economy is the ecosystem of independent creators (YouTubers, podcasters, writers, designers) who monetize content directly via platforms, sponsorships, merchandise, and subscriptions. It's now worth $250B+ globally. 🎨",
+  "Creators make money through: ad revenue (YouTube/TikTok), sponsorships, subscriptions (Patreon, Substack), merchandise, online courses, affiliate marketing, and brand deals. The best creators treat it as a real business — one audience, multiple revenue streams. 💡"
+]},
+{tag:"personal_brand",patterns:["what is a personal brand","how to build a personal brand","personal branding","how to market yourself"],responses:[
+  "A personal brand is how you present yourself professionally to the world. It's what people think of when they hear your name. Build it by: choosing a niche, sharing expertise consistently, engaging your audience, and showing up authentically. 🌟",
+  "Personal branding strategy: 1️⃣ Define your expertise and audience 2️⃣ Choose 1-2 platforms 3️⃣ Create content consistently (weekly minimum) 4️⃣ Engage with followers 5️⃣ Monetize once you have trust. Strong personal brands open doors that CVs cannot. 🚀"
+]},
+{tag:"dropshipping",patterns:["what is dropshipping","how does dropshipping work","dropshipping business","start dropshipping","is dropshipping profitable"],responses:[
+  "Dropshipping: you sell products online without holding inventory. When a customer orders, you buy from a supplier who ships directly to them. Your profit = selling price minus supplier cost. Low barrier to entry, but margins are thin and competition is fierce. 📦",
+  "Dropshipping pros: no inventory risk, low startup cost, location-independent. Cons: low margins (typically 10-30%), supplier reliability issues, high competition, slower shipping. Profitable dropshipping requires finding the right niche and mastering paid ads. 💡"
+]},
+{tag:"print_on_demand",patterns:["what is print on demand","print on demand business","pod business","how does print on demand work"],responses:[
+  "Print on demand (POD): you design products (t-shirts, mugs, books), a POD platform prints and ships them only when ordered. No inventory, no upfront cost. Platforms: Printful, Printify, Redbubble. Profit margins are low but risk is zero. 🎨",
+  "POD is great for creatives and personal brands. Your job is design and marketing — the platform handles production and shipping. Pair it with a Shopify store or Etsy for best results. Expect margins of $5-$15 per item. 💡"
+]},
+{tag:"amazon_fba",patterns:["what is amazon fba","amazon fba business","fulfillment by amazon","how does amazon fba work","start amazon fba"],responses:[
+  "Amazon FBA (Fulfillment by Amazon): you send your products to Amazon's warehouses, and Amazon picks, packs, ships, and handles returns for you. You pay fees but gain access to Prime eligibility and Amazon's logistics network. 📦",
+  "FBA process: source product → send to Amazon warehouse → list on Amazon → Amazon fulfills orders → you collect profit. Key costs: product cost, Amazon fees (15% referral + FBA fees), advertising. Successful FBA sellers are really marketing and product-sourcing experts. 🚀"
+]},
+{tag:"shopify",patterns:["what is shopify","shopify store","how to use shopify","shopify vs competitors","start a shopify store"],responses:[
+  "Shopify is the leading e-commerce platform for building online stores. It handles payments, shipping, inventory, and storefront design. Used by over 4 million businesses from side hustles to major brands. Plans start at ~$39/month. 🛒",
+  "Shopify is your all-in-one e-commerce solution. Set up a store in hours, connect a payment processor, add products, and start selling. It integrates with social media, Amazon, and hundreds of apps. Most successful e-commerce businesses start here. 💡"
+]},
+{tag:"ecommerce_platforms",patterns:["best ecommerce platform","ecommerce platforms comparison","shopify vs woocommerce","which platform to sell online","online store platform"],responses:[
+  "Top e-commerce platforms: Shopify (easiest, best for most), WooCommerce (WordPress-based, more flexible), BigCommerce (scalable), Wix (simple), Amazon (huge reach, less control), Etsy (handmade/vintage niche). Choose based on your tech comfort level, product type, and budget. 🛒",
+  "Platform guide: Shopify = best for most sellers. WooCommerce = best if you want full control. Etsy = best for handmade/craft products. Amazon = best for volume. Squarespace = best for design-heavy brands. Start with Shopify unless you have a specific reason not to. 💡"
+]},
+{tag:"subscription_box",patterns:["subscription box business","how to start a subscription box","subscription box model","curated box business"],responses:[
+  "Subscription box business model: customers pay monthly for a curated box of products. Revenue is predictable, upfront cash flow is strong (customers pay before you buy inventory). Key challenge: keeping churn low — you must constantly surprise and delight subscribers. 📦",
+  "Starting a subscription box: 1️⃣ Find a passionate niche 2️⃣ Source 5-10 products per box 3️⃣ Set price (typically 3-4× your cost) 4️⃣ Build a waitlist before launching 5️⃣ Launch on Cratejoy or Shopify. The subscription model gives you predictable revenue from day one. 💡"
+]},
+// ============================================================
+// NEW BUSINESS INTENTS — DIGITAL MARKETING DEEP DIVE
+// ============================================================
+{tag:"growth_hacking",patterns:["what is growth hacking","growth hacking strategies","growth hacking meaning","how to grow fast","viral growth tactics"],responses:[
+  "Growth hacking: using creative, low-cost experiments to grow a user base rapidly. Famous examples: Dropbox's referral program (give storage for referrals — grew 3900%), Hotmail's email footer ('Get free email at Hotmail'), AirBnb posting listings on Craigslist. 🚀",
+  "Growth hacking mindset: test fast, measure everything, double down on what works, kill what doesn't. It's not about tricks — it's about finding the fastest path to growth through experimentation. Every channel, message, and funnel step is a hypothesis to test. 💡"
+]},
+{tag:"product_led_growth",patterns:["what is product led growth","plg strategy","product led growth meaning","how does product led growth work"],responses:[
+  "Product-led growth (PLG): the product itself is the main driver of acquisition, conversion, and expansion. Users sign up, get value immediately, then upgrade or share. Examples: Slack (try free, pay for more), Figma (free for designers who invite colleagues), Calendly. 💡",
+  "PLG vs sales-led: traditional companies hire salespeople to sell the product; PLG lets the product sell itself. Characteristics: free tier or trial, intuitive onboarding, viral sharing built in, usage-based pricing. The best PLG products make the 'aha moment' happen in minutes. 🚀"
+]},
+{tag:"ab_testing",patterns:["what is ab testing","a b testing","split testing","how does ab testing work","ab test business"],responses:[
+  "A/B testing: showing two versions of something (a webpage, email, ad) to different groups and measuring which performs better. Example: 50% of visitors see a blue button, 50% see a green button — whichever gets more clicks wins. 📊",
+  "A/B testing best practice: test one variable at a time, run tests for long enough to reach statistical significance (usually 1,000+ visitors minimum), and always have a clear metric you're optimizing for. The best-performing companies run hundreds of tests per year. 🎯"
+]},
+{tag:"conversion_rate",patterns:["what is conversion rate","how to improve conversion rate","cro","conversion rate optimization","what is a good conversion rate"],responses:[
+  "Conversion rate: the percentage of visitors who take your desired action (buy, sign up, call). Average e-commerce conversion rate is 1-3%. To improve it: simplify the journey, add social proof, reduce friction, improve your offer, and A/B test. 📊",
+  "CRO (Conversion Rate Optimization): systematically improving your website to turn more visitors into customers. Tactics: clearer headlines, better trust signals (reviews, guarantees), faster load times, simplified checkout, live chat. A 1% improvement in conversion = huge revenue impact. 💡"
+]},
+{tag:"email_list",patterns:["how to build an email list","email list building","grow email subscribers","newsletter growth","email marketing list"],responses:[
+  "Build your email list: 1️⃣ Offer a lead magnet (free guide, checklist, discount) 2️⃣ Add signup forms to your website 3️⃣ Promote on social media 4️⃣ Use pop-ups with exit intent 5️⃣ Gate valuable content. Your email list is an asset you own — unlike social media followers. 📧",
+  "Email list is your most valuable marketing asset. Tactics: content upgrades (specific bonuses for blog readers), webinar signups, free tools, giveaways, referral incentives. Aim for 20%+ open rate and protect your list by sending only genuinely useful content. 💡"
+]},
+{tag:"seo_basics",patterns:["how to improve seo","seo tips","how to rank on google","get more google traffic","search engine optimization tips"],responses:[
+  "SEO fundamentals: 1️⃣ Target the right keywords (use Ahrefs, SEMrush, or free tools) 2️⃣ Create genuinely useful content that answers search intent 3️⃣ Build backlinks (other sites linking to yours) 4️⃣ Ensure fast loading and mobile-friendly design 5️⃣ Optimize titles and meta descriptions. 🔍",
+  "The SEO truth: Google wants to rank the most helpful, trustworthy content. Write better content than what currently ranks, earn links from reputable sites, and ensure your site is technically sound. Avoid shortcuts — they work briefly then get penalized. 📈"
+]},
+{tag:"google_ads",patterns:["what is google ads","how google ads work","pay per click","ppc advertising","google adwords"],responses:[
+  "Google Ads (PPC): you pay when someone clicks your ad. Ads appear in Google search results for keywords you target. Average cost-per-click varies by industry ($1-$50+). Key metrics: CTR, Quality Score, CPA. Best for: businesses with proven offers and enough margin to justify ad spend. 📊",
+  "Google Ads strategy: start with branded keywords, then expand to competitor and intent keywords. Set up conversion tracking before spending a cent. Monitor Quality Score (higher score = lower cost). Never run ads without knowing your target CPA (cost per acquisition). 🎯"
+]},
+{tag:"social_ads",patterns:["facebook ads","instagram ads","social media advertising","paid social","meta ads","how to run facebook ads"],responses:[
+  "Meta (Facebook/Instagram) ads: powerful for audience targeting (demographics, interests, behaviors). Best for B2C products with visual appeal. Key: strong creative (video/image), clear offer, and proper pixel tracking. Start with $10-$20/day to test, then scale winners. 📱",
+  "Social ad funnel: Top of funnel (broad awareness) → Middle (retarget website visitors) → Bottom (retarget cart abandoners with offer). Most beginners skip the funnel and wonder why ads don't convert. Warm audiences always convert better than cold ones. 🎯"
+]},
+{tag:"retargeting",patterns:["what is retargeting","retargeting ads","remarketing","how retargeting works"],responses:[
+  "Retargeting: showing ads to people who already visited your website or engaged with your content. They convert 3-5× better than cold audiences because they already know you. Set up with Facebook Pixel or Google Tag. Even a small retargeting budget delivers outsized results. 🎯",
+  "Retargeting strategy: Day 1-3 after visit → show product they viewed. Day 4-7 → show social proof (reviews). Day 8-14 → show an offer or discount. Sequence matters — don't start with discounts or you train visitors to wait for them. 📊"
+]},
+{tag:"tiktok_business",patterns:["tiktok for business","how to use tiktok for marketing","tiktok marketing","tiktok ads","tiktok strategy"],responses:[
+  "TikTok for business: organic reach is still exceptional compared to other platforms — good content can go viral with zero ad spend. Focus on: entertaining or educational content, trending sounds, consistency (3-5 posts/week minimum). Add a link in bio and drive traffic to your store or lead magnet. 📱",
+  "TikTok marketing strategy: don't sell, entertain and educate. Show behind-the-scenes, transformation videos, 'POV' content, and quick tips. The algorithm rewards watch time and completion rate — hook viewers in the first second. B2C products do especially well here. 🎯"
+]},
+{tag:"linkedin_marketing",patterns:["linkedin for business","linkedin marketing","how to use linkedin","linkedin strategy","linkedin content"],responses:[
+  "LinkedIn for business: best B2B platform. Strategy: optimize your profile, post 3-5 times per week (insights, stories, lessons learned), engage on others' posts, send personalized connection requests, and use LinkedIn Sales Navigator for outreach. Organic reach is still strong. 💼",
+  "LinkedIn content that works: personal stories with business lessons, data-driven posts, controversial (but respectful) opinions in your niche, and 'how I did X' case studies. The algorithm rewards comments — end every post with a question to drive engagement. 📊"
+]},
+{tag:"youtube_business",patterns:["youtube for business","youtube marketing","how to grow youtube channel","youtube strategy","make money on youtube"],responses:[
+  "YouTube for business: the only platform where content compounds — old videos keep getting views for years. Strategy: target search keywords (YouTube is the world's 2nd biggest search engine), optimize titles and thumbnails for clicks, and post consistently (1-2 times per week). 🎬",
+  "YouTube monetization paths: Google AdSense (need 1,000 subs + 4,000 watch hours), sponsorships (often more valuable than AdSense), affiliate links in descriptions, selling your own products or courses. The channel is a long-term asset that compounds over time. 💡"
+]},
+{tag:"keyword_research",patterns:["how to do keyword research","keyword research","finding the right keywords","seo keywords","what keywords should i target"],responses:[
+  "Keyword research process: 1️⃣ Brainstorm topics your customers search for 2️⃣ Use tools (Google Keyword Planner, Ubersuggest, Ahrefs) to find volume and competition 3️⃣ Target long-tail keywords (lower competition, higher intent) first 4️⃣ Create content for each cluster. 🔍",
+  "Keyword strategy: prioritize by: search intent (commercial > informational for sales), competition (can you realistically rank?), and volume (enough people searching). A page ranking #1 for a low-competition keyword beats a page buried on page 3 for a high-volume one. 📈"
+]},
+{tag:"content_repurposing",patterns:["content repurposing","how to repurpose content","repurpose blog posts","content recycling","maximize content"],responses:[
+  "Content repurposing: turning one piece of content into many. Example: record a podcast → transcribe to blog post → pull quotes for Twitter/X → create Instagram carousel → make a YouTube video → compile into an ebook. One idea, 10+ pieces of content. 🔄",
+  "Repurposing workflow: start with your highest-effort content (long video or article), then break it down for each platform's format. This multiplies your output without multiplying your workload — essential for small teams and solo creators. 💡"
+]},
+// ============================================================
+// NEW BUSINESS INTENTS — FINANCE & INVESTMENT DEEP DIVE
+// ============================================================
+{tag:"compound_interest",patterns:["what is compound interest","how compound interest works","compound interest business","power of compounding","compound growth"],responses:[
+  "Compound interest: earning interest on your interest. $10,000 at 8% annual return: Year 1 = $10,800. Year 10 = $21,589. Year 30 = $100,627. The longer the time horizon, the more dramatic the compounding effect. Einstein reportedly called it 'the eighth wonder of the world'. 💰",
+  "Compound interest is why starting early matters more than starting big. Investing $200/month from age 25 to 65 at 8% = $702,000. Starting at 35 instead? = $301,000. The difference isn't contributions — it's 10 extra years of compounding. Start today. 📈"
+]},
+{tag:"index_funds",patterns:["what is an index fund","how index funds work","invest in index funds","index fund vs stocks","should i buy index funds"],responses:[
+  "Index funds: investment funds that track a market index (like the S&P 500) by holding all the stocks in that index. Benefits: instant diversification, very low fees (0.03-0.2% vs 1-2% for active funds), and they consistently outperform most active fund managers over the long term. 📊",
+  "Warren Buffett famously said most investors should simply buy S&P 500 index funds. Why? Over 90% of actively managed funds underperform the index over 15+ years. Low cost, diversified, and hands-off — it's the most rational long-term investment strategy for most people. 💡"
+]},
+{tag:"etf",patterns:["what is an etf","etf meaning","how etfs work","exchange traded fund","etf vs index fund","invest in etfs"],responses:[
+  "ETF (Exchange-Traded Fund): like an index fund but traded on a stock exchange like a share. You can buy and sell throughout the day at market prices. Lower minimum investment than traditional funds, highly diversified, and low cost. Examples: VOO (S&P 500), QQQ (Nasdaq), SPY. 📊",
+  "ETF vs Index Fund: both track indexes, but ETFs trade like stocks (intraday), while index funds trade once per day at closing price. For most investors, the difference is minor — focus on expense ratio (lower = better) and what the ETF tracks. 💡"
+]},
+{tag:"real_estate_investing",patterns:["real estate investing","how to invest in real estate","property investment","buy rental property","real estate vs stocks"],responses:[
+  "Real estate investing strategies: Buy-to-rent (cash flow + appreciation), Fix-and-flip (buy, renovate, sell), REITs (invest without owning property), Short-term rental (Airbnb), Commercial property. Each has different capital requirements, risk profiles, and time commitments. 🏠",
+  "Real estate vs stocks: Real estate offers leverage (borrow to invest), tangible asset, rental income, and tax advantages. Stocks offer liquidity, diversification, and no management headache. Most wealthy people own both. Start with REITs if you can't yet buy property. 📊"
+]},
+{tag:"reit",patterns:["what is a reit","real estate investment trust","how reits work","invest in reits","reit vs property"],responses:[
+  "REIT (Real Estate Investment Trust): a company that owns income-producing real estate. By law, REITs must pay 90% of taxable income as dividends. You invest like buying shares — no property management, no large down payment, high liquidity. 🏢",
+  "REITs give you real estate exposure without owning property. Types: Equity REITs (own buildings), Mortgage REITs (lend money for real estate), Hybrid REITs. Traded on stock exchanges — buy through your brokerage. Good for dividend income and diversification. 📊"
+]},
+{tag:"diversification",patterns:["what is diversification","why diversify investments","portfolio diversification","dont put all eggs in one basket","investment diversification"],responses:[
+  "Diversification: spreading investments across different assets, sectors, and geographies to reduce risk. If one investment fails, others compensate. The goal isn't to maximize returns — it's to achieve good returns for the risk taken. 📊",
+  "Diversification in practice: own a mix of stocks (different sectors + countries), bonds, real estate (or REITs), and possibly alternatives. Within stocks, don't hold more than 5-10% in any single company. Diversification is the only 'free lunch' in investing. 💡"
+]},
+{tag:"recession_business",patterns:["what to do in a recession","business during recession","recession proof business","recession strategy","how to survive a recession"],responses:[
+  "Recession-proofing your business: 1️⃣ Cut non-essential costs before revenue falls 2️⃣ Increase cash reserves (3-6 months runway) 3️⃣ Focus on your best customers 4️⃣ Diversify revenue streams 5️⃣ Avoid debt. Recessions also create opportunities — competitors weaken, talent becomes available, assets get cheap. 📉",
+  "Recession-resistant businesses: essential services (food, healthcare, utilities), value-focused products (discount retail, repairs), counter-cyclical industries (debt collection, bankruptcy law). Many great businesses were born in recessions — Apple, Airbnb, Uber all launched during downturns. 💡"
+]},
+{tag:"working_capital",patterns:["what is working capital","working capital management","working capital formula","how to manage working capital","working capital cycle"],responses:[
+  "Working capital = Current Assets − Current Liabilities. It measures whether you have enough short-term assets (cash, receivables, inventory) to cover short-term debts. Positive = financially healthy short-term. Negative = potential cash crisis even if profitable. 💰",
+  "Working capital management: collect receivables fast (chase payments), pay suppliers slowly (negotiate longer terms), reduce inventory levels, and maintain a cash buffer. Many profitable businesses collapse because of poor working capital management — cash flow ≠ profit. 📊"
+]},
+{tag:"accounts_receivable",patterns:["what is accounts receivable","how to manage receivables","collect payments faster","reduce late payments","invoice management"],responses:[
+  "Accounts receivable: money owed to your business by customers who've been invoiced but haven't paid yet. To speed up collection: invoice immediately on delivery, offer early payment discounts, send automatic reminders, and have clear payment terms (net 30, net 60). 💰",
+  "Late payment tips: 1️⃣ Send invoices the day work is delivered 2️⃣ Follow up on day 31 (or 1 day after due date) 3️⃣ Offer 2% discount for payment within 10 days 4️⃣ Charge late fees (clearly stated in contract) 5️⃣ For persistent offenders — require upfront payment. 📋"
+]},
+{tag:"ebitda",patterns:["what is ebitda","ebitda meaning","ebitda calculation","why ebitda matters","ebitda vs profit"],responses:[
+  "EBITDA = Earnings Before Interest, Taxes, Depreciation, and Amortisation. It measures operating profitability, stripping out financing and accounting decisions. Used widely for business valuation (businesses often sell for 3-10× EBITDA) and comparing companies. 📊",
+  "Why EBITDA: it shows the core cash-generating ability of the business, independent of how it's financed or its depreciation policy. Investors and acquirers use it to compare businesses fairly. A healthy SMB typically has 15-25% EBITDA margins. 💡"
+]},
+{tag:"gross_margin",patterns:["what is gross margin","gross profit margin","how to calculate gross margin","improve gross margin","gross margin meaning"],responses:[
+  "Gross Margin = (Revenue − Cost of Goods Sold) / Revenue × 100%. Example: sell product for $100, it costs $40 to make → Gross Margin = 60%. Higher is better — you have more money to cover operating expenses and generate profit. 📊",
+  "Gross margin benchmarks by industry: Software/SaaS (70-90%), Professional services (50-70%), Retail (30-50%), Restaurants (60-70% food, 30-40% overall), Manufacturing (20-40%). If yours is below industry average, look at pricing and supplier costs. 💡"
+]},
+{tag:"cash_flow_forecast",patterns:["how to forecast cash flow","cash flow forecasting","cash flow projection","predict cash flow","cash flow planning"],responses:[
+  "Cash flow forecast: a week-by-week or month-by-month projection of money coming in (sales, loans) and going out (wages, rent, suppliers). Build one in a spreadsheet: list every expected inflow and outflow. The result shows when you'll have surplus and when you might run short. 💰",
+  "12-week cash flow forecast is the most practical tool for running a business. Update it weekly. It's not about being precise — it's about spotting future cash crunches early so you can act before the crisis hits. Many business failures are preventable with 8 weeks' advance warning. 📊"
+]},
+// ============================================================
+// NEW BUSINESS INTENTS — OPERATIONS & STRATEGY
+// ============================================================
+{tag:"okrs",patterns:["what are okrs","objectives and key results","how to use okrs","okr framework","okrs meaning"],responses:[
+  "OKRs (Objectives and Key Results): a goal-setting framework used by Google, Intel, and thousands of companies. Objective = what you want to achieve (qualitative, inspiring). Key Results = how you measure it (quantitative, time-bound). Typically set quarterly. 🎯",
+  "OKR example: Objective: 'Become the market leader in SMB accounting software'. Key Results: 1) Grow MRR from $50K to $80K 2) Achieve NPS of 60+ 3) Sign 3 strategic partnerships. Each KR has a clear number — either you hit it or you don't. 📊"
+]},
+{tag:"agile_business",patterns:["what is agile","agile methodology","agile vs waterfall","agile business","scrum agile"],responses:[
+  "Agile: an iterative approach to project management and product development. Instead of planning everything upfront, you work in short 'sprints' (1-4 weeks), release frequently, get feedback, and adapt. Originally for software — now used across all business functions. 🔄",
+  "Agile vs Waterfall: Waterfall = plan everything, then build (rigid but predictable). Agile = build in small cycles, adapt as you learn (flexible but requires discipline). Agile works best when requirements are unclear or likely to change — which is almost always. 💡"
+]},
+{tag:"scrum",patterns:["what is scrum","scrum framework","scrum vs agile","daily scrum","scrum master"],responses:[
+  "Scrum is the most popular Agile framework. Teams work in 'Sprints' (usually 2 weeks), have daily 15-minute standups, and hold retrospectives. Roles: Product Owner (prioritizes work), Scrum Master (removes blockers), Development Team (does the work). 🔄",
+  "Scrum in practice: sprint planning (what will we do this sprint?) → daily standup (what did I do, what will I do, any blockers?) → sprint review (demo what was built) → retrospective (what can we improve?). It's a system for getting work done without bureaucracy. 💡"
+]},
+{tag:"outsourcing_strategy",patterns:["when to outsource","what to outsource","outsourcing vs hiring","should i outsource","outsourcing strategy"],responses:[
+  "Outsource rule: outsource anything that is not your core competitive advantage. Accounting, payroll, IT support, design, content — if someone else can do it better or cheaper, outsource it. Focus your team's time on what only YOU can do. 💡",
+  "Outsourcing vs hiring: Outsource for: specialist tasks you rarely need, variable workload, non-core functions. Hire for: daily critical functions, roles needing deep company knowledge, strategic areas. Start by outsourcing, only hire once you have consistent, predictable need. 📊"
+]},
+{tag:"erp_systems",patterns:["what is erp","erp software","enterprise resource planning","erp systems","erp examples"],responses:[
+  "ERP (Enterprise Resource Planning): software that integrates all core business functions — finance, HR, supply chain, manufacturing, procurement — into one system. Examples: SAP, Oracle, Microsoft Dynamics, NetSuite. Essential for mid-large businesses, overkill for small businesses. 💻",
+  "ERP pros: single source of truth for all data, better reporting, reduced manual processes. Cons: expensive ($20K-$1M+ implementation), long implementation (6-18 months), and high training requirements. Small businesses should start with simpler tools (QuickBooks, Xero) before considering ERP. 📊"
+]},
+{tag:"business_process",patterns:["what is a business process","business process improvement","how to improve business processes","process mapping","business process management"],responses:[
+  "A business process is a repeatable series of steps that produces a specific outcome. Examples: sales process, onboarding process, invoice process. Document all core processes in writing — businesses that run on systems (not heroics) are more scalable and sellable. 📋",
+  "Process improvement: 1️⃣ Map the current process (every step, every person) 2️⃣ Identify bottlenecks and waste 3️⃣ Redesign the process (eliminate, simplify, automate) 4️⃣ Implement and measure. Even a 20% improvement in a key process compounds over thousands of repetitions. 💡"
+]},
+{tag:"automation_business",patterns:["business automation","how to automate business","automate tasks","what to automate","workflow automation"],responses:[
+  "Automate anything repetitive: invoicing, email follow-ups, social media posting, data entry, appointment reminders, lead nurturing. Tools: Zapier, Make (Integromat), HubSpot, ActiveCampaign. Automation frees human time for high-judgment, relationship-driven work. 🤖",
+  "Automation ROI example: automating invoice reminders (10 minutes of setup) saves 5 hours/month of manual chasing and gets you paid 8 days faster on average. Map your repetitive tasks — most businesses can automate 20-30% of routine work within 90 days. 💡"
+]},
+{tag:"blue_ocean_strategy",patterns:["what is blue ocean strategy","blue ocean vs red ocean","blue ocean strategy meaning","create new market","blue ocean"],responses:[
+  "Blue Ocean Strategy: instead of competing in existing crowded markets (red oceans), create entirely new market space where competition is irrelevant. Example: Cirque du Soleil combined circus and theatre to invent a new entertainment category with no direct competitors. 🌊",
+  "Blue Ocean thinking: eliminate what the industry takes for granted, reduce what's over-engineered, raise what's undervalued, and create something new entirely. The goal is to make the competition irrelevant rather than beat them at their own game. 💡"
+]},
+{tag:"porters_five_forces",patterns:["porter's five forces","five forces analysis","porters five forces","competitive forces","industry analysis"],responses:[
+  "Porter's Five Forces: framework for analyzing industry competitiveness. The 5 forces: 1️⃣ Rivalry among competitors 2️⃣ Threat of new entrants 3️⃣ Bargaining power of suppliers 4️⃣ Bargaining power of buyers 5️⃣ Threat of substitute products. High forces = tough industry. 🔍",
+  "Use Porter's Five Forces to decide whether an industry is worth entering, and where to position yourself within it. Industries with low rivalry, high barriers to entry, and weak supplier/buyer power (like luxury goods) tend to be very profitable. 📊"
+]},
+{tag:"coopetition",patterns:["what is coopetition","coopetition meaning","cooperate with competitors","compete and cooperate"],responses:[
+  "Coopetition: when companies compete in some areas while cooperating in others. Example: Apple and Samsung compete in smartphones but Samsung supplies Apple's OLED screens. Airlines compete for passengers but share frequent flyer programs. It's strategic, not contradiction. 🤝",
+  "Coopetition opportunities: industry standards development, joint lobbying, shared infrastructure (reduces costs for all), co-marketing to grow the overall market. Ask: 'Where would working with a competitor grow the pie for everyone?' That's your coopetition zone. 💡"
+]},
+{tag:"licensing_business",patterns:["what is licensing in business","business licensing","licensing agreements","how licensing works","license your product"],responses:[
+  "Business licensing: allowing another company to use your intellectual property (brand, patent, technology, content) in exchange for royalty fees. It generates passive income without manufacturing or distribution costs. Risk: losing control of how your IP is used. 📋",
+  "Licensing examples: Disney licenses characters to toy manufacturers, drug companies license molecules to generics, software companies sell API licenses. If you have a strong IP asset, licensing it can create a high-margin revenue stream with minimal additional cost. 💡"
+]},
+{tag:"joint_venture",patterns:["what is a joint venture","joint venture meaning","jv business","how joint ventures work","joint venture vs partnership"],responses:[
+  "Joint venture (JV): two or more businesses creating a new entity together to pursue a specific project or market. Each partner contributes resources (capital, expertise, distribution) and shares profits and risks. JVs are common for entering new markets or developing new products. 🤝",
+  "JV vs Partnership: a partnership is an ongoing business relationship; a JV is typically a specific project or time-limited venture. JVs allow companies to combine strengths without a full merger. Key: have clear governance, profit-sharing, and exit terms in writing from day one. 📋"
+]},
+{tag:"white_labeling",patterns:["what is white labeling","white label products","white label business","private label","how white labeling works"],responses:[
+  "White labeling: buying a product or service made by one company and selling it under your own brand. Example: many supermarkets sell 'own brand' products that are actually made by major manufacturers. It lets you launch products fast without manufacturing capability. 📦",
+  "White label vs private label: White label = same product sold to many brands (generic). Private label = product made exclusively for you (more unique). Both allow you to sell under your brand without manufacturing. Margins depend on volume and negotiation power. 💡"
+]},
+// ============================================================
+// NEW BUSINESS INTENTS — LEGAL & COMPLIANCE
+// ============================================================
+{tag:"nda",patterns:["what is an nda","non disclosure agreement","nda meaning","how does an nda work","when to use an nda"],responses:[
+  "NDA (Non-Disclosure Agreement): a legal contract where one or both parties agree not to share confidential information. Use NDAs when sharing sensitive business information with potential partners, employees, investors, or contractors. 📋",
+  "NDA best practices: specify clearly what is and isn't confidential, set a time limit (1-5 years is typical), define consequences for breach, and have a lawyer review it. NDAs provide legal protection but are hard to enforce if the other party is determined to breach them. ⚖️"
+]},
+{tag:"non_compete",patterns:["what is a non compete","non compete agreement","non compete clause","can i sign non compete","non compete legal"],responses:[
+  "Non-compete agreement: an employee or contractor agrees not to work for competitors or start a competing business for a specified period after leaving. Enforceability varies enormously by country/state — California bans them almost entirely; other US states enforce them. ⚖️",
+  "Non-compete strategy for employers: be reasonable (limited geography, limited time, limited scope) — courts won't enforce overly broad ones. For employees: understand what you're signing, negotiate the scope down, and check your jurisdiction's enforcement rules before signing. 📋"
+]},
+{tag:"gdpr",patterns:["what is gdpr","gdpr compliance","data protection","privacy laws","gdpr meaning","gdpr for business"],responses:[
+  "GDPR (General Data Protection Regulation): EU law governing how businesses collect, store, and use personal data. Key requirements: explicit consent to collect data, right to access/delete data, data breach notification within 72 hours, and appointing a Data Protection Officer if processing at scale. ⚖️",
+  "GDPR compliance checklist: privacy policy that's plain-language, cookie consent mechanism, secure data storage, data processor agreements with third parties, and a process to respond to data subject requests within 30 days. Fines: up to €20M or 4% of global revenue. Take it seriously. 🔒"
+]},
+{tag:"business_insurance",patterns:["what business insurance do i need","types of business insurance","business insurance","professional indemnity","public liability insurance"],responses:[
+  "Core business insurances: 1️⃣ Public Liability (covers injury/damage claims) 2️⃣ Professional Indemnity (covers errors in professional services) 3️⃣ Employer's Liability (legally required if you have employees in UK) 4️⃣ Business Interruption (covers income loss from disasters) 5️⃣ Cyber Insurance (covers data breaches). 🛡️",
+  "Insurance priority by business type: Service business → Professional Indemnity most critical. Retail/physical → Public Liability + Stock Insurance. Tech/SaaS → Cyber insurance + D&O. Get quotes from a business insurance broker — they'll identify gaps you haven't thought of. 📋"
+]},
+{tag:"ip_protection",patterns:["how to protect intellectual property","ip protection","protect my business idea","trademark vs patent","protect my brand"],responses:[
+  "IP protection options: 🔒 Patent (protects inventions, 20 year monopoly), ™ Trademark (protects brand names, logos, slogans — renewable forever), © Copyright (automatic protection for creative works), 🤐 Trade Secret (keep it confidential, like Coca-Cola's recipe). Each protects different things. ⚖️",
+  "Priority for most businesses: 1️⃣ Register your trademark first (protects your brand). 2️⃣ If you have a technical invention, consult a patent attorney before going public (public disclosure can invalidate patent rights). 3️⃣ Copyright is automatic — just document creation dates. 📋"
+]},
+// ============================================================
+// NEW BUSINESS INTENTS — HR & PEOPLE MANAGEMENT
+// ============================================================
+{tag:"hiring_first_employee",patterns:["how to hire first employee","hiring first employee","first hire","when to hire","steps to hiring"],responses:[
+  "Hiring your first employee: 1️⃣ Write a clear job description 2️⃣ Register as an employer with your tax authority 3️⃣ Choose between employee and contractor 4️⃣ Post on job boards 5️⃣ Interview for skills AND values fit 6️⃣ Provide a written contract 7️⃣ Set up payroll. Hire slow, fire fast. 👥",
+  "First hire checklist: employment contract, payroll software (Gusto, Xero Payroll), employer insurance, workplace health & safety basics, onboarding plan (first 90 days), clear KPIs. Your first hire sets the cultural standard for everyone who follows — choose carefully. 💡"
+]},
+{tag:"employee_onboarding",patterns:["employee onboarding","how to onboard employees","new employee onboarding","onboarding process","first day employee"],responses:[
+  "Great onboarding reduces turnover by 82% (Glassdoor data). Elements: pre-start communication (so they know what to expect), structured first day, 30-60-90 day plan with clear goals, assigned buddy/mentor, regular check-ins, and a feedback loop at 30 days. 👥",
+  "Onboarding mistake to avoid: leaving new employees to figure things out themselves. Create a documented onboarding checklist covering: company values and culture, role expectations, tools and systems access, team introductions, and first project. First impressions are permanent. 📋"
+]},
+{tag:"remote_team_management",patterns:["how to manage remote team","remote management","managing remote employees","remote team tips","work from home management"],responses:[
+  "Remote management principles: 1️⃣ Trust first — measure output, not hours 2️⃣ Over-communicate — document decisions in writing 3️⃣ Create rituals (weekly team calls, virtual coffees) 4️⃣ Use async tools (Slack, Notion, Loom) 5️⃣ Check in on wellbeing, not just work. Remote works if culture is intentional. 🏠",
+  "Remote team tools: communication (Slack), video calls (Zoom), project management (Asana, Monday, Linear), documentation (Notion, Confluence), time zones (World Time Buddy). The biggest remote management risk is isolation — actively combat it with regular human connection. 💡"
+]},
+{tag:"performance_review",patterns:["how to do performance reviews","performance review","employee review","annual review","360 feedback"],responses:[
+  "Effective performance reviews: set clear expectations upfront (so reviews aren't a surprise), review specific achievements vs goals (not personality), give balanced feedback (what went well + what to improve), agree on development goals, and document everything in writing. 📋",
+  "360-degree feedback: collecting feedback from peers, direct reports, and managers — not just the boss. More accurate and less biased than top-down only. Best practice: use structured questions, keep responses confidential, focus on behaviors not personality. 👥"
+]},
+{tag:"equity_employee",patterns:["employee equity","stock options employee","esop","share options","vesting schedule","how to give employees equity"],responses:[
+  "Employee equity structures: Stock Options (right to buy shares at a set price), Restricted Stock Units (RSUs — shares given subject to vesting), ESOP (Employee Stock Ownership Plan). Equity aligns employee incentives with company success. 💼",
+  "Vesting schedule: most equity vests over 4 years with a 1-year cliff. Meaning: if an employee leaves before 12 months, they get nothing. After 12 months, 25% vests. Then monthly/quarterly after that. This protects the company from giving equity to people who leave early. 📋"
+]},
+// ============================================================
+// NEW BUSINESS INTENTS — PITCH & FUNDRAISING
+// ============================================================
+{tag:"pitch_deck",patterns:["what is a pitch deck","how to make a pitch deck","pitch deck structure","pitch deck slides","create a pitch deck"],responses:[
+  "Pitch deck structure (the classic 10-slide format): 1️⃣ Problem 2️⃣ Solution 3️⃣ Market Size 4️⃣ Product 5️⃣ Business Model 6️⃣ Traction 7️⃣ Team 8️⃣ Competition 9️⃣ Financials 🔟 The Ask. Keep each slide to one clear idea. 📊",
+  "Pitch deck tips: investors read decks in 3 minutes on average. Lead with your strongest slide (usually traction or team). Use numbers everywhere. Tell a story — problem → solution → why you → why now. The goal of a deck isn't to get investment — it's to get a meeting. 🚀"
+]},
+{tag:"convertible_note",patterns:["what is a convertible note","convertible note meaning","how convertible notes work","safe note vs convertible note","convertible debt"],responses:[
+  "Convertible note: a short-term loan that converts to equity at the next funding round, usually at a discount (e.g., 20% discount to the Series A price). Used for early-stage funding when it's too early to agree on a company valuation. Simpler and cheaper than a priced round. 💰",
+  "Convertible note key terms: discount rate (reward for early risk, typically 15-25%), valuation cap (maximum price note converts at, protects early investors), interest rate (usually 5-8%, accrues and converts), and maturity date (when the loan is due if not converted). 📋"
+]},
+{tag:"safe_note",patterns:["what is a safe note","safe agreement","y combinator safe","simple agreement for future equity"],responses:[
+  "SAFE (Simple Agreement for Future Equity): created by Y Combinator, a SAFE is like a convertible note without the debt features (no interest rate, no maturity date). The investor gives money now in exchange for equity later, when a priced round happens. Simpler than a convertible note. 💡",
+  "SAFE vs Convertible Note: SAFEs have no interest and no maturity date (not technically debt). Convertible notes have interest and a repayment date. SAFEs are founder-friendlier; convertible notes are slightly investor-friendlier. Both are standard for pre-seed funding. 📊"
+]},
+{tag:"series_funding",patterns:["what is series a","series a b c funding","startup funding rounds","series a funding","series b funding","pre seed seed round"],responses:[
+  "Funding stages: Pre-Seed ($50K-$500K, friends/family/angels, proving concept) → Seed ($500K-$3M, angels/micro VCs, building product) → Series A ($3M-$15M, VCs, proving business model) → Series B ($15M-$50M, scaling what works) → Series C+ (expanding, acquisitions, pre-IPO). 💰",
+  "What investors look for at each stage: Pre-Seed = founder quality. Seed = product + early customers. Series A = repeatable revenue model (unit economics work). Series B = growth efficiency (can you scale profitably?). Later stages = market leadership and path to profitability. 📊"
+]},
+{tag:"due_diligence",patterns:["what is due diligence","due diligence process","investor due diligence","business due diligence","m&a due diligence"],responses:[
+  "Due diligence: the investigation an investor or acquirer conducts before finalising a deal. They verify financials, legal contracts, IP ownership, customer contracts, team, and technology. Typically takes 4-12 weeks. Be prepared — surprises found in due diligence kill deals. 🔍",
+  "Due diligence preparation: keep clean cap table records, have audited or well-organized financials, ensure all IP is properly assigned to the company (not personally owned by founders), have customer contracts in writing, and resolve any legal disputes before starting a sale process. 📋"
+]},
+{tag:"cap_table",patterns:["what is a cap table","cap table meaning","how cap table works","capitalization table","cap table startup"],responses:[
+  "Cap table (Capitalization Table): a spreadsheet showing who owns what percentage of a company. Lists all shareholders, the type of securities they hold (common stock, preferred stock, options, warrants), and how much they paid. Essential for managing ownership and dilution. 📊",
+  "Cap table management: keep it clean and up-to-date from day one. Every funding round, option grant, or transfer should be recorded immediately. Tools: Carta, Capdesk, Pulley (for managed cap tables). A messy cap table is a major red flag for investors and acquirers. 📋"
+]},
+// ============================================================
+// NEW BUSINESS INTENTS — MODERN BUSINESS TRENDS
+// ============================================================
+{tag:"ai_in_business_tools",patterns:["how to use ai in business","ai tools for business","best ai tools","ai business tools","using ai at work","chatgpt for business"],responses:[
+  "Top AI tools for business: ✍️ Content (ChatGPT, Claude, Jasper) | 🎨 Design (Midjourney, DALL-E, Canva AI) | 📊 Data (Julius AI, Tableau AI) | 💻 Code (GitHub Copilot, Cursor) | 📧 Email (Superhuman AI) | 🎬 Video (Runway, Synthesia) | 📞 Sales (Gong, Salesloft AI). 🤖",
+  "AI adoption strategy: 1️⃣ Identify your most time-consuming repetitive tasks 2️⃣ Find an AI tool that automates or accelerates each 3️⃣ Run a 2-week trial 4️⃣ Measure time saved 5️⃣ Build into team workflow. Companies using AI tools report 20-40% productivity improvements in knowledge work. 💡"
+]},
+{tag:"web3_business",patterns:["what is web3","web3 for business","blockchain business","nft business","decentralized business","web3 opportunities"],responses:[
+  "Web3 for business: blockchain-based applications that give users ownership of their data and digital assets. Business opportunities: token-gated communities, NFT-based loyalty programs, smart contract automation, DeFi treasury management, and decentralized marketplaces. Still early and volatile. 🌐",
+  "Web3 business reality check: genuine use cases exist (supply chain transparency, digital ownership, cross-border payments) but most consumer applications are still niche. Build on Web3 if blockchain genuinely solves a problem for your customer — not just for the hype. 💡"
+]},
+{tag:"sustainability_business",patterns:["how to make business sustainable","sustainable business practices","green business","eco friendly business","environmental business strategy"],responses:[
+  "Sustainable business strategy: 1️⃣ Measure your carbon footprint (Scope 1, 2, 3 emissions) 2️⃣ Set reduction targets 3️⃣ Switch to renewable energy 4️⃣ Reduce packaging waste 5️⃣ Choose sustainable suppliers 6️⃣ Offset what you can't eliminate 7️⃣ Report transparently. 🌱",
+  "Business case for sustainability: lower energy costs (renewable often cheaper now), attract eco-conscious customers (73% of millennials pay more for sustainable products), attract better talent, reduce regulatory risk, and access green financing. Sustainability is now a competitive advantage. 📊"
+]},
+{tag:"dei_business",patterns:["what is dei","diversity equity inclusion","dei in business","diversity in workplace","inclusive business"],responses:[
+  "DEI (Diversity, Equity & Inclusion): building a workplace where people of all backgrounds have equal opportunity and feel genuinely included. Business case: diverse teams make better decisions, access wider talent pools, and better serve diverse customers. McKinsey found gender-diverse companies are 25% more likely to outperform. 👥",
+  "DEI in practice: audit your hiring process for bias (blind CVs, structured interviews), set representation goals, track pay equity, create psychological safety for all voices, and involve underrepresented employees in decision-making. DEI is a practice, not a statement. 💡"
+]},
+{tag:"b_corporation",patterns:["what is a b corporation","b corp certification","how to become a b corp","b corp meaning","certified b corporation"],responses:[
+  "B Corporation (B Corp): a certification for companies that meet high standards of social and environmental performance, accountability, and transparency. Certifying body is B Lab. B Corps commit to balancing profit and purpose. Examples: Patagonia, Ben & Jerry's, Innocent Drinks. 🌍",
+  "B Corp certification process: complete the B Impact Assessment (measures impact on workers, community, environment, customers, governance), score 80+ out of 200, submit documentation, pay fees (based on revenue), and recertify every 3 years. Takes 3-12 months typically. 📋"
+]},
+{tag:"community_business",patterns:["community led growth","build a community","business community","brand community","community strategy"],responses:[
+  "Community-led growth: building a loyal community around your brand that drives referrals, retention, and product feedback. Examples: Peloton's fitness community, Figma's design community, HubSpot's marketing community. Members become advocates, reducing CAC. 🤝",
+  "Building a business community: 1️⃣ Choose a platform (Slack, Discord, Circle) 2️⃣ Define the shared interest (not your product — the problem your members share) 3️⃣ Create weekly rituals (discussions, AMAs) 4️⃣ Recognize top contributors 5️⃣ Let members lead. The best communities are about members, not brands. 💡"
+]},
+{tag:"no_code_business",patterns:["no code tools","no code business","build without coding","no code platforms","tools to build without code"],responses:[
+  "No-code tools let you build real products without writing code. Top tools: 🌐 Websites (Webflow, Squarespace) | 🤖 Automation (Zapier, Make) | 📱 Apps (Bubble, Glide) | 📊 Databases (Airtable, Notion) | 💬 Chatbots (Tidio, ManyChat) | 🛒 E-commerce (Shopify). 💻",
+  "No-code business opportunity: you can now build a fully functional startup — website, database, automation, checkout — for under $100/month with no developers. Validate your business idea with no-code before investing in custom development. Speed is everything at the early stage. 🚀"
+]},
+{tag:"mrr_arr",patterns:["what is mrr","what is arr","monthly recurring revenue","annual recurring revenue","mrr arr meaning","saas revenue metrics"],responses:[
+  "MRR (Monthly Recurring Revenue): total predictable revenue your business generates each month from subscriptions. ARR = MRR × 12. The most important metric for subscription businesses — it shows the health and trajectory of the business at a glance. 📊",
+  "MRR breakdown: New MRR (from new customers) + Expansion MRR (upsells/upgrades) − Churned MRR (cancellations) − Contraction MRR (downgrades) = Net New MRR. Track all four components. Expansion MRR is often the fastest and cheapest growth lever. 💡"
+]},
+{tag:"net_revenue_retention",patterns:["what is net revenue retention","nrr","net dollar retention","ndr","revenue retention saas"],responses:[
+  "Net Revenue Retention (NRR): the revenue retained from existing customers after accounting for churn, downgrades, and expansions. NRR > 100% means you grow revenue from existing customers alone (expansion outweighs churn). Best SaaS companies have 120-140% NRR. 📊",
+  "NRR example: 100 customers paying $100/month = $10,000 MRR. Next month: 5 churn (−$500), 3 upgrade (+$300), 0 new. NRR = ($10,000 − $500 + $300) / $10,000 = 98%. Below 100% = leaky bucket. Above 100% = you grow even without new sales. 💡"
+]},
+{tag:"rule_of_40",patterns:["what is rule of 40","rule of 40 saas","40 rule startup","growth rate plus profit margin"],responses:[
+  "Rule of 40: a SaaS health metric. Growth Rate (%) + Profit Margin (%) should be ≥ 40. Example: growing at 50% with −20% margins = 30 (below threshold). Growing at 25% with 20% margins = 45 (healthy). It balances growth vs profitability — you can sacrifice one for the other, but not too much. 📊",
+  "Top SaaS companies consistently score 40-70+ on the Rule of 40. Below 40 isn't necessarily bad for early-stage companies prioritizing growth, but becomes critical when fundraising gets harder. Investors use it to quickly assess whether a SaaS business is healthy. 💡"
+]},
+{tag:"churn_reduction",patterns:["how to reduce churn","reduce customer churn","churn management","why customers leave","prevent customer cancellations"],responses:[
+  "Churn reduction strategies: 1️⃣ Identify your churn reasons (exit surveys, cancel flow data) 2️⃣ Fix product gaps causing cancellations 3️⃣ Improve onboarding so customers reach 'aha moment' faster 4️⃣ Add a success team for at-risk accounts 5️⃣ Offer pause instead of cancel 6️⃣ Annual billing (reduces monthly churn). 📉",
+  "The #1 churn cause is customers not getting value — they signed up expecting X and didn't experience it. Fix this with better onboarding, proactive check-ins at day 7 and day 30, and clear milestones that help customers see ROI early. Churn is a product problem more than a retention problem. 💡"
+]},
+{tag:"podcast_business",patterns:["podcast for business","start a business podcast","podcast marketing","how to monetize podcast","podcast strategy"],responses:[
+  "Business podcast strategy: interview your ideal customers or industry experts → build audience trust → monetize through sponsorships, courses, or services. Podcasts build deep intimacy with listeners — podcast audiences buy at 3-5× the rate of social media followers. 🎙️",
+  "Podcast monetization paths: sponsorships (need ~5,000-10,000 downloads/episode), premium memberships (Patreon, Supercast), affiliate marketing, selling your own products/services, or using the show as a B2B lead generation tool. Many B2B podcasts pay for themselves by closing 1-2 deals per year. 💡"
+]},
+{tag:"newsletter_business",patterns:["newsletter business","start a newsletter","how to monetize newsletter","newsletter strategy","substack business"],responses:[
+  "Newsletter businesses: platforms like Substack, Beehiiv, and ConvertKit let you build paid newsletter subscriptions. Top newsletters make $1M-$5M+ annually. Keys: pick a specific niche, publish consistently, lead with free content to build audience, convert a small % to paid. 📧",
+  "Newsletter business model: free tier (builds audience, earns ad revenue) + paid tier ($5-$20/month for premium content). Sponsorship rates: $25-$50 per 1,000 subscribers per issue. A 10,000-subscriber newsletter can earn $2,000-$5,000/month from sponsorships alone. 💡"
+]},
+{tag:"referral_program",patterns:["how to create referral program","referral marketing","referral program","word of mouth marketing","refer a friend program"],responses:[
+  "Referral program formula: give the referrer a reward (cash, discount, free months) + give the referred person a welcome incentive. Make it dead simple — one link, one click to share. Dropbox's referral program (free storage for both sides) grew them 3,900% in 15 months. 🎁",
+  "Referral program best practices: reward must be desirable enough to motivate sharing, timing matters (ask at peak satisfaction moments — after first win, great review), track everything, and promote the program actively. Don't build it and hope people find it — market your referral program. 💡"
+]},
+{tag:"flash_sale",patterns:["what is a flash sale","flash sale strategy","how to run flash sale","limited time offer","urgency in marketing"],responses:[
+  "Flash sales: time-limited discounts (usually 24-72 hours) that create urgency and drive impulse purchases. Used to: clear inventory, acquire new customers, re-engage inactive customers, or generate quick cash. Risk: training customers to wait for discounts. 🔥",
+  "Flash sale best practices: 1️⃣ Email your list first (reward loyalty) 2️⃣ Clear end time with countdown timer 3️⃣ Genuine discount (customers spot fake 'was' prices) 4️⃣ Limited quantity triggers FOMO 5️⃣ Follow up non-purchasers with 'last chance' email. Don't run them more than quarterly or you erode perceived value. 📊"
+]},
+{tag:"local_seo",patterns:["what is local seo","local seo tips","google my business","rank locally","local business seo","how to rank locally"],responses:[
+  "Local SEO: optimizing your online presence to attract customers in your geographic area. Keys: 1️⃣ Claim and fully complete Google Business Profile 2️⃣ Get consistent NAP (Name, Address, Phone) across all directories 3️⃣ Collect Google reviews actively 4️⃣ Create location-specific website pages. 🗺️",
+  "Google Business Profile is the single most impactful local SEO action. Completely fill it out (hours, photos, services, FAQs), post weekly updates, respond to every review (positive and negative), and ask happy customers to leave a review within 24 hours of their visit. 📍"
+]},
+{tag:"business_continuity",patterns:["business continuity plan","disaster recovery","what if business fails","business continuity","contingency planning business"],responses:[
+  "Business continuity plan (BCP): a document outlining how your business will continue operating during and after a significant disruption (fire, cyberattack, key person illness, flood). Key elements: critical processes list, backup systems, communication plan, and recovery time objectives. 📋",
+  "Business continuity basics: 1️⃣ Identify critical functions (what must continue to survive?) 2️⃣ Document processes so someone else can run them 3️⃣ Back up all data offsite/cloud 4️⃣ Have key person insurance 5️⃣ Maintain cash reserves (3-6 months). Most small businesses have no BCP — putting one page together puts you ahead. 💡"
+]},
+{tag:"mystery_shopper",patterns:["what is mystery shopping","mystery shopper","secret shopper","mystery shopping business","how mystery shopping works"],responses:[
+  "Mystery shopping: hiring people to anonymously visit your business as regular customers and report on the experience. Used to evaluate: staff friendliness, compliance, cleanliness, wait times, and sales process quality. Gives objective insight into what customers actually experience. 🕵️",
+  "Running your own mystery shopping: 1️⃣ Define specific criteria to evaluate 2️⃣ Hire 3-5 mystery shoppers (friends, freelancers) 3️⃣ Give them a scenario and checklist 4️⃣ Debrief results 5️⃣ Act on findings. Alternatively, use professional mystery shopping agencies for regulated industries. 📋"
+]},
+{tag:"benchmarking",patterns:["what is benchmarking","business benchmarking","how to benchmark","competitor benchmarking","industry benchmarks"],responses:[
+  "Benchmarking: comparing your business performance against industry standards or competitors. Types: Internal (compare departments or time periods), Competitive (compare against specific rivals), Industry (compare against sector averages). Reveals where you over- or underperform. 📊",
+  "How to benchmark: 1️⃣ Choose metrics (gross margin, NPS, CAC, employee turnover) 2️⃣ Find industry data (trade associations, public reports, databases) 3️⃣ Compare honestly 4️⃣ Identify the biggest gaps 5️⃣ Set improvement targets. The point isn't to hit average — it's to exceed best in class. 🎯"
+]},
+{tag:"six_sigma",patterns:["what is six sigma","six sigma meaning","lean six sigma","six sigma in business","six sigma methodology"],responses:[
+  "Six Sigma: a data-driven methodology for eliminating defects and improving quality. Goal: fewer than 3.4 defects per million opportunities. Uses DMAIC framework: Define, Measure, Analyze, Improve, Control. Widely used in manufacturing, healthcare, and financial services. 📊",
+  "Lean Six Sigma combines Six Sigma's quality focus with Lean's waste elimination. Key tools: process mapping, fishbone diagrams, control charts, and root cause analysis. Certification levels: White Belt (awareness) → Yellow → Green → Black Belt (expert). 💡"
+]},
+{tag:"iso_certification",patterns:["what is iso certification","iso 9001","iso certification business","how to get iso certified","iso standards"],responses:[
+  "ISO certification: internationally recognized standards that demonstrate your business meets specific quality, safety, or management requirements. Most common: ISO 9001 (quality management), ISO 27001 (information security), ISO 14001 (environmental management). 📋",
+  "Why get ISO certified: access to larger corporate or government clients (often required), improve internal processes, differentiate from competitors, reduce insurance costs, and demonstrate credibility. ISO 9001 certification typically takes 6-12 months and costs $3,000-$30,000 depending on business size. 💡"
+]},
+{tag:"pop_up_shop",patterns:["what is a pop up shop","pop up store","pop up shop strategy","temporary retail","how to run pop up shop"],responses:[
+  "Pop-up shop: a temporary retail space (days to months) used to test physical retail, launch a product, create buzz, or sell seasonally. Low commitment, high impact. Used by online brands to build offline relationships and by startups to test markets without long leases. 🏪",
+  "Pop-up success tips: choose high-footfall locations, create an instagrammable experience, collect email addresses from every visitor, use it to test product-market fit in person, and create scarcity ('here for 3 days only'). Costs: $500-$5,000/day depending on location and size. 💡"
+]},
+
+// ============================================================
+// NEW BUSINESS INTENTS — ECONOMICS & MONEY BASICS
+// ============================================================
+{tag:"inflation_business",patterns:["how does inflation affect business","inflation and business","inflation impact","what is inflation","inflation strategy"],responses:[
+  "Inflation impact on business: raises your costs (wages, materials, energy) before you can raise prices. Winners: businesses with pricing power (luxury, essential services, real assets). Losers: fixed-price contracts, thin-margin retailers, cash-heavy businesses. 📊",
+  "Inflation strategy: 1️⃣ Increase prices (test small increases first) 2️⃣ Renegotiate supplier contracts 3️⃣ Lock in fixed-rate borrowing 4️⃣ Reduce low-margin products 5️⃣ Hold real assets not cash. The businesses that survive inflation are those that can pass costs to customers without losing them. 💡"
+]},
+{tag:"interest_rates_business",patterns:["how do interest rates affect business","interest rates and business","high interest rates","rising interest rates strategy"],responses:[
+  "High interest rates impact: borrowing costs rise (more expensive loans), consumer spending falls (mortgages cost more), asset values fall, and currency strengthens (exports become more expensive). Businesses most affected: highly leveraged, interest-rate sensitive (property, auto). 📊",
+  "Rising rate strategy: reduce debt (variable rate especially), strengthen cash flow, delay major capex, focus on profitable revenue over growth, and look for acquisition opportunities (valuations fall in high-rate environments). High rates are painful short-term but reward strong businesses long-term. 💡"
+]},
+{tag:"exchange_rate_business",patterns:["how exchange rates affect business","currency risk","exchange rate risk","hedging currency","forex business impact"],responses:[
+  "Exchange rate risk: if you earn in one currency but pay costs in another, currency movements can wipe out margins. Example: UK exporter earning USD — if USD weakens vs GBP, profits fall even if sales are the same. 💱",
+  "Currency risk management: invoice in your home currency where possible, use forward contracts (lock in today's rate for future transactions), natural hedging (match revenues and costs in the same currency), or use currency accounts (Wise, Revolut Business). 📊"
+]},
+
+// ============================================================
+// NEW BUSINESS INTENTS — CUSTOMER PSYCHOLOGY
+// ============================================================
+{tag:"pricing_psychology",patterns:["pricing psychology","psychological pricing","how to price products psychology","price anchoring","charm pricing"],responses:[
+  "Pricing psychology tactics: 1️⃣ Charm pricing ($9.99 vs $10 — feels significantly cheaper) 2️⃣ Anchoring (show a more expensive option first) 3️⃣ Decoy pricing (make the middle option look best) 4️⃣ Bundling (increases perceived value) 5️⃣ Free trial removes purchase friction. 🧠",
+  "The anchoring effect: always show your most expensive option first. When customers see $500/month first, $99/month feels cheap — even if $99 is your target price. SaaS companies use 3-tier pricing (Basic/Pro/Enterprise) specifically for this anchoring effect. 💡"
+]},
+{tag:"loss_aversion",patterns:["what is loss aversion","loss aversion marketing","loss aversion psychology","fear of loss marketing"],responses:[
+  "Loss aversion: people feel losses 2× more intensely than equivalent gains (Kahneman and Tversky). Marketing application: 'Don't miss out' outperforms 'Get access'. Free trials work because giving something up feels worse than not having it in the first place. 🧠",
+  "Loss aversion in business: frame your offer as preventing a loss rather than achieving a gain. 'Save $2,000 in wasted ad spend' > 'Earn $2,000 more'. 'Don't lose customers to competitors' > 'Win new customers'. Subtle but powerful in copywriting and sales. 💡"
+]},
+{tag:"social_proof",patterns:["what is social proof","social proof marketing","how to use social proof","reviews and testimonials","social proof examples"],responses:[
+  "Social proof: people follow the crowd when uncertain. Types: customer reviews, testimonials, case studies, star ratings, logos ('As seen in Forbes'), user counts ('Join 50,000 businesses'), and celebrity endorsements. The strongest social proof is specific, verifiable, and from people like your target customer. 🌟",
+  "Social proof strategy: collect reviews immediately after positive outcomes (when emotion is high), display them prominently on your homepage and pricing page, use video testimonials for high-ticket sales, and respond publicly to negative reviews (shows confidence and care). 📊"
+]},
+{tag:"scarcity_urgency",patterns:["scarcity in marketing","urgency marketing","limited availability","how to create urgency","scarcity tactics"],responses:[
+  "Scarcity and urgency: among the most powerful conversion tools. Real scarcity (limited stock, limited seats) converts better than manufactured urgency — customers can smell fake. Examples: 'Only 3 left at this price', 'Offer ends Sunday midnight', 'First 100 customers only'. 🔥",
+  "Ethical urgency tactics: limited-time pricing (seasonal/launch), limited quantity (if genuinely limited), cohort-based programs (only open a few times per year), waitlists. Always honour the deadline — if you extend a sale after saying it ends, you destroy trust permanently. ⚠️"
+]},
+{tag:"jobs_to_be_done",patterns:["what is jobs to be done","jtbd framework","jobs theory","why customers buy","what motivates purchase"],responses:[
+  "Jobs To Be Done (JTBD): customers don't buy products — they 'hire' them to do a job. People buy a drill not because they want a drill, but because they want a hole. Understanding the job helps you design better products and marketing. 🔨",
+  "JTBD interview questions: 'Walk me through the last time you solved this problem', 'What were you doing when you decided to look for a solution?', 'What alternatives did you consider?', 'What would make you switch?' These reveal the real motivations behind purchasing decisions. 💡"
+]},
 ];
+
 
 
 // ==================== INTENT MULTI-RESPONSE PATCH ====================
@@ -7004,14 +7523,36 @@ function getLocalizedResponse(intent) {
   return intent.responses[Math.floor(Math.random() * intent.responses.length)];
 }
 
-function getFallbackMsg() {
+function getFallbackMsg(userInput) {
   const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'en';
+
+  // Smart suggestions based on keywords in the user's input
+  if (userInput) {
+    const u = userInput.toLowerCase();
+    if (/market|adverti|promot|brand|social|seo|content|tiktok|instagram|linkedin|google ad/.test(u))
+      return "I didn't quite catch that, but it sounds marketing-related! Try asking: 'How do I market my business?', 'What is SEO?', or 'How do I run Google Ads?' 📣";
+    if (/financ|money|cash|profit|revenue|invest|fund|loan|budget|cost|expense|tax|account/.test(u))
+      return "That sounds finance-related! Try: 'What is cash flow?', 'How do I get funding?', 'What is EBITDA?', or 'How do I manage working capital?' 💰";
+    if (/start|launch|found|create|build|new business|idea|startup|entrepreneur/.test(u))
+      return "Sounds like you're building something! Try: 'How do I start a business?', 'Give me a business idea', or 'How do I write a business plan?' 🚀";
+    if (/team|hire|employ|staff|manage|hr|people|recruit|culture/.test(u))
+      return "People and team question? Try: 'How do I hire my first employee?', 'How do I manage a remote team?', or 'What is employee onboarding?' 👥";
+    if (/stock|share|invest|crypto|etf|portfolio|market|trading/.test(u))
+      return "Investment question? Try: 'What is an ETF?', 'How do index funds work?', or just type a stock ticker like 'AAPL stock' for a live price! 📈";
+    if (/sell|sales|customer|client|convert|funnel|close|deal/.test(u))
+      return "Sales question? Try: 'What is a sales funnel?', 'How do I get more customers?', or 'What is conversion rate optimization?' 🎯";
+    if (/legal|law|contract|nda|patent|trademark|protect|copyright/.test(u))
+      return "Legal question? Try: 'What is an NDA?', 'How do I protect my brand?', or 'What business insurance do I need?' ⚖️";
+    if (/what can you|what do you|who are you|what is usemee|how do you work/.test(u))
+      return "Ask me: 'What can you do?' and I'll tell you everything I'm capable of! 💡";
+  }
+
   const msgs = {
-    en: "I can help with business questions! Try asking about marketing, finance, startups, pricing, or strategy. 💡",
-    es: "¡Puedo ayudarte con preguntas de negocios! Prueba preguntar sobre marketing, finanzas, startups, precios o estrategia. 💡",
-    fr: "Je peux vous aider avec des questions d'affaires ! Essayez de demander sur le marketing, la finance, les startups, les prix ou la stratégie. 💡",
-    de: "Ich kann bei Geschäftsfragen helfen! Fragen Sie nach Marketing, Finanzen, Startups, Preisgestaltung oder Strategie. 💡",
-    ar: "يمكنني مساعدتك في أسئلة الأعمال! جرب السؤال عن التسويق أو التمويل أو الشركات الناشئة أو التسعير أو الاستراتيجية. 💡"
+    en: "I'm not sure I understood that — could you rephrase? I know a lot about business, finance, marketing, startups, investing, and more. Try: 'How do I grow my business?' or 'What is cash flow?' 💡",
+    es: "No entendí bien eso. Prueba preguntar sobre marketing, finanzas, startups o estrategia. 💡",
+    fr: "Je n'ai pas compris. Essayez une question sur le marketing, la finance ou les startups. 💡",
+    de: "Das habe ich nicht ganz verstanden. Versuchen Sie eine Frage zu Marketing, Finanzen oder Startups. 💡",
+    ar: "لم أفهم ذلك جيداً. جرب السؤال عن التسويق أو التمويل أو الشركات الناشئة. 💡"
   };
   return msgs[lang] || msgs.en;
 }
@@ -7174,7 +7715,7 @@ if (bestScore > 0.5 && bestIntent) {
   return respondWithIntent(bestIntent, userInput);
 }
 
-return getFallbackMsg();
+return getFallbackMsg(userInput);
 }
 
 function notifyBotReply(text) {
