@@ -220,6 +220,90 @@ body.dark .chat-container {
 }
 .sidebar-logout-btn:hover { background: rgba(220,53,69,0.6); }
 
+/* SIDEBAR CLOSE BUTTON (top-right, two-squares like ChatGPT) */
+.sidebar-close-btn {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.sidebar-close-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+/* SIDEBAR DIVIDER */
+.sidebar-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.12);
+    margin: 0 0 12px;
+}
+
+/* TWO ACTION BUTTONS */
+.sidebar-action-btns {
+    display: flex;
+    gap: 8px;
+    padding: 0 14px 14px;
+}
+.sidebar-action-btn {
+    flex: 1;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: #dce6f0;
+    border-radius: 8px;
+    padding: 7px 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: all 0.2s;
+}
+.sidebar-action-btn:hover { background: rgba(52,152,219,0.28); border-color: #3498db; color: #fff; }
+.sidebar-action-btn.active { background: rgba(52,152,219,0.38); border-color: #3498db; color: #fff; }
+
+/* RECENTS PANEL */
+.sidebar-recents {
+    max-height: 210px;
+    overflow-y: auto;
+    padding: 0 10px 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 8px;
+}
+.recents-empty {
+    text-align: center;
+    color: rgba(255,255,255,0.38);
+    font-size: 12px;
+    padding: 18px 0;
+}
+.recent-chat-item {
+    padding: 8px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 3px;
+}
+.recent-chat-item:hover { background: rgba(52,152,219,0.22); }
+.recent-chat-title {
+    font-size: 12px;
+    color: #ecf0f1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.recent-chat-time {
+    font-size: 10px;
+    color: rgba(255,255,255,0.38);
+    margin-top: 2px;
+}
+
 .sidebar-overlay {
     position: absolute;
     left: 0;
@@ -942,7 +1026,26 @@ body.dark #image-preview-name { color: #aaa; }
         <div class="sidebar-header">
             <div class="sidebar-logo">📊</div>
             <div class="sidebar-title" data-i18n="menu">Menu</div>
+            <button class="sidebar-close-btn" onclick="closeSidebar()" title="Close sidebar">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="1.5" y="1.5" width="17" height="17" rx="2.5" stroke="currentColor" stroke-width="1.4"/>
+                    <rect x="1.5" y="1.5" width="6.5" height="17" rx="2.5" fill="currentColor" fill-opacity="0.22" stroke="currentColor" stroke-width="1.4"/>
+                </svg>
+            </button>
         </div>
+        <div class="sidebar-divider"></div>
+        <div class="sidebar-action-btns">
+            <button class="sidebar-action-btn" onclick="startNewChat(); closeSidebar();">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>
+                New Chat
+            </button>
+            <button class="sidebar-action-btn" id="recentsBtn" onclick="toggleRecents()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Recents
+            </button>
+        </div>
+        <div class="sidebar-recents" id="sidebarRecents" style="display:none"></div>
+        <div class="sidebar-divider"></div>
         <div class="sidebar-nav-scroll">
         <ul>
             <li><a href="javascript:void(0)" onclick="closeSidebar()"><span class="sidebar-icon">💬</span><span data-i18n="chat">Chat</span></a></li>
@@ -1084,6 +1187,103 @@ function closeSidebar() {
     const overlay = document.getElementById('sidebarOverlay');
     sidebar.classList.remove('open');
     overlay.classList.remove('open');
+    // Hide recents panel and reset button when closing
+    const recentsPanel = document.getElementById('sidebarRecents');
+    const recentsBtn = document.getElementById('recentsBtn');
+    if (recentsPanel) recentsPanel.style.display = 'none';
+    if (recentsBtn) recentsBtn.classList.remove('active');
+}
+
+// ==================== CHAT HISTORY ====================
+function saveChatToHistory() {
+    const chatBox = document.getElementById('chat-box');
+    if (!chatBox) return;
+    const messages = chatBox.querySelectorAll('.message');
+    if (messages.length < 2) return;
+    let title = 'Chat';
+    for (const msg of messages) {
+        if (msg.classList.contains('user')) {
+            title = msg.textContent.trim().substring(0, 55);
+            break;
+        }
+    }
+    const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    const entry = {
+        id: Date.now().toString(),
+        title: title,
+        timestamp: Date.now(),
+        messages: Array.from(messages).map(function(m) {
+            return { text: m.textContent.trim(), sender: m.classList.contains('user') ? 'user' : 'bot' };
+        })
+    };
+    history.unshift(entry);
+    if (history.length > 20) history.length = 20;
+    localStorage.setItem('chatHistory', JSON.stringify(history));
+}
+
+function startNewChat() {
+    saveChatToHistory();
+    const chatBox = document.getElementById('chat-box');
+    if (!chatBox) return;
+    chatBox.innerHTML = '';
+    setTimeout(function() {
+        const name = localStorage.getItem('userName') || '';
+        const greeting = name
+            ? 'Hello ' + name + '! 👋 How can I help you today?'
+            : "Hello! 👋 I'm Usemee, your business AI assistant. Ask me anything!";
+        addMessage(greeting, 'bot');
+    }, 80);
+}
+
+function toggleRecents() {
+    const panel = document.getElementById('sidebarRecents');
+    const btn = document.getElementById('recentsBtn');
+    if (!panel) return;
+    const isOpen = panel.style.display !== 'none';
+    if (isOpen) {
+        panel.style.display = 'none';
+        btn.classList.remove('active');
+    } else {
+        loadRecentChats();
+        panel.style.display = 'block';
+        btn.classList.add('active');
+    }
+}
+
+function loadRecentChats() {
+    const panel = document.getElementById('sidebarRecents');
+    if (!panel) return;
+    const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    if (history.length === 0) {
+        panel.innerHTML = '<div class="recents-empty">No recent chats yet</div>';
+        return;
+    }
+    panel.innerHTML = history.map(function(chat) {
+        const d = new Date(chat.timestamp);
+        const timeStr = d.toLocaleDateString([], {month:'short', day:'numeric'}) + ' · ' + d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+        const safeTitle = chat.title.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return '<div class="recent-chat-item" onclick="loadChatFromHistory(\'' + chat.id + '\')">' +
+            '<div class="recent-chat-title">' + safeTitle + '</div>' +
+            '<div class="recent-chat-time">' + timeStr + '</div>' +
+            '</div>';
+    }).join('');
+}
+
+function loadChatFromHistory(id) {
+    const history = JSON.parse(localStorage.getItem('chatHistory') || '[]');
+    const chat = history.find(function(c) { return c.id === id; });
+    if (!chat) return;
+    const chatBox = document.getElementById('chat-box');
+    if (!chatBox) return;
+    chatBox.innerHTML = '';
+    chat.messages.forEach(function(msg) {
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', msg.sender);
+        msgDiv.textContent = msg.text;
+        chatBox.appendChild(msgDiv);
+    });
+    chatBox.scrollTop = chatBox.scrollHeight;
+    closeSidebar();
 }
 
 // ==================== NAVIGATION ====================
@@ -2001,73 +2201,20 @@ const intents = [
 
 // BUSINESS CREATION
 {tag:"start_business",patterns:["how to start a business","create a business","steps to start a business"],responses:[
-`Starting a business can feel overwhelming, but it becomes manageable when you break it into clear steps. Here’s a practical roadmap that works for most industries:
-1. Start with an idea (but validate it)
-A good business solves a real problem or meets a demand. Ask:
-What problem am I solving?
-Who cares about this enough to pay?
-Are people already spending money on something similar?
-Before investing heavily, test your idea:
-Talk to potential customers
-Run small experiments (sell a prototype, create a landing page, etc.)
-2. Do basic market research
-Understand your environment:
-Who are your competitors?
-What do they do well or poorly?
-What makes your idea different?
-This helps you find your niche instead of entering a crowded market blindly.
-3. Create a simple business plan
-You don’t need a 50-page document. Just cover:
-What you sell
-Who you sell to
-How you’ll make money
-Estimated costs and pricing
-How you’ll get customers
-Think of it as your roadmap, not a formal report.
-4. Choose a business structure
-Common options:
-Sole proprietorship (simple, but personal liability)
-Partnership
-LLC (limited liability, popular choice)
-Corporation (more complex)
-The right choice depends on your country and goals.
-5. Register your business
-This usually includes:
-Choosing a business name
-Registering with your government
-Getting licenses or permits if required
-Setting up a business bank account
-6. Sort out finances
-Estimate startup costs (equipment, marketing, inventory, etc.)
-Decide how to fund it:
-Personal savings
-Loans
-Investors
-Track income and expenses from day one
-7. Build your product or service
-Focus on a minimum viable version (MVP):
-Don’t aim for perfection
-Launch something usable quickly
-Improve based on feedback
-8. Market your business
-Even the best product won’t sell without visibility:
-Social media
-Word of mouth
-Website or online store
-Ads (optional at early stage)
-Pick 1–2 channels and do them well.
-9. Launch and learn
-Once you start:
-Listen to customer feedback
-Track what works and what doesn’t
-Adjust quickly
-Most successful businesses evolve after launch.
-10. Stay consistent
-Expect:
-Slow beginnings
-Mistakes
-Iteration
-Consistency and adaptability matter more than having a “perfect” idea.`
+`Here are the key steps to create a business:
+
+1️⃣ Idea Generation
+2️⃣ Market Research
+3️⃣ Business Plan
+4️⃣ Legal Structure
+5️⃣ Register Your Business
+6️⃣ Finances
+7️⃣ Branding
+8️⃣ Build Your Product/Service
+9️⃣ Marketing
+🔟 Launch & Grow
+
+💡 What specific step would you like more details on?`
 ]},
 {tag:"idea_generator",patterns:["give me business ideas","business idea","startup idea","product ideas","generate idea","help me brainstorm","idea generation","new business idea","idea for startup","create idea","what should i build","startup ideas","business ideas"],responses:["Let me brainstorm a few strong ideas for you..."]},
 {tag:"profit_prediction",patterns:["predict profit","estimate profit","profit forecast","profit or loss","profit prediction","will i make a profit","will i have a loss","calculate profit","calculate loss","estimate loss","forecast profit"],responses:["Share your revenue and expense numbers and I can estimate whether that means profit or loss."]},
@@ -2163,6 +2310,47 @@ Consistency and adaptability matter more than having a “perfect” idea.`
 ]},
     {tag:"customer_satisfaction",patterns:["customer satisfaction","satisfaction score","nps"],responses:["Customer satisfaction (NPS) measures loyalty. Aim for scores above 50 to indicate strong business health. 😊"]},
     {tag:"complaint_management",patterns:["handling complaints","manage complaints","complaint resolution"],responses:["Handle complaints quickly and professionally. It's an opportunity to turn unhappy customers into loyal advocates! ✅"]},
+
+// CUSTOMERS — WHO THEY ARE AND HOW TO MANAGE THEM
+{tag:"what_are_customers",patterns:["what are customers","who are customers","define customer","what is a customer","customer definition","who is my customer","what does customer mean"],responses:[
+  "A customer is any person or organisation that buys — or could buy — your product or service. Understanding exactly who your customers are is one of the most important foundations of any successful business.\n\n👤 The Core Definition\nA customer is someone who pays for the value your business creates. But there are important distinctions:\n• Customers vs Users: In many businesses (especially apps and platforms), the user is not the customer. In Google's case, advertisers are the customers; users of the search engine are the product. In B2B software, the company that pays is the customer — but the employees who use the tool daily are the users. Understanding this distinction shapes how you sell, support, and develop your product.\n• Customers vs Prospects: A prospect is a potential customer who has not yet bought. A lead is someone who has shown interest. A customer is someone who has made a purchase. Treating prospects like customers — giving them genuine value before they pay — is one of the most effective ways to convert them.\n\n👤 Why Knowing Your Customer Is Everything\nYour customer defines your entire business. The product you build, the price you charge, the channels you use to sell, the words you use in your marketing, the hours you operate — all of these should be shaped by a deep understanding of who your customer is and what they need. Businesses that lose sight of their customer lose their competitive edge.\n\n👤 The Ideal Customer Profile (ICP)\nEvery business should have a written Ideal Customer Profile — a detailed description of the perfect customer. For B2C: demographics (age, income, location), psychographics (values, lifestyle, aspirations), and behaviour (how they buy, what they read, what they trust). For B2B: company size, industry, revenue, role of the decision-maker, and the specific pain point your solution addresses.\n\n💡 The golden rule: the more specifically you can describe your customer, the more precisely you can serve them — and the more efficiently you can find them. 'Everyone' is never your customer. The businesses that try to serve everyone end up serving no one well."
+]},
+
+{tag:"types_of_customers",patterns:["types of customers","kinds of customers","different customers","customer types","b2b vs b2c customer","loyal customers","new customers","what type of customer"],responses:[
+  "Understanding the different types of customers your business encounters helps you serve each one more effectively and make smarter decisions about where to focus your time and resources.\n\n🏷️ By Relationship Stage:\n• New customers — people buying from you for the first time. Require the most hand-holding and reassurance. The onboarding experience for new customers determines whether they become loyal or churn.\n• Returning customers — have bought before and come back. These are gold. They already trust you, have lower acquisition cost, and are more likely to buy more expensive offerings.\n• Loyal customers / Advocates — buy regularly, refer others, and defend your brand. Typically represent 20% of your customers but 80% of your revenue (Pareto Principle). Invest disproportionately in these people.\n• Lapsed customers — bought once or twice but haven't returned. Often the easiest wins — they already know and trusted you. A targeted re-engagement campaign can recover 10–30% of lapsed customers.\n• Prospects — haven't bought yet but have shown interest. Nurture them with value-first content until they're ready.\n\n🏷️ By Market Type:\n• B2C (Business-to-Consumer) customers: individuals making personal purchase decisions. Emotional, fast, influenced by marketing, social proof, and peer recommendations. Shorter sales cycles.\n• B2B (Business-to-Business) customers: companies or organisations. More rational, longer decision-making process, multiple stakeholders involved in the purchase, higher contract values, relationship-driven.\n• B2G (Business-to-Government): buying is heavily regulated, involves tenders and procurement processes, long cycles but very stable once won.\n\n🏷️ By Behaviour:\n• Price-sensitive customers — choose based primarily on cost. Require value-for-money messaging and promotions.\n• Value-driven customers — choose based on quality and outcomes. These are the most profitable to serve.\n• Impulse buyers — make fast decisions with little research. Respond to urgency, scarcity, and social proof.\n• Researchers — do extensive due diligence before buying. Need detailed information, case studies, and comparisons.\n• Loyal brand advocates — buy based on emotional connection to your brand. Nurture the relationship above all else."
+]},
+
+{tag:"customer_management",patterns:["how to manage customers","customer management","managing customers","crm strategy","how to organise customers","customer database","keep track of customers","how do i manage my customers"],responses:[
+  "Managing customers well is what separates businesses that grow through word-of-mouth from those that constantly struggle to find new ones. Here is a complete customer management framework:\n\n📋 Step 1 — Know Every Customer Individually\nThe most important thing in customer management is making every customer feel like they are your only customer. This requires a system that stores: contact details, purchase history, communication history, preferences, key dates (contract renewal, birthday), open support issues, and notes from conversations. Without this stored somewhere, you are relying on memory — and that fails.\n\n📋 Step 2 — Choose the Right CRM Tool\nA CRM (Customer Relationship Management) system is the software that organises all your customer information in one place. Options by business size:\n• Solo/early-stage: Notion, Airtable, or even a well-structured Google Sheet\n• Small business (1–20 staff): HubSpot Free CRM, Zoho CRM, or Pipedrive ($15–$25/month per user)\n• Growing business: Salesforce, HubSpot Professional\nThe best CRM is the one your team actually uses consistently. Start simple.\n\n📋 Step 3 — Segment Your Customers\nNot all customers deserve the same amount of your time. Segment by: revenue (which customers generate the most income?), growth potential (which could spend significantly more?), and health (which are at risk of leaving?). Once segmented, define different service levels for each tier — your top 20% may get a dedicated account manager, monthly calls, and priority support. Your bottom tier may be self-serve only.\n\n📋 Step 4 — Create a Communication Cadence\nDecide how often you will proactively contact each customer segment. This is not reactive support — it's proactive relationship management. Example: Top-tier customers → monthly personal call + quarterly business review. Mid-tier → bi-monthly email update + quarterly newsletter. Entry-tier → monthly automated newsletter + usage tips.\n\n📋 Step 5 — Track Satisfaction Continuously\nMeasure customer health with regular, simple surveys (Net Promoter Score: 'How likely are you to recommend us to a friend? 0–10'). Any score below 7 triggers immediate outreach. Any score of 9–10 triggers a referral request. Don't wait until the annual review to find out a customer is unhappy — by then, they've likely already decided to leave.\n\n📋 Step 6 — Have a Customer Offboarding Process\nEven when a customer leaves, handle it with professionalism. Send a brief exit survey (Why are you leaving? What could we have done better?), offer a final resolution attempt if the reason is fixable, and leave the door open with a 'we'd love to have you back' message. Customers who left on good terms often return — and those who left badly never do and often become vocal detractors."
+]},
+
+{tag:"customer_lifecycle",patterns:["customer lifecycle","customer journey","stages of customer","customer journey map","customer experience stages","customer journey stages"],responses:[
+  "The customer lifecycle describes every stage a person goes through from first hearing about your business to becoming a long-term loyal advocate. Understanding and optimising each stage is the blueprint for sustainable growth.\n\n🔄 Stage 1 — Awareness (They discover you exist)\nThe customer first becomes aware of your business through an ad, a referral, social media post, search result, or word of mouth. Your job at this stage: get noticed by the right people. Key metric: impressions, reach, and traffic. Most businesses focus too much energy here and not enough on later stages — but if your later stages are broken, acquiring more awareness just accelerates your churn problem.\n\n🔄 Stage 2 — Consideration (They evaluate whether you're right for them)\nThe prospect researches your business, compares you to competitors, reads reviews, visits your website, watches your content. Your job: give them everything they need to decide confidently. Clear pricing, detailed information, social proof (case studies, testimonials, star ratings), comparison guides. Reduce friction and doubt. Key metric: conversion rate from visitor to enquiry or trial.\n\n🔄 Stage 3 — Decision / Purchase (They buy)\nThe prospect becomes a customer. Your job: make the purchase experience effortless and reinforce their decision immediately ('You made a great choice'). A poor checkout or purchase experience creates instant buyer's remorse. Key metric: checkout completion rate, cart abandonment rate.\n\n🔄 Stage 4 — Onboarding (They experience your product for the first time)\nThe most critical stage. The onboarding experience determines whether a customer becomes loyal or churns within 90 days. Your job: help them achieve their first success milestone as fast as possible. Create a structured welcome sequence, check in personally, remove all confusion and friction. Key metric: time-to-first-value.\n\n🔄 Stage 5 — Retention (They keep buying / subscribing)\nThe customer uses your product regularly and remains a paying customer. Your job: continually deliver value, proactively address issues, reward loyalty, and expand the relationship. Key metric: churn rate, average customer lifetime.\n\n🔄 Stage 6 — Advocacy (They recommend you to others)\nThe highest stage. The customer actively refers others, leaves positive reviews, and defends your brand. Your job: make it easy to refer (referral programmes, shareable content, simple testimonial requests). Word-of-mouth referrals convert at 3–5× the rate of paid advertising and have near-zero acquisition cost. Key metric: NPS score, referral rate, number of referral-sourced leads."
+]},
+
+{tag:"customer_onboarding",patterns:["how to onboard customers","customer onboarding","onboarding new customers","welcome new customers","first customer experience","new customer process"],responses:[
+  "Customer onboarding is the process of guiding a new customer from purchase to their first successful outcome with your product or service. It is the single highest-leverage activity for reducing churn and increasing lifetime value.\n\n🚀 Why Onboarding Is the Most Important Stage\nResearch consistently shows that customers who achieve early success stay longer, spend more, and refer more. Customers who don't achieve success in the first 30–90 days churn at dramatically higher rates — often before you even notice a problem. The question is not 'did they buy?' but 'did they succeed?'\n\n🚀 The Onboarding Framework (7 Key Elements):\n1. Immediate warm welcome — send a personalised welcome message within minutes of purchase. This is automated but must feel human. Address them by name, confirm what they bought, and tell them what happens next.\n2. Clear next steps — new customers hate uncertainty. Give them a clear, numbered list of exactly what to do first. Remove all guesswork from Day 1.\n3. Quick wins — design your onboarding to deliver a small, tangible success in the first session. This builds confidence and reinforces the purchasing decision.\n4. Guided setup — don't expect customers to figure out your product alone. Offer a setup call, interactive walkthrough, video tutorial, or dedicated onboarding specialist for high-value customers.\n5. Check-in at Day 7 — send a personal check-in message. Ask how they're getting on, what's working, and if they have any questions. This is not automated — it's personal.\n6. Milestone acknowledgement — when they hit a key milestone ('You've completed your first project! 🎉'), celebrate it. This reinforces progress and emotional connection.\n7. Success review at Day 30 — schedule a brief call or survey to confirm they've achieved the outcome they paid for. If they haven't, intervene immediately.\n\n🚀 Common Onboarding Mistakes:\n• Overwhelming new customers with features before they've mastered the basics\n• Going silent after the sale\n• Treating onboarding as a one-time event rather than a structured 30-90 day journey\n• Not measuring time-to-first-value\n• Skipping the human touch for high-value customers"
+]},
+
+{tag:"handling_difficult_customers",patterns:["difficult customers","angry customers","unhappy customers","dealing with complaints","handling irate customers","rude customer","how to handle customer complaints","customer conflict"],responses:[
+  "Handling difficult customers is one of the most valuable skills in business. Done well, a resolved complaint creates more loyalty than if the problem never happened — this is the Service Recovery Paradox.\n\n😤 The 5-Step Framework for Handling Any Difficult Customer:\n\nStep 1 — Listen fully without interrupting.\nLet the customer express their frustration completely before saying anything beyond 'I understand.' Most difficult customers just want to feel heard. Interrupting or jumping to a solution before acknowledging their emotion makes everything worse.\n\nStep 2 — Acknowledge and validate.\nSay: 'I completely understand why you feel that way, and I'm sorry this happened.' You are not admitting legal liability — you are acknowledging their experience. This one step de-escalates the majority of difficult situations. Never say 'calm down', 'technically that's not how it works', or 'that's our policy'.\n\nStep 3 — Take ownership.\nNever say 'that's not my department' or 'let me transfer you.' Say: 'I'm going to personally make sure this is resolved.' Even if someone else caused the problem, you represent the company. Own it.\n\nStep 4 — Offer a specific solution with options.\nDon't ask 'what would you like us to do?' — most customers don't know what's possible. Instead, offer 2–3 clear options. This puts them in control while keeping the resolution within your acceptable range.\n\nStep 5 — Follow up after resolution.\nCall or email 24–48 hours after the issue is resolved to confirm the customer is satisfied. This is rare and completely unexpected — and it creates extraordinary loyalty.\n\n😤 When a Customer Is Genuinely Wrong or Abusive:\nYou can be firm and professional at the same time. 'I want to help you resolve this, but I need us to speak respectfully to do that.' If verbal abuse continues, it is entirely appropriate to end the interaction and follow up in writing. Some customers are not worth keeping — chronic abusers of your team damage morale and cost more than they generate."
+]},
+
+{tag:"customer_segmentation",patterns:["customer segmentation","how to segment customers","segment your customers","customer groups","divide customers","target customer groups","customer personas"],responses:[
+  "Customer segmentation is the process of dividing your customers into groups that share similar characteristics, so you can serve each group more effectively and market to them more precisely.\n\n🎯 Why Segment?\nOne-size-fits-all marketing and service is inefficient and increasingly ineffective. When you segment your customers, you can: tailor your messaging to resonate specifically with each group, allocate your resources where they generate the most return, identify which segments are most profitable, and spot which segments are growing or shrinking.\n\n🎯 4 Main Ways to Segment Customers:\n\n1. Demographic segmentation: age, gender, income, education, occupation, family size. Most commonly used for B2C businesses. Example: a financial services company offers different products to 25-year-old new earners vs 55-year-old pre-retirees.\n\n2. Behavioural segmentation: how customers interact with your business — purchase frequency, spend level, product usage, engagement level. This is usually the most actionable for retention and upsell. Example: identify your top 20% highest-spending customers and give them a VIP programme.\n\n3. Psychographic segmentation: values, lifestyle, attitudes, aspirations. Harder to measure but often the most powerful for marketing. Example: a sportswear brand that targets people who aspire to an active identity — not just people who currently exercise.\n\n4. Needs-based segmentation: what problem does each group primarily need solved? Different customer groups may use the same product for completely different reasons. Understanding the primary need of each segment lets you speak directly to that need in your marketing.\n\n🎯 Practical Starting Point:\nFor most small businesses, start with RFM segmentation: Recency (when did they last buy?), Frequency (how often do they buy?), and Monetary value (how much do they spend?). This simple three-variable model instantly identifies your most valuable customers, your at-risk customers, and your growth opportunities. Build your CRM to track these three numbers and you'll have a powerful customer management foundation."
+]},
+
+{tag:"team_management",patterns:["how to manage a team","team management","managing employees","leading a team","team leadership tips","how to be a good manager","manage my team","managing staff"],responses:[
+  "Managing a team well is one of the hardest skills in business — and one of the highest-leverage. A great manager multiplies the output of everyone around them; a poor one halves it.\n\n👥 The 5 Core Responsibilities of a Great Manager:\n1. Clarity — your team must know exactly what success looks like. 'Work hard' is not a clear direction. 'Close 8 new clients this month and reduce average response time to under 2 hours' is. Set specific, measurable goals for every person and every team.\n2. Resources — your job is to remove obstacles and provide what your team needs to succeed. If someone is failing, ask: 'Do they have the skills, tools, time, and information to succeed?' before concluding it's a performance issue.\n3. Feedback — great managers give feedback constantly, not only at annual reviews. Praise publicly and specifically ('The way you handled that client call on Tuesday was excellent — you stayed calm and found a creative solution'). Give constructive feedback privately and specifically ('In the proposal yesterday, the pricing section wasn't clear — let's work through how to improve it').\n4. Development — invest in your team's growth. The best employees leave managers who don't develop them. Regular 1-on-1s focused on career development (not just task updates) dramatically improve retention and performance.\n5. Culture — the manager sets the tone. How you treat people, what you celebrate, what you tolerate, how you handle failure — all of these define the culture of your team. Culture is not what's written on the wall. It's what the manager does every day."
+]},
+
+{tag:"negotiation_tips",patterns:["how to negotiate","negotiation tips","negotiation skills","business negotiation","how to negotiate a deal","negotiating with suppliers","salary negotiation","contract negotiation"],responses:[
+  "Negotiation is one of the highest-value skills in business. Every deal you negotiate better — with suppliers, customers, partners, landlords, or employees — directly improves your profitability.\n\n🤝 The Core Principles of Successful Negotiation:\n\n1. Know your BATNA (Best Alternative To a Negotiated Agreement).\nYour BATNA is what you do if the negotiation fails. The party with the stronger BATNA has more power. Before any negotiation, define yours: if this deal falls through, what will you do? The stronger your alternative, the less pressure you feel to accept a bad deal.\n\n2. Know what the other party actually wants.\nMost negotiations fail because both parties focus on their positions ('I want X') rather than their interests ('I want X because of underlying reason Y'). Understanding why the other party wants what they want opens up creative solutions that both sides can be happy with. Ask questions and listen carefully.\n\n3. Always let them make the first offer.\nThe first number anchors the negotiation. If they offer first, you learn their starting position without revealing yours. If you must go first, anchor high (selling) or low (buying) and justify your number with specific reasoning.\n\n4. Never accept the first offer.\nEven if the first offer is excellent, counter-offer. Accepting immediately makes the other party feel they offered too much — and often triggers instant regret. A counter-offer, even a small one, allows both parties to feel they negotiated and won something.\n\n5. Use silence as a tool.\nAfter making an offer or a counter, stay silent. Silence creates discomfort — and people fill discomfort by making concessions. The negotiator who speaks first after an offer is usually the one who gives ground.\n\n6. Trade concessions, don't give them.\nFor every concession you make, get one in return. 'I can do that price if you commit to a 12-month contract.' Never give something without asking for something back — it signals weakness and invites more demands."
+]},
+
+{tag:"productivity_tips",patterns:["productivity tips","how to be more productive","business productivity","time management","work smarter","how to get more done","productivity hacks","increase productivity"],responses:[
+  "Business productivity — getting the right things done efficiently — is what separates growing businesses from spinning-their-wheels ones. Here are the most powerful productivity principles for business owners and their teams:\n\n⚡ 1. Work on the right things, not just more things.\nThe biggest productivity killer for entrepreneurs is working hard on low-value tasks. Use the 80/20 rule: 80% of your results come from 20% of your activities. Identify your highest-value 20% (activities that directly generate revenue or create strategic advantage) and protect that time ruthlessly. Delegate, automate, or eliminate the rest.\n\n⚡ 2. Time blocking — the single most effective productivity system.\nSchedule every hour of your workday in advance. Block time for deep work (uninterrupted focus on complex tasks), meetings, email/messages, and admin — separately. Never mix these. Deep work blocks of 90–120 minutes, done before 12pm, produce more valuable output than an entire reactive afternoon.\n\n⚡ 3. The single daily priority.\nEvery morning, identify the ONE task that — if completed today — would make the day a success. Do that first, before email, before meetings, before anything else. Teams that do this collectively (each person's daily #1 priority is visible to the team) dramatically increase accountability and output.\n\n⚡ 4. Eliminate decision fatigue.\nEvery decision costs mental energy. Systematise routine decisions so you don't have to make them: standardise processes, create templates, build checklists. The businesses that run on systems rather than founder judgement scale; those that don't, stagnate.\n\n⚡ 5. Weekly review.\nSpend 30 minutes every Friday reviewing: What did I complete this week? What's outstanding? What's blocking progress? What are the 3 most important things for next week? This simple habit keeps you strategic rather than purely reactive."
+]},
 
     // DIGITAL TRANSFORMATION
     {tag:"digital_transformation",patterns:["digital transformation","going digital","automation"],responses:["Digital transformation increases efficiency, reduces costs, and improves customer experience. It's essential in 2026! 💻"]},
@@ -4211,7 +4399,7 @@ Consistency and adaptability matter more than having a “perfect” idea.`
 // ============================================================
 // CHATBOT IDENTITY & CAPABILITY INTENTS
 // ============================================================
-{tag:"chatbot_what_can_you_do",patterns:["what can you do","what do you offer","what do you do","what are you capable of","what do you help with","what can this chatbot do","show me what you can do","list your features","what is your purpose","what do you offer","your capabilities","help me understand what you do"],responses:[
+{tag:"chatbot_what_can_you_do",patterns:["what can you do","what are you capable of","what do you help with","what can this chatbot do","show me what you can do","list your features","what is your purpose","what do you offer","your capabilities","help me understand what you do"],responses:[
   "I can help you with: 💼 Business strategy & planning | 📈 Finance & investment questions | 🚀 Startup advice | 📊 Stock prices (real-time) | 💱 Currency conversion | 🌍 Country facts | 📋 Business reports & planners | 🖼️ Image analysis | 💡 Idea generation | and much more. Just ask!",
   "I'm your business assistant. Ask me anything about marketing, finance, startups, pricing, strategy, investing, or running a business. I can also look up stock prices, convert currencies, generate business plans, and analyze images. 🚀",
   "Here's what I do best: answer business questions, give real-world examples, help you plan and calculate, look up live stock prices, convert currencies, generate business ideas, and analyze photos you send me. What do you need? 💡"
