@@ -9664,7 +9664,7 @@ function onPhotoBtnClick() {
 
 // ⚠️ For GitHub Pages: paste your Groq API key below.
 // Get a free key at https://console.groq.com
-const GROQ_API_KEY = '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';
+const GROQ_API_KEY = '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';
 
 async function translateWithGroq(text, targetLang) {
     const langNames = { es: 'Spanish', fr: 'French', de: 'German', ar: 'Arabic' };
@@ -9690,7 +9690,7 @@ async function translateWithGroq(text, targetLang) {
 
 async function analyzeImageWithGemini(base64data, mimeType, userQuestion) {
     if (!GROQ_API_KEY || GROQ_API_KEY === 'YOUR_GROQ_API_KEY_HERE') {
-        return '❌ Image analysis is not configured. Please add your Groq API key to the HTML file.';
+        return '❌ Image analysis is not configured. You’ve reached the end of the free image upload option';
     }
 
     const prompt = userQuestion
