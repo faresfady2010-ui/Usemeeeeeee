@@ -4,343 +4,370 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Settings — Usemee</title>
+<script src="translations.js"></script>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #000;
-    min-height: 100vh;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    transition: background-color 0.3s, color 0.3s;
+:root {
+    --bg:           #f0f2f5;
+    --surface:      #ffffff;
+    --surface2:     #f7f8fa;
+    --border:       #e2e4e9;
+    --text:         #111827;
+    --text-muted:   #6b7280;
+    --accent:       #1d4ed8;
+    --accent-light: #eff6ff;
+    --accent-ring:  rgba(29,78,216,0.15);
+    --success:      #15803d;
+    --success-bg:   #f0fdf4;
+    --success-bdr:  #86efac;
+    --danger:       #dc2626;
+    --toggle-off:   #d1d5db;
+    --nav-bg:       #1e3a8a;
+    --nav-active:   #3b82f6;
+    --radius:       12px;
+    --shadow:       0 1px 2px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.06);
 }
 body.dark {
-    background-color: #1a1a2e;
-    color: #e0e0e0;
+    --bg:           #0d1b2e;
+    --surface:      #112240;
+    --surface2:     #142b52;
+    --border:       #1e3a5f;
+    --text:         #e6edf3;
+    --text-muted:   #8faec8;
+    --accent:       #58a6ff;
+    --accent-light: #0d2244;
+    --accent-ring:  rgba(88,166,255,0.18);
+    --success:      #3fb950;
+    --success-bg:   #0d2519;
+    --success-bdr:  #1a7f37;
+    --toggle-off:   #1e3a5f;
+    --nav-bg:       #091422;
+    --shadow:       0 1px 2px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.25);
 }
 
-.container {
-    max-width: 600px;
-    width: 100%;
-    background-color: #fff;
-    padding: 30px 24px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    transition: background-color 0.3s, color 0.3s;
-    margin-top: 10px;
-}
-body.dark .container {
-    background-color: #16213e;
-    color: #e0e0e0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-}
+html, body { height: 100%; overflow: hidden; }
 
-h1 {
-    text-align: center;
-    color: #007bff;
-    margin-bottom: 24px;
-    font-size: 24px;
-}
-body.dark h1 { color: #3498db; }
-
-/* NAV */
-.nav-buttons {
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* HEADER */
+.header {
+    background: var(--nav-bg);
+    padding: 12px 16px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 10px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
+    flex-shrink: 0;
 }
-.nav-buttons button {
-    background-color: #007bff;
-    color: white;
+.header-title { color: #fff; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; }
+
+/* NAV TABS */
+.nav-tabs { display: flex; gap: 8px; }
+.nav-tab {
+    padding: 6px 16px;
+    border-radius: 999px;
     border: none;
-    padding: 9px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.25s;
-}
-.nav-buttons button:hover {
-    background-color: #0056b3;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-}
-.nav-buttons button.active {
-    background-color: #0056b3;
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-}
-
-/* SUCCESS BANNER */
-.success-message {
-    display: none;
-    background-color: #d4edda;
-    color: #155724;
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    border: 1px solid #c3e6cb;
-    font-weight: 500;
-    text-align: center;
-}
-body.dark .success-message {
-    background-color: #1a4a1e;
-    color: #7cfc7c;
-    border-color: #2d7a3d;
-}
-
-/* SETTINGS GROUPS */
-.settings-group {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
-    transition: background-color 0.3s, border-color 0.3s;
-}
-body.dark .settings-group {
-    background: #0f2744;
-    border-color: #1e3a5a;
-}
-
-.settings-group-title {
     font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    background: rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.75);
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+.nav-tab:hover { background: rgba(255,255,255,0.2); color: #fff; }
+.nav-tab.active { background: var(--nav-active); color: #fff; box-shadow: 0 2px 8px rgba(59,130,246,0.4); }
+
+/* TOAST */
+.toast {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    background: var(--success-bg);
+    color: var(--success);
+    border-bottom: 1px solid var(--success-bdr);
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    flex-shrink: 0;
+}
+.toast.show { display: flex; }
+
+/* BODY */
+.settings-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* SECTION LABEL */
+.sec-label {
+    font-size: 10.5px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.8px;
-    color: #888;
-    margin-bottom: 14px;
-}
-body.dark .settings-group-title { color: #5a7fa0; }
-
-label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    font-size: 14px;
-    color: #333;
-}
-body.dark label { color: #b0c4de; }
-
-select {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    background-color: #fff;
-    color: #333;
-    cursor: pointer;
-    outline: none;
-    transition: border-color 0.2s;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='2' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 36px;
-}
-select:focus { border-color: #007bff; }
-body.dark select {
-    background-color: #0f3460;
-    color: #e0e0e0;
-    border-color: #1e4a80;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23aaa' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+    color: var(--text-muted);
+    padding: 0 4px;
+    margin-bottom: -4px;
 }
 
-/* TOGGLE SWITCH */
-.toggle-row {
+/* CARD */
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+/* ROW */
+.row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 4px;
+    padding: 11px 14px;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.1s;
 }
-.toggle-row-text { font-size: 14px; color: #444; }
-body.dark .toggle-row-text { color: #b0c4de; }
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--surface2); }
+.row-info { flex: 1; min-width: 0; }
+.row-label { font-size: 13.5px; font-weight: 500; color: var(--text); line-height: 1.3; }
+.row-desc  { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+.row-desc.ok  { color: var(--success); }
+.row-desc.err { color: var(--danger); }
 
-.toggle-switch {
-    position: relative;
-    width: 46px;
-    height: 26px;
-    flex-shrink: 0;
-}
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.toggle-slider {
-    position: absolute;
-    inset: 0;
-    background-color: #ccc;
-    border-radius: 26px;
+/* SELECT */
+.styled-select {
+    padding: 6px 28px 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface2);
+    color: var(--text);
+    font-size: 12.5px;
+    font-weight: 500;
     cursor: pointer;
-    transition: 0.3s;
+    outline: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5' viewBox='0 0 9 5'%3E%3Cpath d='M1 1l3.5 3 3.5-3' stroke='%236b7280' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+    min-width: 120px;
+    flex-shrink: 0;
+    transition: border-color 0.15s, box-shadow 0.15s;
 }
-.toggle-slider:before {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    left: 3px;
-    top: 3px;
-    background-color: white;
-    border-radius: 50%;
-    transition: 0.3s;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-.toggle-switch input:checked + .toggle-slider { background-color: #007bff; }
-.toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+.styled-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
 
-.hint-text {
-    font-size: 12px;
-    color: #888;
-    margin-top: 8px;
-    line-height: 1.4;
+/* ZOOM PICKER */
+.zoom-row { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+.zoom-row:last-child { border-bottom: none; }
+.zoom-row-label { font-size: 13.5px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+.zoom-picker { display: flex; gap: 6px; }
+.zoom-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: 9px;
+    background: var(--surface2);
+    cursor: pointer;
+    color: var(--text-muted);
+    font-family: inherit;
+    transition: all 0.15s;
 }
-body.dark .hint-text { color: #5a7fa0; }
-.hint-text.success { color: #28a745; }
-.hint-text.error   { color: #dc3545; }
+.zoom-btn:hover { border-color: var(--accent); background: var(--accent-light); color: var(--accent); }
+.zoom-btn.active { border-color: var(--accent); background: var(--accent-light); color: var(--accent); box-shadow: 0 0 0 3px var(--accent-ring); }
+.zoom-btn .z-aa { font-weight: 700; line-height: 1; display: block; }
+.zoom-btn .z-lbl { font-size: 9.5px; font-weight: 600; letter-spacing: 0.2px; text-transform: uppercase; opacity: 0.7; }
+.zoom-btn.active .z-lbl { opacity: 1; }
+.zoom-btn[data-size="small"]   .z-aa { font-size: 11px; }
+.zoom-btn[data-size="default"] .z-aa { font-size: 15px; }
+.zoom-btn[data-size="large"]   .z-aa { font-size: 20px; }
+.zoom-btn[data-size="xlarge"]  .z-aa { font-size: 25px; }
+
+/* TOGGLE */
+.tog { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+.tog input { opacity: 0; width: 0; height: 0; position: absolute; }
+.tog-track { position: absolute; inset: 0; background: var(--toggle-off); border-radius: 999px; cursor: pointer; transition: background 0.2s; }
+.tog-thumb { position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: #fff; border-radius: 50%; box-shadow: 0 1px 3px rgba(0,0,0,0.25); transition: transform 0.2s; pointer-events: none; }
+.tog input:checked ~ .tog-track { background: var(--accent); }
+.tog input:checked ~ .tog-thumb { transform: translateX(18px); }
 
 /* SAVE BUTTON */
 .save-btn {
-    margin-top: 24px;
-    padding: 14px;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    color: white;
+    width: 100%;
+    padding: 11px;
+    background: var(--accent);
+    color: #fff;
     border: none;
     border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: 700;
-    width: 100%;
-    transition: all 0.25s;
-    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(29,78,216,0.25);
+    transition: opacity 0.15s, transform 0.1s;
 }
-.save-btn:hover {
-    opacity: 0.92;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(40,167,69,0.35);
-}
-.save-btn:active { transform: translateY(0); }
-
-/* SECTION DIVIDER */
-.section-label {
-    font-size: 13px;
-    font-weight: 700;
-    color: #007bff;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin: 24px 0 10px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #e9ecef;
-}
-body.dark .section-label {
-    color: #3498db;
-    border-color: #1e3a5a;
-}
-
-@media (max-width: 600px) {
-    body { padding: 12px; }
-    .container { padding: 20px 16px; border-radius: 8px; }
-    .nav-buttons { flex-direction: column; }
-    .nav-buttons button { width: 100%; }
-}
+.save-btn:hover  { opacity: 0.9; }
+.save-btn:active { transform: scale(0.99); }
 </style>
 </head>
 <body>
-<div class="container">
 
-    <div class="nav-buttons">
-        <button onclick="window.location.href='index.html'">🏠 Home</button>
-        <button class="active">⚙️ Settings</button>
+<div class="header">
+    <div class="header-title">⚙️ Usemee</div>
+    <div class="nav-tabs">
+        <a class="nav-tab" href="index.html" data-i18n="home">Home</a>
+        <a class="nav-tab" href="about.html" data-i18n="about">About</a>
+        <a class="nav-tab active" href="#" data-i18n="settings">Settings</a>
+    </div>
+</div>
+
+<div class="toast" id="toast">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    <span data-i18n="saveBtn">Save Settings</span>
+</div>
+
+<div class="settings-body">
+
+    <div class="sec-label" data-i18n="sectionAppearance">Appearance</div>
+    <div class="card">
+        <div class="row">
+            <div class="row-info">
+                <div class="row-label" data-i18n="labelTheme">Theme</div>
+                <div class="row-desc" data-i18n="themeDesc">Light or dark interface</div>
+            </div>
+            <select class="styled-select" id="appearance" onchange="applyAppearance(this.value)">
+                <option value="light" data-i18n-opt="optLight">☀️ Light</option>
+                <option value="dark"  data-i18n-opt="optDark">🌙 Dark</option>
+            </select>
+        </div>
     </div>
 
-    <h1>⚙️ Settings</h1>
-
-    <div class="success-message" id="successMessage">✅ Settings saved successfully!</div>
-
-    <!-- APPEARANCE -->
-    <div class="section-label">Appearance</div>
-    <div class="settings-group">
-        <label for="appearance">Theme</label>
-        <select id="appearance" onchange="applyAppearance(this.value)">
-            <option value="light">☀️ Light Mode</option>
-            <option value="dark">🌙 Dark Mode</option>
-        </select>
+    <div class="sec-label" data-i18n="sectionText">Text &amp; Display</div>
+    <div class="card">
+        <div class="zoom-row">
+            <div class="zoom-row-label" data-i18n="labelZoom">Page Zoom</div>
+            <div class="zoom-picker" id="fontSizePicker">
+                <button class="zoom-btn" data-size="small"   onclick="applyFontSize('small')"><span class="z-aa">Aa</span><span class="z-lbl" data-i18n="zSmall">Small</span></button>
+                <button class="zoom-btn" data-size="default" onclick="applyFontSize('default')"><span class="z-aa">Aa</span><span class="z-lbl" data-i18n="zDefault">Default</span></button>
+                <button class="zoom-btn" data-size="large"   onclick="applyFontSize('large')"><span class="z-aa">Aa</span><span class="z-lbl" data-i18n="zLarge">Large</span></button>
+                <button class="zoom-btn" data-size="xlarge"  onclick="applyFontSize('xlarge')"><span class="z-aa">Aa</span><span class="z-lbl" data-i18n="zLargest">Largest</span></button>
+            </div>
+        </div>
     </div>
 
-    <!-- LANGUAGE -->
-    <div class="section-label">Language</div>
-    <div class="settings-group">
-        <label for="language">Interface Language</label>
-        <select id="language" onchange="changeLanguage(this.value)">
-            <option value="en">🇬🇧 English</option>
-            <option value="es">🇪🇸 Español</option>
-            <option value="fr">🇫🇷 Français</option>
-            <option value="de">🇩🇪 Deutsch</option>
-            <option value="ar">🇸🇦 العربية</option>
-        </select>
-        <p class="hint-text">Language changes apply instantly across all pages.</p>
+    <div class="sec-label" data-i18n="sectionLang">Language</div>
+    <div class="card">
+        <div class="row">
+            <div class="row-info">
+                <div class="row-label" data-i18n="labelLang">Interface Language</div>
+                <div class="row-desc" data-i18n="langDesc">Applies instantly across all pages</div>
+            </div>
+            <select class="styled-select" id="language" onchange="changeLanguage(this.value)">
+                <option value="en">🇬🇧 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="ar">🇸🇦 العربية</option>
+            </select>
+        </div>
     </div>
 
-    <!-- NOTIFICATIONS -->
-    <div class="section-label">Notifications</div>
-    <div class="settings-group">
-        <div class="toggle-row">
-            <span class="toggle-row-text">Enable browser notifications</span>
-            <label class="toggle-switch">
+    <div class="sec-label" data-i18n="sectionNotif">Notifications &amp; Chat</div>
+    <div class="card">
+        <div class="row">
+            <div class="row-info">
+                <div class="row-label" data-i18n="labelBrowserNotif">Browser Notifications</div>
+                <div class="row-desc" id="notifHint" data-i18n="browserNotifDesc">Get alerted when Usemee replies</div>
+            </div>
+            <label class="tog" for="notifications">
                 <input type="checkbox" id="notifications">
-                <span class="toggle-slider"></span>
+                <div class="tog-track"></div>
+                <div class="tog-thumb"></div>
             </label>
         </div>
-        <p class="hint-text" id="notifHint">Your browser will ask for permission when you enable this.</p>
-    </div>
-
-    <!-- CHAT -->
-    <div class="section-label">Chat</div>
-    <div class="settings-group">
-        <div class="toggle-row">
-            <span class="toggle-row-text">Sound on new message</span>
-            <label class="toggle-switch">
+        <div class="row">
+            <div class="row-info">
+                <div class="row-label" data-i18n="labelSound">Sound on New Message</div>
+                <div class="row-desc" data-i18n="soundDesc">Play a chime when the bot responds</div>
+            </div>
+            <label class="tog" for="soundToggle">
                 <input type="checkbox" id="soundToggle">
-                <span class="toggle-slider"></span>
+                <div class="tog-track"></div>
+                <div class="tog-thumb"></div>
             </label>
         </div>
     </div>
 
-    <button class="save-btn" onclick="saveSettings()">💾 Save Settings</button>
+    <button class="save-btn" onclick="saveSettings()" data-i18n="saveBtn">Save Settings</button>
+
 </div>
 
 <script>
+var zoomMap = { small: '0.85', default: '1', large: '1.15', xlarge: '1.3' };
+var currentFontSize = 'default';
+
 function applyAppearance(value) {
-    const isDark = value === 'dark';
+    var isDark = value === 'dark';
     document.body.classList.toggle('dark', isDark);
     localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
     localStorage.setItem('darkModeChanged', Date.now().toString());
 }
 
 function changeLanguage(lang) {
+    setCurrentLanguage(lang);
     localStorage.setItem('language', lang);
     localStorage.setItem('languageChanged', Date.now().toString());
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
+    updatePageTranslations();
+}
+
+function applyFontSize(size) {
+    currentFontSize = size;
+    document.documentElement.style.zoom = zoomMap[size] || '1';
+    localStorage.setItem('fontSize', size);
+    localStorage.setItem('fontSizeChanged', Date.now().toString());
+    document.querySelectorAll('.zoom-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.size === size);
+    });
 }
 
 function saveSettings() {
-    localStorage.setItem('darkMode',      document.getElementById('appearance').value === 'dark' ? 'enabled' : 'disabled');
-    localStorage.setItem('language',      document.getElementById('language').value);
-    localStorage.setItem('soundEnabled',  document.getElementById('soundToggle').checked ? 'enabled' : 'disabled');
+    localStorage.setItem('darkMode',     document.getElementById('appearance').value === 'dark' ? 'enabled' : 'disabled');
+    localStorage.setItem('language',     document.getElementById('language').value);
+    localStorage.setItem('soundEnabled', document.getElementById('soundToggle').checked ? 'enabled' : 'disabled');
+    localStorage.setItem('fontSize',     currentFontSize);
     localStorage.setItem('languageChanged',  Date.now().toString());
     localStorage.setItem('darkModeChanged',  Date.now().toString());
+    localStorage.setItem('fontSizeChanged',  Date.now().toString());
 
-    const msg = document.getElementById('successMessage');
-    msg.style.display = 'block';
-    setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    var t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 2500);
 }
 
 document.getElementById('notifications').addEventListener('change', function() {
-    const hint = document.getElementById('notifHint');
+    var hint = document.getElementById('notifHint');
     if (this.checked) {
         if (!('Notification' in window)) {
             alert('Your browser does not support notifications.');
@@ -348,51 +375,57 @@ document.getElementById('notifications').addEventListener('change', function() {
             return;
         }
         Notification.requestPermission().then(function(permission) {
-            const cb = document.getElementById('notifications');
+            var cb = document.getElementById('notifications');
             if (permission === 'granted') {
                 localStorage.setItem('notifications', 'enabled');
-                hint.textContent = '✅ Notifications enabled. You will be alerted when Usemee replies.';
-                hint.className = 'hint-text success';
+                hint.textContent = t('notifEnabled');
+                hint.className = 'row-desc ok';
             } else {
                 cb.checked = false;
                 localStorage.setItem('notifications', 'disabled');
-                hint.textContent = '❌ Permission denied. Please allow notifications in your browser settings.';
-                hint.className = 'hint-text error';
+                hint.textContent = t('notifDenied');
+                hint.className = 'row-desc err';
             }
         });
     } else {
         localStorage.setItem('notifications', 'disabled');
-        hint.textContent = 'Your browser will ask for permission when you enable this.';
-        hint.className = 'hint-text';
+        hint.textContent = t('browserNotifDesc');
+        hint.className = 'row-desc';
     }
 });
 
 window.addEventListener('load', function() {
-    const isDark = localStorage.getItem('darkMode') === 'enabled';
-    if (isDark) {
-        document.body.classList.add('dark');
-        document.getElementById('appearance').value = 'dark';
-    } else {
-        document.getElementById('appearance').value = 'light';
-    }
+    var isDark = localStorage.getItem('darkMode') === 'enabled';
+    document.body.classList.toggle('dark', isDark);
+    document.getElementById('appearance').value = isDark ? 'dark' : 'light';
 
-    const lang = localStorage.getItem('language') || 'en';
+    var lang = localStorage.getItem('language') || 'en';
+    setCurrentLanguage(lang);
     document.getElementById('language').value = lang;
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
 
-    const notifEnabled = localStorage.getItem('notifications') === 'enabled';
+    var notifEnabled = localStorage.getItem('notifications') === 'enabled';
     document.getElementById('notifications').checked = notifEnabled;
-    const hint = document.getElementById('notifHint');
-    if (notifEnabled && Notification.permission === 'granted') {
-        hint.textContent = '✅ Notifications enabled. You will be alerted when Usemee replies.';
-        hint.className = 'hint-text success';
-    } else if (Notification.permission === 'denied') {
-        hint.textContent = '❌ Permission denied. Please allow notifications in your browser settings.';
-        hint.className = 'hint-text error';
+    var hint = document.getElementById('notifHint');
+    if (notifEnabled && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        hint.textContent = t('notifEnabled');
+        hint.className = 'row-desc ok';
+    } else if (typeof Notification !== 'undefined' && Notification.permission === 'denied') {
+        hint.textContent = t('notifDenied');
+        hint.className = 'row-desc err';
     }
 
     document.getElementById('soundToggle').checked = localStorage.getItem('soundEnabled') === 'enabled';
+
+    var savedSize = localStorage.getItem('fontSize') || 'default';
+    currentFontSize = savedSize;
+    document.documentElement.style.zoom = zoomMap[savedSize] || '1';
+    document.querySelectorAll('.zoom-btn').forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.size === savedSize);
+    });
+
+    updatePageTranslations();
 });
 </script>
 </body>
