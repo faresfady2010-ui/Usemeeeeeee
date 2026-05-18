@@ -18,7 +18,7 @@ body {
     min-height: 100vh;
     transition: background-color 0.3s;
 }
-body.dark { background-color: #1a1a2e; }
+body.dark { background-color: #0d1b2e; }
 
 .chat-container {
     background-color: #fff;
@@ -34,7 +34,7 @@ body.dark { background-color: #1a1a2e; }
     position: relative;
 }
 body.dark .chat-container {
-    background-color: #16213e;
+    background-color: #112240;
     box-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
@@ -335,7 +335,7 @@ body.dark .chat-container {
     justify-content: space-between;
     align-items: center;
 }
-body.dark .chat-header { background-color: #0f3460; }
+body.dark .chat-header { background-color: #091422; border-bottom: 1px solid #1e3a5f; }
 
 .header-title { flex: 1; text-align: center; }
 
@@ -348,7 +348,7 @@ body.dark .chat-header { background-color: #0f3460; }
     border-bottom: 1px solid #ccc;
     flex-wrap: wrap;
 }
-body.dark .nav-buttons { background-color: #0f3460; border-bottom: 1px solid #1a1a2e; }
+body.dark .nav-buttons { background-color: #0d1b2e; border-bottom: 1px solid #1e3a5f; }
 
 .nav-buttons button {
     background-color: #007bff;
@@ -369,7 +369,7 @@ body.dark .nav-buttons { background-color: #0f3460; border-bottom: 1px solid #1a
     overflow-y: auto;
     border-bottom: 1px solid #eee;
 }
-body.dark .chat-box { border-bottom: 1px solid #0f3460; }
+body.dark .chat-box { border-bottom: 1px solid #1e3a5f; background-color: #0d1b2e; }
 
 .message {
     margin-bottom: 10px;
@@ -386,7 +386,7 @@ body.dark .chat-box { border-bottom: 1px solid #0f3460; }
     margin-left: auto;
     text-align: right;
 }
-body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
+body.dark .message.user { background-color: #1d4ed8; color: #e6edf3; }
 
 .message.bot {
     background-color: #f0f0f0;
@@ -398,7 +398,7 @@ body.dark .message.user { background-color: #1e4d7b; color: #e0e0e0; }
     margin-right: auto;
     text-align: left;
 }
-body.dark .message.bot { background-color: #2a2a4a; color: #e0e0e0; }
+body.dark .message.bot { background-color: #142b52; color: #e6edf3; }
 
 .msg-actions {
     display: flex;
@@ -447,7 +447,7 @@ body.dark .msg-action-btn:hover { color: #aaa; background: #333; }
     width: fit-content;
     clear: both;
 }
-body.dark .typing-indicator { background-color: #2a2a4a; }
+body.dark .typing-indicator { background-color: #142b52; }
 .typing-indicator span {
     width: 9px; height: 9px;
     background: #999;
@@ -471,7 +471,7 @@ body.dark .typing-indicator span { background: #888; }
     background-color: #fff;
     gap: 10px;
 }
-body.dark .chat-input-area { background-color: #16213e; border-top: 1px solid #0f3460; }
+body.dark .chat-input-area { background-color: #112240; border-top: 1px solid #1e3a5f; }
 
 #suggestWrapper {
     display: flex;
@@ -570,12 +570,12 @@ body.dark .input-hint { color: #bbb; }
     box-shadow: 0 2px 16px rgba(0,0,0,0.13);
 }
 body.dark .gpt-input-box {
-    background: #0f3460;
-    border-color: #1e5fa0;
+    background: #142b52;
+    border-color: #1e3a5f;
     box-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 body.dark .gpt-input-box:focus-within {
-    border-color: #666;
+    border-color: #58a6ff;
 }
 
 /* + attachment button */
@@ -599,7 +599,7 @@ body.dark .gpt-input-box:focus-within {
 }
 .gpt-plus-btn:hover { background: #f0f0f0; border-color: #999; }
 body.dark .gpt-plus-btn { border-color: #555; color: #bbb; }
-body.dark .gpt-plus-btn:hover { background: #3a3a3a; }
+body.dark .gpt-plus-btn:hover { background: #1e3a5f; }
 .gpt-plus-btn.has-image { background: #007bff; border-color: #007bff; color: white; }
 
 /* text input */
@@ -615,7 +615,7 @@ body.dark .gpt-plus-btn:hover { background: #3a3a3a; }
     padding: 6px 2px;
     caret-color: #007bff;
 }
-body.dark .gpt-text-input { color: #e0e0e0; caret-color: #4da3ff; }
+body.dark .gpt-text-input { color: #e6edf3; caret-color: #58a6ff; }
 .gpt-text-input::placeholder { color: #aaa; }
 
 /* outer row: input box + voice + send side by side */
@@ -642,8 +642,8 @@ body.dark .gpt-text-input { color: #e0e0e0; caret-color: #4da3ff; }
     flex-shrink: 0;
 }
 #voice-btn:hover { background: #ddd; }
-body.dark #voice-btn { background: #0f3460; color: #e0e0e0; }
-body.dark #voice-btn:hover { background: #1a1a2e; }
+body.dark #voice-btn { background: #142b52; color: #e6edf3; }
+body.dark #voice-btn:hover { background: #1e3a5f; }
 #voice-btn.listening { background: #ff4d4d; color: white; animation: pulse 1s infinite; }
 
 /* send button */
@@ -693,8 +693,9 @@ body.dark #voice-btn:hover { background: #1a1a2e; }
 }
 
 body.dark .modal-content {
-    background-color: #16213e;
-    color: #e0e0e0;
+    background-color: #112240;
+    color: #e6edf3;
+    border: 1px solid #1e3a5f;
 }
 
 .close-modal {
@@ -745,9 +746,9 @@ body.dark .input-group label {
 body.dark .input-group input,
 body.dark .input-group select,
 body.dark .input-group textarea {
-    background-color: #0f3460;
-    color: #e0e0e0;
-    border: 2px solid #444;
+    background-color: #142b52;
+    color: #e6edf3;
+    border: 2px solid #1e3a5f;
 }
 
 .input-group input:focus,
@@ -807,7 +808,8 @@ body.dark .input-group textarea {
 }
 
 body.dark .chart-box {
-    background: #16213e;
+    background: #112240;
+    border: 1px solid #1e3a5f;
 }
 
 .chart-title {
@@ -839,7 +841,7 @@ body.dark .chart-title {
 }
 
 body.dark .data-table {
-    background: #16213e;
+    background: #112240;
 }
 
 .data-table thead {
@@ -855,8 +857,8 @@ body.dark .data-table {
 }
 
 body.dark .data-table td {
-    border-bottom: 1px solid #444;
-    color: #e0e0e0;
+    border-bottom: 1px solid #1e3a5f;
+    color: #e6edf3;
 }
 
 .data-table tbody tr:hover {
@@ -864,7 +866,7 @@ body.dark .data-table td {
 }
 
 body.dark .data-table tbody tr:hover {
-    background: #0f3460;
+    background: #142b52;
 }
 
 /* PHOTO UPLOAD BUTTON */
@@ -884,8 +886,8 @@ body.dark .data-table tbody tr:hover {
     transition: 0.2s;
 }
 #photo-btn:hover { background-color: #ddd; }
-body.dark #photo-btn { background-color: #0f3460; color: #e0e0e0; }
-body.dark #photo-btn:hover { background-color: #1a1a2e; }
+body.dark #photo-btn { background-color: #142b52; color: #e6edf3; }
+body.dark #photo-btn:hover { background-color: #1e3a5f; }
 #photo-btn.has-image { background-color: #007bff; color: white; }
 
 /* IMAGE PREVIEW */
@@ -898,7 +900,7 @@ body.dark #photo-btn:hover { background-color: #1a1a2e; }
     border-radius: 10px;
     border: 1.5px solid #b3d9ff;
 }
-body.dark #image-preview-area { background: #0f3460; border-color: #1e5fa0; }
+body.dark #image-preview-area { background: #142b52; border-color: #1e3a5f; }
 #image-preview-thumb {
     width: 48px;
     height: 48px;
@@ -1141,6 +1143,7 @@ body.dark #image-preview-name { color: #aaa; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script src="translations.js"></script>
+<script src="intent-translations.js"></script>
 
 <script>
 // ==================== DARK MODE ====================
@@ -1152,18 +1155,30 @@ function applyLangDirection(lang) {
     document.documentElement.lang = lang || 'en';
 }
 
+// ==================== PAGE ZOOM ====================
+var zoomMap = { small: '0.85', default: '1', large: '1.15', xlarge: '1.3' };
+function applyPageZoom(size) {
+    document.documentElement.style.zoom = zoomMap[size] || '1';
+}
+applyPageZoom(localStorage.getItem('fontSize') || 'default');
+
 window.addEventListener('load', function() {
     if (typeof updatePageTranslations === 'function') updatePageTranslations();
     const lang = localStorage.getItem('language') || 'en';
     applyLangDirection(lang);
+    applyPageZoom(localStorage.getItem('fontSize') || 'default');
 });
 
 // Listen for changes from settings page (language + dark mode)
 window.addEventListener('storage', function(e) {
+    if (e.key === 'fontSizeChanged') {
+        applyPageZoom(localStorage.getItem('fontSize') || 'default');
+    }
     if (e.key === 'languageChanged') {
-        if (typeof updatePageTranslations === 'function') updatePageTranslations();
         const lang = localStorage.getItem('language') || 'en';
+        if (typeof setCurrentLanguage === 'function') setCurrentLanguage(lang);
         applyLangDirection(lang);
+        if (typeof updatePageTranslations === 'function') updatePageTranslations();
     }
     if (e.key === 'darkModeChanged' || e.key === 'darkMode') {
         const isDark = localStorage.getItem('darkMode') === 'enabled';
@@ -1224,9 +1239,7 @@ function startNewChat() {
     chatBox.innerHTML = '';
     setTimeout(function() {
         const name = localStorage.getItem('userName') || '';
-        const greeting = name
-            ? 'Hello ' + name + '! 👋 How can I help you today?'
-            : "Hello! 👋 I'm Usemee, your business AI assistant. Ask me anything!";
+        const greeting = name ? bm('newChatName', name) : bm('newChatGuest');
         addMessage(greeting, 'bot');
     }, 80);
 }
@@ -5294,264 +5307,6 @@ A lot of people think starting a business is about having a brilliant idea. In r
     ]
   };
 
-
-
-// ==================== INTENT MULTI-RESPONSE PATCH ====================
-// Upgrades existing single-response intents with varied answers so the bot
-// never gives the same reply twice in a row.
-(function patchIntents(){
-  const patches = {
-    "entrepreneur": [
-      "An entrepreneur is someone who identifies a problem, builds a solution, and takes the financial risk of turning that into a business. It's as much a mindset as a job title. 💡",
-      "Entrepreneurs are problem-solvers who bet on themselves. They spot opportunities others miss and act despite uncertainty — that tolerance for risk is what sets them apart. 🚀",
-      "An entrepreneur starts and manages a business, taking on risk in pursuit of profit and impact. The best ones obsess over customer problems, not just their own ideas. 🎯",
-      "Technically an entrepreneur is a business founder — but really it's anyone who creates value where none existed before, from a solo freelancer to a billion-dollar startup founder. 🌟"
-    ],
-    "entrepreneurship": [
-      "Entrepreneurship is the process of identifying an opportunity, gathering resources, and building a business — while managing the risk that comes with uncertainty. 🏗️",
-      "Entrepreneurship is more than starting businesses. It's a way of thinking — spotting problems, imagining solutions, and having the resilience to see them through. 💪",
-      "Entrepreneurship is the engine of economic growth. It creates jobs, drives innovation, and solves problems at scale. At its heart, it's about turning an idea into something real and valuable. 🌍",
-      "Simply put: entrepreneurship is creating a business from scratch. The hard part isn't the idea — it's surviving long enough to find what works. 📚"
-    ],
-    "startup": [
-      "A startup is a newly created business designed to grow fast by solving a scalable problem. Unlike small businesses, startups aim to capture large markets quickly — often through technology. 🚀",
-      "A startup is a young company still searching for product-market fit and a repeatable business model. The goal is to find what works, then scale it as fast as possible. 📈",
-      "Startups are experiments. They test whether a specific customer problem can be solved profitably at scale. Most pivot several times before finding their winning formula. 🔄",
-      "A startup is an early-stage company with high ambition and high risk — distinguishable from a small business by its growth potential and ambition to disrupt existing industries. ⚡"
-    ],
-    "increase_profit": [
-      "Increase profit by either raising revenue or cutting costs — ideally both. Start by auditing your biggest expense and your highest-margin product. 💰",
-      "Fastest path to profit: raise prices (most businesses undercharge), cut your lowest-margin offerings, and reduce operational waste. Pick the highest-impact move first. 📈",
-      "Boost profitability: 1️⃣ Upsell existing customers 2️⃣ Eliminate unprofitable products 3️⃣ Renegotiate supplier contracts 4️⃣ Automate repetitive tasks. Profit improvement is usually many small wins stacked. 🎯",
-      "Focus on gross margin first — if you're not making money on each sale, no volume will save you. Then tackle fixed costs one by one. 💡"
-    ],
-    "reduce_costs": [
-      "Reduce costs by auditing every expense — eliminate anything not directly driving revenue or customer value. Then negotiate better terms with your top suppliers. 💼",
-      "Cost reduction: 1️⃣ Automate repetitive tasks 2️⃣ Renegotiate vendor contracts annually 3️⃣ Cut unused subscriptions 4️⃣ Outsource non-core activities. Cut fat, not muscle. ✂️",
-      "The best cost cuts are structural, not one-time. Focus on permanent operational improvements rather than emergency cuts. Benchmark your cost ratios against industry averages. 📊",
-      "Don't just cut costs — redirect spending from low-ROI to high-ROI activities. Sometimes spending more in the right place is smarter than cutting across the board. 🔄"
-    ],
-    "pricing_strategy": [
-      "Price based on the value delivered, not just cost of production. If your product saves customers $10,000 per year, charging $1,000 is a bargain — and you're leaving money on the table at $200. 💰",
-      "Three pricing strategies: Cost-plus (simple, ignores value), Competitive (safe, commoditises you), Value-based (what the customer pays for the outcome — most profitable for strong products). 📊",
-      "Most businesses underprice. Test a 10-20% price increase on new customers. If churn doesn't spike, you've permanently improved your margins. Confident pricing signals quality. 🎯",
-      "Pricing is a marketing signal too. Premium prices attract premium customers who complain less and stay longer. Find the price your best customers consider fair. 💎"
-    ],
-    "profit_problem": [
-      "Low profit usually comes from one of three places: prices too low, costs too high, or volume too low. Identify which is your biggest driver before fixing everything at once. 🔍",
-      "If you're not profitable, check gross margin first. Are you making money on each sale? If yes, the problem is overhead. If no, fix pricing or costs before trying to grow. 📊",
-      "Common profit killers: underpricing, scope creep, high customer acquisition costs, poor cash collection, and overhead creep. An honest audit usually reveals the main culprit quickly. 💡",
-      "Not making profit often means you haven't yet found the right combination of price, cost, and volume. This is normal early on — but you need a clear path to profitability with a timeline. 🗓️"
-    ],
-    "revenue_growth": [
-      "Grow revenue: 1️⃣ Increase prices 2️⃣ Upsell/cross-sell to existing customers 3️⃣ Acquire new customers 4️⃣ Add new products/services. Upselling existing customers is usually fastest and cheapest. 📈",
-      "The fastest revenue growth comes from your existing customer base — they already trust you. Increase average order value and purchase frequency before spending heavily on new acquisition. 💰",
-      "Revenue growth framework: Fix retention first, improve conversion second, then acquire more. Most businesses skip to acquisition and wonder why growth is so expensive. 🎯",
-      "Three revenue multipliers: more customers, higher average order value, higher purchase frequency. A 10% improvement in each creates a 33% revenue increase overall. 📊"
-    ],
-    "cash_flow_problem": [
-      "Cash flow problems happen when money out moves faster than money in. Immediate actions: collect outstanding invoices now, delay non-critical expenses, and look for a short-term credit buffer. 💵",
-      "Cash crisis survival: 1️⃣ Offer a small discount for immediate payment from your best customers 2️⃣ Pause all non-essential spending 3️⃣ Talk to your bank before you're desperate. Speed matters. ⚡",
-      "Profitable businesses die from cash flow problems all the time — profit is accounting, cash is reality. Build a 3-month cash reserve as soon as you're profitable. 🏦",
-      "Root cause of most cash flow problems: too long between spending money and receiving payment. Shorten your cash cycle — collect upfront, or shorten payment terms. Net-30 terms can slowly kill small businesses. 📅"
-    ],
-    "business_growth_strategy": [
-      "Growth strategy: 1️⃣ Fix retention — stop losing customers you've already won 2️⃣ Improve the core product based on real feedback 3️⃣ Scale what's working in marketing 4️⃣ Expand to adjacent markets. Don't skip step 1. 📈",
-      "The fastest legitimate growth comes from referrals. Create a referral programme, ask every happy customer to recommend you, and deliver such a remarkable experience that word-of-mouth does the work. 🗣️",
-      "To grow fast: define your ideal customer precisely, find the 1-2 channels where they concentrate, and go deep on those channels instead of being mediocre everywhere. Narrow focus beats broad spray. 🎯",
-      "Growth requires two things in balance: winning new customers AND keeping existing ones. A 20% monthly churn makes growth nearly impossible no matter how good acquisition is. Fix the leaky bucket first. 🔄"
-    ],
-    "scaling_business": [
-      "Scaling requires systems. Document every process, identify your bottlenecks, and automate what's repeatable before you scale. Scaling a broken process just creates bigger problems, faster. ⚙️",
-      "Scaling checklist: 1️⃣ Proven product-market fit 2️⃣ Positive unit economics 3️⃣ Repeatable customer acquisition 4️⃣ Processes that don't require the founder for every decision. Missing any of these? Fix them first. 📋",
-      "Scaling means removing yourself as the bottleneck. Every time you're doing something someone else could do 80% as well, that's a scaling opportunity — hire, systematise, or automate. 🚀",
-      "Scale by stacking leverage: technology (automation), people (delegation), and capital (investing in what's proven). Most businesses try to scale with people alone — add the other two and growth accelerates dramatically. 💡"
-    ],
-    "increase_sales": [
-      "Increase sales: 1️⃣ Sharpen your offer (make it a no-brainer) 2️⃣ Add social proof (reviews, case studies) 3️⃣ Create urgency (limited availability, deadlines) 4️⃣ Follow up relentlessly — most sales are won after the 5th contact. 📞",
-      "The fastest sales boost comes from customers who already trust you. Upsell your existing base, ask for referrals, and make sure they know your full range of products. Upselling is 5× cheaper than new acquisition. 💰",
-      "Fix your conversion rate before buying more traffic. If 100 visitors become 1 customer, improving conversion to 2% doubles sales at zero extra ad spend. Fix the funnel, then pour more in. 🎯",
-      "Sales improvement: more leads → better conversion → higher average order value → repeat purchases. Measure each stage and fix the weakest link rather than trying to improve everything at once. 📊"
-    ],
-    "customer_retention_strategy": [
-      "Keep customers by delivering results, communicating proactively, and making them feel genuinely valued. The moment a customer thinks 'they only care about my money' — they start looking for alternatives. 💙",
-      "Retention tactics: 1️⃣ Loyalty rewards that feel genuinely valuable 2️⃣ Proactive check-ins 3️⃣ Surprise-and-delight moments 4️⃣ Easy, graceful offboarding that leaves them wanting to return. Happy customers are your best salespeople. 🌟",
-      "Improving retention by just 5% can increase profits by 25-95% (Harvard Business Review). Calculate your LTV — once you see how much a retained customer is worth, investing in retention becomes obvious. 📈",
-      "Best retention strategy: make your product so embedded in their workflow that leaving creates real pain. Network effects, integrations, and switching costs create natural loyalty without manipulative tactics. 🔒"
-    ],
-    "expansion": [
-      "Expand only after proving stability in your current market. Opening a second location while the first struggles rarely fixes the first and usually breaks the second too. 🏪",
-      "Before expanding: 1️⃣ Is your current model profitable and repeatable? 2️⃣ Do you have the management capacity? 3️⃣ Is there genuine demand in the new market? 4️⃣ Can you fund expansion without risking the core business? 📋",
-      "Expansion options: geographic, new customer segments, new products for existing customers, or franchising. New products for existing customers is usually the lowest-risk first expansion move. 🗺️",
-      "The biggest expansion mistake: moving too fast because things are going well. Rapid expansion stretches cash, management, and quality simultaneously. Grow deliberately — prove the model in each new context before adding the next. 🐢"
-    ],
-    "marketing": [
-      "Marketing is the process of creating awareness, interest, and desire for your product — and converting that into customers. Good marketing makes selling almost unnecessary. 📣",
-      "Marketing isn't just advertising. It's understanding your customer so deeply that your product and messaging resonate perfectly — and distributing that message through the right channels at the right moment. 🎯",
-      "The four Ps of marketing: Product (what you sell), Price (what you charge), Place (where you sell it), Promotion (how you tell people). All four must be aligned for marketing to work effectively. 📊",
-      "The best marketing in 2025 is authentic, useful, and consistent. Stop interrupting people with ads and start attracting them with content that genuinely helps. That's how brands are built that last. 🌟"
-    ],
-    "advertising": [
-      "Advertising is paid promotion — the art of placing your message in front of people who haven't found you yet. Done well it accelerates growth; done poorly it just burns money faster. 💸",
-      "Advertising channels: Search ads (Google/Bing — capture existing demand), Social ads (Meta/TikTok — create demand), Display (awareness), Influencer (borrowed trust), and traditional (radio, TV, print — for local/mass reach). Match the channel to the buying stage. 📱",
-      "Before you advertise, nail your message and know your unit economics. If your CAC is higher than your LTV, no advertising budget will save you — it'll just accelerate losses. 📊",
-      "The golden rule of advertising: test small, learn fast, scale what works. Never put all your budget into one channel or creative. Run experiments, kill losers, double down on winners. 🎯"
-    ],
-    "branding": [
-      "Branding is the consistent set of associations people have with your business — the emotion, the expectation, the story they tell others. Your logo is the surface; your brand is everything underneath it. 🌟",
-      "A strong brand is your most durable competitive advantage. Anyone can copy your product — no one can copy your reputation, your culture, or the trust you've built with customers over years. 💎",
-      "Build your brand by: 1️⃣ Defining your values clearly 2️⃣ Picking a unique positioning 3️⃣ Being consistent across every touchpoint 4️⃣ Delivering on your promise every single time. Inconsistency destroys brands faster than bad marketing. 🎨",
-      "Your brand is what people say about you when you're not in the room. The only way to control it is to be so reliably excellent that the story tells itself. 💬"
-    ],
-    "target_market": [
-      "Your target market is the specific group of people most likely to buy from you and benefit most from what you offer. The narrower and more precisely you define them, the more effectively you can reach and serve them. 🎯",
-      "Targeting too broadly is one of the most common small business mistakes. 'Everyone' is not a target market. Niching down feels scary but it dramatically improves your conversion rate and reduces customer acquisition costs. 💡",
-      "Define your target market by: demographics (age, income, location), psychographics (values, interests, lifestyle), and behaviour (what they buy, when, and why). The most powerful insight comes from real conversations with actual customers. 📊",
-      "The ideal target market is: large enough to sustain your business, specific enough to reach efficiently, and underserved enough that you can stand out. Find the intersection of these three and you've found your niche. 🔍"
-    ],
-    "leadership": [
-      "Leadership is the ability to create a compelling vision, align people behind it, and bring out their best work in pursuit of it. The tools are clarity, trust, and consistency. 🏆",
-      "Great leaders ask more than they tell. The best question a leader can develop is: 'What do you think we should do?' It builds ownership, surfaces ideas, and develops the team simultaneously. 💡",
-      "Leadership truth: people don't leave companies, they leave managers. The quality of leadership is the single biggest factor in employee retention, engagement, and performance. Invest in becoming a better leader constantly. 👥",
-      "Five core leadership skills: communication (especially listening), decision-making under uncertainty, giving hard feedback kindly, creating psychological safety, and building the next generation of leaders on your team. 🌟"
-    ],
-    "teamwork": [
-      "High-performing teams share three things: psychological safety (people can speak up without fear), clear roles and ownership, and a shared commitment to the mission. Build all three deliberately. 🤝",
-      "Teamwork breaks down when accountability is unclear. The best teams have a single owner for every outcome — not a committee, not 'we'. One person who is ultimately responsible makes everything cleaner and faster. 📋",
-      "Building team culture: hire for values first, skills second. Skills can be learned; values are deeply ingrained. A team with aligned values will solve problems you never anticipated better than a team with misaligned values and perfect skills. 🌟",
-      "Remote teams need more intentional connection than in-person teams. Invest in 1:1 check-ins, virtual team rituals, and in-person gatherings at least quarterly. Connection is the foundation teamwork is built on. 💙"
-    ],
-    "finance": [
-      "Business finance is the management of money — how you raise it, allocate it, and account for it. Financial literacy is the foundation of every good business decision. 💰",
-      "Three things every business owner must understand: their gross margin (are you making money on each sale?), their cash position (can you pay bills next month?), and their burn rate (how long can you survive without new revenue?). 📊",
-      "Finance isn't just for accountants. The founders who understand their numbers — revenue, costs, margins, cash flow — make better decisions, raise money more easily, and sleep better at night. 💡",
-      "The most important financial habit: monthly review of your P&L, balance sheet, and cash flow statement. If you only look at financials when something goes wrong, it's usually already too late to react without pain. 📋"
-    ],
-    "budget": [
-      "A budget is your business's financial plan — what you expect to earn, what you plan to spend, and the gap between the two. It's the difference between running a business and guessing at it. 📊",
-      "Budget process: 1️⃣ Forecast revenue (conservatively) 2️⃣ List fixed costs (rent, salaries, subscriptions) 3️⃣ Estimate variable costs 4️⃣ Set aside tax provisions 5️⃣ What's left is your profit target. Revisit monthly and update assumptions. 📅",
-      "Zero-based budgeting: start from zero every period and justify every expense from scratch rather than just adjusting last year's numbers. It's harder but eliminates the 'we've always done it this way' spending that silently bleeds profit. 🎯",
-      "The biggest budgeting mistake: building a budget and then ignoring it. A budget only adds value if you compare actuals to it monthly, understand the variances, and adjust decisions accordingly. 💡"
-    ],
-    "investment": [
-      "Investment is deploying capital today with the expectation of greater returns in the future. In business, every investment decision — hiring, marketing, equipment — should be evaluated on expected ROI. 💹",
-      "Business investment rule of thumb: invest in things that either grow revenue or reduce costs. Everything else is a cost. Before any significant spend, ask: 'What return am I expecting, and by when?' 🎯",
-      "Types of business investment: capital expenditure (equipment, property), working capital (inventory, receivables), and intangible investment (brand, technology, people). All three matter for long-term value creation. 📊",
-      "The best investment most small businesses can make: their best people. A great hire at $120K outperforms an average hire at $80K by multiples — the ROI on hiring well is extraordinary. 👥"
-    ],
-    "management": [
-      "Management is the process of planning, organising, leading, and controlling resources to achieve business goals. Great management is the invisible force that makes everything else work. 🏗️",
-      "The shift from doing to managing is the hardest transition in business. Your job as a manager is to get results through other people — which requires letting go of the belief that you can do it better yourself. 🔄",
-      "Management fundamentals: set clear expectations, provide regular feedback, remove obstacles, recognise good work, and address poor performance early. These five things, done consistently, create high-performing teams. 📋",
-      "The best managers ask these questions regularly: 'What's slowing you down?', 'What do you need from me?', 'What would you do differently if it were your decision?' Great management is mostly great listening. 💡"
-    ],
-    "sales": [
-      "Sales is the engine of every business — no revenue, no business. But great sales isn't about pressure; it's about deeply understanding a customer's problem and clearly showing how your solution solves it. 💼",
-      "The sales process: Prospect → Qualify (do they have the problem and budget?) → Present → Handle objections → Close → Follow up. Most salespeople skip qualifying and wonder why their close rate is poor. 🎯",
-      "Sales truth: people don't buy products, they buy better versions of themselves. Your pitch should answer 'what's in it for me?' from the customer's perspective before anything else. 💡",
-      "The fortune is in the follow-up. 80% of sales happen after the 5th contact. Most salespeople give up after 2. Persistent, helpful follow-up — not annoying pestering — is where most deals are won or lost. 📞"
-    ],
-    "human_resources": [
-      "HR manages the most valuable and most complex asset in any business: people. Done well, it's a strategic function that drives growth. Done poorly, it's just paperwork and compliance headaches. 👥",
-      "HR fundamentals: attract the right people (recruitment), develop their skills (training), keep them engaged (culture and compensation), and handle departures gracefully (offboarding). The whole lifecycle matters. 🔄",
-      "The biggest HR mistake small businesses make: treating HR as a reactive function (only dealing with problems) instead of a proactive one (building the team and culture before you need to). 💡",
-      "In a small business, culture IS your HR strategy. The values you demonstrate daily, the behaviours you reward, and the people you keep or let go — these shape culture more powerfully than any policy document. 🌟"
-    ],
-    "economy": [
-      "The economy is the system through which a society produces, distributes, and consumes goods and services. For business owners, understanding economic cycles helps you anticipate change and position ahead of it. 🌍",
-      "Key economic indicators for businesses: GDP growth (overall health), unemployment rate (labour market), inflation (your costs), consumer confidence (demand), and interest rates (cost of borrowing). Watch these to make smarter strategic decisions. 📊",
-      "Economic cycles: expansion (growth, low unemployment), peak (inflation risk), contraction (slowdown), trough (opportunity for those with cash). Businesses that survive recessions often emerge stronger by taking market share from those that don't. 🔄",
-      "Macro matters for micro: when interest rates rise, borrowing costs increase and consumer spending slows. When inflation rises, input costs rise and margins compress unless you raise prices. Understanding the macro environment makes you a better business strategist. 💡"
-    ],
-    "ecommerce": [
-      "Ecommerce is buying and selling products or services online. It's one of the fastest-growing sectors globally, with worldwide ecommerce sales exceeding $6 trillion annually and growing every year. 🛍️",
-      "Ecommerce business models: D2C (Direct to Consumer — sell your own brand), Marketplace (sell on Amazon/eBay), Dropshipping (sell without holding stock), Subscription boxes, and Digital products. Each has different margins, control, and scalability. 📦",
-      "Keys to ecommerce success: product photography (first impression is everything), fast shipping (customer expectation has shifted dramatically), easy returns (reduces purchase hesitation), and email marketing (your most profitable owned channel). 🎯",
-      "Ecommerce metrics to master: Conversion rate (visitors to buyers), Average Order Value (AOV), Customer Acquisition Cost (CAC), Lifetime Value (LTV), and Cart Abandonment Rate. Improving any of these improves profitability. 📊"
-    ],
-    "ethics": [
-      "Business ethics are the moral principles that guide how a company behaves — towards customers, employees, suppliers, and society. Ethical businesses build stronger reputations, attract better talent, and earn deeper customer loyalty. ⚖️",
-      "Ethical business isn't just the right thing to do — it's smart strategy. The Edelman Trust Barometer consistently shows that consumer trust drives purchase decisions, and that trust is built on perceived ethical behaviour. 💡",
-      "Common business ethics failures: false advertising, underpaying employees, exploitative supplier terms, environmental shortcuts, and data privacy violations. Each creates legal, reputational, and financial risk that far outweighs any short-term gain. ⚠️",
-      "Building an ethical business culture: define your values explicitly, hire people who embody them, make hard decisions that reflect them (even when costly), and be transparent when you fall short. Consistency is what makes ethics real. 🌟"
-    ],
-    "business_success": [
-      "Business success comes from the intersection of a real customer need, a compelling solution, strong execution, and enough persistence to survive the hard early years. Planning and marketing matter, but grit matters more. 🏆",
-      "The most successful businesses share this: they know their customer better than the customer knows themselves, and they deliver an experience so good that word-of-mouth becomes their biggest growth channel. 🌟",
-      "Success in business is rarely a straight line. It's iterations, pivots, setbacks, and comebacks. The entrepreneurs who make it aren't the ones who avoided failure — they're the ones who failed faster and learned better. 💡",
-      "What makes businesses fail vs succeed: failing businesses run out of cash, can't find product-market fit, or implode from team problems. Successful ones solve a real problem, build a culture of learning, and manage cash obsessively. 📊"
-    ],
-    "innovation": [
-      "Innovation doesn't always mean invention. Most successful innovations are recombinations — taking what works in one context and applying it to another. Uber applied apps to taxi dispatch. Netflix applied subscription to video. What can you recombine? 💡",
-      "Innovation is the profitable commercialisation of a new idea. The 'new idea' part gets all the attention — but the 'profitable commercialisation' part is where 99% of the hard work actually lives. 🎯",
-      "Innovation types: incremental (doing existing things better), disruptive (serving overlooked segments with 'good enough' solutions that improve until they displace incumbents), and radical (entirely new categories). Most businesses benefit most from incremental innovation. 🔄",
-      "Build an innovation culture by making it safe to experiment and fail. Celebrate smart experiments, not just successes. Dedicate protected time for exploration. The businesses that stop innovating start declining — often before they realise it. 🚀"
-    ],
-    "motivation_quote": [
-      "\"The way to get started is to quit talking and begin doing.\" — Walt Disney 🌟",
-      "\"It does not matter how slowly you go as long as you do not stop.\" — Confucius 💪",
-      "\"Success is not the absence of failure; it's the persistence through failure.\" — Aisha Tyler 🚀",
-      "\"Your most unhappy customers are your greatest source of learning.\" — Bill Gates 💡",
-      "\"Don't find customers for your products; find products for your customers.\" — Seth Godin 🎯",
-      "\"The secret of getting ahead is getting started.\" — Mark Twain ⚡"
-    ],
-    "business_joke": [
-      "Why did the doughnut maker retire? He was tired of the whole business! 🍩",
-      "Why did the entrepreneur bring a ladder to the meeting? Because they heard the stakes were high! 📈",
-      "I told my accountant a joke about cash flow. He didn't find it very liquid. 💧",
-      "Why did the CEO sleep on the office floor? To get a head start on the bottom line! 😄",
-      "A startup founder walks into a bar... and immediately pivots to a restaurant. 🍽️"
-    ],
-    "swot_analysis": [
-      "SWOT stands for Strengths, Weaknesses, Opportunities, and Threats. Strengths and Weaknesses are internal (what you control); Opportunities and Threats are external (the environment). Use it to find where your strengths match available opportunities. 💡",
-      "Running a SWOT analysis: be brutally honest about weaknesses (most businesses sugarcoat them), be specific rather than vague, and prioritise the 2-3 items in each quadrant that actually matter. A SWOT with 20 items per quadrant helps nobody. 📋",
-      "After your SWOT, the real work: Strengths vs Opportunities (where to invest), Strengths vs Threats (how to defend), Weaknesses vs Opportunities (what to fix to unlock growth), Weaknesses vs Threats (where you're most vulnerable). 🎯",
-      "SWOT is a starting framework, not a final answer. Use it to structure a conversation and surface assumptions — then validate those assumptions with data and customer feedback before making strategic decisions. 🔍"
-    ],
-    "business_plan": [
-      "A business plan is a formal document outlining your goals and how you'll achieve them — covering market analysis, operational plan, financial projections, and growth strategy. It's as valuable for internal clarity as it is for external investors. 📋",
-      "Business plan essentials: Executive Summary, Problem/Opportunity, Solution, Market Size, Business Model, Marketing & Sales Strategy, Operations, Team, and Financial Projections. Investors read the summary first — make it exceptional. 💼",
-      "The best business plan is one you'll actually use. Keep it short enough to revisit monthly, specific enough to drive decisions, and honest about risks and assumptions. A 50-page document nobody reads is worthless. 💡",
-      "Writing a business plan forces clarity. The act of articulating your strategy on paper surfaces contradictions, gaps, and assumptions you didn't know you were making. Even if no investor ever reads it, the exercise is valuable. 🎯"
-    ],
-    "seo": [
-      "SEO (Search Engine Optimisation) is the process of improving your website so it ranks higher in search results, driving free organic traffic. It's one of the highest-ROI long-term marketing investments a business can make. 🔍",
-      "SEO basics: 1️⃣ Keyword research (what your customers search for) 2️⃣ On-page optimisation (titles, headings, content quality) 3️⃣ Technical SEO (site speed, mobile-friendly) 4️⃣ Link building (other sites linking to yours). All four pillars matter. 📊",
-      "SEO is a long game — results typically take 3-12 months to compound. But the traffic you earn is free and grows over time, unlike paid ads that stop the moment you stop paying. Invest in SEO early and let it compound. ⏳",
-      "The best SEO strategy in 2025: create genuinely useful, comprehensive content around topics your customers care about. Google's algorithms are increasingly good at identifying real value vs SEO tricks. Quality beats keyword-stuffing every time. ✅"
-    ],
-    "roi": [
-      "ROI (Return on Investment) = (Net Profit ÷ Cost of Investment) × 100. A $1,000 investment that generates $1,500 back has a 50% ROI. It's the universal language of business decision-making. 📊",
-      "Use ROI to compare investment options objectively. A 30% ROI on marketing vs 80% ROI on product development tells you where to allocate resources next — your highest-return activities deserve more capital. 💰",
-      "ROI calculation tip: account for all costs (time, overhead, opportunity cost) not just the direct spend. A marketing campaign that 'costs' $5,000 but took 100 hours of team time actually cost $15,000+ when you include labour. 🎯",
-      "Track ROI by channel, campaign, and product line. The business owners who know their ROI at a granular level always outcompete those who spend by gut feel. Data-driven allocation is a sustained competitive advantage. 💡"
-    ],
-    "supply_chain": [
-      "The supply chain is the end-to-end process of getting your product from raw materials to the customer's hands — covering suppliers, manufacturing, logistics, warehousing, and last-mile delivery. Every link in the chain affects your cost and speed. 🚚",
-      "Supply chain resilience lesson from COVID-19: single-supplier dependency is a catastrophic risk. Build redundancy — qualify backup suppliers, maintain strategic inventory buffers, and diversify sourcing across regions. 🌍",
-      "Supply chain optimisation: reduce lead times (speed to customer), minimise inventory holding costs (cash tied up in stock), and improve demand forecasting accuracy (order what you'll actually sell). Small improvements compound into major cost savings. 📦",
-      "The supply chain is increasingly a competitive advantage, not just a cost centre. Amazon's two-day delivery became an expectation for all ecommerce. The businesses that control their supply chain control their customer experience. ⚡"
-    ],
-    "customer_retention": [
-      "Customer retention is the art and science of keeping customers coming back. It's almost always more profitable than acquisition — retained customers buy more, complain less, and refer their friends. 💙",
-      "The economics of retention: acquiring a new customer costs 5-7× more than retaining an existing one. Increasing retention by 5% increases profits by 25-95% (Harvard Business Review). Know these numbers — they justify almost any investment in customer success. 📊",
-      "Retention drivers: product quality, customer service responsiveness, perceived value for money, emotional connection to the brand, and how gracefully you handle problems when they arise. All five matter — and problems handled brilliantly can actually increase retention. ⭐",
-      "Measure retention with these metrics: Churn Rate (% who leave per month), Net Promoter Score (would they recommend you?), and Customer Lifetime Value (total revenue per customer). These three tell you everything about your retention health. 🎯"
-    ],
-    "outsourcing": [
-      "Outsourcing is contracting specific work to external specialists rather than doing it in-house. Done well, it lets you access world-class skills without full-time headcount costs. Done poorly, it creates quality and communication nightmares. 🌍",
-      "What to outsource: non-core, repeatable tasks where specialists exist (bookkeeping, legal, IT, customer support, design). What NOT to outsource: your core product, your customer relationships, and your strategic decision-making. 🎯",
-      "Outsourcing destinations: Philippines (customer service, admin), India (tech development, data entry), Eastern Europe (software engineering, design), Latin America (bilingual support, marketing). Choose based on time zone overlap and skill requirements. 🗺️",
-      "Outsourcing success factors: write detailed briefs, start with small paid tests before large commitments, over-communicate expectations, and build in quality review checkpoints. The biggest outsourcing failures come from vague instructions and no oversight. 📋"
-    ],
-    "crm": [
-      "CRM (Customer Relationship Management) is software that manages all your interactions with prospects and customers — tracking conversations, deals, follow-ups, and customer history in one place. It's the system that stops things falling through the cracks. 🗂️",
-      "Top CRM tools by use case: HubSpot (SMBs, excellent free tier), Salesforce (enterprise, highly customisable), Pipedrive (sales-focused, simple), Zoho CRM (affordable all-rounder), Notion (lightweight startups). Start simple and add complexity as you grow. 🛠️",
-      "The biggest CRM mistake: buying expensive software and not adopting it. A CRM only works if the team actually uses it. Start with the simplest possible setup, enforce data entry discipline, and expand features only after adoption is proven. ⚠️",
-      "What a good CRM unlocks: every customer's complete history at your fingertips, no dropped follow-ups, accurate sales pipeline forecasting, and the ability to personalise at scale. It's the infrastructure of a professional sales and service operation. 💡"
-    ]
-  };
-
   intents.forEach(function(intent){
     if(patches[intent.tag]){
       intent.responses = patches[intent.tag];
@@ -8167,11 +7922,94 @@ function getPptRequestTopic(input) {
 function getLocalizedResponse(intent) {
   if (!intent) return null;
   const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'en';
-  if (lang !== 'en' && typeof translations !== 'undefined' &&
-      translations[lang] && translations[lang].botResponses && translations[lang].botResponses[intent.tag]) {
-    return translations[lang].botResponses[intent.tag];
+  if (lang !== 'en') {
+    const translated = (typeof INTENT_TRANSLATIONS !== 'undefined') &&
+                       INTENT_TRANSLATIONS[intent.tag] &&
+                       INTENT_TRANSLATIONS[intent.tag][lang];
+    if (translated && translated.length) {
+      return translated[Math.floor(Math.random() * translated.length)];
+    }
+    if (typeof translations !== 'undefined' &&
+        translations[lang] && translations[lang].botResponses && translations[lang].botResponses[intent.tag]) {
+      return translations[lang].botResponses[intent.tag];
+    }
   }
   return intent.responses[Math.floor(Math.random() * intent.responses.length)];
+}
+
+// ==================== MULTILINGUAL BOT MESSAGES ====================
+const BOT_MESSAGES = {
+  en: {
+    greetName:    (n) => `Hello ${n}! 👋 Welcome to Usemee. How can I help you today?`,
+    greetGuest:   () => `Hello! 👋 I'm Usemee, your business AI assistant. Ask me anything!`,
+    newChatName:  (n) => `Hello ${n}! 👋 How can I help you today?`,
+    newChatGuest: () => `Hello! 👋 I'm Usemee, your business AI assistant. Ask me anything!`,
+    pptNeedTopic: () => `Please specify the topic for the presentation, for example: "Create a presentation about marketing strategy".`,
+    pptGenerating:(t) => `✅ Generating your presentation about "${t}". Download should start shortly.`,
+    pptFailed:    () => `❌ Presentation failed to download. Please try again or check browser permissions.`,
+    imgCreating:  (t) => `Creating a visual image for "${t}"...`,
+    imgFailed:    () => `Sorry, I could not generate the image. Please try again.`,
+    notValidImg:  () => `Please select a valid image file (JPG, PNG, GIF, WebP).`,
+    comparing:    () => `🔍 Analyzing businesses for comparison...`,
+  },
+  es: {
+    greetName:    (n) => `¡Hola ${n}! 👋 Bienvenido a Usemee. ¿En qué puedo ayudarte hoy?`,
+    greetGuest:   () => `¡Hola! 👋 Soy Usemee, tu asistente de negocios con IA. ¡Pregúntame lo que quieras!`,
+    newChatName:  (n) => `¡Hola ${n}! 👋 ¿En qué puedo ayudarte hoy?`,
+    newChatGuest: () => `¡Hola! 👋 Soy Usemee, tu asistente de negocios. ¡Pregúntame lo que quieras!`,
+    pptNeedTopic: () => `Por favor especifica el tema de la presentación, por ejemplo: "Crear una presentación sobre estrategia de marketing".`,
+    pptGenerating:(t) => `✅ Generando tu presentación sobre "${t}". La descarga comenzará en breve.`,
+    pptFailed:    () => `❌ No se pudo descargar la presentación. Inténtalo de nuevo.`,
+    imgCreating:  (t) => `Creando una imagen visual sobre "${t}"...`,
+    imgFailed:    () => `Lo siento, no pude generar la imagen. Inténtalo de nuevo.`,
+    notValidImg:  () => `Por favor selecciona un archivo de imagen válido (JPG, PNG, GIF, WebP).`,
+    comparing:    () => `🔍 Analizando empresas para comparar...`,
+  },
+  fr: {
+    greetName:    (n) => `Bonjour ${n} ! 👋 Bienvenue sur Usemee. Comment puis-je vous aider aujourd'hui ?`,
+    greetGuest:   () => `Bonjour ! 👋 Je suis Usemee, votre assistant IA en affaires. Posez-moi n'importe quelle question !`,
+    newChatName:  (n) => `Bonjour ${n} ! 👋 Comment puis-je vous aider aujourd'hui ?`,
+    newChatGuest: () => `Bonjour ! 👋 Je suis Usemee, votre assistant IA en affaires. Posez-moi n'importe quelle question !`,
+    pptNeedTopic: () => `Veuillez préciser le sujet de la présentation, par exemple : "Créer une présentation sur la stratégie marketing".`,
+    pptGenerating:(t) => `✅ Génération de votre présentation sur "${t}". Le téléchargement commencera bientôt.`,
+    pptFailed:    () => `❌ Échec du téléchargement. Veuillez réessayer.`,
+    imgCreating:  (t) => `Création d'une image visuelle pour "${t}"...`,
+    imgFailed:    () => `Désolé, je n'ai pas pu générer l'image. Veuillez réessayer.`,
+    notValidImg:  () => `Veuillez sélectionner un fichier image valide (JPG, PNG, GIF, WebP).`,
+    comparing:    () => `🔍 Analyse des entreprises pour comparaison...`,
+  },
+  de: {
+    greetName:    (n) => `Hallo ${n}! 👋 Willkommen bei Usemee. Wie kann ich Ihnen heute helfen?`,
+    greetGuest:   () => `Hallo! 👋 Ich bin Usemee, Ihr KI-Geschäftsassistent. Stellen Sie mir jede Frage!`,
+    newChatName:  (n) => `Hallo ${n}! 👋 Wie kann ich Ihnen heute helfen?`,
+    newChatGuest: () => `Hallo! 👋 Ich bin Usemee, Ihr KI-Geschäftsassistent. Stellen Sie mir jede Frage!`,
+    pptNeedTopic: () => `Bitte geben Sie das Thema der Präsentation an, zum Beispiel: "Eine Präsentation über Marketingstrategie erstellen".`,
+    pptGenerating:(t) => `✅ Ihre Präsentation über "${t}" wird erstellt. Der Download beginnt bald.`,
+    pptFailed:    () => `❌ Download fehlgeschlagen. Bitte versuchen Sie es erneut.`,
+    imgCreating:  (t) => `Erstelle ein Bild für "${t}"...`,
+    imgFailed:    () => `Sorry, das Bild konnte nicht generiert werden. Bitte erneut versuchen.`,
+    notValidImg:  () => `Bitte wählen Sie eine gültige Bilddatei (JPG, PNG, GIF, WebP).`,
+    comparing:    () => `🔍 Unternehmen werden für den Vergleich analysiert...`,
+  },
+  ar: {
+    greetName:    (n) => `مرحباً ${n}! 👋 أهلاً بك في Usemee. كيف يمكنني مساعدتك اليوم؟`,
+    greetGuest:   () => `مرحباً! 👋 أنا Usemee، مساعدك الذكي للأعمال. اسألني أي شيء!`,
+    newChatName:  (n) => `مرحباً ${n}! 👋 كيف يمكنني مساعدتك اليوم؟`,
+    newChatGuest: () => `مرحباً! 👋 أنا Usemee، مساعدك الذكي للأعمال. اسألني أي شيء!`,
+    pptNeedTopic: () => `يرجى تحديد موضوع العرض التقديمي، على سبيل المثال: "إنشاء عرض تقديمي حول استراتيجية التسويق".`,
+    pptGenerating:(t) => `✅ جارٍ إنشاء عرضك التقديمي حول "${t}". سيبدأ التنزيل قريباً.`,
+    pptFailed:    () => `❌ فشل التنزيل. يرجى المحاولة مرة أخرى.`,
+    imgCreating:  (t) => `جارٍ إنشاء صورة بصرية لـ "${t}"...`,
+    imgFailed:    () => `عذراً، لم أتمكن من إنشاء الصورة. يرجى المحاولة مرة أخرى.`,
+    notValidImg:  () => `يرجى اختيار ملف صورة صالح (JPG, PNG, GIF, WebP).`,
+    comparing:    () => `🔍 جارٍ تحليل الشركات للمقارنة...`,
+  }
+};
+function bm(key, arg) {
+  const lang = (typeof getCurrentLanguage === 'function') ? getCurrentLanguage() : 'en';
+  const map = BOT_MESSAGES[lang] || BOT_MESSAGES.en;
+  const fn = map[key] || BOT_MESSAGES.en[key];
+  return fn ? fn(arg) : key;
 }
 
 function getFallbackMsg(userInput) {
@@ -8322,7 +8160,7 @@ if (prediction && (predictionTrigger.test(userInput) || /\d/.test(userInput))) {
 // Business comparison
 if (userInput.includes('compare') && (userInput.includes('business') || userInput.includes('company') || userInput.includes('companies'))) {
   showBusinessComparison(userInput);
-  return "🔍 Analyzing businesses for comparison...";
+  return bm('comparing');
 }
 
 // ---- PASS 1: Exact match ----
@@ -9462,6 +9300,7 @@ function addImageToChat(topic, dataUrl) {
   chat.scrollTop = chat.scrollHeight;
 }
 
+// ==================== SPECIFIC BUSINESS GUIDE ====================
 const INDUSTRY_KEYWORDS = {
   fashion:      ['fashion','fashion brand','fashion business','clothing brand','apparel','streetwear','luxury fashion','boutique'],
   food:         ['food business','food startup','food brand','food industry','food company','meal prep','food delivery'],
