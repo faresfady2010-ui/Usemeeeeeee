@@ -8148,7 +8148,7 @@ if (lastMatchedIntent && followUpExample.test(rawInput)) {
 }
 
 // Profit prediction
-const predictionTrigger = /(predict|estimate|forecast|calculate|profit or loss|profit forecast|loss forecast|will i make a profit|will i have a loss)/;
+const predictionTrigger = /(predict|estimate|forecast|profit or loss|profit forecast|loss forecast|will i make a profit|will i have a loss)/;
 const prediction = predictProfitLoss(userInput);
 if (prediction && (predictionTrigger.test(userInput) || /\d/.test(userInput))) {
   return prediction;
