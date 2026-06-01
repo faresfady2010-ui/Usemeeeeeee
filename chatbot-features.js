@@ -373,6 +373,32 @@ class ChatbotEnhancements {
     }
 
     /**
+     * Generate brand names with style variations
+     */
+    generateBrandNames(businessType, quantity = 10) {
+        const brandPrefixes = ['Quantum', 'Velocity', 'Nexus', 'Aurora', 'Titan', 'Stellar', 'Zenith', 'Vigor', 'Compass', 'Horizon'];
+        const brandSuffixes = ['AI', 'Labs', 'Works', 'Hub', 'Innovations', 'Technologies', 'Solutions', 'Studio', 'Ventures', 'Collective'];
+        const brandModifiers = ['Pro', 'Plus', 'Elite', 'Prime', 'Max', 'Ultra', 'Pure', 'Smart', 'Advanced', 'Next'];
+
+        const brands = [];
+        for (let i = 0; i < quantity; i++) {
+            const prefix = brandPrefixes[Math.floor(Math.random() * brandPrefixes.length)];
+            const suffix = brandSuffixes[Math.floor(Math.random() * brandSuffixes.length)];
+            const modifier = brandModifiers[Math.floor(Math.random() * brandModifiers.length)];
+            
+            const variations = [
+                `${prefix}${suffix}`,
+                `${modifier} ${prefix}`,
+                `${prefix} ${businessType}`,
+            ];
+            
+            brands.push(variations[Math.floor(Math.random() * variations.length)]);
+        }
+        
+        return [...new Set(brands)].slice(0, quantity);
+    }
+
+    /**
      * Generate logo suggestions
      */
     generateLogoSuggestions(businessName, industry) {
@@ -414,6 +440,70 @@ class ChatbotEnhancements {
     }
 
     /**
+     * Generate advanced logo concepts with detailed specifications
+     */
+    generateAdvancedLogoConcepts(businessName, industry, targetAudience = 'general') {
+        const concepts = [
+            {
+                concept: 'Abstract Geometric',
+                description: `Modern geometric shapes representing growth and innovation. Use primary brand colors with minimalist design. Perfect for tech and startup industries.`,
+                colors: ['#007BFF', '#28A745', '#FFC107'],
+                style: 'Minimalist, Modern',
+                techniques: ['Negative space', 'Geometric shapes', 'Linear progression'],
+                bestFor: ['Tech', 'Startup', 'Finance', 'SaaS'],
+                inspiration: 'Think abstract but recognizable - like Airbnb or Slack'
+            },
+            {
+                concept: 'Iconic Symbol',
+                description: `Custom icon/symbol that represents your ${industry} business. Use negative space for sophistication. Consider what your business does visually.`,
+                colors: ['#34495E', '#ECF0F1', '#E74C3C'],
+                style: 'Professional, Timeless',
+                techniques: ['Icon design', 'Symbolic meaning', 'Memorable mark'],
+                bestFor: ['Healthcare', 'Finance', 'Education', 'Professional Services'],
+                inspiration: 'Apple, Nike, Target - simple and iconic'
+            },
+            {
+                concept: 'Wordmark/Logotype',
+                description: `Stylized typography of "${businessName}" with unique font treatment. Add subtle design element to one letter. Excellent for brand recognition.`,
+                colors: ['#2C3E50', '#3498DB'],
+                style: 'Typography-focused',
+                techniques: ['Custom font', 'Letter modification', 'Typography art'],
+                bestFor: ['Media', 'Publishing', 'Entertainment', 'Luxury'],
+                inspiration: 'Google, Sony, Coca-Cola - type as the brand'
+            },
+            {
+                concept: 'Mascot/Character Logo',
+                description: `Friendly character or mascot representing your brand personality. Memorable and versatile across platforms. Great for audience engagement.`,
+                colors: ['#F39C12', '#E67E22', '#D35400'],
+                style: 'Approachable, Friendly',
+                techniques: ['Character design', 'Animation potential', 'Storytelling'],
+                bestFor: ['Retail', 'Entertainment', 'Food & Beverage', 'Kids brands'],
+                inspiration: 'Tweety Bird, Ronald McDonald, Geico Gecko'
+            },
+            {
+                concept: 'Combination Mark',
+                description: `Icon + wordmark combination for versatility. Icon works standalone, text with icon creates full logo. Maximum flexibility.`,
+                colors: ['#16A085', '#27AE60', '#229954'],
+                style: 'Flexible, Professional',
+                techniques: ['Dual usage', 'Icon-text integration', 'Scalability'],
+                bestFor: ['Multi-industry', 'Large corporations', 'Global brands'],
+                inspiration: 'Amazon, Adidas, Firefox - works both ways'
+            },
+            {
+                concept: '3D/Dimensional Logo',
+                description: `Modern 3D rendered logo for premium feel. Adds depth and sophistication. Great for tech and luxury brands.`,
+                colors: ['#FF6B6B', '#4ECDC4', '#44AF69'],
+                style: 'Contemporary, Premium',
+                techniques: ['3D rendering', 'Depth perception', 'Gradient shading'],
+                bestFor: ['Technology', 'Luxury', 'Gaming', 'Innovation'],
+                inspiration: 'Tesla, Adobe, Slack 3D versions'
+            }
+        ];
+
+        return concepts;
+    }
+
+    /**
      * Get situational advice
      */
     getSituationalAdvice(situation, context = '') {
@@ -421,28 +511,36 @@ class ChatbotEnhancements {
         
         const adviceBank = {
             'conflict': {
-                advice: 'Conflict Resolution Framework:\n1. Listen actively to understand all perspectives\n2. Acknowledge emotions without judgment\n3. Focus on common goals\n4. Brainstorm solutions together\n5. Agree on next steps and follow up',
-                tips: ['Stay calm and professional', 'Use "I" statements', 'Separate people from the problem']
+                advice: 'Conflict Resolution Framework:\n1. Listen actively to understand all perspectives\n2. Acknowledge emotions without judgment\n3. Focus on common goals\n4. Brainstorm solutions collaboratively\n5. Implement agreed actions\n6. Follow up to ensure resolution',
+                tips: ['Stay calm and professional', 'Use "I" statements', 'Separate people from the problem', 'Focus on interests not positions', 'Seek win-win solutions']
             },
             'deadline': {
-                advice: 'Deadline Crunch Strategy:\n1. Prioritize ruthlessly - what MUST be done?\n2. Break into smaller milestones\n3. Communicate realistic timelines\n4. Delegate where possible\n5. Focus on MVP first, polish later',
-                tips: ['Over-communicate delays early', 'Ask for help proactively', 'Set buffer time']
+                advice: 'Deadline Crunch Strategy:\n1. Prioritize ruthlessly - what MUST be done?\n2. Break into smaller milestones\n3. Communicate realistic timelines\n4. Delegate where possible\n5. Identify what can be deferred\n6. Execute with focus',
+                tips: ['Over-communicate delays early', 'Ask for help proactively', 'Set buffer time', 'Focus on quality critical items', 'Track progress daily']
             },
             'presentation': {
-                advice: 'Presentation Success:\n1. Know your audience deeply\n2. Start with a hook (problem, stat, question)\n3. Use the rule of 3 for main points\n4. Show, don\'t tell (use visuals)\n5. End with clear call-to-action',
-                tips: ['Practice with real feedback', 'Prepare for tough questions', 'Arrive early to test tech']
+                advice: 'Presentation Success:\n1. Know your audience deeply\n2. Start with a hook (problem, stat, question)\n3. Use the rule of 3 for main points\n4. Show, don\'t tell (use visuals)\n5. Tell a story with data\n6. End with clear call-to-action',
+                tips: ['Practice with real feedback', 'Prepare for tough questions', 'Arrive early to test tech', 'Use visual hierarchy', 'Engage, don\'t lecture']
             },
             'negotiation': {
-                advice: 'Negotiation Tactics:\n1. Research and prepare thoroughly\n2. Start with your ideal, not your limit\n3. Listen more than you talk\n4. Focus on interests, not positions\n5. Have multiple solutions ready',
-                tips: ['Silence is powerful', 'Create win-win solutions', 'Document agreements']
+                advice: 'Negotiation Tactics:\n1. Research and prepare thoroughly\n2. Start with your ideal, not your limit\n3. Listen more than you talk\n4. Focus on interests, not positions\n5. Have walk-away criteria ready\n6. Always leave room for agreement',
+                tips: ['Silence is powerful', 'Create win-win solutions', 'Document agreements', 'Ask open questions', 'Find creative trades']
             },
             'decision': {
-                advice: 'Decision-Making Framework:\n1. Define the decision clearly\n2. Gather relevant information\n3. Identify 3+ options\n4. List pros/cons for each\n5. Consider worst-case scenario',
-                tips: ['Don\'t overthink', 'Get input from smart people', 'Any decision beats no decision']
+                advice: 'Decision-Making Framework:\n1. Define the decision clearly\n2. Gather relevant information\n3. Identify 3+ options\n4. List pros/cons for each\n5. Consider worst-case scenario\n6. Make a decision and commit',
+                tips: ['Don\'t overthink', 'Get input from smart people', 'Any decision beats no decision', 'Set a deadline', 'Review decisions periodically']
             },
             'failure': {
-                advice: 'Recovering from Failure:\n1. Accept responsibility\n2. Analyze what went wrong\n3. Extract the lesson\n4. Adjust strategy\n5. Move forward with conviction',
-                tips: ['Failure is feedback', 'Share learnings with team', 'Stay resilient']
+                advice: 'Recovering from Failure:\n1. Accept responsibility\n2. Analyze what went wrong\n3. Extract the lesson\n4. Adjust strategy\n5. Move forward with conviction\n6. Share learnings with team',
+                tips: ['Failure is feedback', 'Share learnings with team', 'Stay resilient', 'Focus on growth', 'Avoid blame games']
+            },
+            'anxiety': {
+                advice: 'Managing Professional Anxiety:\n1. Acknowledge the anxiety without judgment\n2. Identify specific concerns\n3. Create an action plan\n4. Focus on controllables\n5. Practice self-care\n6. Seek support when needed',
+                tips: ['Breathe deeply and slowly', 'Break tasks into small steps', 'Talk to mentors or counselors', 'Exercise regularly', 'Maintain perspective']
+            },
+            'motivation': {
+                advice: 'Boosting Motivation:\n1. Reconnect with your why\n2. Set meaningful short-term goals\n3. Celebrate small wins\n4. Find an accountability partner\n5. Remove obstacles\n6. Take strategic breaks',
+                tips: ['Celebrate progress', 'Visualize success', 'Find your inspiration', 'Help others', 'Mix up your routine']
             }
         };
 
@@ -456,7 +554,7 @@ class ChatbotEnhancements {
     }
 
     /**
-     * Get role-specific task assistance
+     * Get role-specific task assistance with advanced guidance
      */
     getRoleTaskAssistance(role, task) {
         const normalizedRole = role.toLowerCase();
@@ -467,16 +565,74 @@ class ChatbotEnhancements {
         }
 
         const taskGuides = {
-            'business plan': `BUSINESS PLAN STRUCTURE:\n1. Executive Summary (1 page)\n2. Company Description\n3. Market Analysis\n4. Organization\n5. Service/Product Line\n6. Marketing Strategy\n7. Financial Projections\n8. Funding Requirements`,
-            'pitch deck': `PITCH DECK STRUCTURE (10-15 slides):\n1. Title Slide\n2. The Problem\n3. Your Solution\n4. Market Size\n5. Business Model\n6. Traction\n7. Team\n8. Competition\n9. Use of Funds\n10. Call to Action`,
-            'code review': `CODE REVIEW CHECKLIST:\n✓ Functionality\n✓ Code Quality\n✓ Security\n✓ Performance\n✓ Testing\n✓ Documentation\n✓ Style`,
-            'ui/ux design': `UX DESIGN PROCESS:\n1. Research\n2. Wireframing\n3. Prototyping\n4. User Testing\n5. Visual Design\n6. Accessibility Testing\n7. Iteration`,
-            'campaign strategy': `MARKETING CAMPAIGN FRAMEWORK:\n1. Goal\n2. Audience\n3. Message\n4. Channels\n5. Creative\n6. Budget\n7. Timeline\n8. Metrics`,
-            'default': `TASK COMPLETION FRAMEWORK:\n1. CLARIFY - Define deliverable\n2. PLAN - Break into sub-tasks\n3. EXECUTE - Follow your plan\n4. REVIEW - Check success\n5. DELIVER - Present professionally`
+            'business plan': `BUSINESS PLAN STRUCTURE:\n1. Executive Summary (1 page)\n2. Company Description\n3. Market Analysis\n4. Organization\n5. Service/Product Line\n6. Marketing Strategy\n7. Financial Projections\n8. Funding Request\n9. Appendix`,
+            'pitch deck': `PITCH DECK STRUCTURE (10-15 slides):\n1. Title Slide\n2. The Problem\n3. Your Solution\n4. Market Size\n5. Business Model\n6. Traction\n7. Team\n8. Competition\n9. Use of Funds\n10. Financial Projections`,
+            'code review': `CODE REVIEW CHECKLIST:\n✓ Functionality - Does it work as intended?\n✓ Code Quality - Is it clean and maintainable?\n✓ Security - Are there vulnerabilities?\n✓ Performance - Is it optimized?\n✓ Testing - Is it well-tested?\n✓ Documentation - Is it clear?\n✓ Style - Does it follow standards?`,
+            'ui/ux design': `UX DESIGN PROCESS:\n1. Research - Understand user needs\n2. Wireframing - Map user flows\n3. Prototyping - Create interactive mock\n4. User Testing - Validate with real users\n5. Visual Design - Apply branding\n6. Accessibility Testing - Ensure inclusivity\n7. Iteration - Refine based on feedback`,
+            'campaign strategy': `MARKETING CAMPAIGN FRAMEWORK:\n1. Goal - What are we trying to achieve?\n2. Audience - Who are we targeting?\n3. Message - What's the key message?\n4. Channels - Where will we reach them?\n5. Creative - What content?\n6. Budget - How much to spend?\n7. Timeline - When to launch?\n8. Metrics - How to measure success?`,
+            'sales pitch': `SALES PITCH STRUCTURE:\n1. Introduction - Establish credibility\n2. Hook - Grab attention\n3. Problem - What's the pain point?\n4. Solution - How do you solve it?\n5. Benefits - What's the value?\n6. Social Proof - Who else uses it?\n7. Call-to-Action - What's next?`,
+            'financial analysis': `FINANCIAL ANALYSIS FRAMEWORK:\n1. Gather Data - Revenue, expenses, assets\n2. Calculate Ratios - Profitability, liquidity, efficiency\n3. Analyze Trends - Year-over-year changes\n4. Compare - Vs competitors, vs industry\n5. Identify Issues - What needs attention?\n6. Recommend Actions - Improvements\n7. Present Findings - Clear communication`,
+            'team planning': `TEAM PLANNING PROCESS:\n1. Define Roles - Who does what?\n2. Set Goals - What are we achieving?\n3. Plan Timeline - When do we deliver?\n4. Allocate Resources - Budget and tools\n5. Establish Communication - How do we sync?\n6. Identify Risks - What could go wrong?\n7. Track Progress - Weekly check-ins`,
+            'default': `TASK COMPLETION FRAMEWORK:\n1. CLARIFY - Define the deliverable clearly\n2. PLAN - Break into manageable sub-tasks\n3. EXECUTE - Follow your plan with focus\n4. REVIEW - Check that it meets requirements\n5. DELIVER - Present professionally\n6. ITERATE - Get feedback and improve`
         };
 
         const guidance = taskGuides[task.toLowerCase()] || taskGuides['default'];
         return `${role.charAt(0).toUpperCase() + role.slice(1)} - ${task}\n\n${guidance}`;
+    }
+
+    /**
+     * Advanced task completion for any role
+     */
+    getAdvancedTaskGuidance(role, task, skillLevel = 'intermediate') {
+        const guidance = {
+            beginner: 'Basic overview and step-by-step instructions',
+            intermediate: 'Detailed framework with best practices',
+            advanced: 'Expert strategies, advanced techniques, and optimization'
+        };
+
+        const taskFramework = `
+🎯 ADVANCED TASK COMPLETION - ${task.toUpperCase()}
+
+📋 STRATEGIC FRAMEWORK:
+1. CONTEXT ANALYSIS
+   - Understand the business context
+   - Identify stakeholders and their needs
+   - Assess available resources
+   - Consider timing and market conditions
+
+2. DEEP PLANNING
+   - Break down into logical phases
+   - Create detailed timeline with milestones
+   - Identify critical path items
+   - Plan for contingencies
+
+3. EXECUTION EXCELLENCE
+   - Apply best practices from your industry
+   - Leverage templates and frameworks
+   - Maintain quality standards
+   - Document progress
+
+4. QUALITY ASSURANCE
+   - Review against requirements
+   - Get feedback from stakeholders
+   - Refine and optimize
+   - Prepare for scaling
+
+5. DELIVERY & PRESENTATION
+   - Present with confidence and clarity
+   - Highlight key achievements
+   - Show measurable results
+   - Plan for next steps
+
+💡 ADVANCED TIPS:
+   • Anticipate challenges and prepare solutions
+   • Leverage data and metrics to support decisions
+   • Build in flexibility for changes
+   • Create feedback loops for continuous improvement
+   • Document learnings for future projects
+`;
+
+        return taskFramework;
     }
 
     /**
@@ -485,10 +641,10 @@ class ChatbotEnhancements {
     analyzeUserIntent(userMessage) {
         const msg = userMessage.toLowerCase();
         
-        if (msg.includes('generate name') || msg.includes('business name')) {
+        if (msg.includes('generate name') || msg.includes('business name') || msg.includes('brand name')) {
             return { type: 'name_generation', priority: 1 };
         }
-        if (msg.includes('logo')) {
+        if (msg.includes('logo') || msg.includes('brand') || msg.includes('design')) {
             return { type: 'logo_generation', priority: 1 };
         }
 
@@ -498,12 +654,12 @@ class ChatbotEnhancements {
             }
         }
 
-        const situationKeywords = ['what if', 'how do i handle', 'facing', 'advice', 'conflict', 'deadline', 'presentation', 'negotiation'];
+        const situationKeywords = ['what if', 'how do i handle', 'facing', 'advice', 'conflict', 'deadline', 'presentation', 'negotiation', 'anxiety', 'motivation'];
         if (situationKeywords.some(keyword => msg.includes(keyword))) {
             return { type: 'situation_advice', priority: 2 };
         }
 
-        if (msg.includes('help me') || msg.includes('i need') || msg.includes('create')) {
+        if (msg.includes('help me') || msg.includes('i need') || msg.includes('create') || msg.includes('make')) {
             return { type: 'task_help', priority: 2 };
         }
 
@@ -524,15 +680,16 @@ class ChatbotEnhancements {
             case 'name_generation': {
                 const industry = this.extractIndustry(userMessage);
                 const names = this.generateBusinessNames(industry);
-                return `✨ Generated Business Names for ${industry}:\n\n${names.map((n, i) => `${i + 1}. ${n}`).join('\n')}\n\nWould you like logo suggestions for any of these?`;
+                const brandNames = this.generateBrandNames(industry, 5);
+                return `✨ Generated Business Names for ${industry}:\n\n${names.map((n, i) => `${i + 1}. ${n}`).join('\n')}\n\n🌟 Premium Brand Names:\n${brandNames.map((n, i) => `${i + 1}. ${n}`).join('\n')}\n\nWould you like logo suggestions for any of these?`;
             }
 
             case 'logo_generation': {
                 const businessName = this.extractBusinessName(userMessage) || 'Your Business';
                 const industry = this.extractIndustry(userMessage);
-                const logos = this.generateLogoSuggestions(businessName, industry);
+                const logos = this.generateAdvancedLogoConcepts(businessName, industry);
                 return `🎨 Logo Design Suggestions for ${businessName}:\n\n${logos.map((logo, i) => 
-                    `${i + 1}. ${logo.concept}\n   ${logo.description}`
+                    `${i + 1}. ${logo.concept}\n   ${logo.description}\n   💡 Best for: ${logo.bestFor.join(', ')}\n   🎨 Techniques: ${logo.techniques.join(', ')}`
                 ).join('\n\n')}`;
             }
 
@@ -545,11 +702,19 @@ class ChatbotEnhancements {
 
             case 'role_identified': {
                 const task = this.extractTask(userMessage);
+                const skillLevel = this.extractSkillLevel(userMessage);
+                if (this.isAdvancedRequest(userMessage)) {
+                    return this.getAdvancedTaskGuidance(intent.role, task, skillLevel);
+                }
                 return this.getRoleTaskAssistance(intent.role, task);
             }
 
             case 'task_help': {
                 const task = this.extractTask(userMessage);
+                const skillLevel = this.extractSkillLevel(userMessage);
+                if (this.isAdvancedRequest(userMessage)) {
+                    return this.getAdvancedTaskGuidance('general', task, skillLevel);
+                }
                 return this.getRoleTaskAssistance('general', task);
             }
 
@@ -565,7 +730,7 @@ class ChatbotEnhancements {
         }
 
         // Final fallback with helpful suggestions
-        return `🤖 I'm here to help with:\n\n💼 **Business Names & Logos** - Generate creative names and logo ideas\n💡 **Situational Advice** - Get guidance on conflicts, deadlines, presentations, negotiations\n👔 **Role-Specific Guidance** - Help tailored to your profession\n📚 **Learn & Remember** - Add your own knowledge and documents\n\n📝 **Example Questions:**\n• "Generate names for tech startup"\n• "Help me with code review"\n• "How handle team conflict?"\n• "Add knowledge about marketing"\n• "Learn from website: [topic]"\n\n💾 Your knowledge is saved locally!`;
+        return `🤖 I'm here to help with:\n\n💼 **Business Names & Logos** - Generate creative business names and advanced logo designs\n🎨 **Brand Identity** - Premium branding concepts\n💡 **Situational Advice** - Get guidance on conflicts, deadlines, presentations, and more\n👔 **Role-Specific Tasks** - Help for entrepreneurs, developers, designers, marketers, managers, sales, HR, and finance roles\n📚 **Knowledge Base** - Learn and teach me about any topic\n🚀 **Advanced Guidance** - Expert strategies for any task\n\nWhat would you like help with?`;
     }
 
     /**
@@ -621,7 +786,7 @@ class ChatbotEnhancements {
         }
         
         // Default knowledge learning help
-        return `📚 **Knowledge Learning Mode**\n\nYou can teach me about any topic! Here are the formats:\n\n**1️⃣ Direct Knowledge:**\n"Add knowledge: Marketing is the process of promoting products. Key points: SEO, Content, Social Media"\n\n**2️⃣ From Website:**\n"Learn from website: https://example.com about AI\n- Artificial Intelligence is..."\n\n**3️⃣ From Document:**\n"Add document about Python:\nPython is a programming language\nUsed for web, data science, automation"\n\n💾 **All knowledge is saved locally** and used when answering future questions!\n\n🔍 Try any topic - business, technology, personal development, etc!`;
+        return `📚 **Knowledge Learning Mode**\n\nYou can teach me about any topic! Here are the formats:\n\n**1️⃣ Direct Knowledge:**\n"Add knowledge: Marketing is the process of promoting products or services"\n\n**2️⃣ From Website:**\n"Learn from website: https://example.com about topic - Key insights here"\n\n**3️⃣ From Document:**\n"Add document about topic: Full text content here"\n\nOnce added, I can help answer questions about these topics!`;
     }
 
     /**
@@ -717,6 +882,18 @@ class ChatbotEnhancements {
             }
         }
         return 'general task';
+    }
+
+    extractSkillLevel(message) {
+        const msg = message.toLowerCase();
+        if (msg.includes('advanced') || msg.includes('expert') || msg.includes('complex')) return 'advanced';
+        if (msg.includes('beginner') || msg.includes('basic') || msg.includes('simple')) return 'beginner';
+        return 'intermediate';
+    }
+
+    isAdvancedRequest(message) {
+        const msg = message.toLowerCase();
+        return msg.includes('advanced') || msg.includes('expert') || msg.includes('complex') || msg.includes('how to') || msg.includes('strategy');
     }
 }
 
