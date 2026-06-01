@@ -1,8 +1,10 @@
 /**
- * Enhanced Chatbot Features
+ * Enhanced Chatbot Features with Local Knowledge Base
  * - Name and Logo Generation
  * - Situational Advice
  * - Role-Specific Task Completion
+ * - Local Knowledge Base Learning (No API Required)
+ * - Fallback Intent Matching
  */
 
 class ChatbotEnhancements {
@@ -10,10 +12,299 @@ class ChatbotEnhancements {
         this.roleContexts = this.initializeRoleContexts();
         this.generatedNames = [];
         this.generatedLogos = [];
+        this.knowledgeBase = this.initializeKnowledgeBase();
+        this.userDocuments = this.loadUserDocuments();
+        this.conversationHistory = [];
     }
 
     /**
-     * Initialize context for different professional roles
+     * Initialize built-in knowledge base
+     */
+    initializeKnowledgeBase() {
+        return {
+            'business': {
+                definition: 'A business is an organization or entity engaged in commercial, industrial, or professional activities to generate income and create value.',
+                types: ['Sole Proprietorship', 'Partnership', 'Corporation', 'LLC', 'Non-profit'],
+                basics: [
+                    'Business requires proper planning and strategy',
+                    'Market research is essential before starting',
+                    'Financial management is critical',
+                    'Customer satisfaction drives success',
+                    'Innovation keeps businesses competitive'
+                ]
+            },
+            'startup': {
+                definition: 'A startup is a young company founded to develop and validate a scalable business model.',
+                stages: ['Ideation', 'Planning', 'Funding', 'Launch', 'Growth', 'Scale'],
+                challenges: [
+                    'Securing funding and investors',
+                    'Building the right team',
+                    'Achieving product-market fit',
+                    'Managing cash flow',
+                    'Scaling operations efficiently'
+                ]
+            },
+            'marketing': {
+                definition: 'Marketing is the process of promoting and selling products or services through various channels.',
+                strategies: ['Content Marketing', 'Social Media', 'Email Marketing', 'SEO', 'Paid Ads', 'Influencer Marketing'],
+                fundamentals: [
+                    'Know your target audience',
+                    'Create valuable content',
+                    'Use multiple channels',
+                    'Measure and analyze results',
+                    'Continuously optimize campaigns'
+                ]
+            },
+            'sales': {
+                definition: 'Sales is the activity of selling goods or services to customers for revenue.',
+                techniques: ['Cold Calling', 'Consultative Selling', 'Solution Selling', 'Account-Based Selling'],
+                process: [
+                    'Prospecting - Find potential customers',
+                    'Qualification - Assess fit and need',
+                    'Presentation - Showcase value',
+                    'Handling Objections - Address concerns',
+                    'Closing - Secure commitment',
+                    'Follow-up - Build relationships'
+                ]
+            },
+            'customer service': {
+                definition: 'Customer service is the support provided to customers before, during, and after purchase.',
+                principles: [
+                    'Listen actively to understand customer needs',
+                    'Respond promptly to inquiries',
+                    'Solve problems efficiently',
+                    'Maintain professional communication',
+                    'Follow up to ensure satisfaction'
+                ],
+                channels: ['Phone', 'Email', 'Chat', 'Social Media', 'In-person', 'Video Call']
+            },
+            'leadership': {
+                definition: 'Leadership is the ability to guide, influence, and inspire others toward common goals.',
+                styles: ['Autocratic', 'Democratic', 'Laissez-faire', 'Transformational', 'Situational', 'Servant Leadership'],
+                qualities: [
+                    'Vision and clarity',
+                    'Emotional intelligence',
+                    'Integrity and trust',
+                    'Communication skills',
+                    'Decision-making ability',
+                    'Adaptability'
+                ]
+            },
+            'teamwork': {
+                definition: 'Teamwork is the collaborative effort of a group to achieve common objectives.',
+                benefits: [
+                    'Increased productivity',
+                    'Better decision-making',
+                    'Enhanced creativity',
+                    'Improved employee satisfaction',
+                    'Knowledge sharing'
+                ],
+                practices: [
+                    'Clear communication',
+                    'Define roles and responsibilities',
+                    'Foster trust and respect',
+                    'Celebrate wins together',
+                    'Address conflicts promptly'
+                ]
+            },
+            'project management': {
+                definition: 'Project management is the discipline of planning, organizing, and managing resources to deliver projects.',
+                methodologies: ['Waterfall', 'Agile', 'Scrum', 'Kanban', 'Lean', 'Six Sigma'],
+                phases: ['Initiation', 'Planning', 'Execution', 'Monitoring', 'Closure'],
+                tools: ['Gantt Charts', 'RACI Matrix', 'Risk Register', 'Burndown Charts']
+            },
+            'product development': {
+                definition: 'Product development is the process of creating new or improved products to meet market needs.',
+                stages: ['Ideation', 'Research', 'Prototyping', 'Testing', 'Launch', 'Post-launch'],
+                considerations: [
+                    'Market demand and trends',
+                    'User feedback and testing',
+                    'Cost and feasibility',
+                    'Competition analysis',
+                    'Regulatory compliance'
+                ]
+            },
+            'finance': {
+                definition: 'Finance is the management of money and investments for individuals, businesses, and organizations.',
+                areas: ['Personal Finance', 'Corporate Finance', 'Public Finance', 'Investment Finance'],
+                basics: [
+                    'Budgeting and cash flow management',
+                    'Revenue and expense tracking',
+                    'Profit and loss analysis',
+                    'Investment decisions',
+                    'Risk management'
+                ]
+            }
+        };
+    }
+
+    /**
+     * Load user-added documents and knowledge
+     */
+    loadUserDocuments() {
+        const stored = localStorage.getItem('chatbot_knowledge_base');
+        return stored ? JSON.parse(stored) : {};
+    }
+
+    /**
+     * Add new knowledge from user input, documents, or websites
+     * @param {string} topic - Topic name
+     * @param {object} data - Knowledge data {definition, content, examples, etc}
+     */
+    addKnowledge(topic, data) {
+        const normalizedTopic = topic.toLowerCase().trim();
+        
+        this.userDocuments[normalizedTopic] = {
+            ...data,
+            addedDate: new Date().toISOString(),
+            source: data.source || 'user-input'
+        };
+        
+        localStorage.setItem('chatbot_knowledge_base', JSON.stringify(this.userDocuments));
+        
+        return {
+            success: true,
+            message: `✅ Knowledge added for "${topic}". The chatbot can now help with questions about this topic.`,
+            topic: normalizedTopic
+        };
+    }
+
+    /**
+     * Parse and learn from plain text documents
+     * @param {string} text - Document text
+     * @param {string} topic - Main topic
+     */
+    learnFromText(text, topic) {
+        const lines = text.split('\n').filter(line => line.trim().length > 0);
+        
+        const knowledge = {
+            definition: lines[0] || `Information about ${topic}`,
+            content: lines,
+            wordCount: text.split(/\s+/).length,
+            source: 'document'
+        };
+        
+        return this.addKnowledge(topic, knowledge);
+    }
+
+    /**
+     * Extract key information from a URL (simulated - stores URL reference)
+     * @param {string} url - Website URL
+     * @param {string} topic - Main topic
+     * @param {string} summary - User-provided summary
+     */
+    learnFromWebsite(url, topic, summary) {
+        const knowledge = {
+            definition: summary || `Information from ${url}`,
+            source: 'website',
+            url: url,
+            content: [summary]
+        };
+        
+        return this.addKnowledge(topic, knowledge);
+    }
+
+    /**
+     * Get knowledge from local knowledge base
+     */
+    getKnowledge(topic) {
+        const normalizedTopic = topic.toLowerCase().trim();
+        
+        // Check user documents first
+        if (this.userDocuments[normalizedTopic]) {
+            return this.userDocuments[normalizedTopic];
+        }
+        
+        // Check built-in knowledge base
+        if (this.knowledgeBase[normalizedTopic]) {
+            return this.knowledgeBase[normalizedTopic];
+        }
+        
+        return null;
+    }
+
+    /**
+     * Search knowledge base for similar topics
+     */
+    searchKnowledge(query) {
+        const queryWords = query.toLowerCase().split(/\s+/);
+        const allKnowledge = { ...this.knowledgeBase, ...this.userDocuments };
+        const results = [];
+        
+        for (const [topic, data] of Object.entries(allKnowledge)) {
+            let relevanceScore = 0;
+            
+            // Check if query words match topic
+            queryWords.forEach(word => {
+                if (word.length > 2) {
+                    if (topic.includes(word)) relevanceScore += 10;
+                    if (data.definition && data.definition.toLowerCase().includes(word)) relevanceScore += 5;
+                    if (data.content && Array.isArray(data.content)) {
+                        const contentStr = data.content.join(' ').toLowerCase();
+                        if (contentStr.includes(word)) relevanceScore += 3;
+                    }
+                }
+            });
+            
+            if (relevanceScore > 0) {
+                results.push({ topic, data, score: relevanceScore });
+            }
+        }
+        
+        return results.sort((a, b) => b.score - a.score);
+    }
+
+    /**
+     * Fallback intent matching using knowledge base
+     */
+    fallbackIntentMatching(userMessage) {
+        const message = userMessage.toLowerCase();
+        
+        // Search for relevant knowledge
+        const searchResults = this.searchKnowledge(message);
+        
+        if (searchResults.length > 0) {
+            const topResult = searchResults[0];
+            const knowledge = topResult.data;
+            
+            let response = `📚 **${topResult.topic.charAt(0).toUpperCase() + topResult.topic.slice(1)}**\n\n`;
+            
+            if (knowledge.definition) {
+                response += `📖 Definition:\n${knowledge.definition}\n\n`;
+            }
+            
+            if (knowledge.basics || knowledge.principles || knowledge.fundamentals) {
+                const items = knowledge.basics || knowledge.principles || knowledge.fundamentals;
+                response += `✓ Key Points:\n`;
+                items.slice(0, 4).forEach(item => {
+                    response += `  • ${item}\n`;
+                });
+                response += `\n`;
+            }
+            
+            if (knowledge.content && Array.isArray(knowledge.content)) {
+                response += `📋 Additional Info:\n`;
+                knowledge.content.slice(0, 3).forEach(item => {
+                    if (typeof item === 'string' && item.trim().length > 0) {
+                        response += `  • ${item}\n`;
+                    }
+                });
+            }
+            
+            if (knowledge.source === 'website' && knowledge.url) {
+                response += `\n🔗 Source: ${knowledge.url}`;
+            } else if (knowledge.source === 'document') {
+                response += `\n📄 From: User Document`;
+            }
+            
+            return response;
+        }
+        
+        return null;
+    }
+
+    /**
+     * Initialize role contexts
      */
     initializeRoleContexts() {
         return {
@@ -53,10 +344,7 @@ class ChatbotEnhancements {
     }
 
     /**
-     * Generate creative business names
-     * @param {string} industry - Industry/business type
-     * @param {string} style - Style preference (modern, classic, playful, etc.)
-     * @returns {Array} Array of generated names
+     * Generate business names
      */
     generateBusinessNames(industry, style = 'modern') {
         const prefixes = ['Pro', 'Next', 'Smart', 'Swift', 'Prime', 'Peak', 'Pulse', 'Flow', 'Nexus', 'Zenith', 'Apex', 'Spark'];
@@ -65,21 +353,18 @@ class ChatbotEnhancements {
 
         const names = [];
 
-        // Generate combination names
         for (let i = 0; i < 3; i++) {
             const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
             const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
             names.push(`${prefix}${suffix}`);
         }
 
-        // Generate industry-based names
         for (let i = 0; i < 2; i++) {
             const term = industryTerms[Math.floor(Math.random() * industryTerms.length)];
             const modifier = prefixes[Math.floor(Math.random() * prefixes.length)];
             names.push(`${term} ${modifier}`);
         }
 
-        // Generate acronym-style names
         const acronym = this.generateAcronym(industry);
         names.push(acronym);
 
@@ -88,10 +373,7 @@ class ChatbotEnhancements {
     }
 
     /**
-     * Generate logo design suggestions
-     * @param {string} businessName - Business name
-     * @param {string} industry - Industry type
-     * @returns {Array} Array of logo concepts
+     * Generate logo suggestions
      */
     generateLogoSuggestions(businessName, industry) {
         const logos = [
@@ -132,10 +414,7 @@ class ChatbotEnhancements {
     }
 
     /**
-     * Provide situational advice for specific scenarios
-     * @param {string} situation - Describe the situation
-     * @param {string} context - Additional context
-     * @returns {string} Actionable advice
+     * Get situational advice
      */
     getSituationalAdvice(situation, context = '') {
         const situationKeywords = situation.toLowerCase();
@@ -150,28 +429,20 @@ class ChatbotEnhancements {
                 tips: ['Over-communicate delays early', 'Ask for help proactively', 'Set buffer time']
             },
             'presentation': {
-                advice: 'Presentation Success:\n1. Know your audience deeply\n2. Start with a hook (problem, stat, question)\n3. Use the rule of 3 for main points\n4. Show, don\'t tell (use visuals)\n5. End with clear call-to-action\n6. Practice out loud multiple times',
+                advice: 'Presentation Success:\n1. Know your audience deeply\n2. Start with a hook (problem, stat, question)\n3. Use the rule of 3 for main points\n4. Show, don\'t tell (use visuals)\n5. End with clear call-to-action',
                 tips: ['Practice with real feedback', 'Prepare for tough questions', 'Arrive early to test tech']
             },
             'negotiation': {
-                advice: 'Negotiation Tactics:\n1. Research and prepare thoroughly\n2. Start with your ideal, not your limit\n3. Listen more than you talk\n4. Focus on interests, not positions\n5. Have multiple solutions ready\n6. Know your walk-away point',
+                advice: 'Negotiation Tactics:\n1. Research and prepare thoroughly\n2. Start with your ideal, not your limit\n3. Listen more than you talk\n4. Focus on interests, not positions\n5. Have multiple solutions ready',
                 tips: ['Silence is powerful', 'Create win-win solutions', 'Document agreements']
             },
             'decision': {
-                advice: 'Decision-Making Framework:\n1. Define the decision clearly\n2. Gather relevant information\n3. Identify 3+ options\n4. List pros/cons for each\n5. Consider worst-case scenario\n6. Trust your gut after analysis\n7. Set a review date',
-                tips: ['Don\'t overthink', 'Get input from smart people', 'Remember: any decision beats no decision']
+                advice: 'Decision-Making Framework:\n1. Define the decision clearly\n2. Gather relevant information\n3. Identify 3+ options\n4. List pros/cons for each\n5. Consider worst-case scenario',
+                tips: ['Don\'t overthink', 'Get input from smart people', 'Any decision beats no decision']
             },
             'failure': {
-                advice: 'Recovering from Failure:\n1. Accept responsibility (but not blame)\n2. Analyze what went wrong\n3. Extract the lesson\n4. Adjust strategy\n5. Communicate transparently\n6. Move forward with conviction',
-                tips: ['Failure is feedback, not final', 'Share learnings with team', 'Stay resilient']
-            },
-            'hiring': {
-                advice: 'Hiring Strategy:\n1. Define role requirements clearly\n2. Look for culture fit AND skills\n3. Ask behavior-based questions\n4. Check references thoroughly\n5. Have multiple interview rounds\n6. Trust team feedback',
-                tips: ['First interview: screening only', 'Watch for red flags', 'Negotiate fairly']
-            },
-            'scaling': {
-                advice: 'Scaling Your Business:\n1. Perfect your current model first\n2. Document all processes\n3. Build a strong team\n4. Systematize everything\n5. Track key metrics\n6. Scale gradually and test',
-                tips: ['Don\'t scale too fast', 'Culture matters more as you grow', 'Maintain quality']
+                advice: 'Recovering from Failure:\n1. Accept responsibility\n2. Analyze what went wrong\n3. Extract the lesson\n4. Adjust strategy\n5. Move forward with conviction',
+                tips: ['Failure is feedback', 'Share learnings with team', 'Stay resilient']
             }
         };
 
@@ -181,19 +452,11 @@ class ChatbotEnhancements {
             }
         }
 
-        // Generic situational advice
-        return `Situational Analysis for: ${situation}\n\n` +
-               `1. Assess Current State:\n   - What exactly is happening?\n   - Who is involved?\n   - What's the timeline?\n\n` +
-               `2. Identify Options:\n   - What are 3 possible approaches?\n   - What are the trade-offs?\n   - Which aligns with your values?\n\n` +
-               `3. Take Action:\n   - Choose your approach\n   - Execute with clarity\n   - Monitor and adjust\n\n` +
-               `${context ? `Additional Context: ${context}` : ''}`;
+        return null;
     }
 
     /**
      * Get role-specific task assistance
-     * @param {string} role - Professional role
-     * @param {string} task - Specific task
-     * @returns {string} Task guidance
      */
     getRoleTaskAssistance(role, task) {
         const normalizedRole = role.toLowerCase();
@@ -204,91 +467,12 @@ class ChatbotEnhancements {
         }
 
         const taskGuides = {
-            'business plan': `BUSINESS PLAN STRUCTURE:
-1. Executive Summary (1 page) - Hook, problem, solution, market size
-2. Company Description - Mission, vision, values
-3. Market Analysis - Industry trends, target audience, competition
-4. Organization - Structure, key team members, roles
-5. Service/Product Line - What you offer, unique value
-6. Marketing Strategy - How you'll reach customers
-7. Financial Projections - Revenue, expenses, break-even
-8. Funding Requirements - How much and how you'll use it
-
-Pro Tips: Keep it 20-30 pages, update quarterly, make it action-oriented.`,
-
-            'pitch deck': `PITCH DECK STRUCTURE (10-15 slides):
-1. Title Slide
-2. The Problem - Make it relatable
-3. Your Solution - Show, don't tell
-4. Market Size - Total Addressable Market (TAM)
-5. Business Model - How you make money
-6. Traction - Proof points, metrics
-7. Team - Why you can execute
-8. Competition - Your differentiation
-9. Use of Funds - Where money goes
-10. Call to Action - What you're asking for
-
-Pro Tips: Tell a story, use visuals, practice timing (15 mins), anticipate questions.`,
-
-            'code review': `CODE REVIEW CHECKLIST:
-✓ Functionality - Does it work as intended?
-✓ Code Quality - Is it clean and maintainable?
-✓ Security - Any vulnerabilities?
-✓ Performance - Efficient algorithms?
-✓ Testing - Adequate test coverage?
-✓ Documentation - Clear comments?
-✓ Style - Follows conventions?
-
-Giving Feedback: Be constructive, praise good work, ask questions, suggest improvements.`,
-
-            'ui/ux design': `UX DESIGN PROCESS:
-1. Research - User interviews, surveys, testing
-2. Wireframing - Low-fidelity layouts
-3. Prototyping - Interactive mockups
-4. User Testing - Get feedback early
-5. Visual Design - Colors, typography, spacing
-6. Testing - Usability and accessibility
-7. Iteration - Refine based on feedback
-
-Golden Rules: Consistency, clarity, accessibility, mobile-first, reduce friction.`,
-
-            'campaign strategy': `MARKETING CAMPAIGN FRAMEWORK:
-1. Goal - What are you trying to achieve?
-2. Audience - Who are you targeting?
-3. Message - What's your core message?
-4. Channels - Where will you reach them?
-5. Creative - Content, visuals, copy
-6. Budget - Resource allocation
-7. Timeline - When and how often?
-8. Metrics - How will you measure success?
-
-Pro Tips: Start with one channel, test, scale what works, track ROI.`,
-
-            'default': `TASK COMPLETION FRAMEWORK:
-Step 1: CLARIFY
-- Define the exact deliverable
-- Identify success metrics
-- Set realistic timeline
-
-Step 2: PLAN
-- Break into sub-tasks
-- Identify dependencies
-- Allocate resources
-
-Step 3: EXECUTE
-- Follow your plan
-- Document progress
-- Flag blockers early
-
-Step 4: REVIEW
-- Check against success metrics
-- Get feedback
-- Iterate if needed
-
-Step 5: DELIVER
-- Present professionally
-- Provide documentation
-- Offer support for adoption`
+            'business plan': `BUSINESS PLAN STRUCTURE:\n1. Executive Summary (1 page)\n2. Company Description\n3. Market Analysis\n4. Organization\n5. Service/Product Line\n6. Marketing Strategy\n7. Financial Projections\n8. Funding Requirements`,
+            'pitch deck': `PITCH DECK STRUCTURE (10-15 slides):\n1. Title Slide\n2. The Problem\n3. Your Solution\n4. Market Size\n5. Business Model\n6. Traction\n7. Team\n8. Competition\n9. Use of Funds\n10. Call to Action`,
+            'code review': `CODE REVIEW CHECKLIST:\n✓ Functionality\n✓ Code Quality\n✓ Security\n✓ Performance\n✓ Testing\n✓ Documentation\n✓ Style`,
+            'ui/ux design': `UX DESIGN PROCESS:\n1. Research\n2. Wireframing\n3. Prototyping\n4. User Testing\n5. Visual Design\n6. Accessibility Testing\n7. Iteration`,
+            'campaign strategy': `MARKETING CAMPAIGN FRAMEWORK:\n1. Goal\n2. Audience\n3. Message\n4. Channels\n5. Creative\n6. Budget\n7. Timeline\n8. Metrics`,
+            'default': `TASK COMPLETION FRAMEWORK:\n1. CLARIFY - Define deliverable\n2. PLAN - Break into sub-tasks\n3. EXECUTE - Follow your plan\n4. REVIEW - Check success\n5. DELIVER - Present professionally`
         };
 
         const guidance = taskGuides[task.toLowerCase()] || taskGuides['default'];
@@ -296,67 +480,42 @@ Step 5: DELIVER
     }
 
     /**
-     * Get industry-specific terms for name generation
-     */
-    getIndustryTerms(industry) {
-        const terms = {
-            'tech': ['Byte', 'Code', 'Net', 'Cloud', 'Data', 'Logic', 'Matrix', 'Cyber'],
-            'finance': ['Capital', 'Wealth', 'Invest', 'Trust', 'Assets', 'Portfolio', 'Equity', 'Funds'],
-            'health': ['Care', 'Vital', 'Heal', 'Wellness', 'Life', 'Medical', 'Health', 'Plus'],
-            'retail': ['Shop', 'Store', 'Trends', 'Style', 'Choice', 'Market', 'Direct', 'Hub'],
-            'consulting': ['Advise', 'Expert', 'Insight', 'Strategy', 'Clarity', 'Navigate', 'Thrive', 'Growth'],
-            'education': ['Learn', 'Academy', 'Insight', 'Master', 'Edu', 'School', 'Institute', 'Smart'],
-            'default': ['Pro', 'Smart', 'Elite', 'Dynamic', 'Future', 'Quantum', 'Velocity', 'Vision']
-        };
-
-        return terms[industry.toLowerCase()] || terms['default'];
-    }
-
-    /**
-     * Generate acronym from industry/business type
-     */
-    generateAcronym(industry) {
-        const words = industry.split(' ');
-        return words.map(w => w.charAt(0).toUpperCase()).join('') || 'BIZ';
-    }
-
-    /**
-     * Identify the user's intent and provide appropriate response
+     * Analyze user intent
      */
     analyzeUserIntent(userMessage) {
         const msg = userMessage.toLowerCase();
         
-        // Name/Logo generation
-        if (msg.includes('generate name') || msg.includes('business name') || msg.includes('company name')) {
+        if (msg.includes('generate name') || msg.includes('business name')) {
             return { type: 'name_generation', priority: 1 };
         }
-        if (msg.includes('logo') || msg.includes('design suggestion')) {
+        if (msg.includes('logo')) {
             return { type: 'logo_generation', priority: 1 };
         }
 
-        // Role detection
         for (const role of Object.keys(this.roleContexts)) {
-            if (msg.includes(role) || msg.includes('i am a ' + role) || msg.includes('as a ' + role)) {
+            if (msg.includes(role)) {
                 return { type: 'role_identified', role, priority: 2 };
             }
         }
 
-        // Situational advice
-        const situationKeywords = ['what if', 'how do i handle', 'facing', 'dealing with', 'advice', 'help with situation', 'scenario'];
+        const situationKeywords = ['what if', 'how do i handle', 'facing', 'advice', 'conflict', 'deadline', 'presentation', 'negotiation'];
         if (situationKeywords.some(keyword => msg.includes(keyword))) {
             return { type: 'situation_advice', priority: 2 };
         }
 
-        // Task request
-        if (msg.includes('help me') || msg.includes('i need') || msg.includes('create') || msg.includes('build')) {
+        if (msg.includes('help me') || msg.includes('i need') || msg.includes('create')) {
             return { type: 'task_help', priority: 2 };
+        }
+
+        if (msg.includes('learn') || msg.includes('add knowledge') || msg.includes('teach') || msg.includes('add document') || msg.includes('from website')) {
+            return { type: 'knowledge_learning', priority: 2 };
         }
 
         return { type: 'general', priority: 3 };
     }
 
     /**
-     * Generate comprehensive response based on user input
+     * Main response generator with fallback
      */
     generateResponse(userMessage) {
         const intent = this.analyzeUserIntent(userMessage);
@@ -364,23 +523,24 @@ Step 5: DELIVER
         switch (intent.type) {
             case 'name_generation': {
                 const industry = this.extractIndustry(userMessage);
-                const style = this.extractStyle(userMessage);
-                const names = this.generateBusinessNames(industry, style);
-                return `Generated Business Names for ${industry} industry (${style} style):\n\n${names.map((n, i) => `${i + 1}. ${n}`).join('\n')}\n\nWould you like me to suggest logos for any of these names?`;
+                const names = this.generateBusinessNames(industry);
+                return `✨ Generated Business Names for ${industry}:\n\n${names.map((n, i) => `${i + 1}. ${n}`).join('\n')}\n\nWould you like logo suggestions for any of these?`;
             }
 
             case 'logo_generation': {
                 const businessName = this.extractBusinessName(userMessage) || 'Your Business';
                 const industry = this.extractIndustry(userMessage);
                 const logos = this.generateLogoSuggestions(businessName, industry);
-                return `Logo Design Suggestions for "${businessName}":\n\n${logos.map((logo, i) => 
-                    `${i + 1}. ${logo.concept}\n   ${logo.description}\n   Colors: ${logo.colors.join(', ')}\n   Style: ${logo.style}`
-                ).join('\n\n')}\n\nChoose the one that resonates with you and let me know!`;
+                return `🎨 Logo Design Suggestions for ${businessName}:\n\n${logos.map((logo, i) => 
+                    `${i + 1}. ${logo.concept}\n   ${logo.description}`
+                ).join('\n\n')}`;
             }
 
             case 'situation_advice': {
                 const situation = this.extractSituation(userMessage);
-                return this.getSituationalAdvice(situation);
+                const advice = this.getSituationalAdvice(situation);
+                if (advice) return advice;
+                break;
             }
 
             case 'role_identified': {
@@ -389,40 +549,155 @@ Step 5: DELIVER
             }
 
             case 'task_help': {
-                const role = this.extractRole(userMessage) || 'general';
                 const task = this.extractTask(userMessage);
-                return this.getRoleTaskAssistance(role, task);
+                return this.getRoleTaskAssistance('general', task);
             }
 
-            default:
-                return `I'm here to help with:\n\n` +
-                       `💼 Business name and logo generation\n` +
-                       `🎯 Role-specific guidance (entrepreneur, developer, designer, marketer, manager, etc.)\n` +
-                       `📋 Task completion assistance\n` +
-                       `💡 Situational advice for specific scenarios\n\n` +
-                       `What can I help you with? You can ask things like:\n` +
-                       `- "Generate business names for a tech startup"\n` +
-                       `- "I'm a developer, help me with a code review process"\n` +
-                       `- "How do I handle a conflict with a team member?"\n` +
-                       `- "Suggest a logo for my consulting business"`;
+            case 'knowledge_learning': {
+                return this.handleKnowledgeLearning(userMessage);
+            }
+        }
+
+        // FALLBACK: Check knowledge base and search
+        const fallbackResponse = this.fallbackIntentMatching(userMessage);
+        if (fallbackResponse) {
+            return fallbackResponse;
+        }
+
+        // Final fallback with helpful suggestions
+        return `🤖 I'm here to help with:\n\n💼 **Business Names & Logos** - Generate creative names and logo ideas\n💡 **Situational Advice** - Get guidance on conflicts, deadlines, presentations, negotiations\n👔 **Role-Specific Guidance** - Help tailored to your profession\n📚 **Learn & Remember** - Add your own knowledge and documents\n\n📝 **Example Questions:**\n• "Generate names for tech startup"\n• "Help me with code review"\n• "How handle team conflict?"\n• "Add knowledge about marketing"\n• "Learn from website: [topic]"\n\n💾 Your knowledge is saved locally!`;
+    }
+
+    /**
+     * Handle knowledge learning requests
+     */
+    handleKnowledgeLearning(userMessage) {
+        const msg = userMessage.toLowerCase();
+        
+        // Pattern: "add knowledge: topic is [X], definition: [Y], points: [Z]"
+        if (msg.includes('add knowledge') || msg.includes('teach me about')) {
+            const topicMatch = msg.match(/(?:add knowledge|teach me about)[:\s]+([^\n,]+)/i);
+            const topic = topicMatch ? topicMatch[1].trim() : 'new topic';
+            
+            const definitionMatch = msg.match(/(?:definition|is)[:\s]+([^\n,]+)/i);
+            const definition = definitionMatch ? definitionMatch[1].trim() : '';
+            
+            if (definition.length > 0) {
+                const result = this.addKnowledge(topic, { 
+                    definition,
+                    source: 'user-input'
+                });
+                return result.message;
+            }
+        }
+        
+        // Pattern: "learn from website: [URL] about [topic] - [description]"
+        if (msg.includes('from website') || msg.includes('website:')) {
+            const urlMatch = msg.match(/(?:from website|website)[:\s]+([^\s]+)/i);
+            const url = urlMatch ? urlMatch[1].trim() : 'unknown-source';
+            
+            const topicMatch = msg.match(/(?:about|topic)[:\s]+([^-,]+)/i);
+            const topic = topicMatch ? topicMatch[1].trim() : 'web-content';
+            
+            const summaryMatch = msg.match(/-\s+(.+)/);
+            const summary = summaryMatch ? summaryMatch[1].trim() : 'Web content learned';
+            
+            const result = this.learnFromWebsite(url, topic, summary);
+            return result.message;
+        }
+        
+        // Pattern: "add document about [topic]: [content]"
+        if (msg.includes('add document') || msg.includes('document about')) {
+            const topicMatch = msg.match(/(?:add document|document about)[:\s]+([^:]+)/i);
+            const topic = topicMatch ? topicMatch[1].trim() : 'document';
+            
+            const contentMatch = msg.match(/:\s+(.+)/s);
+            const content = contentMatch ? contentMatch[1].trim() : '';
+            
+            if (content.length > 0) {
+                const result = this.learnFromText(content, topic);
+                return result.message;
+            }
+        }
+        
+        // Default knowledge learning help
+        return `📚 **Knowledge Learning Mode**\n\nYou can teach me about any topic! Here are the formats:\n\n**1️⃣ Direct Knowledge:**\n"Add knowledge: Marketing is the process of promoting products. Key points: SEO, Content, Social Media"\n\n**2️⃣ From Website:**\n"Learn from website: https://example.com about AI\n- Artificial Intelligence is..."\n\n**3️⃣ From Document:**\n"Add document about Python:\nPython is a programming language\nUsed for web, data science, automation"\n\n💾 **All knowledge is saved locally** and used when answering future questions!\n\n🔍 Try any topic - business, technology, personal development, etc!`;
+    }
+
+    /**
+     * Get all stored knowledge topics
+     */
+    getStoredTopics() {
+        const allKnowledge = { ...this.knowledgeBase, ...this.userDocuments };
+        const builtIn = Object.keys(this.knowledgeBase);
+        const userAdded = Object.keys(this.userDocuments);
+        
+        return {
+            builtIn,
+            userAdded,
+            total: Object.keys(allKnowledge).length
+        };
+    }
+
+    /**
+     * Export knowledge base
+     */
+    exportKnowledge() {
+        const allKnowledge = { ...this.knowledgeBase, ...this.userDocuments };
+        return JSON.stringify(allKnowledge, null, 2);
+    }
+
+    /**
+     * Import knowledge base
+     */
+    importKnowledge(jsonData) {
+        try {
+            const imported = JSON.parse(jsonData);
+            for (const [topic, data] of Object.entries(imported)) {
+                this.userDocuments[topic] = data;
+            }
+            localStorage.setItem('chatbot_knowledge_base', JSON.stringify(this.userDocuments));
+            return { success: true, message: `✅ Imported ${Object.keys(imported).length} knowledge topics` };
+        } catch (e) {
+            return { success: false, message: `❌ Error importing: ${e.message}` };
         }
     }
 
-    // Helper extraction methods
+    /**
+     * Clear all user knowledge (keep built-in)
+     */
+    clearUserKnowledge() {
+        this.userDocuments = {};
+        localStorage.setItem('chatbot_knowledge_base', JSON.stringify({}));
+        return { success: true, message: '🗑️ User knowledge cleared. Built-in knowledge preserved.' };
+    }
+
+    // Helper methods
+    getIndustryTerms(industry) {
+        const terms = {
+            'tech': ['Byte', 'Code', 'Net', 'Cloud', 'Data', 'Logic', 'Matrix', 'Pixel'],
+            'finance': ['Capital', 'Wealth', 'Invest', 'Trust', 'Assets', 'Portfolio', 'Coin'],
+            'health': ['Care', 'Vital', 'Heal', 'Wellness', 'Life', 'Medical', 'Plus'],
+            'retail': ['Shop', 'Store', 'Trends', 'Style', 'Choice', 'Market', 'Buy'],
+            'consulting': ['Advise', 'Expert', 'Insight', 'Strategy', 'Clarity', 'Think'],
+            'education': ['Learn', 'Skill', 'Academy', 'Master', 'Wisdom', 'Path'],
+            'default': ['Pro', 'Smart', 'Elite', 'Dynamic', 'Future', 'Quantum', 'Infinite']
+        };
+
+        return terms[industry.toLowerCase()] || terms['default'];
+    }
+
+    generateAcronym(industry) {
+        const words = industry.split(' ');
+        return words.map(w => w.charAt(0).toUpperCase()).join('') || 'BIZ';
+    }
+
     extractIndustry(message) {
-        const industries = ['tech', 'finance', 'health', 'retail', 'consulting', 'education'];
+        const industries = ['tech', 'finance', 'health', 'retail', 'consulting', 'education', 'software', 'ai', 'ecommerce', 'saas'];
         for (const industry of industries) {
             if (message.toLowerCase().includes(industry)) return industry;
         }
         return 'general';
-    }
-
-    extractStyle(message) {
-        const styles = ['modern', 'classic', 'playful', 'minimal', 'bold'];
-        for (const style of styles) {
-            if (message.toLowerCase().includes(style)) return style;
-        }
-        return 'modern';
     }
 
     extractBusinessName(message) {
@@ -431,24 +706,17 @@ Step 5: DELIVER
     }
 
     extractSituation(message) {
-        return message.replace(/^.*?(how|what|can|should|would).*?\?/i, '').trim() || 'general situation';
+        return message.replace(/^.*?(how|what|can|should|would).*?\?/i, '').trim() || 'situation';
     }
 
     extractTask(message) {
-        const taskKeywords = ['help', 'need', 'with', 'create', 'build', 'make', 'develop'];
+        const taskKeywords = ['help', 'need', 'with', 'create', 'build', 'make', 'generate'];
         for (const keyword of taskKeywords) {
             if (message.toLowerCase().includes(keyword)) {
                 return message.replace(keyword, '').trim();
             }
         }
         return 'general task';
-    }
-
-    extractRole(message) {
-        for (const role of Object.keys(this.roleContexts)) {
-            if (message.toLowerCase().includes(role)) return role;
-        }
-        return 'general';
     }
 }
 
