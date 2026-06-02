@@ -7,6 +7,15 @@
  * - Fallback Intent Matching
  */
 
+/**
+ * Enhanced Chatbot Features with Local Knowledge Base
+ * - Name and Logo Generation
+ * - Situational Advice
+ * - Role-Specific Task Completion
+ * - Local Knowledge Base Learning (No API Required)
+ * - Fallback Intent Matching
+ */
+
 class ChatbotEnhancements {
   constructor() {
     this.knowledgeBase   = this._initKB();
