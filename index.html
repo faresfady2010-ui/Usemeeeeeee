@@ -958,6 +958,28 @@ body.dark #image-preview-name { color: #aaa; }
         padding: 5px 10px;
     }
 }
+
+/* ── Formatted bot message markdown styles ─────────────────────── */
+.message.bot { line-height: 1.6; }
+.md-h1 { font-size: 1.05em; font-weight: 800; color: #0d1117; margin: 10px 0 4px; border-bottom: 2px solid #e9ecef; padding-bottom: 4px; }
+.md-h2 { font-size: 1em; font-weight: 700; color: #1a237e; margin: 8px 0 3px; }
+.md-section { display: flex; align-items: flex-start; gap: 6px; padding: 5px 0 3px; font-size: 0.97em; }
+.md-section-icon { flex-shrink: 0; width: 20px; text-align: center; }
+.md-bullet { display: flex; align-items: flex-start; gap: 6px; padding: 2px 0 2px 12px; font-size: 0.95em; color: #343a40; }
+.md-bullet::before { content: "•"; color: #6c757d; flex-shrink: 0; margin-top: 1px; }
+.md-numbered { padding: 2px 0 2px 12px; font-size: 0.95em; }
+.md-tip { background: #fff8e1; border-left: 3px solid #ffc107; border-radius: 0 8px 8px 0; padding: 7px 10px; margin: 8px 0 4px; font-size: 0.92em; color: #555; }
+.md-spacer { height: 6px; }
+.md-text { padding: 1px 0; font-size: 0.96em; }
+.md-divider { border: none; border-top: 1px solid #e9ecef; margin: 8px 0; }
+.message.bot strong { font-weight: 700; color: #0d1117; }
+.message.bot em { font-style: italic; color: #495057; }
+.message.bot code { background: #f1f3f5; padding: 1px 5px; border-radius: 4px; font-size: 0.83em; font-family: 'Courier New', monospace; color: #d63384; }
+body.dark .md-h1 { color: #e0e0e0; border-color: #333; }
+body.dark .md-h2 { color: #90caf9; }
+body.dark .md-tip { background: #2a2a1a; border-color: #ffc107; color: #ccc; }
+body.dark .message.bot strong { color: #fff; }
+body.dark .md-bullet { color: #ccc; }
 </style>
 </head>
 <body>
@@ -1141,6 +1163,8 @@ body.dark #image-preview-name { color: #aaa; }
 <script src="https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <script src="translations.js"></script>
 <script src="intent-translations.js"></script>
+<script src="chatbot-features.js"></script>
+<script src="logo-generator.js"></script>
 
 <script>
 // ==================== DARK MODE ====================
@@ -1370,6 +1394,496 @@ const bcfQuestions = [
 ];
 
 const bcfKeys = ['businessType', 'targetCustomers', 'problem', 'budget', 'experience', 'team'];
+
+// ── Business Plan Flow ────────────────────────────────────────────────
+let businessPlanFlow = {
+  active: false,
+  step: 0,
+  answers: {}
+};
+
+const bpfQuestions = [
+  "Perfect! Let's build your business plan together — I'll ask you 8 quick questions, then generate a complete, personalised plan. 📋\n\nQuestion 1 of 8 — What is your business name? (If you haven't chosen one yet, describe your idea instead.)",
+  "Question 2 of 8 — What product or service does your business sell? Describe it in 1–2 sentences.",
+  "Question 3 of 8 — Who are your target customers?\n(e.g., small business owners in the US, young professionals aged 25–35, local families, e-commerce stores, etc.)",
+  "Question 4 of 8 — What problem do you solve for your customers, and what makes you different from competitors?",
+  "Question 5 of 8 — How will your business make money? Describe your pricing or revenue model.\n(e.g., $99/month subscription, one-time fee of $500, 20% commission per sale, freemium with paid upgrades, etc.)",
+  "Question 6 of 8 — Who are your main competitors? Name 2–3 if you can, and what do they do well or poorly?\n(It's fine to say 'none yet' or 'not sure' — just give your best answer.)",
+  "Question 7 of 8 — What is your starting budget or available funding?\n(e.g., $500, $5,000, $50,000, bootstrapping from revenue, seeking investors, etc.)",
+  "Question 8 of 8 — What is your main goal for the first 12 months? Be as specific as possible.\n(e.g., 100 paying customers, $10,000 monthly revenue, 3 enterprise contracts signed, 500 units sold, etc.)"
+];
+
+const bpfKeys = ['businessName','productService','targetCustomers','differentiation','revenueModel','competitors','budget','goal12months'];
+
+function startBusinessPlanFlow() {
+  businessPlanFlow.active = true;
+  businessPlanFlow.step = 0;
+  businessPlanFlow.answers = {};
+  return bpfQuestions[0];
+}
+
+function handleBusinessPlanStep(input) {
+  const flow = businessPlanFlow;
+  flow.answers[bpfKeys[flow.step]] = input;
+  flow.step++;
+  if (flow.step < bpfQuestions.length) return bpfQuestions[flow.step];
+  flow.active = false;
+  return generateFullBusinessPlan(flow.answers);
+}
+
+function generateFullBusinessPlan(a) {
+  const name = a.businessName || 'Your Business';
+  const hasCompetitors = a.competitors && !/none|no comp|not sure|unsure|don't know|n\/a/i.test(a.competitors);
+  const isLowBudget = /under|\$500|\$1k|1,000|1000|small|little|no budget|bootstrap|zero/i.test(a.budget || '');
+  const isRecurring = /subscription|saas|recurring|retainer|monthly|annual/i.test(a.revenueModel || '');
+
+  return `📋 **Business Plan — ${name}**\n\n━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+
+  `## 1. Executive Summary\n\n` +
+  `**Business:** ${name}\n` +
+  `**Product / Service:** ${a.productService}\n` +
+  `**Target Market:** ${a.targetCustomers}\n` +
+  `**Unique Value:** ${a.differentiation}\n` +
+  `**Revenue Model:** ${a.revenueModel}\n` +
+  `**12-Month Goal:** ${a.goal12months}\n\n` +
+  `${name} serves ${a.targetCustomers} by addressing: ${a.differentiation}. With a ${a.revenueModel} model, the plan is to achieve ${a.goal12months} within the first year.\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 2. Business Description\n\n` +
+  `**What we sell:** ${a.productService}\n\n` +
+  `**Who we serve:** ${a.targetCustomers}\n\n` +
+  `**Why customers choose us:** ${a.differentiation}\n\n` +
+  `Our customers currently lack a reliable, focused solution. ${name} fills this gap with a high-quality, targeted offering built specifically for their needs.\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 3. Market Analysis\n\n` +
+  `**Target segment:** ${a.targetCustomers}\n\n` +
+  `**Competition:**\n` +
+  (hasCompetitors
+    ? `Key competitors: ${a.competitors}\n\nOur edge over them: ${a.differentiation}. We differentiate through focus, customer experience, and quality — not just price.`
+    : `No direct competitors identified yet — this signals either a blue-ocean opportunity or a need to validate demand urgently before building.`) +
+  `\n\n**Market opportunity:** Even capturing a 1–5% share of the target segment can generate meaningful revenue. Focus first: dominate one niche before expanding.\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 4. Products & Services\n\n` +
+  `**Core offering:** ${a.productService}\n\n` +
+  `- Solves: ${a.differentiation}\n` +
+  `- Designed for: ${a.targetCustomers}\n` +
+  `- Delivered via: ${a.revenueModel}\n\n` +
+  `**Launch approach:** Build a minimum viable version (MVP) first. Collect real customer feedback before adding features — the market tells you what to build next.\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 5. Revenue Model & Pricing\n\n` +
+  `**How ${name} earns:** ${a.revenueModel}\n\n` +
+  (isRecurring
+    ? `✅ Recurring revenue is excellent for predictable cash flow and business valuation. Focus on minimising churn and maximising lifetime customer value (LTV).`
+    : `💡 Tip: Explore whether a recurring or retainer element could be added — predictable monthly revenue makes the business far more stable and valuable.`) +
+  `\n\n**Pricing strategy:**\n` +
+  `- Use value-based pricing: what is the outcome worth to the customer?\n` +
+  `- Test 2–3 price points with early customers before locking in\n` +
+  `- Avoid competing purely on low price — it erodes margins and attracts difficult customers\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 6. Marketing & Sales Strategy\n\n` +
+  `**Audience:** ${a.targetCustomers}\n\n` +
+  `**Top 5 recommended channels:**\n` +
+  `1. 📣 Content marketing — publish about the problem you solve (attracts warm, ready-to-buy leads)\n` +
+  `2. 🤝 Direct outreach — personally contact 30–50 ideal customers per week in the early stage\n` +
+  `3. 💬 Community presence — show up in forums, groups, and spaces your audience uses\n` +
+  `4. 🔁 Referral programme — incentivise happy customers to refer others (cheapest channel)\n` +
+  `5. 📧 Email list — start building from day one; email converts at 3–5× the rate of social media\n\n` +
+  `**First 30-day focus:** Land your first 3–5 paying customers through personal outreach and your existing network. Real feedback from real customers is worth more than any market research.\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 7. Operations Plan\n\n` +
+  `**Tools to set up:** CRM, payment processor, invoicing, project management, communication\n\n` +
+  `**4 core processes to define immediately:**\n` +
+  `- How do you onboard a new customer?\n` +
+  `- How do you deliver your product/service consistently?\n` +
+  `- How do you handle complaints or refunds?\n` +
+  `- How do you track revenue and expenses?\n\n` +
+  `**Rule:** Document everything from day one — even basic SOPs save enormous time as you scale.\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 8. Financial Overview\n\n` +
+  `**Starting budget:** ${a.budget}\n\n` +
+  (isLowBudget
+    ? `💡 Low-budget approach: Use free tools (Canva, Google Workspace, Notion, Wave Accounting). Validate demand before any significant spend. Your first goal is revenue — not a perfect setup.`
+    : `💡 You have runway — invest in order: (1) product/service quality, (2) customer acquisition, (3) operations systems. Delay overhead until revenue supports it.`) +
+  `\n\n**Key metrics to track monthly:**\n` +
+  `- Total Revenue vs Target\n` +
+  `- Customer Acquisition Cost (CAC)\n` +
+  `- Gross Margin %\n` +
+  `- Monthly Burn Rate\n` +
+  `- Break-even point (Fixed costs ÷ Gross margin %)\n\n` +
+
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 9. 12-Month Milestones\n\n` +
+  `**Your goal:** ${a.goal12months}\n\n` +
+  `📍 **Months 1–3 — Validate & Launch**\n` +
+  `- Talk to 50 potential customers before building\n` +
+  `- Make your first 5–10 sales\n` +
+  `- Establish your core delivery process\n\n` +
+  `📍 **Months 4–6 — Build & Grow**\n` +
+  `- Refine your offer based on real feedback\n` +
+  `- Build one marketing channel consistently\n` +
+  `- Hit 25% of your 12-month target\n\n` +
+  `📍 **Months 7–9 — Scale**\n` +
+  `- Document and systematise operations\n` +
+  `- Activate your referral programme\n` +
+  `- Hit 60% of your 12-month target\n\n` +
+  `📍 **Months 10–12 — Optimise**\n` +
+  `- Double down on what's working\n` +
+  `- Plan your first hire or key partnership\n` +
+  `- Achieve: ${a.goal12months} ✅\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `🚀 Your personalised business plan is complete! Ask me about any section — pricing, marketing, funding, legal, operations — and I'll go deeper. You've got this! 💪`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ADVANCED BUSINESS TASK FLOWS
+// ═══════════════════════════════════════════════════════════════
+
+// ── 1. MARKETING PLAN FLOW ──────────────────────────────────────
+let marketingPlanFlow = { active: false, step: 0, answers: {} };
+const mpfQuestions = [
+  "Let's build your 90-day marketing plan! I'll ask you 6 quick questions. 📣\n\nQuestion 1 of 6 — What is your business name and what do you sell? (A brief description is fine.)",
+  "Question 2 of 6 — Who are your target customers? Describe them as specifically as you can.\n(e.g., female entrepreneurs aged 28–45 in the US, local restaurant owners, e-commerce brands spending $5K+/month on ads)",
+  "Question 3 of 6 — What marketing are you already doing, if anything?\n(e.g., posting on Instagram, running Google Ads, word of mouth, nothing yet — all answers are fine!)",
+  "Question 4 of 6 — What is your monthly marketing budget?\n(e.g., $0 / $100 / $500 / $2,000 / $10,000+ — even zero is a valid answer)",
+  "Question 5 of 6 — What is your #1 marketing goal right now? Pick one:\n• More brand awareness\n• More website traffic\n• More leads / enquiries\n• More sales / revenue\n• More social media followers",
+  "Question 6 of 6 — What is your biggest marketing challenge right now?\n(e.g., not enough time, don't know what to post, low budget, can't get people to buy, etc.)"
+];
+const mpfKeys = ['businessDesc','targetAudience','currentMarketing','monthlyBudget','primaryGoal','biggestChallenge'];
+function startMarketingPlanFlow() { marketingPlanFlow.active=true; marketingPlanFlow.step=0; marketingPlanFlow.answers={}; return mpfQuestions[0]; }
+function handleMarketingPlanStep(input) {
+  const f=marketingPlanFlow; f.answers[mpfKeys[f.step]]=input; f.step++;
+  if(f.step<mpfQuestions.length) return mpfQuestions[f.step];
+  f.active=false; return generateMarketingPlan(f.answers);
+}
+function generateMarketingPlan(a) {
+  const isZeroBudget = /\$0|zero|no budget|nothing|free|broke/i.test(a.monthlyBudget||'');
+  const isPaidFocus = /sales|revenue|leads|enquir/i.test(a.primaryGoal||'');
+  const budgetNum = parseInt((a.monthlyBudget||'0').replace(/[^0-9]/g,''))||0;
+
+  return `📣 **90-Day Marketing Plan — ${a.businessDesc.split(' ').slice(0,4).join(' ')}**\n\n━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Your Marketing Snapshot\n\n` +
+  `**Business:** ${a.businessDesc}\n**Audience:** ${a.targetAudience}\n**Goal:** ${a.primaryGoal}\n**Budget:** ${a.monthlyBudget}\n**Current activity:** ${a.currentMarketing}\n**Challenge:** ${a.biggestChallenge}\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Phase 1 — Days 1–30: Foundation\n\n` +
+  `**Goal:** Build the basics. Nothing converts without these in place.\n\n` +
+  `✅ Define your brand message in one sentence: "We help [audience] achieve [outcome] without [pain]."\n` +
+  `✅ Set up or optimise your Google Business Profile (free — drives local discovery)\n` +
+  `✅ Audit your existing online presence — fix broken links, outdated info, missing CTAs\n` +
+  `✅ Create 3 pieces of cornerstone content: one video, one article, one social post — each addressing your customer's #1 question\n` +
+  `✅ Start collecting customer emails — even a simple signup form is enough\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Phase 2 — Days 31–60: Generate Attention\n\n` +
+  `**Goal:** Get in front of ${a.targetAudience} consistently.\n\n` +
+  `📱 **Organic Social (pick ONE platform your audience uses most):**\n` +
+  `- Post 4–5× per week — mix of value, behind-the-scenes, and social proof\n` +
+  `- Engage in comments on competitors' posts (comment marketing)\n` +
+  `- Use Reels/Shorts — short video gets 3–5× the organic reach of static posts\n\n` +
+  `📝 **Content Marketing:**\n` +
+  `- Publish one SEO-optimised blog post or YouTube video per week targeting a keyword your audience searches\n` +
+  `- Repurpose each piece into 5+ social posts — work smarter, not harder\n\n` +
+  (isZeroBudget
+    ? `💡 **Zero-budget tactics (for your $0 budget):**\n- Direct outreach: message 20 ideal prospects per day on LinkedIn, Instagram, or via email\n- Join and contribute to 3 communities (Reddit, Facebook Groups, Slack groups) where your audience hangs out\n- Ask your existing customers or contacts for referrals — most people forget to just ask\n\n`
+    : `💰 **Paid channels (for your ${a.monthlyBudget}/month budget):**\n${budgetNum >= 500 ? '- Meta (Facebook/Instagram) Ads: Start with $10/day retargeting website visitors — warmest audience, lowest CPA\n- Google Search Ads: Bid on 3–5 high-intent keywords. Use exact match to avoid wasted spend\n' : '- Boost your best-performing organic post with $5–$20 to amplify what already works\n- Sponsor a newsletter or niche community in your space\n'}\n`) +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Phase 3 — Days 61–90: Convert & Optimise\n\n` +
+  `**Goal:** Turn attention into revenue for ${a.businessDesc}.\n\n` +
+  `🔁 **Referral system:** Ask every happy customer: "Do you know anyone else who'd benefit from this?" Offer a simple incentive (discount, gift, commission)\n` +
+  `📧 **Email sequence:** Set up a 5-email welcome sequence for new subscribers: (1) Welcome, (2) Your story, (3) Most common problem + your solution, (4) Social proof/case study, (5) Offer\n` +
+  `📊 **Weekly review ritual:** Every Monday, check: What content got the most engagement? What drove the most enquiries? Do more of that, less of everything else\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Your KPIs to Track Monthly\n\n` +
+  `| Metric | Month 1 Target | Month 3 Target |\n` +
+  `|--------|---------------|----------------|\n` +
+  `| Website visitors | Baseline | +30% |\n` +
+  `| Email subscribers | 50 | 200 |\n` +
+  `| Social followers | +100 | +500 |\n` +
+  `| Leads/enquiries | 10 | 40 |\n` +
+  `| Conversions | 2–3 | 10+ |\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `🎯 **Fix for your challenge ("${a.biggestChallenge}"):** ${
+    /time/i.test(a.biggestChallenge) ? 'Batch your content creation: spend 2 hours on Sunday creating everything for the week. One session, done.' :
+    /what to post|content/i.test(a.biggestChallenge) ? 'Answer the 10 most common questions your customers ask you. That\'s 10 pieces of content — done.' :
+    /budget|money|afford/i.test(a.biggestChallenge) ? 'Double down on referrals and direct outreach. They cost $0 and convert better than ads.' :
+    /buy|convert|sales/i.test(a.biggestChallenge) ? 'Add a clear call-to-action to everything. Most people don\'t buy because no one asked them to.' :
+    'Focus on one channel. Mastering one platform beats being mediocre on five.'
+  }\n\n` +
+  `🚀 Your 90-day marketing plan is ready. Ask me to go deeper on any channel — SEO, email, paid ads, social media, or content strategy! 💪`;
+}
+
+// ── 2. SWOT ANALYSIS FLOW ──────────────────────────────────────
+let swotFlow = { active: false, step: 0, answers: {} };
+const swotQuestions = [
+  "Let's build your SWOT Analysis! I'll ask 5 questions and create a full strategic assessment. 🎯\n\nQuestion 1 of 5 — What is your business name and what industry are you in?",
+  "Question 2 of 5 — What are your top 2–3 STRENGTHS?\nThink: What do you do better than anyone? What unique resources, skills, or advantages do you have that are hard to copy?",
+  "Question 3 of 5 — What are your main WEAKNESSES or gaps?\nBe honest — these are internal limitations. (e.g., limited budget, small team, no brand recognition, slow delivery, etc.)",
+  "Question 4 of 5 — What OPPORTUNITIES do you see in the market right now?\n(e.g., growing demand, underserved niche, new technology, competitor leaving the market, new regulation that favours you, etc.)",
+  "Question 5 of 5 — What THREATS or risks concern you most?\n(e.g., strong competitors, economic downturn, changing regulations, rising costs, new technology disrupting your sector, etc.)"
+];
+const swotKeys = ['businessName','strengths','weaknesses','opportunities','threats'];
+function startSwotFlow() { swotFlow.active=true; swotFlow.step=0; swotFlow.answers={}; return swotQuestions[0]; }
+function handleSwotStep(input) {
+  const f=swotFlow; f.answers[swotKeys[f.step]]=input; f.step++;
+  if(f.step<swotQuestions.length) return swotQuestions[f.step];
+  f.active=false; return generateSwotAnalysis(f.answers);
+}
+function generateSwotAnalysis(a) {
+  return `🎯 **SWOT Analysis — ${a.businessName}**\n\n━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## The SWOT Matrix\n\n` +
+  `┌─────────────────────────┬─────────────────────────┐\n` +
+  `│ 💪 STRENGTHS (Internal) │ ⚠️ WEAKNESSES (Internal) │\n` +
+  `├─────────────────────────┼─────────────────────────┤\n` +
+  `│ ${a.strengths}          │ ${a.weaknesses}          │\n` +
+  `├─────────────────────────┼─────────────────────────┤\n` +
+  `│ 🚀 OPPORTUNITIES (Ext.) │ 🔴 THREATS (External)   │\n` +
+  `├─────────────────────────┼─────────────────────────┤\n` +
+  `│ ${a.opportunities}      │ ${a.threats}             │\n` +
+  `└─────────────────────────┴─────────────────────────┘\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 💪 Strengths — Deep Dive\n\n` +
+  `${a.strengths}\n\n` +
+  `**How to leverage these:** Your strengths are your moat. Double down on what makes you different — don't try to be average at everything. Build your marketing, sales, and positioning around these assets.\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## ⚠️ Weaknesses — Action Plan\n\n` +
+  `${a.weaknesses}\n\n` +
+  `**How to address these:** For each weakness, decide: (1) Fix it — invest in closing the gap, (2) Outsource it — hire or partner to cover it, or (3) Reframe it — turn a weakness into a niche (e.g., "small team" = "boutique, personal service"). Don't pretend weaknesses don't exist — address them before competitors exploit them.\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 🚀 Opportunities — Priority Actions\n\n` +
+  `${a.opportunities}\n\n` +
+  `**How to capture these:** Opportunities have windows — act before competitors do. Pick the ONE opportunity that offers the highest return for the lowest effort and build a 90-day plan to capture it. Don't wait for perfect conditions.\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 🔴 Threats — Mitigation Plan\n\n` +
+  `${a.threats}\n\n` +
+  `**How to reduce exposure:** For each threat, ask: "What would happen if this hit us tomorrow?" Build contingency plans. Diversify revenue streams so no single threat can collapse the business.\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 4 Strategic Directions\n\n` +
+  `**SO Strategy (Strengths × Opportunities) — GROW**\nUse your strengths to seize your opportunities. This is your highest-upside play. ${a.strengths.split(/[,;.]/)[0]?.trim()} can directly help you capture ${a.opportunities.split(/[,;.]/)[0]?.trim()}.\n\n` +
+  `**ST Strategy (Strengths × Threats) — DEFEND**\nUse your strengths to neutralise threats. Your competitive advantages are your best shield against external risks. Focus on what makes you hard to replace.\n\n` +
+  `**WO Strategy (Weaknesses × Opportunities) — IMPROVE**\nAddress your weaknesses so you can actually capture your opportunities. Identify the weakest link that is blocking your biggest opportunity — fix that first.\n\n` +
+  `**WT Strategy (Weaknesses × Threats) — PROTECT**\nMinimise vulnerability. Where your weaknesses align with your threats, you are most exposed. These are your highest-risk scenarios — have a contingency plan ready.\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 🏆 Your Top 3 Strategic Priorities\n\n` +
+  `1. **Exploit your #1 strength** in the context of your biggest opportunity — this is your highest-return move\n` +
+  `2. **Address your most dangerous weakness** before a competitor or threat exploits it\n` +
+  `3. **Monitor your top threat** monthly — build early warning signals so you're never caught off guard\n\n` +
+  `🎯 Your SWOT Analysis is complete! Ask me to build a strategic action plan, competitive analysis, or growth roadmap from this. 💪`;
+}
+
+// ── 3. INVESTOR PITCH FLOW ──────────────────────────────────────
+let pitchFlow = { active: false, step: 0, answers: {} };
+const pitchQuestions = [
+  "Let's craft your investor pitch! I'll ask 7 questions and write a compelling narrative investors actually respond to. 💼\n\nQuestion 1 of 7 — What is your business name and give me your one-line description (what you do, for whom, and why it matters)?",
+  "Question 2 of 7 — What problem are you solving? Be specific — who suffers from it, how often, and what does it cost them today? (The more vivid, the better.)",
+  "Question 3 of 7 — What is your solution and how does it work? What makes it meaningfully better than existing alternatives?",
+  "Question 4 of 7 — How big is the market opportunity? Any market size numbers you know? (Even rough estimates are fine — e.g., 'there are 500,000 small restaurants in the US spending $2B/year on this')",
+  "Question 5 of 7 — What traction do you have so far? Include any: revenue, paying customers, growth rate, pilots, partnerships, users, notable contracts, or awards.",
+  "Question 6 of 7 — How do you make money? Describe your business model and unit economics.\n(e.g., $299/month SaaS, 15% commission per transaction, $5,000 one-time setup + $500/month retainer)",
+  "Question 7 of 7 — How much are you raising in this round, and what will you use the funds for? (Break it down roughly by allocation, e.g., 40% product, 35% sales, 25% operations)"
+];
+const pitchKeys = ['businessDesc','problem','solution','marketSize','traction','businessModel','fundingAsk'];
+function startPitchFlow() { pitchFlow.active=true; pitchFlow.step=0; pitchFlow.answers={}; return pitchQuestions[0]; }
+function handlePitchStep(input) {
+  const f=pitchFlow; f.answers[pitchKeys[f.step]]=input; f.step++;
+  if(f.step<pitchQuestions.length) return pitchQuestions[f.step];
+  f.active=false; return generateInvestorPitch(f.answers);
+}
+function generateInvestorPitch(a) {
+  const hasTraction = !/none|nothing|pre-revenue|no customer|zero|early/i.test(a.traction||'');
+  return `💼 **Investor Pitch — ${a.businessDesc.split(/[,.]|for /)[0]?.trim()}**\n\n━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 1 — The Hook\n\n` +
+  `**"${a.businessDesc}"**\n\n` +
+  `_[Deliver this in under 15 seconds. Practice until it's effortless.]_\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 2 — The Problem\n\n` +
+  `${a.problem}\n\n` +
+  `**Why this matters to investors:** You've identified a painful, frequent problem affecting a large number of people who are currently underserved. The bigger and more painful the problem, the bigger the opportunity.\n\n` +
+  `_Pitch tip: Open with a real customer story. "Meet [name]. Every week, she faces [specific problem]..." — this makes the problem human and memorable._\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 3 — The Solution\n\n` +
+  `${a.solution}\n\n` +
+  `**What makes this defensible:** Your solution should be 10× better than the current alternative — not just incrementally better. Investors back category-defining solutions, not slight improvements.\n\n` +
+  `_Pitch tip: Show a live demo or a visual of the product here. "Let me show you what that looks like in practice..."_\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 4 — Market Opportunity\n\n` +
+  `**Market size:** ${a.marketSize}\n\n` +
+  `**Framing your TAM/SAM/SOM:**\n` +
+  `- **TAM** (Total Addressable Market): The full global market for this problem\n` +
+  `- **SAM** (Serviceable Addressable Market): The segment you can realistically reach\n` +
+  `- **SOM** (Serviceable Obtainable Market): What you can capture in 3–5 years\n\n` +
+  `_Pitch tip: Investors want to see that even 1% market share creates a very large business. Build bottom-up: "There are X customers × $Y average contract = $Z opportunity for us."_\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 5 — Business Model\n\n` +
+  `**How we make money:** ${a.businessModel}\n\n` +
+  `**Unit economics framework:**\n` +
+  `- What does it cost to acquire one customer (CAC)?\n` +
+  `- What does one customer generate over their lifetime (LTV)?\n` +
+  `- LTV:CAC ratio of 3:1+ is the investor benchmark\n` +
+  `- How fast do you recover your CAC (payback period)?\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 6 — Traction\n\n` +
+  `${a.traction}\n\n` +
+  (hasTraction
+    ? `**This is your strongest slide.** Traction silences all objections. Present your growth as a chart — investors fund trajectories, not snapshots. If you're growing 20%+ month-over-month, lead with that number.\n\n`
+    : `**Building to traction:** At the pre-traction stage, show: Letters of Intent (LOIs), pilot agreements, waitlist signups, or strong customer interviews validating the problem. Make the "why now" case — what's changed that makes this the right moment?\n\n`) +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 7 — The Ask\n\n` +
+  `**Raising:** ${a.fundingAsk}\n\n` +
+  `**Use of funds:**\nPresent this clearly — investors want to know their money creates specific, measurable outcomes. Example format:\n- **XX%** — Product development / engineering\n- **XX%** — Sales & marketing / customer acquisition\n- **XX%** — Operations / team\n- **Milestone this achieves:** "[What this funding gets you to in 18 months]"\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Slide 8 — Why Us / The Team\n\n` +
+  `_[Add your team slide here — investors back people first, ideas second.]_\n\n` +
+  `**What investors look for in a team:**\n` +
+  `- Domain expertise — have you lived this problem?\n` +
+  `- Complementary skills — a complete founding team (product + business + technical)\n` +
+  `- Previous success or credibility — past wins transfer trust\n` +
+  `- Coachability — do you listen, adapt, and learn fast?\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 5 Questions Investors Will Ask You\n\n` +
+  `1. **"Why will you win?"** — Have a crisp, confident answer about your unfair advantage\n` +
+  `2. **"What's your customer acquisition strategy?"** — Show you know your channels and cost of customer acquisition\n` +
+  `3. **"What happens if [major competitor] copies this?"** — Explain your moat (network effects, data, brand, switching costs)\n` +
+  `4. **"What does 5 years look like?"** — Paint the vision. Investors invest in where you're going, not just where you are\n` +
+  `5. **"Why now?"** — What has changed in the market, technology, or regulation that makes this the perfect moment?\n\n` +
+  `💼 Your investor pitch is ready! Ask me to refine any slide, prepare for tough questions, or build your financial model. 🚀`;
+}
+
+// ── 4. FINANCIAL PROJECTIONS FLOW ──────────────────────────────
+let finProjectionsFlow = { active: false, step: 0, answers: {} };
+const fpfQuestions = [
+  "Let's build your 12-month financial projections! I'll ask 6 questions. 📊\n\nQuestion 1 of 6 — What is your business name and what do you sell?",
+  "Question 2 of 6 — How many new customers or units do you expect to acquire per month in Year 1?\n(Give a starting number for Month 1 and your target by Month 12, e.g., '5 customers in Month 1, growing to 50 by Month 12')",
+  "Question 3 of 6 — What is your average selling price per customer, transaction, or unit?\n(e.g., $99/month subscription, $500 one-time fee, $1,200 per project, $25 per product sold)",
+  "Question 4 of 6 — What are your estimated monthly FIXED costs?\nFixed costs stay the same regardless of how many sales you make. (e.g., rent $1,000, salaries $3,000, software $200, insurance $100 = $4,300 total)",
+  "Question 5 of 6 — What does it cost you to deliver each sale? These are your VARIABLE costs (COGS).\n(e.g., manufacturing cost $8/unit, freelancer $100/project, delivery $5/order, API cost $2/user — or '0' if it's a pure service/digital product)",
+  "Question 6 of 6 — What is your break-even goal — by which month do you need to be profitable?\n(e.g., 'Month 6', 'end of Year 1', 'as soon as possible', 'we have 12 months of runway')"
+];
+const fpfKeys = ['businessDesc','customerGrowth','avgPrice','fixedCosts','variableCosts','breakevenGoal'];
+function startFinProjectionsFlow() { finProjectionsFlow.active=true; finProjectionsFlow.step=0; finProjectionsFlow.answers={}; return fpfQuestions[0]; }
+function handleFinProjectionsStep(input) {
+  const f=finProjectionsFlow; f.answers[fpfKeys[f.step]]=input; f.step++;
+  if(f.step<fpfQuestions.length) return fpfQuestions[f.step];
+  f.active=false; return generateFinProjections(f.answers);
+}
+function generateFinProjections(a) {
+  const extractNum = (s) => { const m=(s||'').match(/[\d,]+/); return m ? parseInt(m[0].replace(/,/g,''))||0 : 0; };
+  const startCust = extractNum(a.customerGrowth.split(/to|by|grow/i)[0]) || 5;
+  const endCust   = extractNum(a.customerGrowth.split(/to|by|grow/i)[1]) || startCust*4;
+  const price     = extractNum(a.avgPrice) || 100;
+  const fixed     = extractNum(a.fixedCosts) || 2000;
+  const variable  = extractNum(a.variableCosts) || 0;
+
+  let rows = '';
+  let totalRevenue = 0;
+  let breakevenMonth = null;
+  for(let m=1; m<=12; m++) {
+    const cust = Math.round(startCust + (endCust-startCust)*((m-1)/11));
+    const rev = cust * price;
+    const cogs = cust * variable;
+    const gp = rev - cogs;
+    const profit = gp - fixed;
+    totalRevenue += rev;
+    if(!breakevenMonth && profit >= 0) breakevenMonth = m;
+    const sign = profit>=0?'+':'';
+    rows += `| Month ${m.toString().padStart(2)} | ${cust} | $${rev.toLocaleString()} | $${cogs.toLocaleString()} | $${gp.toLocaleString()} | $${fixed.toLocaleString()} | ${sign}$${Math.abs(profit).toLocaleString()} |\n`;
+  }
+  const grossMargin = variable>0 ? Math.round(((price-variable)/price)*100) : 100;
+  const beRevenue = Math.round(fixed / (grossMargin/100));
+
+  return `📊 **12-Month Financial Projections — ${a.businessDesc.split(' ').slice(0,4).join(' ')}**\n\n━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Key Assumptions\n\n` +
+  `- **Starting customers/units:** ${startCust}/month → growing to ${endCust}/month by Month 12\n` +
+  `- **Average price:** $${price.toLocaleString()}\n` +
+  `- **Fixed monthly costs:** $${fixed.toLocaleString()}\n` +
+  `- **Variable cost per sale:** $${variable.toLocaleString()}\n` +
+  `- **Gross margin:** ${grossMargin}%\n` +
+  `- **Break-even revenue needed:** $${beRevenue.toLocaleString()}/month\n` +
+  `- **Break-even target:** ${a.breakevenGoal}\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 12-Month Revenue Projection\n\n` +
+  `| Month | Customers | Revenue | COGS | Gross Profit | Fixed Costs | Net Profit |\n` +
+  `|-------|-----------|---------|------|-------------|-------------|------------|\n` +
+  rows + `\n` +
+  `**Total Year 1 Revenue: $${totalRevenue.toLocaleString()}**\n` +
+  (breakevenMonth ? `**Projected Break-Even: Month ${breakevenMonth}** ✅\n` : `**Break-Even: Not reached in Year 1 — review cost structure or pricing** ⚠️\n`) + `\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Financial Health Check\n\n` +
+  `**Gross Margin: ${grossMargin}%** ${grossMargin>=60?'✅ Excellent — strong profitability potential':grossMargin>=30?'⚠️ Moderate — watch your COGS carefully':'🔴 Low — pricing or cost structure needs review'}\n\n` +
+  `**Break-even revenue:** $${beRevenue.toLocaleString()}/month — this is your most important monthly milestone\n\n` +
+  `**To improve your break-even speed:**\n` +
+  `- Raise prices by 10–20% (often the fastest lever with least effort)\n` +
+  `- Reduce fixed costs — audit every monthly expense\n` +
+  `- Accelerate customer acquisition — add one new channel\n` +
+  `- Reduce churn (for subscription models) — every retained customer improves break-even\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 3-Year Outlook (High Level)\n\n` +
+  `| | Year 1 | Year 2 (est. 2× growth) | Year 3 (est. 2× growth) |\n` +
+  `|--|--------|-------------------------|-------------------------|\n` +
+  `| Annual Revenue | $${totalRevenue.toLocaleString()} | $${(totalRevenue*2).toLocaleString()} | $${(totalRevenue*4).toLocaleString()} |\n` +
+  `| Annual Fixed Costs | $${(fixed*12).toLocaleString()} | $${(fixed*14).toLocaleString()} | $${(fixed*18).toLocaleString()} |\n\n` +
+  `📊 Your financial projections are ready! Ask me to model a different scenario, stress-test your pricing, or build a cash flow forecast. 💪`;
+}
+
+// ── 5. JOB DESCRIPTION FLOW ──────────────────────────────────────
+let jobDescFlow = { active: false, step: 0, answers: {} };
+const jdfQuestions = [
+  "Let's write your job description! I'll ask 5 questions and create a professional posting that attracts top candidates. 💼\n\nQuestion 1 of 5 — What is the job title you're hiring for?",
+  "Question 2 of 5 — What are the 3–5 main responsibilities for this role?\n(e.g., manage social media accounts, create weekly content calendar, report on performance metrics, engage with followers)",
+  "Question 3 of 5 — What skills, qualifications, or experience are required?\nSeparate must-haves from nice-to-haves if you can.\n(e.g., Must have: 2+ years social media experience, Canva proficiency. Nice to have: Video editing, copywriting experience)",
+  "Question 4 of 5 — What type of role is this and what's the compensation?\n(e.g., Full-time remote, $50K–$65K/year / Part-time freelance, $25–$35/hour / Contract, $2,000/month)",
+  "Question 5 of 5 — Describe your company and why someone would want to work there.\n(e.g., mission, culture, team size, growth stage, perks, values — what makes you a great place to work?)"
+];
+const jdfKeys = ['jobTitle','responsibilities','skillsRequired','arrangement','companyDesc'];
+function startJobDescFlow() { jobDescFlow.active=true; jobDescFlow.step=0; jobDescFlow.answers={}; return jdfQuestions[0]; }
+function handleJobDescStep(input) {
+  const f=jobDescFlow; f.answers[jdfKeys[f.step]]=input; f.step++;
+  if(f.step<jdfQuestions.length) return jdfQuestions[f.step];
+  f.active=false; return generateJobDescription(f.answers);
+}
+function generateJobDescription(a) {
+  const respList = a.responsibilities.split(/[,;\n]/).filter(r=>r.trim()).map(r=>`- ${r.trim()}`).join('\n');
+  const skillsList = a.skillsRequired.split(/[,;\n]/).filter(r=>r.trim()).map(r=>`- ${r.trim()}`).join('\n');
+  return `💼 **Job Description — ${a.jobTitle}**\n\n━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## About Us\n\n${a.companyDesc}\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## The Role\n\n` +
+  `We're looking for a talented **${a.jobTitle}** to join our team. This is a ${a.arrangement} position.\n\n` +
+  `As our ${a.jobTitle}, you will play a key role in helping us [grow/scale/deliver/improve — edit to match your goal]. You'll work directly with [leadership/team — edit] and have a real impact from day one.\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## Key Responsibilities\n\n${respList}\n- Collaborate with the team to continuously improve processes and results\n- Report on performance and share insights with leadership\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## What We're Looking For\n\n${skillsList}\n- Strong communication skills and ability to work independently\n- Problem-solving mindset and attention to detail\n- Alignment with our company values and culture\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## What We Offer\n\n` +
+  `- **Compensation:** ${a.arrangement}\n` +
+  `- Flexible working environment\n` +
+  `- Opportunity for growth and advancement within the company\n` +
+  `- Collaborative, supportive team culture\n` +
+  `- [Add your specific perks: health insurance, equipment, learning budget, etc.]\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## How to Apply\n\n` +
+  `Send your CV and a brief note (3–5 sentences) on why you're the right fit for this role to [your email]. Applications without a cover note will not be considered.\n\n` +
+  `━━━━━━━━━━━━━━━━━━━━━━━\n\n` +
+  `## 5 Interview Questions to Ask Candidates\n\n` +
+  `1. **"Tell me about a specific result you achieved in a similar role."** — Look for concrete numbers and ownership of outcomes\n` +
+  `2. **"What would you do in your first 30 days in this role?"** — Tests strategic thinking and initiative\n` +
+  `3. **"Tell me about a time something went wrong and how you handled it."** — Reveals problem-solving and accountability\n` +
+  `4. **"What does your ideal work environment look like?"** — Culture fit check\n` +
+  `5. **"What questions do you have for us?"** — Great candidates always have thoughtful questions\n\n` +
+  `## 🚨 Red Flags to Watch For\n\n` +
+  `- Vague answers with no specific examples or numbers\n` +
+  `- Blame placed entirely on others for past failures\n` +
+  `- No questions about the role, company, or growth path\n` +
+  `- Inconsistencies between CV and what they say in interview\n` +
+  `- Unwillingness to discuss compensation expectations\n\n` +
+  `💼 Your job description is ready to post! Ask me to create a structured interview scorecard, onboarding plan, or employment contract template. 🚀`;
+}
+
+// ═══════════════════════════════════════════════════════════════
 
 function startBusinessCreationFlow() {
   businessCreationFlow.active = true;
@@ -8330,28 +8844,104 @@ if (sender === 'bot') {
 }
 }
 
-function typeMessage(element, text, onDone) {
-let charIndex = 0;
-let wordBuffer = '';
-const speed = 30;
+// ── Markdown → HTML renderer ──────────────────────────────────────────────
+function markdownToHTML(text) {
+  if (!text) return '';
+  // If already contains HTML tags, render as-is
+  if (/<[a-z][\s\S]*>/i.test(text)) return text.replace(/\n/g, '<br>');
 
-function typeNextCharacter() {
-  if (charIndex < text.length) {
-    const char = text[charIndex];
-    wordBuffer += char;
-    element.textContent = wordBuffer;
-    
-    const chatBox = document.getElementById('chat-box');
-    chatBox.scrollTop = chatBox.scrollHeight;
-    
-    charIndex++;
-    setTimeout(typeNextCharacter, speed);
-  } else {
-    if (typeof onDone === 'function') onDone();
+  const applyInline = (s) => s
+    .replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^\*\n]{1,80}?)\*/g, '<em>$1</em>')
+    .replace(/`([^`\n]+?)`/g, '<code>$1</code>');
+
+  const lines = text.split('\n');
+  let html = '';
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    const trimmed = raw.trim();
+
+    if (!trimmed) {
+      html += '<div class="md-spacer"></div>';
+      continue;
+    }
+
+    // Section divider (--- or ***)
+    if (/^[-*]{3,}$/.test(trimmed)) {
+      html += '<hr class="md-divider">';
+      continue;
+    }
+
+    // Tip line (💡 ...)
+    if (trimmed.startsWith('💡')) {
+      html += `<div class="md-tip">${applyInline(trimmed)}</div>`;
+      continue;
+    }
+
+    // Emoji-led section heading (e.g. "📋 **Title**")
+    const emojiHeadMatch = trimmed.match(/^([\u{1F000}-\u{1FFFF}✅❌📌📋💡🚀💰💵📈🔍⚙️👥🏗️👤🎯🔬🔄📝📱📧🎨📢💎🏦💳🤝⚖️🌿🌍🔵🔴🟢🟡⚫🟣⚡📊🔭🗺️🔎🎤🛒🔐📄📷🏆🔑⭐])\s+(\*\*.*)/u);
+    if (emojiHeadMatch) {
+      html += `<div class="md-h2">${applyInline(trimmed)}</div>`;
+      continue;
+    }
+
+    // Bold-only heading ("**Title**" alone on a line)
+    if (/^\*\*[^*]+\*\*\s*$/.test(trimmed)) {
+      html += `<div class="md-h1">${applyInline(trimmed)}</div>`;
+      continue;
+    }
+
+    // Numbered list
+    if (/^\d+\.\s/.test(trimmed)) {
+      html += `<div class="md-numbered">${applyInline(trimmed)}</div>`;
+      continue;
+    }
+
+    // Bullet list (- or • indented or not)
+    if (/^[-•]\s/.test(trimmed) || /^\s{2,}[-•]\s/.test(raw)) {
+      const content = trimmed.replace(/^[-•]\s*/, '');
+      html += `<div class="md-bullet">${applyInline(content)}</div>`;
+      continue;
+    }
+
+    // Emoji-led item (like "✅ Text" or "🎯 Text") — not section heading
+    if (/^[\u{1F000}-\u{1FFFF}✅❌📌💡🚀💰🔍⚙️👥🏗️👤🎯🔬🔄📝📱📧🎨📢💎🏦💳🤝⚖️🌿🌍🔵🔴🟢🟡⚫🟣⚡📊🔭🗺️🔎🎤🛒🔐📄📷🏆🔑⭐]/u.test(trimmed)) {
+      html += `<div class="md-section"><span class="md-section-icon"></span><span>${applyInline(trimmed)}</span></div>`;
+      continue;
+    }
+
+    // Plain text
+    html += `<div class="md-text">${applyInline(trimmed)}</div>`;
   }
+
+  return html;
 }
 
-typeNextCharacter();
+// ── Typewriter with HTML markdown rendering ───────────────────────────────
+function typeMessage(element, text, onDone) {
+  const words = text.split(' ');
+  let idx = 0;
+  let buf = '';
+  const chatBox = document.getElementById('chat-box');
+
+  // Adaptive speed: shorter for long responses so it doesn't feel slow
+  const speed = words.length > 80 ? 12 : words.length > 40 ? 18 : 24;
+
+  function next() {
+    if (idx < words.length) {
+      buf += (idx > 0 ? ' ' : '') + words[idx];
+      element.innerHTML = markdownToHTML(buf);
+      idx++;
+      chatBox.scrollTop = chatBox.scrollHeight;
+      setTimeout(next, speed);
+    } else {
+      element.innerHTML = markdownToHTML(text);
+      if (typeof onDone === 'function') onDone();
+    }
+  }
+  next();
 }
 
 // ==================== STOCK PRICE LOOKUP ====================
@@ -9533,6 +10123,102 @@ function generateBusinessGuide(industry, country) {
 }
 
 async function processQuestion(msg) {
+  // ── Logo generation ─────────────────────────────────────────────
+  if (typeof extractLogoIntent === 'function') {
+    const logoIntent = extractLogoIntent(msg);
+    if (logoIntent) {
+      showTypingIndicator();
+      await new Promise(r => setTimeout(r, 900));
+      removeTypingIndicator();
+      displayLogoCard(logoIntent.name, logoIntent.industry);
+      return;
+    }
+  }
+
+  // ── Business name generation ─────────────────────────────────────
+  if (typeof extractNameGenIntent === 'function') {
+    const nameIntent = extractNameGenIntent(msg);
+    if (nameIntent) {
+      showTypingIndicator();
+      await new Promise(r => setTimeout(r, 700));
+      removeTypingIndicator();
+      displayNameCard(nameIntent.industry);
+      return;
+    }
+  }
+
+  // ── Interactive task flows — active checks ───────────────────────
+  const _activeFlows = [
+    { flow: businessPlanFlow,     handler: handleBusinessPlanStep },
+    { flow: marketingPlanFlow,    handler: handleMarketingPlanStep },
+    { flow: swotFlow,             handler: handleSwotStep },
+    { flow: pitchFlow,            handler: handlePitchStep },
+    { flow: finProjectionsFlow,   handler: handleFinProjectionsStep },
+    { flow: jobDescFlow,          handler: handleJobDescStep },
+  ];
+  for (const {flow, handler} of _activeFlows) {
+    if (flow.active) {
+      showTypingIndicator();
+      await new Promise(r => setTimeout(r, 500));
+      removeTypingIndicator();
+      addMessage(handler(msg), 'bot');
+      return;
+    }
+  }
+
+  // ── Interactive task flows — intent detection ─────────────────────
+  // Skip flow triggers when the user is asking for a PPT/presentation — let the PPT generator handle it
+  const _isPptRequest = /\b(?:ppt|powerpoint|presentation|slides|slide\s*deck)\b/i.test(msg);
+  const _flowTriggers = [
+    {
+      re: /\b(write|create|make|build|help.*with|generate|draft|develop|need|want|get)\b.*\bbusiness\s*plan\b|\bbusiness\s*plan\b.*(for\s*me|please|help|write|create|make|build)|i\s+need\s+a\s+business\s+plan|help\s+me\s+(write|create|make|build|draft)\s+a\s+business\s+plan/i,
+      start: startBusinessPlanFlow
+    },
+    {
+      re: /\b(create|make|build|write|generate|draft|develop|help.*with|need|want)\b.*\b(marketing\s*plan|marketing\s*strategy)\b|\bmarketing\s*plan\b.*(for\s*me|please|help)|help\s+me\s+(market|promote|advertise)\b|i\s+need\s+a\s+marketing\s+plan/i,
+      start: startMarketingPlanFlow
+    },
+    {
+      re: /\b(do|run|create|make|build|write|generate|help.*with|need|want)\b.*\bswot\b|\bswot\s*(analysis|for\s*my|of\s*my)\b|analyse\s+my\s+business|strengths\s+and\s+weaknesses\s+analysis/i,
+      start: startSwotFlow
+    },
+    {
+      re: /\b(create|make|build|write|generate|draft|help.*with|need|want|prepare)\b.*\b(investor\s*pitch|pitch\s*deck|pitch\s*to\s*investor|fundraising\s*pitch)\b|\bpitch\s*deck\b.*(for\s*me|please|help)|help\s+me\s+(pitch|raise\s+money|raise\s+funding|pitch\s+investors)/i,
+      start: startPitchFlow
+    },
+    {
+      re: /\b(create|make|build|write|generate|help.*with|need|want)\b.*\b(financial\s*proj|revenue\s*proj|cash\s*flow\s*proj|financial\s*forecast|financial\s*model)\b|project\s+my\s+(revenue|finances|financials)|help\s+me\s+(project|forecast)\s+(revenue|finances|cash\s*flow)/i,
+      start: startFinProjectionsFlow
+    },
+    {
+      re: /\b(write|create|make|build|generate|draft|help.*with|need|want)\b.*\b(job\s*description|job\s*posting|job\s*ad|hiring\s*description)\b|i\s+need\s+a\s+job\s*description|help\s+me\s+(hire|write\s+a\s+job|create\s+a\s+job)/i,
+      start: startJobDescFlow
+    },
+  ];
+  if (!_isPptRequest) {
+    for (const {re, start} of _flowTriggers) {
+      if (re.test(msg)) {
+        showTypingIndicator();
+        await new Promise(r => setTimeout(r, 600));
+        removeTypingIndicator();
+        addMessage(start(), 'bot');
+        return;
+      }
+    }
+  }
+
+  // ── 100+ Business task library ──────────────────────────────────
+  if (!_isPptRequest && typeof getBusinessTaskResponse === 'function') {
+    const taskResp = getBusinessTaskResponse(msg);
+    if (taskResp) {
+      showTypingIndicator();
+      await new Promise(r => setTimeout(r, 700));
+      removeTypingIndicator();
+      addMessage(taskResp, 'bot');
+      return;
+    }
+  }
+
   if (businessCreationFlow.active) {
     showTypingIndicator();
     await new Promise(r => setTimeout(r, 500));
