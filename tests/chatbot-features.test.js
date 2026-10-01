@@ -10,6 +10,12 @@ test('primary sector definitions answer the exact wording the user asked for', (
   assert.match(response.toLowerCase(), /farming|mining|agriculture|raw materials/i);
 });
 
+test('sector classification questions do not return business startup advice', () => {
+  const response = bot.generateResponse('what sector is a restaurant in');
+  assert.match(response.toLowerCase(), /tertiary sector/i);
+  assert.doesNotMatch(response.toLowerCase(), /menu design|startup cost|location strategy/i);
+});
+
 test('restaurant sector questions get a tailored answer', () => {
   const response = bot.generateResponse('how do i start a restaurant business in dubai');
   assert.match(response.toLowerCase(), /restaurant|food/i);

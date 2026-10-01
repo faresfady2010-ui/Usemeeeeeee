@@ -553,6 +553,24 @@ class ChatbotEnhancements {
     getSectorAndBusinessGuidance(userMessage) {
         const msg = (userMessage || '').toLowerCase();
 
+        const asksSectorClassification = /\b(?:what|which)\s+(?:economic\s+)?sector\b/.test(msg)
+            || /\bsector\b.{0,30}\b(?:belong|classified|fall|fit)\b/.test(msg);
+
+        if (asksSectorClassification) {
+            const classifications = [
+                { keywords: ['restaurant', 'cafe', 'coffee shop', 'retail', 'bank', 'transport', 'tourism', 'healthcare', 'hospital', 'education'], sector: 'Tertiary', reason: 'it provides services to customers or the public' },
+                { keywords: ['farm', 'farming', 'agriculture', 'fishing', 'forestry', 'mining', 'oil extraction'], sector: 'Primary', reason: 'it obtains natural resources directly' },
+                { keywords: ['factory', 'manufacturing', 'construction', 'food processing', 'textile', 'car production'], sector: 'Secondary', reason: 'it processes raw materials or manufactures goods' },
+                { keywords: ['research', 'software', 'data analysis', 'scientific', 'technology'], sector: 'Quaternary', reason: 'it creates or applies specialized knowledge and information' }
+            ];
+
+            for (const classification of classifications) {
+                if (classification.keywords.some(keyword => msg.includes(keyword))) {
+                    return `This business is generally part of the **${classification.sector} sector** because ${classification.reason}.`;
+                }
+            }
+        }
+
         const guides = [
             {
                 keywords: ['what is primary sector', 'primary sector meaning', 'define primary sector', 'primary sector', 'primary sector business'],
