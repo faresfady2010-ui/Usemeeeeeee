@@ -4,6 +4,12 @@ const ChatbotEnhancements = require('../chatbot-features.js');
 
 const bot = new ChatbotEnhancements();
 
+test('primary sector definitions answer the exact wording the user asked for', () => {
+  const response = bot.generateResponse('what is primary sector');
+  assert.match(response.toLowerCase(), /primary sector/i);
+  assert.match(response.toLowerCase(), /farming|mining|agriculture|raw materials/i);
+});
+
 test('restaurant sector questions get a tailored answer', () => {
   const response = bot.generateResponse('how do i start a restaurant business in dubai');
   assert.match(response.toLowerCase(), /restaurant|food/i);

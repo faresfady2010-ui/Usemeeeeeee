@@ -555,6 +555,38 @@ class ChatbotEnhancements {
 
         const guides = [
             {
+                keywords: ['what is primary sector', 'primary sector meaning', 'define primary sector', 'primary sector', 'primary sector business'],
+                response: `🏞️ **Primary Sector**\n\nThe primary sector is the part of the economy that extracts or harvests natural resources directly from the earth. It includes activities such as farming, fishing, forestry, mining, and oil extraction.\n\nExamples:\n• Agriculture and farming\n• Fishing and aquaculture\n• Forestry and logging\n• Mining and quarrying\n• Oil and gas extraction\n\n✅ It is called the primary sector because it provides the raw materials used by other sectors.`
+            },
+            {
+                keywords: ['what is secondary sector', 'secondary sector meaning', 'define secondary sector', 'secondary sector'],
+                response: `🏭 **Secondary Sector**\n\nThe secondary sector turns raw materials from the primary sector into finished or semi-finished goods. It includes manufacturing, construction, and processing industries.\n\nExamples:\n• Factories producing goods\n• Car manufacturing\n• Textile production\n• Construction companies\n• Food processing\n\n✅ This sector adds value by converting natural resources into usable products.`
+            },
+            {
+                keywords: ['what is tertiary sector', 'tertiary sector meaning', 'define tertiary sector', 'tertiary sector'],
+                response: `💼 **Tertiary Sector**\n\nThe tertiary sector provides services rather than physical goods. It supports consumers and businesses by offering professional, personal, and commercial services.\n\nExamples:\n• Retail and wholesale\n• Education\n• Healthcare\n• Banking and finance\n• Transport and logistics\n• Tourism and entertainment\n\n✅ This sector focuses on service delivery and customer support.`
+            },
+            {
+                keywords: ['what is quaternary sector', 'quaternary sector meaning', 'define quaternary sector', 'quaternary sector'],
+                response: `🧠 **Quaternary Sector**\n\nThe quaternary sector is based on knowledge and information. It includes research, technology, education, consulting, and innovation-driven activities.\n\nExamples:\n• Research and development\n• Software and IT services\n• Data analysis\n• Scientific research\n• Consulting and innovation\n\n✅ This sector is important in modern economies because it creates new ideas and technology.`
+            },
+            {
+                keywords: ['what is quinary sector', 'quinary sector meaning', 'define quinary sector', 'quinary sector'],
+                response: `👩‍💼 **Quinary Sector**\n\nThe quinary sector focuses on high-level decision-making, leadership, and services that require advanced knowledge. It is often linked with top-level management, policy, and public services.\n\nExamples:\n• Government leadership\n• Senior management\n• Public administration\n• Healthcare leadership\n• Research institutions\n\n✅ This sector deals with strategic planning and high-level decision-making.`
+            },
+            {
+                keywords: ['primary sector examples', 'examples of primary sector', 'primary sector example'],
+                response: `🌾 **Examples of the primary sector**\n\nThe primary sector includes businesses that obtain or harvest natural resources directly. Common examples are:\n\n• Farming and crop production\n• Livestock and dairy farming\n• Fishing and aquaculture\n• Forestry and logging\n• Mining and quarrying\n• Oil and gas extraction\n\n✅ These activities provide the raw materials needed by other sectors.`
+            },
+            {
+                keywords: ['secondary sector examples', 'examples of secondary sector', 'secondary sector example'],
+                response: `🏭 **Examples of the secondary sector**\n\nThe secondary sector includes business activities that process raw materials into useful products. Examples include:\n\n• Manufacturing cars\n• Textile production\n• Food processing\n• Construction\n• Furniture making\n• Chemical production\n\n✅ The value is added by turning raw materials into finished goods.`
+            },
+            {
+                keywords: ['tertiary sector examples', 'examples of tertiary sector', 'tertiary sector example'],
+                response: `🛒 **Examples of the tertiary sector**\n\nThe tertiary sector provides services to people and businesses. Examples include:\n\n• Retail stores\n• Restaurants\n• Transport services\n• Banking\n• Education\n• Healthcare\n• Tourism\n\n✅ This sector creates value through services rather than direct production.`
+            },
+            {
                 keywords: ['restaurant', 'cafe', 'coffee shop', 'bakery', 'food truck', 'food business'],
                 response: `🍽️ **Restaurant business guide**\n\nStart with a clear concept, pricing, and a realistic location strategy. For a restaurant, the biggest wins are: a menu that makes money, a location with enough foot traffic, a strong opening team, and tight cash-flow control.\n\n✅ Focus on:\n• Menu design with strong gross margins\n• Location and local demand\n• Licenses, food safety, and staffing\n• Daily cost control (food cost, payroll, waste)\n• A simple but consistent customer experience\n\n💡 Good rule: build a menu you can execute without stress, not a menu that looks impressive on paper.`
             },
