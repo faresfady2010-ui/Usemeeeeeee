@@ -1,10 +1,9 @@
-// Backend configuration for Hugging Face Spaces
-// Using Hugging Face Space URL
-const BACKEND_URL = localStorage.getItem('backendUrl') || 'https://ankarasui-business-chatbot-caeb2a6.hf.space';
+// Backend configuration for the JavaScript app
+const BACKEND_URL = localStorage.getItem('backendUrl') || 'http://localhost:5000';
 
-// For local development with Flask backend
+// Local Node development server
 const USE_LOCAL_BACKEND = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-const LOCAL_BACKEND_URL = 'http://localhost:8000';
+const LOCAL_BACKEND_URL = 'http://localhost:5000';
 
 const ACTIVE_BACKEND = USE_LOCAL_BACKEND ? LOCAL_BACKEND_URL : BACKEND_URL;
 

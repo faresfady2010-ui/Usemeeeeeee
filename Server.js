@@ -29,9 +29,95 @@ function readBody(req) {
 }
 
 const server = http.createServer(async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
+    }
+
+    if (req.method === 'POST' && (req.url === '/api/chat' || req.url === '/api/translate')) {
+        try {
+            const incoming = JSON.parse(await readBody(req));
+            let messages;
+            let maxTokens = 1200;
+
+            if (req.url === '/api/chat') {
+                const message = typeof incoming.message === 'string' ? incoming.message.trim() : '';
+                if (!message || message.length > 4000) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Provide a message no longer than 4000 characters.' }));
+                    return;
+                }
+
+                const history = Array.isArray(incoming.history) ? incoming.history
+                    .filter(item => ['user', 'assistant'].includes(item.role) && typeof item.content === 'string')
+                    .slice(-10)
+                    .map(item => ({ role: item.role, content: item.content.slice(0, 4000) })) : [];
+                messages = [
+                    {
+                        role: 'system',
+                        content: 'You are Usemee, a practical business advisor for founders and small businesses. Answer the question directly, explain unfamiliar terms, and give actionable steps or a short example when useful. Support questions across business sectors (such as technology, retail, food, healthcare, education, finance, manufacturing, agriculture, and professional services) and business types (such as sole proprietorships, partnerships, LLCs, corporations, franchises, ecommerce, subscriptions, marketplaces, and service businesses). Tailor advice to the sector, business model, stage, customer, and country when known. Ask one focused clarifying question if important details are missing, but give useful general guidance first. Do not invent laws, market statistics, or guarantees; say when rules vary by location and recommend checking an official source or qualified professional for legal, tax, or investment decisions. Keep answers clear and appropriately concise.'
+                    },
+                    ...history,
+                    { role: 'user', content: message }
+                ];
+            } else {
+                const languageNames = { es: 'Spanish', fr: 'French', de: 'German', ar: 'Arabic' };
+                const text = typeof incoming.text === 'string' ? incoming.text : '';
+                const language = languageNames[incoming.targetLang];
+                if (!text || !language) {
+                    res.writeHead(400, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify({ error: 'Provide text and a supported target language.' }));
+                    return;
+                }
+                messages = [{
+                    role: 'user',
+                    content: `Translate this text into ${language}. Preserve its tone and formatting. Return only the translation.\n\n${text.slice(0, 12000)}`
+                }];
+                maxTokens = 2000;
+            }
+
+            const apiKey = process.env.GROQ_API_KEY;
+            if (!apiKey) {
+                res.writeHead(503, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'AI service is not configured. Set GROQ_API_KEY on the server.' }));
+                return;
+            }
+
+            const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+                    messages,
+                    max_tokens: maxTokens
+                })
+            });
+            const groqData = await groqRes.json();
+            if (!groqRes.ok) {
+                res.writeHead(groqRes.status, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: groqData.error?.message || 'AI request failed.' }));
+                return;
+            }
+
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ response: groqData.choices?.[0]?.message?.content?.trim() || '' }));
+        } catch (e) {
+            res.writeHead(500, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: e.message }));
+        }
+        return;
+    }
 
     if (req.method === 'POST' && req.url === '/api/analyze') {
-        const apiKey = "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";
+        const apiKey = process.env.GROQ_API_KEY;
         if (!apiKey) {
             res.writeHead(500, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'Groq API key not configured on server.' }));

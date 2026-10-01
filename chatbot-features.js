@@ -548,10 +548,71 @@ class ChatbotEnhancements {
     }
 
     /**
+     * Sector and business model guidance for common goals
+     */
+    getSectorAndBusinessGuidance(userMessage) {
+        const msg = (userMessage || '').toLowerCase();
+
+        const guides = [
+            {
+                keywords: ['restaurant', 'cafe', 'coffee shop', 'bakery', 'food truck', 'food business'],
+                response: `🍽️ **Restaurant business guide**\n\nStart with a clear concept, pricing, and a realistic location strategy. For a restaurant, the biggest wins are: a menu that makes money, a location with enough foot traffic, a strong opening team, and tight cash-flow control.\n\n✅ Focus on:\n• Menu design with strong gross margins\n• Location and local demand\n• Licenses, food safety, and staffing\n• Daily cost control (food cost, payroll, waste)\n• A simple but consistent customer experience\n\n💡 Good rule: build a menu you can execute without stress, not a menu that looks impressive on paper.`
+            },
+            {
+                keywords: ['franchise', 'franchising'],
+                response: `🏪 **Franchise business guide**\n\nA franchise is a business model where you operate under an existing brand and system. It reduces brand-building risk but usually involves higher upfront fees, royalties, training, and strict operating rules.\n\n✅ Look at:\n• Franchise fee and total startup cost\n• Brand reputation and customer demand\n• Royalty structure and ongoing fees\n• Training support and operating system\n• Territory rights and local competition\n\n💡 A great franchise is one where the brand is already proven, the local market is strong, and the operating model is realistic for your budget.`
+            },
+            {
+                keywords: ['saas', 'software as a service', 'subscription software', 'b2b software'],
+                response: `💻 **SaaS business guide**\n\nA SaaS business sells software on a recurring subscription model. The winning formula is strong customer value, low churn, and a system that can scale without proportional cost growth.\n\n✅ Prioritize:\n• A clear problem and measurable value\n• A simple onboarding flow\n• Retention and usage metrics\n• Pricing tiers and customer expansion\n• Customer support and feedback loops\n\n💡 If your product is not sticky, it will struggle to survive. Focus on recurring value, not just one-time sales.`
+            },
+            {
+                keywords: ['ecommerce', 'online store', 'shopify', 'dropshipping', 'marketplace'],
+                response: `🛍️ **Ecommerce business guide**\n\nEcommerce works best when you understand your customer, conversion path, and unit economics. The most common mistakes are weak product-market fit, poor checkout experience, and rising shipping or ad costs.\n\n✅ Focus on:\n• Product-market fit and customer demand\n• Conversion rate and checkout flow\n• Cost per acquisition and gross margin\n• Shipping, returns, and customer service\n• Retention and repeat purchases\n\n💡 A store with strong margins and strong repeat customers wins more than a store with volume alone.`
+            },
+            {
+                keywords: ['agency', 'consulting', 'service business', 'professional services', 'freelance business'],
+                response: `📈 **Service business guide**\n\nA service business is usually easier to start because it needs fewer physical assets. The main challenge is turning expertise into repeatable revenue and consistent delivery.\n\n✅ Focus on:\n• A clear niche and target client\n• Strong positioning and pricing\n• Service packages and deliverables\n• Retention and referrals\n• Standard operating procedures\n\n💡 Great service businesses are not built on generalism — they are built on one problem they solve very well.`
+            },
+            {
+                keywords: ['clinic', 'healthcare', 'hospital', 'medical business', 'wellness business'],
+                response: `🏥 **Healthcare business guide**\n\nHealthcare businesses need trust, compliance, and careful patient experience. The success model depends on service quality, operational consistency, and the ability to handle regulations and data privacy properly.\n\n✅ Focus on:\n• Regulation and licensing\n• Patient trust and onboarding\n• Staff quality and training\n• Service consistency and retention\n• Cash flow and high-cost operations\n\n💡 In healthcare, trust is often more valuable than marketing volume — patients choose providers they feel safe with.`
+            },
+            {
+                keywords: ['technology', 'tech startup', 'software startup', 'saas startup', 'app business'],
+                response: `🚀 **Technology startup guide**\n\nTechnology businesses grow fastest when they solve a painful problem, launch quickly, and improve based on real user feedback. The best early-stage tech companies focus on adoption, retention, and product-market fit.\n\n✅ Prioritize:\n• Problem validation with real users\n• A smaller MVP that creates value\n• Fast feedback loops\n• Clear user acquisition pathway\n• Retention and customer education\n\n💡 Ship the simplest version that proves the value proposition before spending heavily on scale.`
+            },
+            {
+                keywords: ['education', 'academy', 'training center', 'school', 'coaching business'],
+                response: `🎓 **Education business guide**\n\nEducation businesses succeed when they solve a real learning need and deliver a credible outcome. This often works well with a strong niche, clear promise, and repeatable programs.\n\n✅ Focus on:\n• A market need and clear audience\n• Curriculum or service design\n• Pricing and delivery format\n• Student outcomes and testimonials\n• Retention and referral loops\n\n💡 People buy transformation, not just information. Make the learning outcome tangible and measurable.`
+            },
+            {
+                keywords: ['manufacturing', 'factory', 'production business', 'industrial business'],
+                response: `🏭 **Manufacturing business guide**\n\nManufacturing needs careful planning around materials, unit economics, quality control, and supply chain reliability. Strong operational discipline usually matters more than a flashy brand at the start.\n\n✅ Focus on:\n• Production cost and quality control\n• Supplier reliability and lead times\n• Capacity planning and demand forecast\n• Working capital and inventory\n• Safety and compliance\n\n💡 In manufacturing, cash flow and process reliability often determine survival more than sales volume.`
+            },
+            {
+                keywords: ['agriculture', 'farm', 'agribusiness', 'food production'],
+                response: `🌾 **Agriculture business guide**\n\nAgriculture businesses usually depend on land, inputs, seasonality, and operational efficiency. The key is matching production to demand and controlling costs across the cycle.\n\n✅ Focus on:\n• Crop or product demand and price stability\n• Input cost management\n• Equipment and labor planning\n• Risk planning and weather exposure\n• Distribution and market access\n\n💡 A good agri-business is not just productive; it is also resilient to weather, margin swings, and supply chain disruption.`
+            }
+        ];
+
+        for (const guide of guides) {
+            if (guide.keywords.some(keyword => msg.includes(keyword))) {
+                return guide.response;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Main response generator
      */
     generateResponse(userMessage) {
         const intent = this.analyzeUserIntent(userMessage);
+
+        const sectorResponse = this.getSectorAndBusinessGuidance(userMessage);
+        if (sectorResponse) return sectorResponse;
 
         switch (intent.type) {
             case 'name_generation': {
@@ -708,6 +769,7 @@ class ChatbotEnhancements {
     }
 
     loadUserDocuments() {
+        if (typeof localStorage === 'undefined') return {};
         const stored = localStorage.getItem('chatbot_knowledge_base');
         return stored ? JSON.parse(stored) : {};
     }
@@ -715,7 +777,9 @@ class ChatbotEnhancements {
     addKnowledge(topic, data) {
         const normalizedTopic = topic.toLowerCase().trim();
         this.userDocuments[normalizedTopic] = { ...data, addedDate: new Date().toISOString(), source: data.source || 'user-input' };
-        localStorage.setItem('chatbot_knowledge_base', JSON.stringify(this.userDocuments));
+        if (typeof localStorage !== 'undefined') {
+            localStorage.setItem('chatbot_knowledge_base', JSON.stringify(this.userDocuments));
+        }
         return { success: true, message: `✅ Knowledge added for "${topic}". I can now answer questions about this topic.`, topic: normalizedTopic };
     }
 
